@@ -1,0 +1,31 @@
+.form {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-flow: column nowrap;
+  gap: 2rem;
+  width: 100%;
+  max-width: 120ch;
+  padding: 1rem 0 2rem;
+}
+
+.formSubmitContainer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 1rem;
+
+  p {
+    color: var(--colors-habanero);
+    text-align: left;
+    line-height: 1.25;
+  }
+}
+
+.formSubmitSuccess {
+  margin-bottom: 6rem;
+  border: 1px solid var(--colors-light-green);
+  border-radius: 10px;
+  padding: 1.5rem;
+  font-size: 1.25rem;
+}

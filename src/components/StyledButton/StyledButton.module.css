@@ -1,0 +1,98 @@
+.styledButton {
+  appearance: none;
+  padding: 1.15rem 3rem;
+  border: 1px solid var(--colors-text);
+  background-color: transparent;
+  color: var(--colors-text);
+  border-radius: 1000px;
+  font-size: 1rem;
+  transition: color 0.1s linear, background 0.1s linear;
+  line-height: 0.9;
+  
+  &:not(a) {
+    cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>🚀</text></svg>") 16 0,auto;
+  }
+  
+  @media screen and (min-width: 600px) {
+    padding: clamp(1.1rem, 2vw, 1.35rem) clamp(2.5rem, 3vw, 3.25rem);
+    font-size: 1.15rem
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    opacity: 0.8;
+    cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>❌</text></svg>") 16 0,auto;
+  }
+
+  &.inverted {
+    border-radius: 8px 36px 8px  36px;
+  }
+
+  &.fullWidth {
+    width: 100%;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:hover {
+    background-color: var(--colors-text);
+    color: var(--colors-bg);
+  }
+
+  &.light {
+    &.contained {
+      background-color: var(--colors-text);
+      color: var(--colors-bg);
+
+      &:hover {
+        background-color: var(--colors-bg);
+        color: var(--colors-text);
+      }
+    }
+
+    &:focus {
+      outline: 0;
+      box-shadow: 0 0 0 1px var(--colors-bg), 0 0 0 3px var(--colors-text);
+      background-color: var(--colors-text);
+      color: var(--colors-bg);
+    }
+
+    &:hover {
+      cursor: pointer;
+      border-color: var(--colors-text);
+      background-color: var(--colors-text);
+      color: var(--colors-bg);
+    }
+  }
+
+  &.dark {
+    border-color: var(--colors-street-lamp-yellow);
+    color: var(--colors-street-lamp-yellow);
+
+    &.contained {
+      background-color: var(--colors-text);
+      color: var(--colors-street-lamp-yellow);
+
+      &:hover {
+        background-color: var(--colors-street-lamp-yellow);
+        color: var(--colors-bg);
+      }
+    }
+
+    &:focus {
+      outline: 0;
+      box-shadow: 0 0 0 1px var(--colors-text), 0 0 0 3px var(--colors-street-lamp-yellow);
+      background-color: var(--colors-street-lamp-yellow);
+      color: var(--colors-text);
+    }
+
+    &:hover {
+      cursor: pointer;
+      border-color: var(--colors-street-lamp-yellow);
+      background-color: var(--colors-street-lamp-yellow);
+      color: var(--colors-text);
+    }
+  }
+}

@@ -1,0 +1,30 @@
+.hero {
+  height: auto;
+  padding-bottom: 4rem;
+
+  @media screen and (min-height: 900px) and (min-width: 800px) {
+    height: clamp(10vh, 60vw, 65vh);
+  }
+
+  &.reducedHeight {
+    @media screen and (min-height: 900px) and (min-width: 800px) {
+      height: clamp(25vh, 75vw, 52.5vh);
+    }
+  }
+}
+
+.heroSubtitle {
+  color: currentColor;
+}
+
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.75rem;
+  width: 100%;
+
+  @media screen and (min-width: 600px) {
+    margin-top: 3rem;
+  }
+}

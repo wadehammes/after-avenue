@@ -1,0 +1,89 @@
+.input {
+  background: transparent;
+  appearance: none;
+  border: 0;
+  padding: 1.25rem 0 1.25rem 2rem;
+  padding-left: 2rem;
+  width: 100%;
+  color: var(--colors-bg);
+  font-size: 16px;
+  font-family: inherit;
+
+  &.variantLarge {
+    padding: 1.25rem 1.25rem 1.25rem 2rem;
+
+    @media screen and (min-width: 600px) {
+      font-size: clamp(16px, 1.5vw, 1.75rem);
+      padding: clamp(1.75rem, 3vw, 3rem);
+      padding-left: 2rem;
+    }
+  }
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.inputWrapper {
+  background-color: var(--colors-text);
+  border: 2px solid var(--colors-text);
+  border-radius: 60px 12px 60px 12px;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,.25);
+  min-width: 25ch;
+  min-height: auto;
+  display: flex;
+  align-items: center;
+  padding-right: 2.25rem;
+  width: 100%;
+
+  &:focus-within {
+    border-color: var(--colors-street-lamp-yellow);
+    background-color: color-mix(in srgb, var(--colors-street-lamp-yellow) 25%, white);
+    outline: 0;
+  }
+}
+
+.fieldsetWrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-flow: column nowrap;
+  gap: 1rem;
+  position: relative;
+  width: 100%;
+}
+
+.hasError {
+  border-color: var(--colors-red-wine);
+}
+
+.inputHasError {
+  border-color: var(--colors-red-wine);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.25), 0 -1px 1px var(--colors-red-wine), 0 1px 0 var(--colors-red-wine);
+  background-color: color-mix(in srgb, var(--colors-red-wine) 20%, white);
+}
+
+.errorMessage {
+  position: absolute;
+  bottom: -1.75rem;
+  font-size: 0.9rem;
+  color: var(--colors-red-wine);
+}
+
+.label {
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-size: 0.85rem;
+  text-align: center;
+  line-height: 1.25;
+  width: 100%;
+
+  @media screen and (min-width: 600px) {
+    text-align: left;
+  }
+}
+
+.textarea {
+  field-sizing: content;
+  min-height: 6lh;
+}

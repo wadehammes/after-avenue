@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://afteravenue.com/sitemap-index.xml
