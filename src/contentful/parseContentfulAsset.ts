@@ -1,4 +1,4 @@
-import { Asset, AssetLink } from "contentful";
+import type { Asset, AssetLink } from "contentful";
 
 // Our simplified version of an image asset.
 // We don't need all the data that Contentful gives us.

@@ -1,26 +1,28 @@
 import classNames from "classnames";
-import { Ref, forwardRef } from "react";
-import { AriaButtonProps } from "react-aria";
+import type { Ref } from "react";
+import { forwardRef } from "react";
+import type { AriaButtonProps } from "react-aria";
 import styles from "src/components/StyledButton/StyledButton.module.css";
 import { Button } from "src/ui/Button/Button.component";
 
 interface StyledButtonProps extends AriaButtonProps {
-  fullWidth?: boolean;
+	className?: string;
+	fullWidth?: boolean;
 }
 
 export const StyledButton = forwardRef(
-  (props: StyledButtonProps, ref: Ref<HTMLButtonElement>) => {
-    const { fullWidth } = props;
-    return (
-      <Button
-        ref={ref}
-        {...props}
-        className={classNames(styles.styledButton, {
-          [styles.fullWidth]: fullWidth,
-        })}
-      />
-    );
-  },
+	(props: StyledButtonProps, ref: Ref<HTMLButtonElement>) => {
+		const { className, fullWidth } = props;
+		return (
+			<Button
+				ref={ref}
+				{...props}
+				className={classNames(className, styles.styledButton, {
+					[styles.fullWidth]: fullWidth,
+				})}
+			/>
+		);
+	},
 );
 
 export default StyledButton;

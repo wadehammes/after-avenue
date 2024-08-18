@@ -3,15 +3,12 @@ import Providers from "src/app/providers";
 import { ExitDraftModeLink } from "src/components/ExitDraftModeLink/ExitDraftModeLink.component";
 import { Footer } from "src/components/Footer/Footer.component";
 import { Navigation } from "src/components/Navigation/Navigation";
-import "react-toastify/dist/ReactToastify.css";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "swiper/css/effect-fade";
+import "src/styles/fonts.css";
 import "src/styles/globals.css";
-import "src/styles/swiper.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { Metadata } from "next";
+import type { Metadata } from "next";
+import { fetchNavigation } from "src/contentful/getNavigation";
+import { NAVIGATION_ID } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
 export function generateMetadata(): Metadata {
@@ -26,13 +23,18 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   // Layouts must accept a children prop.
   // This will be populated with nested layouts or pages
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const nav = await fetchNavigation({
+    id: NAVIGATION_ID,
+    preview: false,
+  });
+
   return (
     <html lang="en">
       <head>
@@ -54,7 +56,7 @@ export default function RootLayout({
           sizes="16x16"
           href="/favicons/favicon-16x16.png"
         />
-        <link rel="manifest" href="/site.webmanifest"></link>
+        <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body>
         {draftMode().isEnabled ? (
@@ -65,7 +67,7 @@ export default function RootLayout({
         ) : null}
         <Providers>
           <div className="page">
-            <Navigation />
+            <Navigation navigationItems={nav?.navigationItems ?? []} />
             <main className="page-content">{children}</main>
             <Footer />
           </div>

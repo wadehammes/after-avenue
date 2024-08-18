@@ -10,39 +10,50 @@
 }
 
 .footerContainer {
+  background-image: url("/images/dot-bg.png");
+  border-radius: 20px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: column nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-flow: row nowrap;
   gap: var(--default-padding);
-  padding: var(--default-padding) var(--default-padding) 4rem;
-  width: 100%;
-  max-width: 60ch;
+  padding: var(--default-padding);
   margin: 0 auto;
   position: relative;
   z-index: 1;
   margin-top: -2rem;
+  width: 100%;
+}
 
-  svg {
-    width: 3rem;
-    height: 3rem;
-  }
+.copyright {
+  flex: 1;
+}
+
+.email {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  width: 100%;
+  flex: 1;
 }
 
 .socialList {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 1rem;
   width: 100%;
+  flex: 1;
 }
 
 .socialIcon {
-  width: 2rem;
-  height: 2rem;
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 .twitterIcon {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 0.9rem;
+  height: 0.9rem;
 }

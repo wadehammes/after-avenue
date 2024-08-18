@@ -22,18 +22,20 @@
   align-items: center;
   justify-content: center;
 
-  &:hover,
-  &:focus {
-    outline: 0;
-    background: none;
-  }
-}
-
-.desktopLogo {
   & > svg {
     margin: auto;
     height: 3rem;
     width: 14rem;
+  }
+
+  &:hover,
+  &:focus {
+    outline: 0;
+    background: none;
+
+    svg {
+      fill: var(--colors-street-lamp-yellow);
+    }
   }
 }
 
@@ -42,6 +44,16 @@
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
   width: 100%;
+  gap: var(--default-padding);
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  font-size: 0.75rem;
+}
+
+.navItem {
+  &.active {
+    color: var(--colors-street-lamp-yellow);
+  }
 }

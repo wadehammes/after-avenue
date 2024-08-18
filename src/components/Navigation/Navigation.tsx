@@ -2,47 +2,86 @@
 
 import classNames from "classnames";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import styles from "src/components/Navigation/Navigation.module.css";
 import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
+import type { Page } from "src/contentful/getPages";
+import AfterAvenueLogo from "src/icons/AfterAvenue.svg";
 
-export const Navigation = () => {
-  const [scrolled, setScrolled] = useState(false);
+interface NavigationProps {
+	navigationItems: Partial<Page | null>[];
+}
 
-  const listenScrollEvent = useCallback(() => {
-    if (window.scrollY < 50) {
-      return setScrolled(false);
-    } else {
-      return setScrolled(true);
-    }
-  }, []);
+export const Navigation = (props: NavigationProps) => {
+	const { navigationItems } = props;
 
-  useEffect(() => {
-    window.addEventListener("scroll", listenScrollEvent);
+	const pathname = usePathname();
 
-    listenScrollEvent();
+	const [scrolled, setScrolled] = useState(false);
 
-    return () => window.removeEventListener("scroll", listenScrollEvent);
-  }, [listenScrollEvent]);
+	const listenScrollEvent = useCallback(() => {
+		if (window.scrollY < 50) {
+			return setScrolled(false);
+		}
 
-  return (
-    <nav
-      className={classNames(styles.navigation, { [styles.scrolled]: scrolled })}
-    >
-      <div className="container">
-        <Link
-          href="/"
-          className={styles.logo}
-          title="After Avenue"
-          aria-label="After Avenue"
-        >
-          After Avenue
-        </Link>
-        <ul className={styles.navItemList}></ul>
-        <StyledButtonLink variant="outlined" href="/contact">
-          Contact Us
-        </StyledButtonLink>
-      </div>
-    </nav>
-  );
+		return setScrolled(true);
+	}, []);
+
+	useEffect(() => {
+		window.addEventListener("scroll", listenScrollEvent);
+
+		listenScrollEvent();
+
+		return () => window.removeEventListener("scroll", listenScrollEvent);
+	}, [listenScrollEvent]);
+
+	return (
+		<nav
+			className={classNames(styles.navigation, {
+				[styles.scrolled]: scrolled,
+			})}
+		>
+			<div className="container">
+				<Link
+					href="/"
+					className={styles.logo}
+					title="After Avenue"
+					aria-label="After Avenue"
+				>
+					<AfterAvenueLogo />
+				</Link>
+				{navigationItems.length > 0 ? (
+					<ul className={styles.navItemList}>
+						{navigationItems.map((page) =>
+							page?.pageSlug ? (
+								<li key={page.pageSlug}>
+									<Link
+										href={`/${page.pageSlug}`}
+										className={classNames(styles.navItem, {
+											[styles.active]: pathname.includes(page.pageSlug),
+										})}
+										title={page.pageTitle}
+										aria-label={page.pageTitle}
+									>
+										{page.pageTitle}
+									</Link>
+								</li>
+							) : null,
+						)}
+						<li>
+							<Link
+								href="/contact"
+								className={styles.navItem}
+								title="Contact Us"
+								aria-label="Contact Us"
+							>
+								Contact Us
+							</Link>
+						</li>
+					</ul>
+				) : null}
+			</div>
+		</nav>
+	);
 };

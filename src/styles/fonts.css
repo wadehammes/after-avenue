@@ -1,0 +1,119 @@
+@font-face {
+  font-family: "arida";
+  src: url("/fonts/Arida/Arida-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "arida";
+  src: url("/fonts/Arida/Arida-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "arida";
+  src: url("/fonts/Arida/Arida-Medium.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "arida";
+  src: url("/fonts/Arida/Arida-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "arida";
+  src: url("/fonts/Arida/Arida-RegularIt.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "area";
+  src: url("/fonts/Area/fonnts.com-Area_Normal_Black_Italic.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "area";
+  src: url("/fonts/Area/fonnts.com-Area_Normal_Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "area";
+  src: url("/fonts/Area/fonnts.com-Area_Normal_Bold_Italic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "area";
+  src: url("/fonts/Area/fonnts.com-Area_Normal_Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "area";
+  src: url("/fonts/Area/fonnts.com-Area_Normal_ExtraBold_Italic.otf") format("opentype");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "area";
+  src: url("/fonts/Area/fonnts.com-Area_Normal_ExtraBold.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "area";
+  src: url("/fonts/Area/fonnts.com-Area_Normal_Regular_Italic.otf") format("opentype");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "area";
+  src: url("/fonts/Area/fonnts.com-Area_Normal_Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "area";
+  src: url("/fonts/Area/fonnts.com-Area_Normal_SemiBold_Italic.otf") format("opentype");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "area";
+  src: url("/fonts/Area/fonnts.com-Area_Normal_SemiBold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}

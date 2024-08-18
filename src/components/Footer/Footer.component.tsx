@@ -1,11 +1,19 @@
+import classNames from "classnames";
 import styles from "src/components/Footer/Footer.module.css";
 import Instagram from "src/icons/Instagram.icon.svg";
 import Twitter from "src/icons/Twitter.icon.svg";
 
 export const Footer = () => (
-  <footer id="footer" className={styles.footer}>
-    <div className="container centered">
-      &copy; {new Date().getFullYear()} After Avenue
+  <footer id="footer" className={classNames(styles.footer)}>
+    <div className={styles.footerContainer}>
+      <span className={styles.copyright}>
+        &copy; {new Date().getFullYear()} After Avenue
+      </span>
+      <div className={styles.email}>
+        <a href="mailto:hello@afteravenue.com" title="Email" aria-label="Email">
+          hello@afteravenue.com
+        </a>
+      </div>
       <div className={styles.socialList}>
         <a
           href="https://instagram.com/afteravenue"

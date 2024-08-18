@@ -3,6 +3,7 @@ import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { HomePage } from "src/components/HomePage/HomePage";
 import { fetchPage } from "src/contentful/getPages";
+import { fetchAllFeaturedWork } from "src/contentful/getWork";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await fetchPage({
@@ -24,8 +25,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const Home = () => {
-  return <HomePage />;
+const Home = async () => {
+  const featuredWork = await fetchAllFeaturedWork({
+    preview: draftMode().isEnabled,
+  });
+
+  return <HomePage featuredWork={featuredWork} />;
 };
 
 export default Home;

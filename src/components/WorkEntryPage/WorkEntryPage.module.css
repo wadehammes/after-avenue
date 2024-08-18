@@ -1,0 +1,6 @@
+.workCopyContainer {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+  padding: 0 0 var(--default-padding);
+}

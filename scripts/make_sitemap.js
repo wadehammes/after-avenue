@@ -2,7 +2,7 @@ const fs = require("fs");
 
 const path = ".next/prerender-manifest.json";
 const sitemapPath = "public/sitemap.xml";
-const baseUrl = "https:/provisioner.agency";
+const baseUrl = "https://www.afteravenue.com";
 const lastModTime = new Date().toISOString();
 
 const manifestContents = fs.readFileSync(path, "utf-8");
@@ -13,7 +13,7 @@ let sitemapStr = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
 
 const addRoute = (route) => {
-  sitemapStr += `
+	sitemapStr += `
   <url>
     <loc>${baseUrl}${route}</loc>
     <lastmod>${lastModTime}</lastmod>
@@ -24,10 +24,11 @@ const { routes } = manifest;
 
 const IGNORE_ROUTES = ["/404"];
 
+// biome-ignore lint/complexity/noForEach: I want to
 Object.entries(routes).forEach(([route, _]) => {
-  if (!IGNORE_ROUTES.includes(route)) {
-    addRoute(route);
-  }
+	if (!IGNORE_ROUTES.includes(route)) {
+		addRoute(route);
+	}
 });
 
 sitemapStr += "</urlset>";
