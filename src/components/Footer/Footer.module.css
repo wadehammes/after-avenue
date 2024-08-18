@@ -1,0 +1,48 @@
+.footer {
+  align-items: flex-start;
+  bottom: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  padding: var(--default-padding);
+  position: relative;
+  width: 100%;
+  z-index: 0;
+}
+
+.footerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+  gap: var(--default-padding);
+  padding: var(--default-padding) var(--default-padding) 4rem;
+  width: 100%;
+  max-width: 60ch;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  margin-top: -2rem;
+
+  svg {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+.socialList {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.socialIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.twitterIcon {
+  width: 1.35rem;
+  height: 1.35rem;
+}

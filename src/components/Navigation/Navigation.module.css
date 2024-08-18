@@ -1,0 +1,47 @@
+.navigation {
+  background: transparent;
+  position: fixed;
+  width: 100%;
+  z-index: 99;
+  transition: background 0.25s linear;
+  padding: 1.5rem 0;
+
+  &.scrolled {
+    background: color-mix(in srgb, var(--colors-black) 80%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
+    background-color: var(--black);
+    position: relative;  
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover,
+  &:focus {
+    outline: 0;
+    background: none;
+  }
+}
+
+.desktopLogo {
+  & > svg {
+    margin: auto;
+    height: 3rem;
+    width: 14rem;
+  }
+}
+
+.navItemList {
+  list-style-type: none;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
