@@ -7,8 +7,8 @@
   padding: 1.5rem 0;
 
   &.scrolled {
-    background: color-mix(in srgb, var(--colors-black) 80%, transparent);
-    backdrop-filter: blur(12px);
+    background-color: rgba(0,0,0,0.25);
+    background-image: url("/images/dot-bg.png");
   }
 
   @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
