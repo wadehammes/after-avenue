@@ -21,7 +21,10 @@ export const WorkCard = (props: WorkCardProps) => {
     <div ref={ref} className={styles.workCard}>
       <VideoPlayer url={work.workVideoUrl} rounded playing={inView} />
       <div className={styles.workCardMeta}>
-        <h2>{work.workTitle}</h2>
+        <div className={styles.workCardTitle}>
+          <h2>{work.workTitle}</h2>
+          <p>{work.workClient}</p>
+        </div>
         <StyledButtonLink
           href={`/work/${work.workSlug}`}
           variant="outlined"

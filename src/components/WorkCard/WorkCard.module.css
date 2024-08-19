@@ -23,3 +23,15 @@
     text-wrap: balance;
   }
 }
+
+.workCardTitle {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.5rem;
+  width: 100%;
+  flex: 1;
+
+  p {
+    font-size: 0.75rem;
+  }
+}

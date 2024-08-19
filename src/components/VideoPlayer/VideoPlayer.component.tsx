@@ -2,6 +2,7 @@
 
 import classNames from "classnames";
 import ReactPlayer from "react-player/lazy";
+import { Loader } from "src/components/Loader/Loader.component";
 import styles from "src/components/VideoPlayer/VideoPlayer.module.css";
 import { useIsBrowser } from "src/hooks/useIsBrowser";
 
@@ -23,9 +24,14 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     <div
       className={classNames(styles.videoPlayer, { [styles.rounded]: rounded })}
     >
-      <ReactPlayer controls url={url} playing={playing} loop muted>
-        VideoPlayer
-      </ReactPlayer>
+      <ReactPlayer
+        controls
+        url={url}
+        playing={playing}
+        loop
+        muted
+        fallback={<Loader />}
+      />
     </div>
   );
 };

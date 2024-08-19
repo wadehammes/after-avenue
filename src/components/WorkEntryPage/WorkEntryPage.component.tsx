@@ -4,25 +4,25 @@ import type { Work } from "src/contentful/getWork";
 import { RichText } from "src/contentful/richText";
 
 interface WorkEntryPageProps {
-	workEntry: Work;
+  workEntry: Work;
 }
 
 export const WorkEntryPage = (props: WorkEntryPageProps) => {
-	const { workEntry } = props;
+  const { workEntry } = props;
+  const { workTitle, workVideoUrl, workDescription, workClient } = workEntry;
 
-	const { workTitle, workVideoUrl, workDescription } = workEntry;
-
-	return (
-		<div className="container column">
-			<VideoPlayer url={workVideoUrl} rounded />
-			<div className={styles.workCopyContainer}>
-				<h1>{workTitle}</h1>
-				{workDescription ? (
-					<div>
-						<RichText document={workDescription} />
-					</div>
-				) : null}
-			</div>
-		</div>
-	);
+  return (
+    <article className="container column">
+      <VideoPlayer url={workVideoUrl} rounded />
+      <div className={styles.workCopyContainer}>
+        <h1>{workTitle}</h1>
+        <p>{workClient}</p>
+        {workDescription ? (
+          <div>
+            <RichText document={workDescription} />
+          </div>
+        ) : null}
+      </div>
+    </article>
+  );
 };
