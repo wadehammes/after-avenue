@@ -1,0 +1,56 @@
+.workOverlay {
+  align-items: center;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.5);
+  background-image: url("/images/dot-bg.png");
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 1;
+
+  > * {
+    margin: auto;
+  }
+}
+
+.featuredWork {
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  opacity: 0.5;
+  transition: opacity 0.2s ease-in-out, transform 0.5s ease-in-out, border-radius 0.2s ease-in-out;
+  transform: scale(0.9);
+  transform-origin: center;
+  width: 100%;
+
+  &.inView {
+    opacity: 1;
+    transform: scale(1);
+    border-radius: 0;
+  }
+
+  &:hover {
+    .workOverlay {
+      opacity: 1;
+    }
+  }
+}
+
+.videoContainer {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  width: 100%;
+
+  video {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: auto !important;
+    border: 0;
+  }
+}

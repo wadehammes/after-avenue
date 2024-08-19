@@ -1,12 +1,13 @@
 .form {
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: center;
   flex-flow: column nowrap;
   gap: 2rem;
   width: 100%;
   max-width: 120ch;
   padding: 1rem 0 2rem;
+  margin: 0 auto;
 }
 
 .formSubmitContainer {

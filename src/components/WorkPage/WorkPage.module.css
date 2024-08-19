@@ -1,0 +1,7 @@
+.workList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: var(--default-padding);
+  width: 100%;
+  margin: 0 auto;
+}

@@ -1,7 +1,8 @@
-import { Entry } from "contentful";
+import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
-import { ContentfulAsset, parseContentfulAsset } from "src/contentful/image";
-import { TypePageSkeleton } from "src/contentful/types/TypePage";
+import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
+import { parseContentfulAsset } from "src/contentful/parseContentfulAsset";
+import type { TypePageSkeleton } from "src/contentful/types/TypePage";
 
 type PageEntry = Entry<TypePageSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
 

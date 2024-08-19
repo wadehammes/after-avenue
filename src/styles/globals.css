@@ -99,8 +99,8 @@ html,
 body {
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: "arboria", sans-serif;
-  font-weight: 400;
+  font-family: "area", sans-serif;
+  font-weight: normal;
   font-style: normal;
   font-size: 14px;
   transition: background 0.2s ease-in-out;
@@ -131,8 +131,8 @@ body {
 .page {
   display: flex;
   flex-flow: column nowrap;
-  gap: var(--default-padding);
   width: 100%;
+  gap: var(--default-padding);
   margin: 0 auto;
   min-height: 100vh;
 }
@@ -143,6 +143,7 @@ body {
   z-index: 2;
   overflow: hidden;
   flex: 1;
+  padding-top: 95px;
 }
 
 img, video {
@@ -190,7 +191,7 @@ b {
   align-items: center;
   justify-content: flex-start;
   flex-flow: row nowrap;
-  max-width: 1440px;
+  max-width: 2560px;
   margin: 0 auto;
   gap: var(--default-padding);
   width: 100%;
@@ -198,9 +199,10 @@ b {
   position: relative;
   z-index: 1;
 
-  &.centered {
-    text-align: center;
-    justify-content: center;
+
+  &.column {
+    align-items: flex-start;
+    justify-content: flex-start;
     flex-flow: column nowrap;
   }
 }
@@ -211,15 +213,15 @@ b {
   height: 3.35rem;
 }
 
-h1, h2 {
+h1, h2, h3, h4, h5, h6 {
+  font-family: "arida", serif;
   position: relative;
   z-index: 1;
 }
 
 h1 {
-  font-family: new-spirit, serif;
-  font-weight: 500;
-  font-style: normal;
+  font-size: clamp(3.5rem, 5vw, 5rem);
+  font-weight: 900;
   color: currentColor;
 }
 
@@ -237,19 +239,9 @@ p {
   color: currentColor;
 }
 
-.hero {
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: clamp(400px, 40vw, 800px);
-  overflow: hidden;
-  position: relative;
-  padding-top: 8rem;
-
-  &.reduced {
-    min-height: clamp(300px, 30vw, 600px);
-  }
+.page-container {
+  padding: 0 0 var(--default-padding);
+  width: 100%;
 }
 
 .page-header {
@@ -265,9 +257,10 @@ p {
   width: 100%;
   max-width: 140ch;
   color: var(--colors-text);
+  margin-bottom: var(--default-padding);
 
   h1 {
-    font-size: clamp(3.15rem, 10vw, 9rem);
+    font-size: clamp(2rem, 10vw, 5rem);
     line-height: 1.1;
   }
 }
@@ -328,7 +321,7 @@ p {
 :root {
   --colors-black: #171818;
   --colors-white: #E5E2DA;
-  --colors-streen-lamp-yellow: #D78D2D;
+  --colors-street-lamp-yellow: #D78D2D;
   --colors-sunset-yellow: #FFBF71;
   --colors-red-wine: #60140A;
 

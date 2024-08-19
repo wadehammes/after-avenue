@@ -6,6 +6,7 @@ import type {
   LocaleCode,
 } from "contentful";
 import type { TypeEditorsSkeleton } from "./TypeEditors";
+import type { TypeWorkCategorySkeleton } from "./TypeWorkCategory";
 
 export interface TypeWorkFields {
   entryTitle?: EntryFieldTypes.Symbol;
@@ -14,12 +15,15 @@ export interface TypeWorkFields {
   workClient?: EntryFieldTypes.Symbol;
   workVideoUrl: EntryFieldTypes.Symbol;
   workDescription?: EntryFieldTypes.RichText;
+  workCategories?: EntryFieldTypes.Array<
+    EntryFieldTypes.EntryLink<TypeWorkCategorySkeleton>
+  >;
   workEditors?: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<TypeEditorsSkeleton>
   >;
   workSocialImage?: EntryFieldTypes.AssetLink;
-  featuredOnHomePage?: EntryFieldTypes.Boolean;
   workShortClip?: EntryFieldTypes.AssetLink;
+  featuredOnHomePage?: EntryFieldTypes.Boolean;
 }
 
 export type TypeWorkSkeleton = EntrySkeletonType<TypeWorkFields, "work">;
