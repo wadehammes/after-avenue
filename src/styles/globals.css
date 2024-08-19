@@ -130,6 +130,7 @@ body {
 }
 
 .draftMode {
+  background-color: var(--colors-red-wine);
   background-image: url("/images/dot-bg.png");
   border-radius: 20px;
   display: flex;
@@ -138,9 +139,10 @@ body {
   text-align: left;
   gap: 1rem;
   padding: var(--default-padding);
-  position: absolute;
+  position: fixed;
   right: var(--default-padding);
   bottom: var(--default-padding);
+  z-index: 99;
 }
 
 .page {

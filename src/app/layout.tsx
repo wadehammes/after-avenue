@@ -61,7 +61,7 @@ export default async function RootLayout({
       <body>
         {draftMode().isEnabled ? (
           <div className="draftMode">
-            Draft mode is on!{" "}
+            You are previewing in draft mode!{" "}
             <ExitDraftModeLink style={{ textDecoration: "underline" }} />
           </div>
         ) : null}
