@@ -3,6 +3,7 @@ import Link from "next/link";
 import styles from "src/components/Footer/Footer.module.css";
 import AfterAvenueBrandmark from "src/icons/AfterAvenueBrandmark.svg";
 import Instagram from "src/icons/Instagram.icon.svg";
+import LinkedIn from "src/icons/LinkedIn.svg";
 import Twitter from "src/icons/Twitter.icon.svg";
 
 export const Footer = () => (
@@ -11,7 +12,7 @@ export const Footer = () => (
       <span className={styles.copyright}>
         &copy; {new Date().getFullYear()} After Avenue
       </span>
-      <div className={styles.email}>
+      <div className={styles.item}>
         <a href="mailto:hello@afteravenue.com" title="Email" aria-label="Email">
           hello@afteravenue.com
         </a>
@@ -27,6 +28,13 @@ export const Footer = () => (
         </a>
       </div>
       <div className={styles.socialList}>
+        <a
+          href="https://linkedin.com/in/afteravenue"
+          rel="noopener noreferrer"
+          title="LinkedIn"
+        >
+          <LinkedIn className={styles.socialIcon} />
+        </a>
         <a
           href="https://instagram.com/afteravenue"
           rel="noopener noreferrer"
