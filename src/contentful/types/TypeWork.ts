@@ -19,11 +19,9 @@ export interface TypeWorkFields {
   workCategories?: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<TypeWorkCategorySkeleton>
   >;
+  workSeriesCategory?: EntryFieldTypes.EntryLink<TypeWorkCategorySkeleton>;
   workEditors?: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<TypeEditorsSkeleton>
-  >;
-  workSeries?: EntryFieldTypes.Array<
-    EntryFieldTypes.EntryLink<TypeWorkSkeleton>
   >;
   workShortClip?: EntryFieldTypes.AssetLink;
   featuredOnHomePage?: EntryFieldTypes.Boolean;

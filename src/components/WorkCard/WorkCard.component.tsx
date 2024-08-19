@@ -25,14 +25,16 @@ export const WorkCard = (props: WorkCardProps) => {
           <h2>{work.workTitle}</h2>
           <p>{work.workClient}</p>
         </div>
-        <StyledButtonLink
-          href={`/work/${work.workSlug}`}
-          variant="outlined"
-          color="dark"
-          size="small"
-        >
-          View Work
-        </StyledButtonLink>
+        <div className={styles.workCardButtonContainer}>
+          <StyledButtonLink
+            href={`/work/${work.workSlug}`}
+            variant="outlined"
+            color="dark"
+            size="small"
+          >
+            View Work
+          </StyledButtonLink>
+        </div>
       </div>
     </div>
   );
