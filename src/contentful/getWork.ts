@@ -143,6 +143,34 @@ export async function fetchRecentWork({
   );
 }
 
+export async function fetchRandomWork({
+  preview,
+}: FetchAllWorkOptions): Promise<Work[]> {
+  const contentful = contentfulClient({ preview });
+
+  const workResults =
+    await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
+      // biome-ignore lint/style/useNamingConvention: Contentful standards
+      content_type: "work",
+      limit: 0,
+    });
+
+  const workCount = workResults.total;
+
+  const workResult =
+    await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
+      // biome-ignore lint/style/useNamingConvention: Contentful standards
+      content_type: "work",
+      include: 10,
+      limit: 3,
+      skip: Math.floor(Math.random() * (workCount - 3)),
+    });
+
+  return workResult.items.map(
+    (pageEntry) => parseContentfulWork(pageEntry) as Work,
+  );
+}
+
 // A function to fetch a single page by its slug.
 // Optionally uses the Contentful content preview.
 interface FetchSingleWorkOptions {

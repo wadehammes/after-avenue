@@ -5,7 +5,7 @@ import { WorkEntryPage } from "src/components/WorkEntryPage/WorkEntryPage.compon
 import type { Work } from "src/contentful/getWork";
 import {
   fetchAllWork,
-  fetchRecentWork,
+  fetchRandomWork,
   fetchWork,
   fetchWorkByCategory,
 } from "src/contentful/getWork";
@@ -99,11 +99,11 @@ async function WorkEntry({ params }: WorkProps) {
     return workEntry.workSlug !== work.workSlug;
   });
 
-  const recentWork = await fetchRecentWork({
+  const randomRecentWork = await fetchRandomWork({
     preview: draftMode().isEnabled,
   });
 
-  const recentWorkUnique = recentWork.filter((work) => {
+  const randomRecentWorkUnique = randomRecentWork.filter((work) => {
     return workEntry.workSlug !== work.workSlug;
   });
 
@@ -111,7 +111,7 @@ async function WorkEntry({ params }: WorkProps) {
     <WorkEntryPage
       workEntry={workEntry}
       workSeries={workSeriesUnique}
-      recentWork={recentWorkUnique}
+      recentWork={randomRecentWorkUnique}
     />
   );
 }
