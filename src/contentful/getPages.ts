@@ -12,7 +12,8 @@ export interface Page {
   pageTitle: string;
   pageSlug: string;
   enableIndexing: boolean;
-  pageDescription: string;
+  metaDescription: string;
+  pageDescription?: string;
   socialImage: ContentfulAsset | null;
   updatedAt: string;
 }
@@ -25,12 +26,13 @@ export function parseContentfulPage(pageEntry?: PageEntry): Page | null {
   }
 
   return {
-    pageTitle: pageEntry.fields.pageTitle,
-    pageSlug: pageEntry.fields.pageSlug,
     enableIndexing: pageEntry.fields?.enableIndexing ?? true,
-    updatedAt: pageEntry.sys.updatedAt,
+    metaDescription: pageEntry.fields.metaDescription,
     pageDescription: pageEntry.fields.pageDescription,
+    pageSlug: pageEntry.fields.pageSlug,
+    pageTitle: pageEntry.fields.pageTitle,
     socialImage: parseContentfulAsset(pageEntry.fields.socialImage),
+    updatedAt: pageEntry.sys.updatedAt,
   };
 }
 

@@ -20,7 +20,7 @@
 
   &.small {
     font-size: 0.9rem;
-    padding: clamp(0.8rem, 1vw, 1.1rem);
+    padding: clamp(0.8rem, 1vw, 1.1rem) clamp(1em, 10vw, 2rem);
   }
 
   &[disabled] {

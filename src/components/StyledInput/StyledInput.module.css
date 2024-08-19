@@ -25,17 +25,16 @@
 }
 
 .inputWrapper {
-  background-color: transparent;
+  background-color: white;
   border: 1px solid var(--colors-white);
-  border-radius: 1000px;
-  box-shadow: inset 0 1px 4px rgba(0,0,0,.25);
+  border-radius: 20px;
   min-width: 25ch;
   min-height: auto;
   display: flex;
   align-items: center;
   padding-right: 2.25rem;
   width: 100%;
-  color: var(--colors-white);
+  color: var(--colors-black);
 
   &:focus-within {
     border-color: var(--colors-street-lamp-yellow);

@@ -14,9 +14,12 @@
   gap: 1rem;
   padding: var(--default-padding);
   width: 100%;
+  
 
   h2 {
     font-size: clamp(1.25rem, 3vw, 1.5rem);
     flex: 1;
+    line-height: 1.2;
+    text-wrap: balance;
   }
 }

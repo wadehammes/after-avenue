@@ -15,13 +15,16 @@ export interface TypeWorkFields {
   workClient?: EntryFieldTypes.Symbol;
   workVideoUrl: EntryFieldTypes.Symbol;
   workDescription?: EntryFieldTypes.RichText;
+  workProjectDate?: EntryFieldTypes.Date;
   workCategories?: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<TypeWorkCategorySkeleton>
   >;
   workEditors?: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<TypeEditorsSkeleton>
   >;
-  workSocialImage?: EntryFieldTypes.AssetLink;
+  workSeries?: EntryFieldTypes.Array<
+    EntryFieldTypes.EntryLink<TypeWorkSkeleton>
+  >;
   workShortClip?: EntryFieldTypes.AssetLink;
   featuredOnHomePage?: EntryFieldTypes.Boolean;
 }

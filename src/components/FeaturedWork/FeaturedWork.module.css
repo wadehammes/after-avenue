@@ -10,9 +10,25 @@
   position: absolute;
   transition: opacity 0.2s ease-in-out;
   z-index: 1;
+  padding: var(--default-padding);
+  text-align: center;
 
   > * {
     margin: auto;
+  }
+}
+
+.workOverlayText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+  gap: 1rem;
+  max-width: 100ch;
+  text-wrap: balance;
+
+  p {
+    padding-bottom: 1.5rem
   }
 }
 
@@ -30,6 +46,12 @@
     opacity: 1;
     transform: scale(1);
     border-radius: 0;
+  }
+
+  @media screen and (min-width: 1960px) {
+    &.inView {
+      border-radius: 20px;
+    }
   }
 
   &:hover {

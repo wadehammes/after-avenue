@@ -1,3 +1,6 @@
+"use client";
+
+import { useInView } from "react-intersection-observer";
 import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import styles from "src/components/WorkCard/WorkCard.module.css";
@@ -10,9 +13,13 @@ interface WorkCardProps {
 export const WorkCard = (props: WorkCardProps) => {
   const { work } = props;
 
+  const { inView, ref } = useInView({
+    threshold: 0.25,
+  });
+
   return (
-    <div className={styles.workCard}>
-      <VideoPlayer url={work.workVideoUrl} rounded />
+    <div ref={ref} className={styles.workCard}>
+      <VideoPlayer url={work.workVideoUrl} rounded playing={inView} />
       <div className={styles.workCardMeta}>
         <h2>{work.workTitle}</h2>
         <StyledButtonLink

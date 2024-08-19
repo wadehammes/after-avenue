@@ -12,7 +12,7 @@
   &.rounded {
     border-radius: 20px;
   }
-
+  
   > * {
     margin: auto;
     position: absolute;
