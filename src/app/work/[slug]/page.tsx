@@ -6,8 +6,8 @@ import type { Work } from "src/contentful/getWork";
 import {
   fetchAllWork,
   fetchRandomWork,
-  fetchWork,
   fetchWorkByCategory,
+  fetchWorkBySlug,
 } from "src/contentful/getWork";
 import { outputSitemap } from "src/lib/generateSitemap";
 import type { SitemapItem } from "src/lib/generateSitemap";
@@ -60,7 +60,7 @@ export async function generateStaticParams(): Promise<WorkParams[]> {
 export async function generateMetadata({
   params,
 }: WorkProps): Promise<Metadata> {
-  const workEntry = await fetchWork({
+  const workEntry = await fetchWorkBySlug({
     slug: params.slug,
     preview: draftMode().isEnabled,
   });
@@ -79,7 +79,7 @@ export async function generateMetadata({
 async function WorkEntry({ params }: WorkProps) {
   // Fetch a single work entry by slug,
   // using the content preview if draft mode is enabled:
-  const workEntry = await fetchWork({
+  const workEntry = await fetchWorkBySlug({
     slug: params.slug,
     preview: draftMode().isEnabled,
   });

@@ -51,6 +51,8 @@
 }
 
 .navItem {
+  text-decoration: none;
+
   &.active {
     color: var(--colors-street-lamp-yellow);
   }

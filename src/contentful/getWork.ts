@@ -1,9 +1,7 @@
 import type { Document } from "@contentful/rich-text-types";
 import type { Entry } from "contentful";
-import safeJsonStringify from "safe-json-stringify";
 import { contentfulClient } from "src/contentful/client";
-import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
-import { parseContentfulAsset } from "src/contentful/parseContentfulAsset";
+import { Editor, parseContentfulEditor } from "src/contentful/getEditors";
 import type { WorkCategory } from "src/contentful/parseWorkCategories";
 import { parseContentfulWorkCategory } from "src/contentful/parseWorkCategories";
 import type { TypeWorkSkeleton } from "src/contentful/types";
@@ -15,12 +13,12 @@ type WorkEntry = Entry<TypeWorkSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
 export interface Work {
   featuredOnHomePage: boolean;
   updatedAt: string;
-  workEditors?: [];
   workCategories: (WorkCategory | null)[];
   workClient: string;
+  workCredits: Document | undefined | null;
   workDescription: Document | undefined | null;
+  workEditors?: (Editor | null)[];
   workSeriesCategory: WorkCategory | null;
-  workShortClip: ContentfulAsset | null;
   workSlug: string;
   workTitle: string;
   workVideoUrl: string;
@@ -41,11 +39,14 @@ export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
         category ? parseContentfulWorkCategory(category) : null,
       ) ?? [],
     workClient: workEntry.fields?.workClient ?? "",
+    workCredits: workEntry.fields.workCredits,
     workDescription: workEntry.fields.workDescription,
+    workEditors: workEntry.fields?.workEditors?.map((editor) =>
+      editor ? parseContentfulEditor(editor) : null,
+    ),
     workSeriesCategory: workEntry.fields?.workSeriesCategory
       ? parseContentfulWorkCategory(workEntry.fields.workSeriesCategory)
       : null,
-    workShortClip: parseContentfulAsset(workEntry.fields.workShortClip),
     workSlug: workEntry.fields.workSlug,
     workTitle: workEntry.fields.workTitle,
     workVideoUrl: workEntry.fields?.workVideoUrl ?? "",
@@ -104,6 +105,44 @@ export async function fetchWorkByCategory({
   return workResult.items.map(
     (pageEntry) => parseContentfulWork(pageEntry) as Work,
   );
+}
+
+interface FetchWorkByEditorOptions {
+  editorSlug: string;
+  preview: boolean;
+}
+
+export async function fetchWorkByEditor({
+  preview,
+  editorSlug,
+}: FetchWorkByEditorOptions): Promise<Work[]> {
+  if (!editorSlug) {
+    return [];
+  }
+
+  const contentful = contentfulClient({ preview });
+
+  const workResult =
+    await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
+      // biome-ignore lint/style/useNamingConvention: Contentful standards
+      content_type: "work",
+      include: 10,
+      limit: 1000,
+    });
+
+  const parseWorkResults = workResult.items.map(
+    (pageEntry) => parseContentfulWork(pageEntry) as Work,
+  );
+
+  return parseWorkResults.filter((work) => {
+    if (!work || !work.workEditors) {
+      return false;
+    }
+
+    return work.workEditors.some((editor) => {
+      return editor ? editor.editorSlug === editorSlug : false;
+    });
+  });
 }
 
 export async function fetchAllFeaturedWork({
@@ -178,7 +217,7 @@ interface FetchSingleWorkOptions {
   preview: boolean;
 }
 
-export async function fetchWork({
+export async function fetchWorkBySlug({
   slug,
   preview,
 }: FetchSingleWorkOptions): Promise<Work | null> {

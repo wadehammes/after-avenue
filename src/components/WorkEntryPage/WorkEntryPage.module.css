@@ -1,9 +1,48 @@
+.workContentContainer {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: var(--default-padding);
+  padding: 0;
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    flex-flow: row nowrap;
+  }
+}
+
+.workCredits {
+  background-image: url("/images/dot-bg.png");
+  border-radius: 20px;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+  padding: var(--default-padding);
+  width: 100%;
+  flex: 1;
+
+  h3 {
+    font-family: "arida", serif;
+    font-weight: 900;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    text-align: left;
+    line-height: 1.25;
+  }
+}
+
 .workCopyContainer {
   display: flex;
   flex-flow: column nowrap;
   gap: 1rem;
   padding: 0 0 var(--default-padding);
   width: 100%;
+  flex: 2;
+}
+
+.workDescription {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  text-wrap: balance;
+  line-height: 1.5;
+  padding-top: 1rem;
 }
 
 .workSeries {
@@ -11,6 +50,7 @@
   flex-flow: column nowrap;
   gap: var(--default-padding);
   padding: 4rem 0 0;
+  width: 100%;
 }
 
 .workSeriesList {
