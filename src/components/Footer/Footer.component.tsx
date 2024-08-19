@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import Link from "next/link";
 import styles from "src/components/Footer/Footer.module.css";
 import AfterAvenueBrandmark from "src/icons/AfterAvenueBrandmark.svg";
 import Instagram from "src/icons/Instagram.icon.svg";
@@ -8,12 +9,21 @@ export const Footer = () => (
   <footer id="footer" className={classNames(styles.footer)}>
     <div className={styles.footerContainer}>
       <span className={styles.copyright}>
-        <AfterAvenueBrandmark />
         &copy; {new Date().getFullYear()} After Avenue
       </span>
       <div className={styles.email}>
         <a href="mailto:hello@afteravenue.com" title="Email" aria-label="Email">
           hello@afteravenue.com
+        </a>
+      </div>
+      <div className={styles.item}>
+        <Link href="#top">
+          <AfterAvenueBrandmark />
+        </Link>
+      </div>
+      <div className={styles.item}>
+        <a href="tel:(770) 289-0063" title="Call Us" aria-label="Call Us">
+          (770) 289-0063
         </a>
       </div>
       <div className={styles.socialList}>

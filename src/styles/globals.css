@@ -217,6 +217,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "arida", serif;
   font-weight: 900;
   position: relative;
+  text-wrap: balance;
   z-index: 1;
 }
 
@@ -278,10 +279,15 @@ p {
 .section-header {
   display: flex;
   flex-flow: column nowrap;
-  gap: 1rem;
+  gap: var(--default-padding);
   max-width: 100ch;
   text-wrap: balance;
   margin: 0 auto 2rem;
+  text-align: center;
+
+  p {
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+  }
 }
 
 .content {

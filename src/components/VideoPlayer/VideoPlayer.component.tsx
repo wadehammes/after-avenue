@@ -25,7 +25,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
       className={classNames(styles.videoPlayer, { [styles.rounded]: rounded })}
     >
       <ReactPlayer
-        controls
+        controls={rounded}
         url={url}
         playing={playing}
         loop
