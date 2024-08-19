@@ -13,16 +13,19 @@
   background-image: url("/images/dot-bg.png");
   border-radius: 20px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   gap: var(--default-padding);
   padding: var(--default-padding);
   margin: 0 auto;
   position: relative;
   z-index: 1;
-  margin-top: -2rem;
   width: 100%;
+
+  @media screen and (min-width: 600px) {
+    flex-flow: row nowrap;
+  }
 }
 
 .copyright {

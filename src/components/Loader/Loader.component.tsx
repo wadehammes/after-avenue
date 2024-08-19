@@ -4,7 +4,7 @@ import AfterAvenueBrandmark from "src/icons/AfterAvenueBrandmark.svg";
 export const Loader = () => {
   return (
     <div className={styles.loaderContainer}>
-      <AfterAvenueBrandmark />
+      <AfterAvenueBrandmark className={styles.loader} />
     </div>
   );
 };
