@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import styles from "src/components/WorkEntryPage/WorkEntryPage.module.css";
@@ -12,8 +13,14 @@ interface WorkEntryPageProps {
 
 export const WorkEntryPage = (props: WorkEntryPageProps) => {
   const { workEntry, workSeries, recentWork } = props;
-  const { workTitle, workVideoUrl, workDescription, workClient, workCredits } =
-    workEntry;
+  const {
+    workTitle,
+    workVideoUrl,
+    workDescription,
+    workClient,
+    workCredits,
+    workEditors,
+  } = workEntry;
 
   return (
     <article className="container column">
@@ -25,6 +32,24 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
           {workDescription ? (
             <div className={styles.workDescription}>
               <RichText document={workDescription} />
+            </div>
+          ) : null}
+          {workEditors ? (
+            <div className={styles.workEditors}>
+              <h3>Edited by:</h3>
+              {workEditors.map((editor) => {
+                if (!editor) {
+                  return null;
+                }
+
+                return (
+                  <div key={editor.editorSlug}>
+                    <Link href={`/editors/${editor.editorSlug}`}>
+                      {editor.editorName}
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
           ) : null}
         </div>
