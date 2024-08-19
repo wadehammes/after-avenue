@@ -7,6 +7,11 @@
   padding: 0;
   max-width: 1920px;
   margin: 0 auto;
+
+  @media (min-width: 1920px) {
+    gap: var(--default-padding);
+    padding: 0 var(--default-padding);
+  }
 }
 
 .homeSection {
