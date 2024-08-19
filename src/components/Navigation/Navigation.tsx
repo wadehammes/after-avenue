@@ -10,78 +10,79 @@ import type { Page } from "src/contentful/getPages";
 import AfterAvenueLogo from "src/icons/AfterAvenue.svg";
 
 interface NavigationProps {
-	navigationItems: Partial<Page | null>[];
+  navigationItems: Partial<Page | null>[];
 }
 
 export const Navigation = (props: NavigationProps) => {
-	const { navigationItems } = props;
+  const { navigationItems } = props;
 
-	const pathname = usePathname();
+  const pathname = usePathname();
 
-	const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-	const listenScrollEvent = useCallback(() => {
-		if (window.scrollY < 50) {
-			return setScrolled(false);
-		}
+  const listenScrollEvent = useCallback(() => {
+    if (window.scrollY < 50) {
+      return setScrolled(false);
+    }
 
-		return setScrolled(true);
-	}, []);
+    return setScrolled(true);
+  }, []);
 
-	useEffect(() => {
-		window.addEventListener("scroll", listenScrollEvent);
+  useEffect(() => {
+    window.addEventListener("scroll", listenScrollEvent);
 
-		listenScrollEvent();
+    listenScrollEvent();
 
-		return () => window.removeEventListener("scroll", listenScrollEvent);
-	}, [listenScrollEvent]);
+    return () => window.removeEventListener("scroll", listenScrollEvent);
+  }, [listenScrollEvent]);
 
-	return (
-		<nav
-			className={classNames(styles.navigation, {
-				[styles.scrolled]: scrolled,
-			})}
-		>
-			<div className="container">
-				<Link
-					href="/"
-					className={styles.logo}
-					title="After Avenue"
-					aria-label="After Avenue"
-				>
-					<AfterAvenueLogo />
-				</Link>
-				{navigationItems.length > 0 ? (
-					<ul className={styles.navItemList}>
-						{navigationItems.map((page) =>
-							page?.pageSlug ? (
-								<li key={page.pageSlug}>
-									<Link
-										href={`/${page.pageSlug}`}
-										className={classNames(styles.navItem, {
-											[styles.active]: pathname.includes(page.pageSlug),
-										})}
-										title={page.pageTitle}
-										aria-label={page.pageTitle}
-									>
-										{page.pageTitle}
-									</Link>
-								</li>
-							) : null,
-						)}
-						<li>
-							<Link
-								href="/contact"
-								className={styles.navItem}
-								title="Contact Us"
-								aria-label="Contact Us"
-							>
-								Contact Us
-							</Link>
-						</li>
-					</ul>
-				) : null}
-			</div>
-		</nav>
-	);
+  return (
+    <nav
+      id="top"
+      className={classNames(styles.navigation, {
+        [styles.scrolled]: scrolled,
+      })}
+    >
+      <div className="container">
+        <Link
+          href="/"
+          className={styles.logo}
+          title="After Avenue"
+          aria-label="After Avenue"
+        >
+          <AfterAvenueLogo />
+        </Link>
+        {navigationItems.length > 0 ? (
+          <ul className={styles.navItemList}>
+            {navigationItems.map((page) =>
+              page?.pageSlug ? (
+                <li key={page.pageSlug}>
+                  <Link
+                    href={`/${page.pageSlug}`}
+                    className={classNames(styles.navItem, {
+                      [styles.active]: pathname.includes(page.pageSlug),
+                    })}
+                    title={page.pageTitle}
+                    aria-label={page.pageTitle}
+                  >
+                    {page.pageTitle}
+                  </Link>
+                </li>
+              ) : null,
+            )}
+            <li>
+              <Link
+                href="/contact"
+                className={styles.navItem}
+                title="Contact Us"
+                aria-label="Contact Us"
+              >
+                Contact Us
+              </Link>
+            </li>
+          </ul>
+        ) : null}
+      </div>
+    </nav>
+  );
 };

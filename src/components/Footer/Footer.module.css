@@ -34,11 +34,6 @@
   justify-content: flex-start;
   gap: 1rem;
   flex: 1;
-
-  svg {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
 }
 
 .email {
@@ -49,6 +44,20 @@
   gap: 1rem;
   width: 100%;
   flex: 1;
+}
+
+.item {
+  color: var(--colors-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+  }
 }
 
 .socialList {
