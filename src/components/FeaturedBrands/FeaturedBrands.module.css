@@ -2,7 +2,8 @@
   display: grid;
   align-items: center;
   justify-items: center;
-  grid-template-columns: 1fr 1fr;
+  align-content: center;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: var(--default-padding);
   width: 100%;
 
