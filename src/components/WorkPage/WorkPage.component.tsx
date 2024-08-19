@@ -12,12 +12,16 @@ interface WorkPageProps {
 export const WorkPage = (props: WorkPageProps) => {
   const { pageFields, allWork } = props;
 
+  const { pageDescription, pageTitle } = pageFields;
+
   return (
     <div className="container column">
       <div className="page-container">
         <header className="page-header">
-          <h1 className="page-title">{pageFields.pageTitle}</h1>
-          <p className="subtitle">{pageFields.pageDescription}</p>
+          <h1 className="page-title">{pageTitle}</h1>
+          {pageDescription ? (
+            <p className="subtitle">{pageDescription}</p>
+          ) : null}
         </header>
         <div className={styles.workList}>
           {allWork.map((work) => (

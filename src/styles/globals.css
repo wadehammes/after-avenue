@@ -191,7 +191,7 @@ b {
   align-items: center;
   justify-content: flex-start;
   flex-flow: row nowrap;
-  max-width: 2560px;
+  max-width: 1920px;
   margin: 0 auto;
   gap: var(--default-padding);
   width: 100%;
@@ -215,13 +215,13 @@ b {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: "arida", serif;
+  font-weight: 900;
   position: relative;
   z-index: 1;
 }
 
 h1 {
   font-size: clamp(3.5rem, 5vw, 5rem);
-  font-weight: 900;
   color: currentColor;
 }
 

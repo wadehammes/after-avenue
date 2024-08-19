@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
       page.enableIndexing && process.env.ENVIRONMENT === "production"
         ? "index, follow"
         : "noindex, nofollow",
-    description: page.pageDescription,
+    description: page.metaDescription,
   };
 }
 
