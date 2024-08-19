@@ -15,6 +15,7 @@ export interface TypeWorkFields {
   workClient?: EntryFieldTypes.Symbol;
   workVideoUrl: EntryFieldTypes.Symbol;
   workDescription?: EntryFieldTypes.RichText;
+  workCredits?: EntryFieldTypes.RichText;
   workProjectDate?: EntryFieldTypes.Date;
   workCategories?: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<TypeWorkCategorySkeleton>
@@ -23,7 +24,6 @@ export interface TypeWorkFields {
   workEditors?: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<TypeEditorsSkeleton>
   >;
-  workShortClip?: EntryFieldTypes.AssetLink;
   featuredOnHomePage?: EntryFieldTypes.Boolean;
 }
 

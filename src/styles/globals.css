@@ -154,7 +154,7 @@ img, video {
 a {
   color: currentColor;
   font-family: inherit;
-  text-decoration: none;
+  text-decoration: underline;
   font-weight: normal;
 
   &:hover, &:focus {

@@ -12,55 +12,64 @@ interface WorkEntryPageProps {
 
 export const WorkEntryPage = (props: WorkEntryPageProps) => {
   const { workEntry, workSeries, recentWork } = props;
-  const { workTitle, workVideoUrl, workDescription, workClient } = workEntry;
+  const { workTitle, workVideoUrl, workDescription, workClient, workCredits } =
+    workEntry;
 
   return (
     <article className="container column">
       <VideoPlayer url={workVideoUrl} rounded />
-      <div className={styles.workCopyContainer}>
-        <h1>{workTitle}</h1>
-        <p>{workClient}</p>
-        {workDescription ? (
-          <div>
-            <RichText document={workDescription} />
+      <div className={styles.workContentContainer}>
+        <div className={styles.workCopyContainer}>
+          <h1>{workTitle}</h1>
+          <p>{workClient}</p>
+          {workDescription ? (
+            <div className={styles.workDescription}>
+              <RichText document={workDescription} />
+            </div>
+          ) : null}
+        </div>
+        {workCredits ? (
+          <div className={styles.workCredits}>
+            <h3>Credits</h3>
+            <RichText document={workCredits} />
           </div>
         ) : null}
-        {workSeries.length > 0 ? (
-          <div className={styles.workSeries}>
-            <h3>More in this series</h3>
-            <ul className={styles.workSeriesList}>
-              {workSeries.map((work) => {
-                if (!work) {
-                  return null;
-                }
-
-                return (
-                  <li key={work.workSlug}>
-                    <WorkCard work={work} />
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ) : (
-          <div className={styles.workSeries}>
-            <h3>Other work</h3>
-            <ul className={styles.workSeriesList}>
-              {recentWork.map((work) => {
-                if (!work) {
-                  return null;
-                }
-
-                return (
-                  <li key={work.workSlug}>
-                    <WorkCard work={work} />
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
       </div>
+      {workSeries.length > 0 ? (
+        <div className={styles.workSeries}>
+          <h3>More in this series</h3>
+          <ul className={styles.workSeriesList}>
+            {workSeries.map((work) => {
+              if (!work) {
+                return null;
+              }
+
+              return (
+                <li key={work.workSlug}>
+                  <WorkCard work={work} />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : (
+        <div className={styles.workSeries}>
+          <h3>Other work</h3>
+          <ul className={styles.workSeriesList}>
+            {recentWork.map((work) => {
+              if (!work) {
+                return null;
+              }
+
+              return (
+                <li key={work.workSlug}>
+                  <WorkCard work={work} />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </article>
   );
 };
