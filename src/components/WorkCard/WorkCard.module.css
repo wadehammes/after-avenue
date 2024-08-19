@@ -5,6 +5,8 @@
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
+  height: 100%;
+  container: workCard / inline-size;
 }
 
 .workCardMeta {
@@ -14,11 +16,17 @@
   gap: 1rem;
   padding: var(--default-padding);
   width: 100%;
-  
+  flex: 1;
+
+  @container workCard (width < 500px) {
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    justify-content: stretch;
+    gap: var(--default-padding);
+  }
 
   h2 {
     font-size: clamp(1.25rem, 3vw, 1.5rem);
-    flex: 1;
     line-height: 1.2;
     text-wrap: balance;
   }
@@ -29,9 +37,17 @@
   flex-flow: column nowrap;
   gap: 0.5rem;
   width: 100%;
-  flex: 1;
+  flex: 1 1 100%;
 
   p {
     font-size: 0.75rem;
   }
+}
+
+.workCardButtonContainer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
 }

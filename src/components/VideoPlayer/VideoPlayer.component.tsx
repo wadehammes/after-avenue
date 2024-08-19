@@ -13,7 +13,7 @@ interface VideoPlayerProps {
 }
 
 export const VideoPlayer = (props: VideoPlayerProps) => {
-  const { url, rounded, playing = true } = props;
+  const { url, rounded = false, playing = true } = props;
   const isBrowser = useIsBrowser();
 
   if (!isBrowser) {
@@ -31,6 +31,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         loop
         muted
         fallback={<Loader />}
+        light={rounded}
       />
     </div>
   );

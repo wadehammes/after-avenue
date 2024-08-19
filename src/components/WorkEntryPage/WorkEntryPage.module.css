@@ -3,4 +3,25 @@
   flex-flow: column nowrap;
   gap: 1rem;
   padding: 0 0 var(--default-padding);
+  width: 100%;
+}
+
+.workSeries {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: var(--default-padding);
+  padding: 4rem 0 0;
+}
+
+.workSeriesList {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--default-padding);
+  align-content: stretch;
+  width: 100%;
+
+  @media screen and (min-width: 600px) {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
 }
