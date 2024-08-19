@@ -48,7 +48,7 @@
     border-radius: 0;
   }
 
-  @media screen and (min-width: 1960px) {
+  @media screen and (min-width: 1920px) {
     &.inView {
       border-radius: 20px;
     }
