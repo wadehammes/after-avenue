@@ -10,10 +10,10 @@ import type { TypeWorkCategorySkeleton } from "./TypeWorkCategory";
 
 export interface TypeWorkFields {
   entryTitle?: EntryFieldTypes.Symbol;
-  workProjectDate?: EntryFieldTypes.Date;
   workTitle: EntryFieldTypes.Symbol;
   workSlug: EntryFieldTypes.Symbol;
   workClient?: EntryFieldTypes.Symbol;
+  workDirector?: EntryFieldTypes.Symbol;
   workVideoUrl: EntryFieldTypes.Symbol;
   workDescription?: EntryFieldTypes.RichText;
   workCredits?: EntryFieldTypes.RichText;
@@ -25,6 +25,7 @@ export interface TypeWorkFields {
     EntryFieldTypes.EntryLink<TypeEditorsSkeleton>
   >;
   featuredOnHomePage?: EntryFieldTypes.Boolean;
+  hideFromWorkFeeds?: EntryFieldTypes.Boolean;
 }
 
 export type TypeWorkSkeleton = EntrySkeletonType<TypeWorkFields, "work">;

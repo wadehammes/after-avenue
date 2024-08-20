@@ -23,7 +23,9 @@ interface EditorsProps {
 // Tell Next.js about all our editor entries so
 // they can be statically generated at build time.
 export async function generateStaticParams(): Promise<EditorParams[]> {
-  const editorEntries = await fetchAllEditors({ preview: false });
+  const editorEntries = await fetchAllEditors({
+    preview: false,
+  });
 
   if (editorEntries) {
     // Generate Sitemap

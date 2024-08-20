@@ -50,12 +50,13 @@
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  flex: 1;
   min-width: 10rem;
+  flex: 1;
 
   @container workCard (width < 500px) {
     align-items: stretch;
     justify-content: stretch;
+    flex: 0;
 
     > a {
       width: 100%;

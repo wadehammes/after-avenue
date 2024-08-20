@@ -24,7 +24,9 @@ interface WorkCategoryProps {
 // Tell Next.js about all our work categories
 // they can be statically generated at build time.
 export async function generateStaticParams(): Promise<WorkCategoryParams[]> {
-  const workCategories = await fetchAllWorkCategories({ preview: false });
+  const workCategories = await fetchAllWorkCategories({
+    preview: false,
+  });
 
   if (workCategories) {
     // Generate Sitemap

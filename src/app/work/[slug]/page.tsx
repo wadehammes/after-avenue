@@ -103,9 +103,9 @@ async function WorkEntry({ params }: WorkProps) {
     preview: draftMode().isEnabled,
   });
 
-  const randomRecentWorkUnique = randomRecentWork.filter((work) => {
-    return workEntry.workSlug !== work.workSlug;
-  });
+  const randomRecentWorkUnique = randomRecentWork
+    .filter((work) => workEntry.workSlug !== work.workSlug)
+    .filter((work) => !work.hideFromWorkFeeds);
 
   return (
     <WorkEntryPage

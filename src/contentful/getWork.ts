@@ -12,11 +12,13 @@ type WorkEntry = Entry<TypeWorkSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
 // We don't need all the data that Contentful gives us.
 export interface Work {
   featuredOnHomePage: boolean;
+  hideFromWorkFeeds: boolean;
   updatedAt: string;
   workCategories: (WorkCategory | null)[];
   workClient: string;
   workCredits: Document | undefined | null;
   workDescription: Document | undefined | null;
+  workDirector: string;
   workEditors?: (Editor | null)[];
   workSeriesCategory: WorkCategory | null;
   workSlug: string;
@@ -33,6 +35,7 @@ export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
 
   return {
     featuredOnHomePage: workEntry.fields?.featuredOnHomePage ?? false,
+    hideFromWorkFeeds: workEntry.fields?.hideFromWorkFeeds ?? false,
     updatedAt: workEntry.sys.updatedAt,
     workCategories:
       workEntry?.fields?.workCategories?.map((category) =>
@@ -41,6 +44,7 @@ export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
     workClient: workEntry.fields?.workClient ?? "",
     workCredits: workEntry.fields.workCredits,
     workDescription: workEntry.fields.workDescription,
+    workDirector: workEntry.fields?.workDirector ?? "",
     workEditors: workEntry.fields?.workEditors?.map((editor) =>
       editor ? parseContentfulEditor(editor) : null,
     ),
