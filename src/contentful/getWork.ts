@@ -2,8 +2,8 @@ import type { Document } from "@contentful/rich-text-types";
 import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
 import { Editor, parseContentfulEditor } from "src/contentful/getEditors";
-import type { WorkCategory } from "src/contentful/parseWorkCategories";
-import { parseContentfulWorkCategory } from "src/contentful/parseWorkCategories";
+import type { WorkCategory } from "src/contentful/getWorkCategories";
+import { parseContentfulWorkCategory } from "src/contentful/getWorkCategories";
 import type { TypeWorkSkeleton } from "src/contentful/types";
 
 type WorkEntry = Entry<TypeWorkSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
@@ -156,7 +156,7 @@ export async function fetchAllFeaturedWork({
       content_type: "work",
       include: 10,
       "fields.featuredOnHomePage": true,
-      limit: 1000,
+      limit: 5,
     });
 
   return workResult.items.map(

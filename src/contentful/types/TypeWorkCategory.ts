@@ -9,6 +9,7 @@ import type {
 export interface TypeWorkCategoryFields {
   entryTitle?: EntryFieldTypes.Symbol;
   categoryName: EntryFieldTypes.Symbol;
+  slug: EntryFieldTypes.Symbol;
 }
 
 export type TypeWorkCategorySkeleton = EntrySkeletonType<

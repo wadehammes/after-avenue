@@ -20,6 +20,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
     workClient,
     workCredits,
     workEditors,
+    workCategories,
   } = workEntry;
 
   return (
@@ -36,7 +37,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
           ) : null}
           {workEditors ? (
             <div className={styles.workEditors}>
-              <h3>Edited by:</h3>
+              <h3>Editors</h3>
               {workEditors.map((editor) => {
                 if (!editor) {
                   return null;
@@ -50,6 +51,21 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                   </div>
                 );
               })}
+            </div>
+          ) : null}
+          {workCategories.length ? (
+            <div className={styles.workCategoriesList}>
+              {workCategories.map((category) =>
+                category ? (
+                  <Link
+                    key={category.slug}
+                    className={styles.workCategory}
+                    href={`/work/category/${category.slug}`}
+                  >
+                    {category?.categoryName}
+                  </Link>
+                ) : null,
+              )}
             </div>
           ) : null}
         </div>
