@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          token: ${{ secrets.WADES_NEXT_PAT }}
+          token: ${{ secrets.AA_NEXT_PAT }}
       - name: Reset Main
         id: reset_main
         run: |
