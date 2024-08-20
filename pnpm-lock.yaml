@@ -36,8 +36,8 @@ importers:
         specifier: ^2.5.1
         version: 2.5.1
       contentful:
-        specifier: ^10.14.1
-        version: 10.14.1
+        specifier: ^10.15.0
+        version: 10.15.0
       gsap:
         specifier: ^3.12.5
         version: 3.12.5
@@ -878,8 +878,8 @@ packages:
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
 
-  '@contentful/content-source-maps@0.6.1':
-    resolution: {integrity: sha512-IjsyhakG17OC5xtIa5agVRsnjjxiJf9HZjpDIV6Ix036Pd5YHJrbyyiF4KNEmLlIqe3hQ0kHGWEs9S/HfECmRQ==}
+  '@contentful/content-source-maps@0.11.0':
+    resolution: {integrity: sha512-eS/Bm1hzv5C3SyTpP08+sYVQ7fFcNUdANrLsotUWk+uC7WpponQIIY26R9QZhX7tE3r5Nq80Z+aR7uo5u31ksg==}
 
   '@contentful/rich-text-react-renderer@15.22.9':
     resolution: {integrity: sha512-ubzuQKaIwB7AeUi1zHQ6EMvpLOMJ9p5LGxZznkcHG1Sn91LNZorQXfMt9K4tSoOR9Cn8KxN6ca8gMNNh5zGbig==}
@@ -2587,8 +2587,8 @@ packages:
     resolution: {integrity: sha512-HYy4ecFA76ERxz7P0jW7hgDcL8jH+bRckv2QfAwQ4k1yPP9TvxpZwrKnlLM69JOStxVkCXP37HvbjbFnjcoWdg==}
     engines: {node: '>=18'}
 
-  contentful@10.14.1:
-    resolution: {integrity: sha512-ZBmJwohQqldXW7sxBCcucKPLO6JdZK+G+aKVxA2EG2nKY13jY8DNSAk8cQS2tc7Wj9C14haQpzbzqKnErSQ8/w==}
+  contentful@10.15.0:
+    resolution: {integrity: sha512-gkkMRf2FK1SQHMs2UKOuIeCdBXQKF/fMzIRCDL038lUScyE6mvnPu8aHrAQuUZwfcd58J0cibqT+iqj+pAVyGA==}
     engines: {node: '>=18'}
 
   convert-source-map@2.0.0:
@@ -5998,7 +5998,7 @@ snapshots:
   '@colors/colors@1.5.0':
     optional: true
 
-  '@contentful/content-source-maps@0.6.1':
+  '@contentful/content-source-maps@0.11.0':
     dependencies:
       '@vercel/stega': 0.1.2
       json-pointer: 0.6.2
@@ -8131,7 +8131,7 @@ snapshots:
     dependencies:
       '@oclif/core': 3.27.0
       '@oclif/plugin-help': 6.2.8
-      contentful: 10.14.1
+      contentful: 10.15.0
       contentful-export: 7.19.147
       contentful-management: 10.46.4
       fs-extra: 11.2.0
@@ -8291,7 +8291,7 @@ snapshots:
       bfj: 8.0.0
       bluebird: 3.7.2
       cli-table3: 0.6.5
-      contentful: 10.14.1
+      contentful: 10.15.0
       contentful-batch-libs: 9.7.0
       contentful-management: 11.31.6
       date-fns: 3.6.0
@@ -8344,9 +8344,9 @@ snapshots:
       p-throttle: 4.1.1
       qs: 6.13.0
 
-  contentful@10.14.1:
+  contentful@10.15.0:
     dependencies:
-      '@contentful/content-source-maps': 0.6.1
+      '@contentful/content-source-maps': 0.11.0
       '@contentful/rich-text-types': 16.8.3
       axios: 1.7.4
       contentful-resolve-response: 1.9.0

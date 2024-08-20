@@ -7,8 +7,8 @@ export const FeaturedBrands = () => {
       {featuredBrands.map((brand) => {
         const { name, icon: Icon, maxWidth = "100%" } = brand;
         return (
-          <div key={name} style={{ width: maxWidth }}>
-            <Icon />
+          <div key={name}>
+            <Icon style={{ width: maxWidth }} />
           </div>
         );
       })}
