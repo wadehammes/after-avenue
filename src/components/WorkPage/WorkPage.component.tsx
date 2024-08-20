@@ -1,4 +1,3 @@
-import React from "react";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import styles from "src/components/WorkPage/WorkPage.module.css";
 import type { Page } from "src/contentful/getPages";

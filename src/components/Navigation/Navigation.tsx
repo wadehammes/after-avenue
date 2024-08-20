@@ -4,10 +4,11 @@ import classNames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { MobileNavigationDrawer } from "src/components/Navigation/MobileNavigationDrawer.component";
 import styles from "src/components/Navigation/Navigation.module.css";
-import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
 import type { Page } from "src/contentful/getPages";
 import AfterAvenueLogo from "src/icons/AfterAvenue.svg";
+import Menu from "src/icons/Menu.svg";
 
 interface NavigationProps {
   navigationItems: Partial<Page | null>[];
@@ -15,10 +16,9 @@ interface NavigationProps {
 
 export const Navigation = (props: NavigationProps) => {
   const { navigationItems } = props;
-
-  const pathname = usePathname();
-
+  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   const listenScrollEvent = useCallback(() => {
     if (window.scrollY < 50) {
@@ -35,6 +35,16 @@ export const Navigation = (props: NavigationProps) => {
 
     return () => window.removeEventListener("scroll", listenScrollEvent);
   }, [listenScrollEvent]);
+
+  useEffect(() => {
+    const closeMenu = () => setIsOpen(false);
+
+    window.addEventListener("resize", closeMenu);
+
+    return () => {
+      window.removeEventListener("resize", closeMenu);
+    };
+  }, []);
 
   return (
     <nav
@@ -53,36 +63,40 @@ export const Navigation = (props: NavigationProps) => {
           <AfterAvenueLogo />
         </Link>
         {navigationItems.length > 0 ? (
-          <ul className={styles.navItemList}>
-            {navigationItems.map((page) =>
-              page?.pageSlug ? (
-                <li key={page.pageSlug}>
-                  <Link
-                    href={`/${page.pageSlug}`}
-                    className={classNames(styles.navItem, {
-                      [styles.active]: pathname.includes(page.pageSlug),
-                    })}
-                    title={page.pageTitle}
-                    aria-label={page.pageTitle}
-                  >
-                    {page.pageTitle}
-                  </Link>
-                </li>
-              ) : null,
-            )}
-            <li>
-              <Link
-                href="/contact"
-                className={styles.navItem}
-                title="Contact Us"
-                aria-label="Contact Us"
-              >
-                Contact Us
-              </Link>
-            </li>
-          </ul>
+          <div className={styles.navContainer}>
+            <ul className={styles.navItemList}>
+              {navigationItems.map((page) =>
+                page?.pageSlug ? (
+                  <li key={page.pageSlug}>
+                    <Link
+                      href={`/${page.pageSlug}`}
+                      className={classNames(styles.navItem, {
+                        [styles.active]: pathname.includes(page.pageSlug),
+                      })}
+                      title={page.pageTitle}
+                      aria-label={page.pageTitle}
+                    >
+                      {page.pageTitle}
+                    </Link>
+                  </li>
+                ) : null,
+              )}
+            </ul>
+            <button
+              type="button"
+              className={styles.mobileNavToggle}
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <Menu className={styles.menu} />
+            </button>
+          </div>
         ) : null}
       </div>
+      <MobileNavigationDrawer
+        navigationItems={navigationItems}
+        visible={isOpen}
+        closeMenu={() => setIsOpen(false)}
+      />
     </nav>
   );
 };

@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { EditorsPage } from "src/components/EditorsPage/EditorsPage.component";
-import { WorkPage } from "src/components/WorkPage/WorkPage.component";
 import { fetchAllEditors } from "src/contentful/getEditors";
 import { fetchPage } from "src/contentful/getPages";
-import { fetchAllWork } from "src/contentful/getWork";
 import { EDITORS_PAGE_SLUG } from "src/utils/constants";
 
 // Fetch the editors page, tell Next.js which metadata
