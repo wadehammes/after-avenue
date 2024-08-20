@@ -152,6 +152,7 @@ body {
   gap: var(--default-padding);
   margin: 0 auto;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .page-content {

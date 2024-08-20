@@ -1,6 +1,7 @@
 .workContentContainer {
   display: flex;
   flex-flow: column nowrap;
+  align-items: flex-start;
   gap: var(--default-padding);
   padding: 0;
   width: 100%;
@@ -28,7 +29,7 @@
     font-family: "arida", serif;
     font-weight: 900;
     text-align: left;
-    line-height: 1.25;
+    line-height: 1;
     font-size: clamp(1.25rem, 3vw, 1.75rem);
   }
 }
