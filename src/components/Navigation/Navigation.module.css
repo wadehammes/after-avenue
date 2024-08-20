@@ -1,5 +1,5 @@
 .navigation {
-  background: transparent;
+  background: var(--color-bg);
   position: fixed;
   width: 100%;
   z-index: 99;
@@ -112,9 +112,38 @@
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  padding: var(--default-padding);
+  padding: 2rem;
   font-size: 3rem;
   gap: 2rem;
+  color: var(--colors-text);
+  
+  > a {
+    text-decoration: none;
+  }
+}
+
+.mobileNavLogo {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  display: block;
+  color: var(--colors-text);
+
+  > * {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+.mobileNavList {
+  flex: 1;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2rem;
+  padding: var(--default-padding);
   
   > a {
     text-decoration: none;
@@ -147,4 +176,8 @@
   &:hover .close {
     color: var(--colors-street-lamp-yellow);
   }
+}
+
+.navLink {
+  font-size: 1rem;
 }
