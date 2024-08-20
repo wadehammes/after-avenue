@@ -115,6 +115,11 @@ const sharedRedirects = [
 		destination: "/contact",
 		permanent: true,
 	},
+	{
+		source: "/work/category",
+		destination: "/work",
+		permanent: true,
+	}
 ];
 
 // https://securityheaders.com

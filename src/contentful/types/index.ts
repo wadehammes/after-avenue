@@ -4,6 +4,11 @@ export type {
   TypeEditorsSkeleton,
 } from "./TypeEditors";
 export type {
+  TypeGlobalVariables,
+  TypeGlobalVariablesFields,
+  TypeGlobalVariablesSkeleton,
+} from "./TypeGlobalVariables";
+export type {
   TypeNavigation,
   TypeNavigationFields,
   TypeNavigationSkeleton,

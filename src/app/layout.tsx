@@ -38,7 +38,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="favicon.ico" />
+        <link rel="icon" href="/favicon.ico" />
         <link
           rel="apple-touch-icon"
           sizes="180x180"

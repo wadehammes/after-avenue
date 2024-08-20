@@ -34,6 +34,28 @@
   }
 }
 
+.workCategoriesList {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 1rem;
+  width: 100%;
+  padding-top: var(--default-padding);
+}
+
+.workCategory {
+  border: 1px solid var(--color-text);
+  border-radius: 1000px;
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  text-decoration: none;
+
+  &:hover {
+    border-color: var(--colors-street-lamp-yellow);
+    background-color: var(--colors-street-lamp-yellow);
+    color: var(--colors-bg);
+  }
+}
+
 .workCopyContainer {
   display: flex;
   flex-flow: column nowrap;
