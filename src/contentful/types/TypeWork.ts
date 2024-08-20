@@ -10,13 +10,13 @@ import type { TypeWorkCategorySkeleton } from "./TypeWorkCategory";
 
 export interface TypeWorkFields {
   entryTitle?: EntryFieldTypes.Symbol;
+  workProjectDate?: EntryFieldTypes.Date;
   workTitle: EntryFieldTypes.Symbol;
   workSlug: EntryFieldTypes.Symbol;
   workClient?: EntryFieldTypes.Symbol;
   workVideoUrl: EntryFieldTypes.Symbol;
   workDescription?: EntryFieldTypes.RichText;
   workCredits?: EntryFieldTypes.RichText;
-  workProjectDate?: EntryFieldTypes.Date;
   workCategories?: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<TypeWorkCategorySkeleton>
   >;

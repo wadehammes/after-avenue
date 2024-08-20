@@ -36,16 +36,6 @@
   flex: 1;
 }
 
-.email {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 1rem;
-  width: 100%;
-  flex: 1;
-}
-
 .item {
   color: var(--colors-text);
   display: flex;

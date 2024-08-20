@@ -1,6 +1,6 @@
 .styledButton {
   appearance: none;
-  padding: 1.15rem 3rem;
+  padding: 1.25rem 3rem;
   border-width: 1px;
   border-style: solid;
   border-color: transparent;
@@ -31,10 +31,6 @@
     cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>❌</text></svg>") 16 0,auto;
   }
 
-  &.inverted {
-    border-radius: 8px 36px 8px  36px;
-  }
-
   &.fullWidth {
     width: 100%;
   }
@@ -45,16 +41,16 @@
 
   &:hover {
     background-color: var(--colors-text);
-    color: var(--colors-bg);
+    color: var(--color-bg);
   }
 
   &.light {
     &.contained {
       background-color: var(--colors-text);
-      color: var(--colors-bg);
+      color: var(--color-bg);
 
       &:hover {
-        background-color: var(--colors-bg);
+        background-color: var(--color-bg);
         color: var(--colors-text);
       }
     }
@@ -62,26 +58,26 @@
     &.outlined {
       border-color: var(--colors-text);
       background-color: var(--colors-text);
-      color: var(--colors-bg);
+      color: var(--color-bg);
 
       &:hover {
-        background-color: var(--colors-bg);
+        background-color: var(--color-bg);
         color: var(--colors-text);
       }
     }
 
     &:focus {
       outline: 0;
-      box-shadow: 0 0 0 1px var(--colors-bg), 0 0 0 3px var(--colors-text);
+      box-shadow: 0 0 0 1px var(--color-bg), 0 0 0 3px var(--colors-text);
       background-color: var(--colors-text);
-      color: var(--colors-bg);
+      color: var(--color-bg);
     }
 
     &:hover {
       cursor: pointer;
       border-color: var(--colors-text);
       background-color: var(--colors-text);
-      color: var(--colors-bg);
+      color: var(--color-bg);
     }
   }
 
@@ -89,13 +85,27 @@
     border-color: var(--colors-street-lamp-yellow);
     color: var(--colors-street-lamp-yellow);
 
+    &:focus {
+      outline: 0;
+      box-shadow: 0 0 0 1px var(--colors-text), 0 0 0 3px var(--colors-street-lamp-yellow);
+      background-color: var(--colors-street-lamp-yellow);
+      color: var(--color-bg);
+    }
+
+    &:hover {
+      cursor: pointer;
+      border-color: var(--colors-street-lamp-yellow);
+      background-color: var(--colors-street-lamp-yellow);
+      color: var(--color-bg);
+    }
+
     &.contained {
       background-color: var(--colors-text);
       color: var(--colors-street-lamp-yellow);
 
       &:hover {
         background-color: var(--colors-street-lamp-yellow);
-        color: var(--colors-bg);
+        color: var(--color-bg);
       }
     }
 
@@ -106,22 +116,8 @@
 
       &:hover {
         background-color: var(--colors-street-lamp-yellow);
-        color: var(--colors-black);
+        color: var(--color-bg);
       }
-    }
-
-    &:focus {
-      outline: 0;
-      box-shadow: 0 0 0 1px var(--colors-text), 0 0 0 3px var(--colors-street-lamp-yellow);
-      background-color: var(--colors-street-lamp-yellow);
-      color: var(--colors-text);
-    }
-
-    &:hover {
-      cursor: pointer;
-      border-color: var(--colors-street-lamp-yellow);
-      background-color: var(--colors-street-lamp-yellow);
-      color: var(--colors-text);
     }
   }
 }

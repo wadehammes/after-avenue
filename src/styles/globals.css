@@ -155,7 +155,7 @@ body {
 }
 
 .page-content {
-  background: var(--colors-bg);
+  background: var(--color-bg);
   position: relative;
   z-index: 2;
   overflow: hidden;
