@@ -12,7 +12,7 @@
   }
 
   svg {
-    width: 15rem;
+    width: clamp(6rem, 10vw, 8rem);
     max-width: 100%;
     height: auto;
     margin: 0 auto;
@@ -20,5 +20,9 @@
 
   @media screen and (min-width: 600px) {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+
+    svg {
+      width: clamp(7rem, 5vw, 9rem);
+    }
   }
 }
