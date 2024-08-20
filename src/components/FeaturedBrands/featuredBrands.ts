@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import Adidas from "src/icons/Adidas.svg";
 import Disney from "src/icons/Disney.svg";
 import Dove from "src/icons/Dove.svg";

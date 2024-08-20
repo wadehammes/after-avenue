@@ -24,7 +24,6 @@ const { routes } = manifest;
 
 const IGNORE_ROUTES = ["/404"];
 
-// biome-ignore lint/complexity/noForEach: I want to
 Object.entries(routes).forEach(([route, _]) => {
 	if (!IGNORE_ROUTES.includes(route)) {
 		addRoute(route);
