@@ -13,3 +13,15 @@ export const envUrl = () => {
 
   return "https://www.afteravenue.com";
 };
+
+export const createImageUrl = (src: string) => {
+  if (!src) {
+    return "";
+  }
+
+  if (src.startsWith("http")) {
+    return src;
+  }
+
+  return `https:${src}`;
+};
