@@ -8,47 +8,53 @@ import Twitter from "src/icons/Twitter.icon.svg";
 
 export const Footer = () => (
   <footer id="footer" className={classNames(styles.footer)}>
-    <div className={styles.footerContainer}>
-      <span className={styles.copyright}>
-        &copy; {new Date().getFullYear()} After Avenue
-      </span>
-      <div className={styles.item}>
-        <a href="mailto:hello@afteravenue.com" title="Email" aria-label="Email">
-          hello@afteravenue.com
-        </a>
-      </div>
-      <div className={styles.item}>
-        <Link href="#top">
-          <AfterAvenueBrandmark />
-        </Link>
-      </div>
-      <div className={styles.item}>
-        <a href="tel:(770) 289-0063" title="Call Us" aria-label="Call Us">
-          (770) 289-0063
-        </a>
-      </div>
-      <div className={styles.socialList}>
-        <a
-          href="https://linkedin.com/in/afteravenue"
-          rel="noopener noreferrer"
-          title="LinkedIn"
-        >
-          <LinkedIn className={styles.socialIcon} />
-        </a>
-        <a
-          href="https://instagram.com/afteravenue"
-          rel="noopener noreferrer"
-          title="Instagram"
-        >
-          <Instagram className={styles.socialIcon} />
-        </a>
-        <a
-          href="https://twitter.com/afteravenue"
-          rel="noopener noreferrer"
-          title="Twitter"
-        >
-          <Twitter className={styles.twitterIcon} />
-        </a>
+    <div className="container column">
+      <div className={styles.footerContainer}>
+        <span className={styles.copyright}>
+          &copy; {new Date().getFullYear()} After Avenue
+        </span>
+        <div className={styles.item}>
+          <a
+            href="mailto:hello@afteravenue.com"
+            title="Email"
+            aria-label="Email"
+          >
+            hello@afteravenue.com
+          </a>
+        </div>
+        <div className={styles.item}>
+          <Link href="#top">
+            <AfterAvenueBrandmark />
+          </Link>
+        </div>
+        <div className={styles.item}>
+          <a href="tel:(770) 289-0063" title="Call Us" aria-label="Call Us">
+            (770) 289-0063
+          </a>
+        </div>
+        <div className={styles.socialList}>
+          <a
+            href="https://linkedin.com/in/afteravenue"
+            rel="noopener noreferrer"
+            title="LinkedIn"
+          >
+            <LinkedIn className={styles.socialIcon} />
+          </a>
+          <a
+            href="https://instagram.com/afteravenue"
+            rel="noopener noreferrer"
+            title="Instagram"
+          >
+            <Instagram className={styles.socialIcon} />
+          </a>
+          <a
+            href="https://twitter.com/afteravenue"
+            rel="noopener noreferrer"
+            title="Twitter"
+          >
+            <Twitter className={styles.twitterIcon} />
+          </a>
+        </div>
       </div>
     </div>
   </footer>

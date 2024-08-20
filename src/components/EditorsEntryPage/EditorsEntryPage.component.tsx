@@ -1,4 +1,5 @@
 import styles from "src/components/EditorsEntryPage/EditorsEntryPage.module.css";
+import { EditorsEntryPageIntro } from "src/components/EditorsEntryPage/EditorsEntryPageIntro.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import { Editor } from "src/contentful/getEditors";
 import { Work } from "src/contentful/getWork";
@@ -13,12 +14,10 @@ export const EditorsEntryPage = (props: EditorsEntryPageProps) => {
 
   return (
     <div className="container column">
-      <header className="page-header">
-        <h1>{editorEntry.editorName}</h1>
-      </header>
+      <EditorsEntryPageIntro editorEntry={editorEntry} />
       {editorsWork.length > 0 ? (
         <div className={styles.workSeries}>
-          <h3>Editorial Work</h3>
+          <h3>Editorial Credits</h3>
           <ul className={styles.workSeriesList}>
             {editorsWork.map((work) => {
               if (!work) {

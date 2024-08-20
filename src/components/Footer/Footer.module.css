@@ -3,7 +3,7 @@
   bottom: 0;
   display: flex;
   flex-flow: column nowrap;
-  padding: var(--default-padding);
+  padding: var(--default-padding) 0;
   position: relative;
   width: 100%;
   z-index: 0;

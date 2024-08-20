@@ -11,17 +11,19 @@ type EditorEntry = Entry<
   string
 >;
 
-// Our simplified version of a Page.
+// Our simplified version of an Editor.
 // We don't need all the data that Contentful gives us.
 export interface Editor {
   editorBio: Document | undefined | null;
   editorName: string;
+  editorTitle?: string;
   editorSlug: string;
   editorHeadshot: ContentfulAsset | null;
+  editorHeadshotHover: ContentfulAsset | null;
   updatedAt: string;
 }
 
-// A function to transform a Contentful page
+// A function to transform an editor entry
 // into our own Page object.
 export function parseContentfulEditor(
   editorEntry?: EditorEntry,
@@ -33,13 +35,17 @@ export function parseContentfulEditor(
   return {
     editorBio: editorEntry.fields.editorBio,
     editorHeadshot: parseContentfulAsset(editorEntry.fields.editorHeadshot),
+    editorHeadshotHover: parseContentfulAsset(
+      editorEntry.fields.editorHeadshotHover,
+    ),
     editorName: editorEntry.fields.editorName,
     editorSlug: editorEntry.fields.editorSlug,
+    editorTitle: editorEntry.fields.editorTitle,
     updatedAt: editorEntry.sys.updatedAt,
   };
 }
 
-// A function to fetch all pages.
+// A function to fetch all editors.
 // Optionally uses the Contentful content preview.
 interface FetchAllWorkOptions {
   preview: boolean;
@@ -63,7 +69,7 @@ export async function fetchAllEditors({
   );
 }
 
-// A function to fetch a single page by its slug.
+// A function to fetch a single editor by its slug.
 // Optionally uses the Contentful content preview.
 interface FetchEditorBySlugOptions {
   slug: string;

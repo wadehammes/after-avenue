@@ -1,0 +1,52 @@
+.editorsCard {
+  background-image: url("/images/dot-bg.png");
+  display: flex;
+  flex-flow: column nowrap;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  container: editorsCard / inline-size;
+  text-decoration: none;
+}
+
+.editorsCardImage {
+  border-radius: 20px;
+  overflow: hidden;
+  width: 100%;
+  height: auto;
+}
+
+.editorsCardMeta {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 1rem;
+  padding: var(--default-padding);
+  width: 100%;
+  flex: 1;
+
+  @container editorsCard (width < 500px) {
+    flex-flow: column nowrap;
+    align-items: stretch;
+    justify-content: stretch;
+    gap: var(--default-padding);
+  }
+}
+
+.editorsCardTitle {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.5rem;
+  width: 100%;
+  flex: 1;
+
+  h2 {
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  p {
+    font-size: 0.75rem;
+  }
+}

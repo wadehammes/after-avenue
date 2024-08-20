@@ -18,3 +18,37 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 }
+
+.editorsEntryPageIntro {
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+  gap: 1rem;
+  width: 100%;
+  padding: var(--default-padding) 0 0;
+}
+
+.editorsEntryPageIntroImage {
+  position: relative;
+  border-radius: 1000px;
+  overflow: hidden;
+  height: 250px;
+  width: 250px;
+
+  img {
+    position: absolute;
+    top: 0;
+    object-fit: cover;
+  }
+}
+
+.editorsEntryPageIntroContent{
+  padding: var(--default-padding);
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.5rem;
+  width: 100%;
+  flex: 1;
+}

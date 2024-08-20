@@ -10,8 +10,10 @@ export interface TypeEditorsFields {
   entryTitle?: EntryFieldTypes.Symbol;
   editorName: EntryFieldTypes.Symbol;
   editorSlug: EntryFieldTypes.Symbol;
+  editorTitle?: EntryFieldTypes.Symbol;
   editorBio?: EntryFieldTypes.RichText;
   editorHeadshot?: EntryFieldTypes.AssetLink;
+  editorHeadshotHover?: EntryFieldTypes.AssetLink;
 }
 
 export type TypeEditorsSkeleton = EntrySkeletonType<
