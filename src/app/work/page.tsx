@@ -6,6 +6,7 @@ import { fetchPage } from "src/contentful/getPages";
 import { fetchAllWork } from "src/contentful/getWork";
 import { fetchAllWorkCategories } from "src/contentful/getWorkCategories";
 import { WORK_SLUG } from "src/utils/constants";
+import { convertBooleanToNumber } from "src/utils/helpers";
 
 // Fetch the work page, tell Next.js which metadata
 // (e.g. page title) to display.
@@ -34,21 +35,31 @@ async function Work() {
     preview: draftMode().isEnabled,
   });
 
-  const allWorkCategories = await fetchAllWorkCategories({ preview: false });
+  const allWorkCategories = await fetchAllWorkCategories({
+    preview: draftMode().isEnabled,
+  });
 
   // Fetch all work entries
   const allWork = await fetchAllWork({ preview: draftMode().isEnabled });
 
-  if (!workPage) {
+  if (!workPage || !allWork) {
     // If a work entry can't be found,
     // tell Next.js to render a 404 page.
     return notFound();
   }
 
+  const allWorkSortedFeaturedFirst = allWork
+    .sort(
+      (a, b) =>
+        convertBooleanToNumber(b.featuredOnHomePage) -
+        convertBooleanToNumber(a.featuredOnHomePage),
+    )
+    .filter((work) => !work.hideFromWorkFeeds);
+
   return (
     <WorkPage
       pageFields={workPage}
-      allWork={allWork}
+      allWork={allWorkSortedFeaturedFirst}
       allWorkCategories={allWorkCategories}
     />
   );

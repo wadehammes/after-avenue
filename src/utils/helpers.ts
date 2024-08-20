@@ -25,3 +25,11 @@ export const createImageUrl = (src: string) => {
 
   return `https:${src}`;
 };
+
+export const convertBooleanToNumber = (value: boolean | number) => {
+  if (typeof value === "boolean") {
+    return value ? 1 : 0;
+  }
+
+  return value;
+};

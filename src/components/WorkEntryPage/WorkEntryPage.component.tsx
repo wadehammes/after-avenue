@@ -21,6 +21,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
     workCredits,
     workEditors,
     workCategories,
+    hideFromWorkFeeds,
   } = workEntry;
 
   return (
@@ -94,22 +95,26 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
           </ul>
         </div>
       ) : (
-        <div className={styles.workSeries}>
-          <h3>Other work</h3>
-          <ul className={styles.workSeriesList}>
-            {recentWork.map((work) => {
-              if (!work) {
-                return null;
-              }
+        <>
+          {!hideFromWorkFeeds ? (
+            <div className={styles.workSeries}>
+              <h3>Other work</h3>
+              <ul className={styles.workSeriesList}>
+                {recentWork.map((work) => {
+                  if (!work) {
+                    return null;
+                  }
 
-              return (
-                <li key={work.workSlug}>
-                  <WorkCard work={work} />
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+                  return (
+                    <li key={work.workSlug}>
+                      <WorkCard work={work} />
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
+        </>
       )}
     </article>
   );
