@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import styles from "src/components/WorkEntryPage/WorkEntryPage.module.css";
@@ -23,14 +26,22 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
     workCategories,
     hideFromWorkFeeds,
   } = workEntry;
+  const searchParams = useSearchParams();
+
+  const playVideo = searchParams.get("playVideo");
 
   return (
     <article className="container column">
-      <VideoPlayer url={workVideoUrl} rounded />
+      <VideoPlayer
+        url={workVideoUrl}
+        playing={playVideo === "true"}
+        rounded
+        light={!playVideo}
+      />
       <div className={styles.workContentContainer}>
         <div className={styles.workCopyContainer}>
-          <h1>{workTitle}</h1>
-          <p>{workClient}</p>
+          <h1>{workClient}</h1>
+          <p>{workTitle}</p>
           {workDescription ? (
             <div className={styles.workDescription}>
               <RichText document={workDescription} />
@@ -38,7 +49,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
           ) : null}
           {workEditors ? (
             <div className={styles.workEditors}>
-              <h3>Editors</h3>
+              <h3>Our Editors</h3>
               {workEditors.map((editor) => {
                 if (!editor) {
                   return null;

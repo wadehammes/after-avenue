@@ -1,42 +1,9 @@
 .section {
   position: relative;
-  padding: 4rem 0;
+  padding: var(--default-padding) 0;
+  width: 100%;
 
   @media screen and (min-width: 800px) {
-    padding: 8rem 0;
-  }
-
-  &.whiteBg {
-    background-color: var(--colors-white);
-    color: var(--colors-black);
-  }
-
-  &.grayBg {
-    background-color: var(--colors-silver);
-    color: var(--colors-green);
-  }
-
-  &.noTopPadding {
-    padding-top: 0;
-  }
-
-  &.padded {
-    padding: 4rem;
-  }
-
-  &.fullBleed {
-    padding: 0;
-  }
-
-  &.overlapBottom {
-    margin-bottom: -8rem;
-  }
-
-  &.topOverlapPadding {
-    padding-top: 16rem;
-
-    @media screen and (max-width: 1600px) {
-      padding-top: 20rem;
-    }
+    padding: 4rem 0;
   }
 }

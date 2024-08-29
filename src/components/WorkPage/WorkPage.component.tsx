@@ -13,13 +13,13 @@ interface WorkPageProps {
 export const WorkPage = (props: WorkPageProps) => {
   const { pageFields, allWork } = props;
 
-  const { pageDescription, pageTitle } = pageFields;
+  const { pageDescription, pageDisplayTitle, pageTitle } = pageFields;
 
   return (
     <div className="container column">
       <div className="page-container">
         <header className="page-header">
-          <h1 className="page-title">{pageTitle}</h1>
+          <h1 className="page-title">{pageDisplayTitle ?? pageTitle}</h1>
           {pageDescription ? (
             <p className="subtitle">{pageDescription}</p>
           ) : null}

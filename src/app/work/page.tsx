@@ -6,7 +6,7 @@ import { fetchPage } from "src/contentful/getPages";
 import { fetchAllWork } from "src/contentful/getWork";
 import { fetchAllWorkCategories } from "src/contentful/getWorkCategories";
 import { WORK_SLUG } from "src/utils/constants";
-import { convertBooleanToNumber } from "src/utils/helpers";
+import { convertBooleanToNumber, envUrl } from "src/utils/helpers";
 
 // Fetch the work page, tell Next.js which metadata
 // (e.g. page title) to display.
@@ -21,6 +21,10 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
+    metadataBase: new URL(`${envUrl()}/work`),
+    alternates: {
+      canonical: "/",
+    },
     title: `${workPage.pageTitle} | After Avenue`,
     robots: "index, follow",
   };

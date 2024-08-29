@@ -7,6 +7,22 @@
   overflow: hidden;
   height: 100%;
   container: workCard / inline-size;
+  text-decoration: none;
+}
+
+.workCardPlayIconContainer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+
+  svg {
+    height: 1.5rem;
+    width: 1.5rem;
+    transform: rotate(-90deg);
+  }
 }
 
 .workCardMeta {
@@ -17,6 +33,7 @@
   padding: var(--default-padding);
   width: 100%;
   flex: 1;
+  text-decoration: none;
 
   @container workCard (width < 500px) {
     flex-flow: column nowrap;
@@ -30,6 +47,12 @@
     line-height: 1.2;
     text-wrap: balance;
   }
+
+  &:hover {
+    .workCardPlayIconContainer {
+      opacity: 1;
+    }
+  }
 }
 
 .workCardTitle {
@@ -41,25 +64,5 @@
 
   p {
     font-size: 0.75rem;
-  }
-}
-
-.workCardButtonContainer {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: flex-end;
-  width: 100%;
-  min-width: 10rem;
-  flex: 1;
-
-  @container workCard (width < 500px) {
-    align-items: stretch;
-    justify-content: stretch;
-    flex: 0;
-
-    > a {
-      width: 100%;
-    }
   }
 }

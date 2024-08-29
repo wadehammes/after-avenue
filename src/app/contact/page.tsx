@@ -29,8 +29,17 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const Contact = () => {
-  return <ContactPage />;
+const Contact = async () => {
+  const page = await fetchPage({
+    slug: "contact",
+    preview: draftMode().isEnabled,
+  });
+
+  if (!page) {
+    return notFound();
+  }
+
+  return <ContactPage pageFields={page} />;
 };
 
 export default Contact;

@@ -2,6 +2,7 @@ import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
 import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
 import { parseContentfulAsset } from "src/contentful/parseContentfulAsset";
+import { Section, parseContentfulSection } from "src/contentful/parseSections";
 import type { TypePageSkeleton } from "src/contentful/types/TypePage";
 
 type PageEntry = Entry<TypePageSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
@@ -13,7 +14,9 @@ export interface Page {
   pageSlug: string;
   enableIndexing: boolean;
   metaDescription: string;
+  pageDisplayTitle?: string;
   pageDescription?: string;
+  sections: (Section | null)[];
   socialImage: ContentfulAsset | null;
   updatedAt: string;
 }
@@ -30,7 +33,12 @@ export function parseContentfulPage(pageEntry?: PageEntry): Page | null {
     metaDescription: pageEntry.fields.metaDescription,
     pageDescription: pageEntry.fields.pageDescription,
     pageSlug: pageEntry.fields.pageSlug,
+    pageDisplayTitle: pageEntry.fields.pageDisplayTitle,
     pageTitle: pageEntry.fields.pageTitle,
+    sections:
+      pageEntry?.fields?.sections?.map((section) =>
+        parseContentfulSection(section),
+      ) ?? [],
     socialImage: parseContentfulAsset(pageEntry.fields.socialImage),
     updatedAt: pageEntry.sys.updatedAt,
   };

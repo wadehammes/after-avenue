@@ -11,6 +11,7 @@ import {
   EXCLUDED_PAGE_SLUGS_FROM_BUILD,
   TEST_PAGE_SLUG,
 } from "src/utils/constants";
+import { envUrl } from "src/utils/helpers";
 
 interface EditorParams {
   slug: string;
@@ -70,6 +71,10 @@ export async function generateMetadata({
   }
 
   return {
+    metadataBase: new URL(`${envUrl()}/editors/${editorEntry.editorSlug}`),
+    alternates: {
+      canonical: "/",
+    },
     title: `${editorEntry.editorName} | After Avenue`,
     robots: "index, follow",
   };

@@ -5,6 +5,7 @@ import { EditorsPage } from "src/components/EditorsPage/EditorsPage.component";
 import { fetchAllEditors } from "src/contentful/getEditors";
 import { fetchPage } from "src/contentful/getPages";
 import { EDITORS_PAGE_SLUG } from "src/utils/constants";
+import { envUrl } from "src/utils/helpers";
 
 // Fetch the editors page, tell Next.js which metadata
 // (e.g. page title) to display.
@@ -19,6 +20,10 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
+    metadataBase: new URL(`${envUrl()}/editors`),
+    alternates: {
+      canonical: "/",
+    },
     title: `${editorsPage.pageTitle} | After Avenue`,
     robots: "index, follow",
   };

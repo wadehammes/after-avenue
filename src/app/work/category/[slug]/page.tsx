@@ -12,6 +12,7 @@ import {
 import { outputSitemap } from "src/lib/generateSitemap";
 import type { SitemapItem } from "src/lib/generateSitemap";
 import { TEST_PAGE_SLUG } from "src/utils/constants";
+import { envUrl } from "src/utils/helpers";
 
 interface WorkCategoryParams {
   slug: string;
@@ -74,6 +75,10 @@ export async function generateMetadata({
   }
 
   return {
+    metadataBase: new URL(`${envUrl()}/work/category/${workCategory.slug}`),
+    alternates: {
+      canonical: "/",
+    },
     title: `${workCategory.categoryName} - Work | After Avenue`,
     robots: "index, follow",
   };

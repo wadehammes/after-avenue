@@ -14,13 +14,7 @@ export const Footer = () => (
           &copy; {new Date().getFullYear()} After Avenue
         </span>
         <div className={styles.item}>
-          <a
-            href="mailto:hello@afteravenue.com"
-            title="Email"
-            aria-label="Email"
-          >
-            hello@afteravenue.com
-          </a>
+          <Link href="/privacy-policy">Privacy Policy</Link>
         </div>
         <div className={styles.item}>
           <Link href="#top">
@@ -28,9 +22,7 @@ export const Footer = () => (
           </Link>
         </div>
         <div className={styles.item}>
-          <a href="tel:(770) 289-0063" title="Call Us" aria-label="Call Us">
-            (770) 289-0063
-          </a>
+          <Link href="/contact">Contact Us</Link>
         </div>
         <div className={styles.socialList}>
           <a
