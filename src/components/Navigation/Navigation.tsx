@@ -59,6 +59,7 @@ export const Navigation = (props: NavigationProps) => {
       id="top"
       className={classNames(styles.navigation, {
         [styles.scrolled]: scrolled,
+        [styles.noBackground]: pathname.includes("editors"),
       })}
     >
       <div className="container">

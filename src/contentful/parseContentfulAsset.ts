@@ -3,6 +3,7 @@ import type { Asset, AssetLink } from "contentful";
 // Our simplified version of an image asset.
 // We don't need all the data that Contentful gives us.
 export interface ContentfulAsset {
+  id: string;
   src: string;
   alt: string;
   width: number;
@@ -23,6 +24,7 @@ export function parseContentfulAsset(
   }
 
   return {
+    id: asset.sys.id,
     src: asset.fields.file?.url || "",
     alt: asset.fields.description || "",
     width: asset.fields.file?.details.image?.width || 0,

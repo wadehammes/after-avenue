@@ -11,6 +11,7 @@ type WorkEntry = Entry<TypeWorkSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
 // Our simplified version of a Page.
 // We don't need all the data that Contentful gives us.
 export interface Work {
+  id: string;
   featuredOnHomePage: boolean;
   hideFromWorkFeeds: boolean;
   updatedAt: string;
@@ -34,6 +35,7 @@ export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
   }
 
   return {
+    id: workEntry.sys.id,
     featuredOnHomePage: workEntry.fields?.featuredOnHomePage ?? false,
     hideFromWorkFeeds: workEntry.fields?.hideFromWorkFeeds ?? false,
     updatedAt: workEntry.sys.updatedAt,
@@ -53,6 +55,19 @@ export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
       : null,
     workSlug: workEntry.fields.workSlug,
     workTitle: workEntry.fields.workTitle,
+    workVideoUrl: workEntry.fields?.workVideoUrl ?? "",
+  };
+}
+
+export function parseContentfulFeaturedWork(
+  workEntry?: WorkEntry,
+): Partial<Work> | null {
+  if (!workEntry) {
+    return null;
+  }
+
+  return {
+    id: workEntry.sys.id,
     workVideoUrl: workEntry.fields?.workVideoUrl ?? "",
   };
 }
