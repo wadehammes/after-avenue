@@ -26,7 +26,12 @@ export const EditorsEntryPage = (props: EditorsEntryPageProps) => {
 
               return (
                 <li key={work.workSlug}>
-                  <WorkCard work={work} />
+                  <WorkCard
+                    work={work}
+                    showHoverIcon={false}
+                    title={work.workTitle}
+                    subtitle={work.workClient}
+                  />
                 </li>
               );
             })}
