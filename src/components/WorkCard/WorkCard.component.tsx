@@ -9,10 +9,13 @@ import ArrowDownIcon from "src/icons/ArrowDown.svg";
 
 interface WorkCardProps {
   work: Work;
+  title: string;
+  subtitle: string;
+  showHoverIcon?: boolean;
 }
 
 export const WorkCard = (props: WorkCardProps) => {
-  const { work } = props;
+  const { work, title, subtitle, showHoverIcon = true } = props;
 
   const { inView, ref } = useInView({
     threshold: 0.25,
@@ -26,12 +29,14 @@ export const WorkCard = (props: WorkCardProps) => {
         className={styles.workCardMeta}
       >
         <div className={styles.workCardTitle}>
-          <h2>{work.workClient}</h2>
-          <p>{work.workTitle}</p>
+          <h2>{title}</h2>
+          <p>{subtitle}</p>
         </div>
-        <div className={styles.workCardPlayIconContainer}>
-          <ArrowDownIcon />
-        </div>
+        {showHoverIcon ? (
+          <div className={styles.workCardPlayIconContainer}>
+            <ArrowDownIcon />
+          </div>
+        ) : null}
       </Link>
     </div>
   );

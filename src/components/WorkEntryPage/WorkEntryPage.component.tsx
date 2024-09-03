@@ -99,7 +99,12 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
 
               return (
                 <li key={work.workSlug}>
-                  <WorkCard work={work} />
+                  <WorkCard
+                    work={work}
+                    showHoverIcon={false}
+                    title={work.workTitle}
+                    subtitle={work.workClient}
+                  />
                 </li>
               );
             })}
@@ -118,7 +123,12 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
 
                   return (
                     <li key={work.workSlug}>
-                      <WorkCard work={work} />
+                      <WorkCard
+                        work={work}
+                        showHoverIcon={false}
+                        title={work.workClient}
+                        subtitle={work.workTitle}
+                      />
                     </li>
                   );
                 })}

@@ -48,6 +48,10 @@
     text-wrap: balance;
   }
 
+  p {
+    line-height: 1.5;
+  }
+
   &:hover {
     .workCardPlayIconContainer {
       opacity: 1;

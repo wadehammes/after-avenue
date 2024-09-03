@@ -26,7 +26,12 @@ export const WorkPage = (props: WorkPageProps) => {
         </header>
         <div className={styles.workList}>
           {allWork.map((work) => (
-            <WorkCard key={work.workSlug} work={work} />
+            <WorkCard
+              key={work.workSlug}
+              work={work}
+              title={work.workClient}
+              subtitle={work.workTitle}
+            />
           ))}
         </div>
       </div>
