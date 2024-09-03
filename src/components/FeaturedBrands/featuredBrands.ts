@@ -40,6 +40,6 @@ export const featuredBrands: FeaturedBrand[] = [
   {
     name: "Adidas",
     icon: Adidas,
-    maxWidth: "clamp(5rem, 5vw, 6rem",
+    maxWidth: "clamp(5rem, 5vw, 6rem)",
   },
 ];

@@ -1,15 +1,19 @@
 import { Document } from "@contentful/rich-text-types";
 import { Entry } from "contentful";
-import {
-  TypeComponentCopyBlockSkeleton,
-  TypeSectionSkeleton,
-} from "src/contentful/types";
+import { ComponentCopyMediaBlockEntry } from "src/contentful/getComponentCopyMediaBlock";
+import { ComponentCopyBlockEntry } from "src/contentful/parseComponentCopyBlock";
+import { ComponentHeroEntry } from "src/contentful/parseComponentHero";
+import { ComponentLogoTickerEntry } from "src/contentful/parseComponentLogoTicker";
+import { TypeSectionSkeleton } from "src/contentful/types";
 
 export type Content =
-  | Entry<TypeComponentCopyBlockSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>
+  | ComponentCopyBlockEntry
+  | ComponentCopyMediaBlockEntry
+  | ComponentHeroEntry
+  | ComponentLogoTickerEntry
   | undefined;
 
-export interface Section {
+export interface SectionType {
   id: string;
   sectionHeader: Document | undefined;
   content: Content[];
@@ -19,18 +23,16 @@ export type SectionEntry =
   | Entry<TypeSectionSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>
   | undefined;
 
-export function parseContentfulSection(section: SectionEntry): Section | null {
-  if (!section) {
-    return null;
-  }
-
-  if (!("fields" in section)) {
+export function parseContentfulSection(
+  section: SectionEntry,
+): SectionType | null {
+  if (!section || !("fields" in section)) {
     return null;
   }
 
   return {
     id: section.sys.id,
     sectionHeader: section.fields.sectionHeader,
-    content: section.fields.content,
+    content: section.fields.content.map((entry) => entry as Content),
   };
 }

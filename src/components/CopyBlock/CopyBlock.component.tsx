@@ -4,17 +4,18 @@ import { RichText } from "src/contentful/richText";
 
 interface CopyBlockProps {
   copy: Document | null;
+  textAlign?: "left" | "center" | "right";
 }
 
 export const CopyBlock = (props: CopyBlockProps) => {
-  const { copy } = props;
+  const { copy, textAlign } = props;
 
   if (!copy) {
     return null;
   }
 
   return (
-    <div className={styles.copyBlock}>
+    <div className={styles.copyBlock} style={{ textAlign }}>
       <RichText document={copy} />
     </div>
   );
