@@ -65,6 +65,7 @@ export async function fetchAllEditors({
       content_type: "editors",
       include: 10,
       limit: 1000,
+      order: ["fields.editorName"],
     });
 
   return editorResults.items.map(

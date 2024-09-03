@@ -19,13 +19,14 @@
   justify-content: center;
   min-height: 50vh;
   width: 100%;
+  padding: var(--default-padding);
   
   > * {
     margin: auto;
   }
 }
 
-.editorButton {
+.editorLink {
   cursor: pointer;
   font-family: "area", sans-serif;
   font-size: clamp(2rem, 10vw, 4rem);
