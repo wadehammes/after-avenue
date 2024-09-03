@@ -1,0 +1,7 @@
+.copyBlock {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+  max-width: 80ch;
+  margin: 0 auto;
+}

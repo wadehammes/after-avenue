@@ -10,12 +10,12 @@ interface EditorsPageProps {
 
 export const EditorsPage = (props: EditorsPageProps) => {
   const { editors, pageFields } = props;
-  const { pageTitle, pageDescription } = pageFields;
+  const { pageTitle, pageDisplayTitle, pageDescription } = pageFields;
 
   return (
     <div className="container column">
       <header className="page-header">
-        <h1>{pageTitle}</h1>
+        <h1>{pageDisplayTitle ?? pageTitle}</h1>
         {pageDescription ? <p className="subtitle">{pageDescription}</p> : null}
       </header>
       <div className={styles.editorsList}>

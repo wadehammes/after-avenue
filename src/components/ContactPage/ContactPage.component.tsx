@@ -1,16 +1,24 @@
 import { ContactForm } from "src/components/ContactForm/ContactForm.component";
+import styles from "src/components/ContactPage/ContactPage.module.css";
+import { Page } from "src/contentful/getPages";
 
-export const ContactPage = () => {
+interface ContactPageProps {
+  pageFields: Page;
+}
+
+export const ContactPage = (props: ContactPageProps) => {
+  const { pageFields } = props;
+  const { pageTitle, pageDisplayTitle, pageDescription } = pageFields;
+
   return (
     <div className="container column">
       <header className="page-header">
-        <h1>Contact us</h1>
-        <p className="subtitle">
-          Send us your contact info and we will get back to you within 24-48
-          hours.
-        </p>
+        <h1>{pageDisplayTitle ?? pageTitle}</h1>
+        <p className="subtitle">{pageDescription}</p>
       </header>
-      <ContactForm />
+      <div className={styles.contactPageContainer}>
+        <ContactForm />
+      </div>
     </div>
   );
 };

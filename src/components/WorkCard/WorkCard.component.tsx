@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useInView } from "react-intersection-observer";
-import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import styles from "src/components/WorkCard/WorkCard.module.css";
 import { Work } from "src/contentful/getWork";
+import ArrowDownIcon from "src/icons/ArrowDown.svg";
 
 interface WorkCardProps {
   work: Work;
@@ -19,23 +20,19 @@ export const WorkCard = (props: WorkCardProps) => {
 
   return (
     <div ref={ref} className={styles.workCard}>
-      <VideoPlayer url={work.workVideoUrl} rounded playing={inView} />
-      <div className={styles.workCardMeta}>
+      <VideoPlayer url={work.workVideoUrl} rounded playing={inView} light />
+      <Link
+        href={`/work/${work.workSlug}?playVideo=true`}
+        className={styles.workCardMeta}
+      >
         <div className={styles.workCardTitle}>
-          <h2>{work.workTitle}</h2>
-          <p>{work.workClient}</p>
+          <h2>{work.workClient}</h2>
+          <p>{work.workTitle}</p>
         </div>
-        <div className={styles.workCardButtonContainer}>
-          <StyledButtonLink
-            href={`/work/${work.workSlug}`}
-            variant="outlined"
-            color="dark"
-            size="small"
-          >
-            View Work
-          </StyledButtonLink>
+        <div className={styles.workCardPlayIconContainer}>
+          <ArrowDownIcon />
         </div>
-      </div>
+      </Link>
     </div>
   );
 };

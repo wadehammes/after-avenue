@@ -5,6 +5,7 @@ import type {
   EntrySkeletonType,
   LocaleCode,
 } from "contentful";
+import type { TypeWorkSkeleton } from "./TypeWork";
 
 export interface TypeEditorsFields {
   entryTitle?: EntryFieldTypes.Symbol;
@@ -14,6 +15,7 @@ export interface TypeEditorsFields {
   editorBio?: EntryFieldTypes.RichText;
   editorHeadshot?: EntryFieldTypes.AssetLink;
   editorHeadshotHover?: EntryFieldTypes.AssetLink;
+  featuredWork?: EntryFieldTypes.EntryLink<TypeWorkSkeleton>;
 }
 
 export type TypeEditorsSkeleton = EntrySkeletonType<

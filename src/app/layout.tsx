@@ -13,10 +13,7 @@ import { envUrl } from "src/utils/helpers";
 
 export function generateMetadata(): Metadata {
   return {
-    metadataBase: new URL(`${envUrl()}`),
-    alternates: {
-      canonical: "/",
-    },
+    metadataBase: new URL(`${envUrl()}/`),
     keywords: ["videography", "post production"],
     creator: "After Avenue",
     publisher: "After Avenue",

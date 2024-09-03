@@ -9,16 +9,6 @@
   font-size: 16px;
   font-family: inherit;
 
-  &.variantLarge {
-    padding: 1.25rem 1.25rem 1.25rem 2rem;
-
-    @media screen and (min-width: 600px) {
-      font-size: clamp(16px, 1.5vw, 1.75rem);
-      padding: clamp(1.75rem, 3vw, 3rem);
-      padding-left: 2rem;
-    }
-  }
-
   &:focus {
     outline: 0;
   }

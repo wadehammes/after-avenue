@@ -1,4 +1,9 @@
 export type {
+  TypeComponentCopyBlock,
+  TypeComponentCopyBlockFields,
+  TypeComponentCopyBlockSkeleton,
+} from "./TypeComponentCopyBlock";
+export type {
   TypeEditors,
   TypeEditorsFields,
   TypeEditorsSkeleton,
@@ -14,6 +19,11 @@ export type {
   TypeNavigationSkeleton,
 } from "./TypeNavigation";
 export type { TypePage, TypePageFields, TypePageSkeleton } from "./TypePage";
+export type {
+  TypeSection,
+  TypeSectionFields,
+  TypeSectionSkeleton,
+} from "./TypeSection";
 export type { TypeWork, TypeWorkFields, TypeWorkSkeleton } from "./TypeWork";
 export type {
   TypeWorkCategory,

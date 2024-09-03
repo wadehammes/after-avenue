@@ -1,19 +1,20 @@
 "use client";
 
 import classNames from "classnames";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player";
 import { Loader } from "src/components/Loader/Loader.component";
 import styles from "src/components/VideoPlayer/VideoPlayer.module.css";
 import { useIsBrowser } from "src/hooks/useIsBrowser";
 
 interface VideoPlayerProps {
-  url: string;
-  rounded?: boolean;
+  light?: boolean;
   playing?: boolean;
+  rounded?: boolean;
+  url: string;
 }
 
 export const VideoPlayer = (props: VideoPlayerProps) => {
-  const { url, rounded = false, playing = true } = props;
+  const { url, rounded = false, playing = true, light = false } = props;
   const isBrowser = useIsBrowser();
 
   if (!isBrowser) {
@@ -31,7 +32,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         loop
         muted
         fallback={<Loader />}
-        light={rounded}
+        light={light}
       />
     </div>
   );

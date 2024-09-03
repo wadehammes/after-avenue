@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { WorkEntryPage } from "src/components/WorkEntryPage/WorkEntryPage.component";
 import type { Work } from "src/contentful/getWork";
 import {
@@ -15,6 +16,7 @@ import {
   EXCLUDED_PAGE_SLUGS_FROM_BUILD,
   TEST_PAGE_SLUG,
 } from "src/utils/constants";
+import { envUrl } from "src/utils/helpers";
 
 interface WorkParams {
   slug: string;
@@ -70,6 +72,10 @@ export async function generateMetadata({
   }
 
   return {
+    metadataBase: new URL(`${envUrl()}/work/${workEntry.workSlug}`),
+    alternates: {
+      canonical: "/",
+    },
     title: `${workEntry.workTitle} | After Avenue`,
     robots: "index, follow",
   };
@@ -108,11 +114,13 @@ async function WorkEntry({ params }: WorkProps) {
     .filter((work) => !work.hideFromWorkFeeds);
 
   return (
-    <WorkEntryPage
-      workEntry={workEntry}
-      workSeries={workSeriesUnique}
-      recentWork={randomRecentWorkUnique}
-    />
+    <Suspense>
+      <WorkEntryPage
+        workEntry={workEntry}
+        workSeries={workSeriesUnique}
+        recentWork={randomRecentWorkUnique}
+      />
+    </Suspense>
   );
 }
 
