@@ -62,7 +62,7 @@ export const EditorsPage = (props: EditorsPageProps) => {
                 key={editor.editorSlug}
                 style={{
                   opacity: currentVideoId === editor.featuredWork?.id ? 1 : 0,
-                  transition: "opacity 0.75s ease-in-out",
+                  transition: "opacity 1s ease-in-out",
                   zIndex: currentVideoId === editor.featuredWork?.id ? 1 : 0,
                   position: "absolute",
                   inset: 0,
@@ -75,6 +75,16 @@ export const EditorsPage = (props: EditorsPageProps) => {
               />
             );
           })}
+          <video
+            className={styles.staticVideo}
+            playsInline
+            loop
+            preload="auto"
+            autoPlay
+            muted
+          >
+            <source src="/video/static.mp4" type="video/mp4"></source>
+          </video>
         </div>
       ) : null}
     </>
