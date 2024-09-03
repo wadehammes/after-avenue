@@ -17,7 +17,7 @@ export const EditorsPage = (props: EditorsPageProps) => {
   const { editors, pageFields } = props;
   const { pageTitle } = pageFields;
   const [currentVideoId, setCurrentVideoId] = useState<string>(
-    editors[1].featuredWork?.id ?? "",
+    editors[0].featuredWork?.id ?? "",
   );
 
   if (!editors) {
