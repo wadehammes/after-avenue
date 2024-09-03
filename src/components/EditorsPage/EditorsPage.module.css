@@ -1,11 +1,82 @@
 .editorsList {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
   gap: var(--default-padding);
   width: 100%;
   margin: 0 auto;
 
-  @media screen and (min-width: 600px) {
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  @media (min-width: 768px) {
+    gap: 4rem;
+  }
+}
+
+.editorsPageContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  width: 100%;
+  
+  > * {
+    margin: auto;
+  }
+}
+
+.editorButton {
+  cursor: pointer;
+  font-family: "area", sans-serif;
+  font-size: clamp(2rem, 10vw, 4rem);
+  font-weight: 200;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  z-index: 1;
+  color: var(--color-text);
+
+  &.activeEditor,
+  &:hover {
+    color: var(--colors-street-lamp-yellow);
+  }
+}
+
+.videoBackground {
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(5px);
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  > div {
+    width: 300vw !important;
+    height: 300vh !important;
+    margin-left: -100vw;
+    margin-top: -100vh;
+
+    @media (min-width: 1200px) {
+      width: 150vw !important;
+      height: 150vh !important;
+      margin-left: -25vw;
+      margin-top: -25vh;
+    }
+  }
+
+  video, iframe {
+    object-fit: cover;
+  }
+
+  @media (min-width: 768px) {
+    display: block;
   }
 }

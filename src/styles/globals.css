@@ -158,7 +158,7 @@ body {
 .page-content {
   background: var(--color-bg);
   position: relative;
-  z-index: 2;
+  z-index: 1;
   overflow: hidden;
   flex: 1;
   padding-top: 100px;
@@ -230,6 +230,10 @@ b {
   margin: auto;
   width: 3.35rem;
   height: 3.35rem;
+}
+
+.hidden-title {
+  text-indent: -9999px;
 }
 
 h1, h2, h3, h4, h5, h6 {

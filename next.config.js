@@ -144,7 +144,7 @@ const ContentSecurityPolicy = `
   style-src 'self' 'unsafe-inline' *.googleapis.com *.typekit.net vercel.live;
   img-src * blob: data: images.ctfassets.net placehold.co;
   media-src * 'self';
-  connect-src *;
+  connect-src * 'self' *.vimeocdn.com;
   font-src data: 'self' *.typekit.net vercel.live;
   worker-src 'self' *.vercel.app;
   manifest-src 'self' *.vercel.app;

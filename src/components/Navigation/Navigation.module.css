@@ -6,6 +6,10 @@
   transition: background 0.25s linear;
   padding: 1.5rem 0;
 
+  &.noBackground {
+    background: none;
+  }
+
   &.scrolled {
     background-color: rgba(0,0,0,.35);
     background-image: url("/images/dot-bg.png");

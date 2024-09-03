@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { EditorsPage } from "src/components/EditorsPage/EditorsPage.component";
 import { fetchAllEditors } from "src/contentful/getEditors";
 import { fetchPage } from "src/contentful/getPages";
@@ -47,7 +48,11 @@ async function Editors() {
     return notFound();
   }
 
-  return <EditorsPage pageFields={editorsPage} editors={allEditors} />;
+  return (
+    <Suspense>
+      <EditorsPage pageFields={editorsPage} editors={allEditors} />
+    </Suspense>
+  );
 }
 
 export default Editors;
