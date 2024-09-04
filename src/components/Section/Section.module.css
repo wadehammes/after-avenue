@@ -3,7 +3,15 @@
   padding: 4rem 0;
   width: 100%;
 
+  &.noPadding {
+    padding: 0;
+  }
+
   @media screen and (min-width: 800px) {
     padding: 8rem 0;
+
+    &.noPadding {
+      padding: 0;
+    }
   }
 }

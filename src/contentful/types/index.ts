@@ -4,11 +4,6 @@ export type {
   TypeComponentCopyBlockSkeleton,
 } from "./TypeComponentCopyBlock";
 export type {
-  TypeComponentCopyMediaBlock,
-  TypeComponentCopyMediaBlockFields,
-  TypeComponentCopyMediaBlockSkeleton,
-} from "./TypeComponentCopyMediaBlock";
-export type {
   TypeComponentHero,
   TypeComponentHeroFields,
   TypeComponentHeroSkeleton,
@@ -18,6 +13,11 @@ export type {
   TypeComponentLogoTickerFields,
   TypeComponentLogoTickerSkeleton,
 } from "./TypeComponentLogoTicker";
+export type {
+  TypeComponentSlide,
+  TypeComponentSlideFields,
+  TypeComponentSlideSkeleton,
+} from "./TypeComponentSlide";
 export type {
   TypeEditors,
   TypeEditorsFields,

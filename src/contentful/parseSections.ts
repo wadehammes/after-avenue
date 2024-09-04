@@ -1,16 +1,16 @@
 import { Document } from "@contentful/rich-text-types";
 import { Entry } from "contentful";
-import { ComponentCopyMediaBlockEntry } from "src/contentful/getComponentCopyMediaBlock";
 import { ComponentCopyBlockEntry } from "src/contentful/parseComponentCopyBlock";
 import { ComponentHeroEntry } from "src/contentful/parseComponentHero";
 import { ComponentLogoTickerEntry } from "src/contentful/parseComponentLogoTicker";
+import { ComponentSlideEntry } from "src/contentful/parseComponentSlide";
 import { TypeSectionSkeleton } from "src/contentful/types";
 
 export type Content =
   | ComponentCopyBlockEntry
-  | ComponentCopyMediaBlockEntry
   | ComponentHeroEntry
   | ComponentLogoTickerEntry
+  | ComponentSlideEntry
   | undefined;
 
 export interface SectionType {
