@@ -28,7 +28,6 @@ export const EditorsEntryPage = (props: EditorsEntryPageProps) => {
                 <li key={work.workSlug}>
                   <WorkCard
                     work={work}
-                    showHoverIcon={editorsWork.length <= 3}
                     title={work.workTitle}
                     subtitle={work.workClient}
                   />

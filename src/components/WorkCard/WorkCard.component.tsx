@@ -13,11 +13,10 @@ interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {
   work: Work;
   title: string;
   subtitle: string;
-  showHoverIcon?: boolean;
 }
 
 export const WorkCard = (props: WorkCardProps) => {
-  const { work, title, subtitle, showHoverIcon = true } = props;
+  const { work, title, subtitle } = props;
 
   const { inView, ref } = useInView({
     threshold: 0.5,
@@ -41,11 +40,9 @@ export const WorkCard = (props: WorkCardProps) => {
           <h2>{title}</h2>
           <p>{subtitle}</p>
         </div>
-        {showHoverIcon ? (
-          <div className={styles.workCardPlayIconContainer}>
-            <ArrowDownIcon />
-          </div>
-        ) : null}
+        <div className={styles.workCardPlayIconContainer}>
+          <ArrowDownIcon />
+        </div>
       </Link>
     </div>
   );
