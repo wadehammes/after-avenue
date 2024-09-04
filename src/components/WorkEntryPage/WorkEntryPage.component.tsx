@@ -103,7 +103,6 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                 <li key={work.workSlug}>
                   <WorkCard
                     work={work}
-                    showHoverIcon={false}
                     title={work.workTitle}
                     subtitle={work.workClient}
                   />
@@ -127,7 +126,6 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                     <li key={work.workSlug}>
                       <WorkCard
                         work={work}
-                        showHoverIcon={recentWork.length <= 3}
                         title={work.workClient}
                         subtitle={work.workTitle}
                       />
