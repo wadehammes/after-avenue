@@ -29,7 +29,13 @@ export const WorkCard = (props: WorkCardProps) => {
       className={classNames(styles.workCard, { [styles.animate]: inView })}
     >
       <div className={styles.workCardVideoContainer}>
-        <VideoPlayer url={work.workVideoUrl} rounded playing={inView} light />
+        <VideoPlayer
+          url={work.workVideoUrl}
+          rounded
+          playing={inView}
+          light
+          inView={inView}
+        />
       </div>
 
       <Link
