@@ -20,3 +20,20 @@
     border: 0;
   }
 }
+
+.playIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--colors-street-lamp-yellow-alpha);
+  backdrop-filter: blur(10px);
+  border-radius: 1000px;
+  color: var(--colors-black);
+  padding: 0.55rem;
+
+  svg {
+    width: 1.65rem;
+    height: 1.65rem;
+    margin: auto;
+  }
+}
