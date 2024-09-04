@@ -9,6 +9,7 @@ import type {
 export interface TypeComponentCopyBlockFields {
   entryTitle?: EntryFieldTypes.Symbol;
   copy: EntryFieldTypes.RichText;
+  textAlign?: EntryFieldTypes.Symbol<"center" | "left" | "right">;
 }
 
 export type TypeComponentCopyBlockSkeleton = EntrySkeletonType<

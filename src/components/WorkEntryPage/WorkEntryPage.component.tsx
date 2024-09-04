@@ -32,12 +32,14 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
 
   return (
     <article className="container column">
-      <VideoPlayer
-        url={workVideoUrl}
-        playing={playVideo === "true"}
-        rounded
-        light={!playVideo}
-      />
+      <div className={styles.videoContainer}>
+        <VideoPlayer
+          url={workVideoUrl}
+          playing={playVideo === "true"}
+          rounded
+          light={!playVideo}
+        />
+      </div>
       <div className={styles.workContentContainer}>
         <div className={styles.workCopyContainer}>
           <h1>{workClient}</h1>
@@ -116,7 +118,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
             <div className={styles.workSeries}>
               <h3>Other work</h3>
               <ul className={styles.workSeriesList}>
-                {recentWork.map((work) => {
+                {recentWork.map((work, index) => {
                   if (!work) {
                     return null;
                   }
@@ -125,9 +127,10 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                     <li key={work.workSlug}>
                       <WorkCard
                         work={work}
-                        showHoverIcon={false}
+                        showHoverIcon={recentWork.length <= 3}
                         title={work.workClient}
                         subtitle={work.workTitle}
+                        index={index}
                       />
                     </li>
                   );

@@ -108,3 +108,8 @@
     font-size: clamp(1.25rem, 3vw, 1.75rem);
   }
 }
+
+.videoContainer {
+  height: calc(100vw / 1.77);
+  width: 100%;
+}

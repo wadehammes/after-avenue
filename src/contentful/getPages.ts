@@ -2,7 +2,10 @@ import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
 import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
 import { parseContentfulAsset } from "src/contentful/parseContentfulAsset";
-import { Section, parseContentfulSection } from "src/contentful/parseSections";
+import {
+  SectionType,
+  parseContentfulSection,
+} from "src/contentful/parseSections";
 import type { TypePageSkeleton } from "src/contentful/types/TypePage";
 
 type PageEntry = Entry<TypePageSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
@@ -16,7 +19,7 @@ export interface Page {
   metaDescription: string;
   pageDisplayTitle?: string;
   pageDescription?: string;
-  sections: (Section | null)[];
+  sections: (SectionType | null)[];
   socialImage: ContentfulAsset | null;
   updatedAt: string;
 }

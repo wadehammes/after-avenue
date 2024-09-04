@@ -16,6 +16,7 @@ export interface TypeEditorsFields {
   editorHeadshot?: EntryFieldTypes.AssetLink;
   editorHeadshotHover?: EntryFieldTypes.AssetLink;
   featuredWork?: EntryFieldTypes.EntryLink<TypeWorkSkeleton>;
+  priority?: EntryFieldTypes.Boolean;
 }
 
 export type TypeEditorsSkeleton = EntrySkeletonType<

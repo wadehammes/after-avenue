@@ -26,11 +26,22 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const Home = async () => {
+  const page = await fetchPage({
+    slug: "home",
+    preview: draftMode().isEnabled,
+  });
+
+  if (!page) {
+    return notFound();
+  }
+
+  const { sections } = page;
+
   const featuredWork = await fetchAllFeaturedWork({
     preview: draftMode().isEnabled,
   });
 
-  return <HomePage featuredWork={featuredWork} />;
+  return <HomePage featuredWork={featuredWork} sections={sections} />;
 };
 
 export default Home;

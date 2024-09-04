@@ -38,9 +38,14 @@
   color: var(--color-text);
   transition: color 0.3s ease-in-out;
 
-  &.activeEditor,
   &:hover {
     color: var(--colors-street-lamp-yellow);
+  }
+
+  @media (min-width: 768px) {
+    &.activeEditor {
+      color: var(--colors-street-lamp-yellow);
+    }
   }
 }
 
@@ -82,7 +87,7 @@
     height: 100vh;
     width: 100vw;
     filter: grayscale(100%);
-    opacity: 0.5;
+    opacity: 0.45;
     position: absolute;
     inset: 0;
     z-index: 0;

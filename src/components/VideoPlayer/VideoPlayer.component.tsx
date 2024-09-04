@@ -23,7 +23,9 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
 
   return (
     <div
-      className={classNames(styles.videoPlayer, { [styles.rounded]: rounded })}
+      className={classNames(styles.videoPlayer, {
+        [styles.rounded]: rounded,
+      })}
     >
       <ReactPlayer
         controls={rounded}
