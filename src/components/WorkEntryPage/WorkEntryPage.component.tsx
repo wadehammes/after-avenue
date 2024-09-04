@@ -118,7 +118,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
             <div className={styles.workSeries}>
               <h3>Other work</h3>
               <ul className={styles.workSeriesList}>
-                {recentWork.map((work, index) => {
+                {recentWork.map((work) => {
                   if (!work) {
                     return null;
                   }
@@ -130,7 +130,6 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                         showHoverIcon={recentWork.length <= 3}
                         title={work.workClient}
                         subtitle={work.workTitle}
-                        index={index}
                       />
                     </li>
                   );

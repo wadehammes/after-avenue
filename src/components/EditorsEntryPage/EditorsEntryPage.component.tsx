@@ -19,7 +19,7 @@ export const EditorsEntryPage = (props: EditorsEntryPageProps) => {
         <div className={styles.workSeries}>
           <h3>Editorial Credits</h3>
           <ul className={styles.workSeriesList}>
-            {editorsWork.map((work, index) => {
+            {editorsWork.map((work) => {
               if (!work) {
                 return null;
               }
@@ -31,7 +31,6 @@ export const EditorsEntryPage = (props: EditorsEntryPageProps) => {
                     showHoverIcon={editorsWork.length <= 3}
                     title={work.workTitle}
                     subtitle={work.workClient}
-                    index={index}
                   />
                 </li>
               );

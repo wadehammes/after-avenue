@@ -14,21 +14,13 @@ interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   subtitle: string;
   showHoverIcon?: boolean;
-  index?: number;
 }
 
 export const WorkCard = (props: WorkCardProps) => {
-  const {
-    work,
-    title,
-    subtitle,
-    showHoverIcon = true,
-    index = 0,
-    ...rest
-  } = props;
+  const { work, title, subtitle, showHoverIcon = true } = props;
 
   const { inView, ref } = useInView({
-    threshold: 0.25,
+    threshold: 0.5,
     triggerOnce: true,
   });
 
@@ -36,8 +28,6 @@ export const WorkCard = (props: WorkCardProps) => {
     <div
       ref={ref}
       className={classNames(styles.workCard, { [styles.animate]: inView })}
-      style={{ animationDelay: `${index * 0.2}s` }}
-      {...rest}
     >
       <div className={styles.workCardVideoContainer}>
         <VideoPlayer url={work.workVideoUrl} rounded playing={inView} light />
