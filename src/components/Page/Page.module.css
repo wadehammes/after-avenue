@@ -2,6 +2,7 @@
   display: flex;
   align-items: flex-start;
   flex-flow: column nowrap;
-  gap: 1rem;
+  gap: var(--default-padding);
   padding: var(--default-padding);
+  position: relative;
 }

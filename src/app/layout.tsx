@@ -7,6 +7,7 @@ import "src/styles/fonts.css";
 import "src/styles/globals.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
+import { fetchGlobalVariables } from "src/contentful/getGlobalVariables";
 import { fetchNavigation } from "src/contentful/getNavigation";
 import { NAVIGATION_ID } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
@@ -30,6 +31,10 @@ export default async function RootLayout({
   const nav = await fetchNavigation({
     id: NAVIGATION_ID,
     preview: false,
+  });
+
+  const globalVariables = await fetchGlobalVariables({
+    preview: draftMode().isEnabled,
   });
 
   return (
@@ -62,7 +67,7 @@ export default async function RootLayout({
             <ExitDraftModeLink style={{ textDecoration: "underline" }} />
           </div>
         ) : null}
-        <Providers>
+        <Providers globalVariables={globalVariables}>
           <div className="page">
             <Navigation navigationItems={nav?.navigationItems ?? []} />
             <main className="page-content">{children}</main>

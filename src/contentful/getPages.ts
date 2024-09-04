@@ -18,6 +18,7 @@ export interface Page {
   enableIndexing: boolean;
   metaDescription: string;
   pageDisplayTitle?: string;
+  pageSubtitle?: string;
   pageDescription?: string;
   sections: (SectionType | null)[];
   socialImage: ContentfulAsset | null;
@@ -38,6 +39,7 @@ export function parseContentfulPage(pageEntry?: PageEntry): Page | null {
     pageSlug: pageEntry.fields.pageSlug,
     pageDisplayTitle: pageEntry.fields.pageDisplayTitle,
     pageTitle: pageEntry.fields.pageTitle,
+    pageSubtitle: pageEntry.fields.pageSubtitle,
     sections:
       pageEntry?.fields?.sections?.map((section) =>
         parseContentfulSection(section),

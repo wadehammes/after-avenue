@@ -1,0 +1,9 @@
+.aboutPageHeader {
+  padding: 6rem 0;
+
+  h1 {
+    font-size: 8vw;
+    text-wrap: balance;
+    text-align: center;
+  }
+}

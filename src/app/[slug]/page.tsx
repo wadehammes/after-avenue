@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import { AboutPage } from "src/components/AboutPage/AboutPage.component";
 import PageComponent from "src/components/Page/Page.component";
 import type { Page as PageType } from "src/contentful/getPages";
 import { fetchPage, fetchPages } from "src/contentful/getPages";
@@ -97,6 +98,10 @@ async function Page({ params }: PageProps) {
     // If a page can't be found,
     // tell Next.js to render a 404 page.
     return notFound();
+  }
+
+  if (page.pageSlug === "about") {
+    return <AboutPage pageFields={page} />;
   }
 
   return <PageComponent fields={page} />;
