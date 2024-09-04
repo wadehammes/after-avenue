@@ -35,13 +35,11 @@ const Home = async () => {
     return notFound();
   }
 
-  const { sections } = page;
-
   const featuredWork = await fetchAllFeaturedWork({
     preview: draftMode().isEnabled,
   });
 
-  return <HomePage featuredWork={featuredWork} sections={sections} />;
+  return <HomePage featuredWork={featuredWork} pageFields={page} />;
 };
 
 export default Home;

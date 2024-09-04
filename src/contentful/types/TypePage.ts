@@ -11,6 +11,7 @@ export interface TypePageFields {
   entryTitle?: EntryFieldTypes.Symbol;
   pageTitle: EntryFieldTypes.Symbol;
   pageDisplayTitle?: EntryFieldTypes.Symbol;
+  pageSubtitle?: EntryFieldTypes.Symbol;
   pageSlug: EntryFieldTypes.Symbol;
   pageDescription?: EntryFieldTypes.Text;
   sections?: EntryFieldTypes.Array<
