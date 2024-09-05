@@ -6,9 +6,9 @@ import type {
   LocaleCode,
 } from "contentful";
 import type { TypeComponentCopyBlockSkeleton } from "./TypeComponentCopyBlock";
-import type { TypeComponentCopyMediaBlockSkeleton } from "./TypeComponentCopyMediaBlock";
 import type { TypeComponentHeroSkeleton } from "./TypeComponentHero";
 import type { TypeComponentLogoTickerSkeleton } from "./TypeComponentLogoTicker";
+import type { TypeComponentSlideSkeleton } from "./TypeComponentSlide";
 
 export interface TypeSectionFields {
   entryTitle?: EntryFieldTypes.Symbol;
@@ -16,9 +16,9 @@ export interface TypeSectionFields {
   content: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<
       | TypeComponentCopyBlockSkeleton
-      | TypeComponentCopyMediaBlockSkeleton
       | TypeComponentHeroSkeleton
       | TypeComponentLogoTickerSkeleton
+      | TypeComponentSlideSkeleton
     >
   >;
 }

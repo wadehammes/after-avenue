@@ -8,7 +8,11 @@ import {
 } from "src/contentful/parseSections";
 import type { TypePageSkeleton } from "src/contentful/types/TypePage";
 
-type PageEntry = Entry<TypePageSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
+export type PageEntry = Entry<
+  TypePageSkeleton,
+  "WITHOUT_UNRESOLVABLE_LINKS",
+  string
+>;
 
 // Our simplified version of a Page.
 // We don't need all the data that Contentful gives us.

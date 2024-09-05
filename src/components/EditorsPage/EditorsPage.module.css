@@ -74,6 +74,7 @@
     height: 300vh !important;
     margin-left: -100vw;
     margin-top: -100vh;
+    object-fit: cover;
 
     @media (min-width: 1200px) {
       width: 150vw !important;
