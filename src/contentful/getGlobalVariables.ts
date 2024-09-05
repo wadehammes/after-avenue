@@ -6,6 +6,7 @@ export interface GlobalVariables {
   address?: string;
   phoneNumber?: string;
   email?: string;
+  featuredWorkButtonText?: string;
   instagramUrl?: string;
   linkedInUrl?: string;
   twitterUrl?: string;
@@ -27,6 +28,7 @@ export function parseContentfulGlobalVariables(
   return {
     address: globalVariables.fields.address,
     email: globalVariables.fields.email,
+    featuredWorkButtonText: globalVariables.fields.featuredWorkButtonText,
     instagramUrl: globalVariables.fields.instagramUrl,
     linkedInUrl: globalVariables.fields.linkedInUrl,
     phoneNumber: globalVariables.fields.phoneNumber,

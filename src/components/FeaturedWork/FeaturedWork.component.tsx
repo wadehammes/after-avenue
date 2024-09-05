@@ -6,6 +6,7 @@ import styles from "src/components/FeaturedWork/FeaturedWork.module.css";
 import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import type { Work } from "src/contentful/getWork";
+import { useGlobalVariables } from "src/context/globalContext.context";
 import PlayIcon from "src/icons/Play.icon.svg";
 
 interface FeaturedWorkProps {
@@ -15,6 +16,8 @@ interface FeaturedWorkProps {
 export const FeaturedWork = (props: FeaturedWorkProps) => {
   const { fields } = props;
   const { workVideoUrl } = fields;
+
+  const { featuredWorkButtonText } = useGlobalVariables();
 
   const { inView, ref } = useInView({
     threshold: 0.5,
@@ -35,7 +38,7 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
             color="dark"
           >
             <PlayIcon />
-            Play Video
+            {featuredWorkButtonText ?? "Watch Video"}
           </StyledButtonLink>
         </div>
       </div>

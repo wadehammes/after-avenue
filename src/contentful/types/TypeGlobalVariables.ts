@@ -12,6 +12,7 @@ export interface TypeGlobalVariablesFields {
   address?: EntryFieldTypes.Symbol;
   phoneNumber?: EntryFieldTypes.Symbol;
   email?: EntryFieldTypes.Symbol;
+  featuredWorkButtonText?: EntryFieldTypes.Symbol;
   instagramUrl?: EntryFieldTypes.Symbol;
   linkedInUrl?: EntryFieldTypes.Symbol;
   twitterUrl?: EntryFieldTypes.Symbol;
