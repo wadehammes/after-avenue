@@ -15,7 +15,7 @@ interface SlideProps {
 export const Slide = (props: SlideProps) => {
   const { fields, index } = props;
   const { ref, inView } = useInView({
-    threshold: 0.5,
+    threshold: 0.25,
   });
 
   if (!fields) {
@@ -60,11 +60,31 @@ export const Slide = (props: SlideProps) => {
         </div>
         <header className={styles.slideHeader}>
           {index === 0 ? (
-            <h1>{parse(headline as string)}</h1>
+            <h1
+              className={classNames({
+                [styles.animated]: inView,
+              })}
+            >
+              {parse(headline as string)}
+            </h1>
           ) : (
-            <h2>{parse(headline as string)}</h2>
+            <h2
+              className={classNames({
+                [styles.animated]: inView,
+              })}
+            >
+              {parse(headline as string)}
+            </h2>
           )}
-          {subheadline ? <p>{parse(subheadline as string)}</p> : null}
+          {subheadline ? (
+            <p
+              className={classNames({
+                [styles.animated]: inView,
+              })}
+            >
+              {parse(subheadline as string)}
+            </p>
+          ) : null}
         </header>
       </div>
     </div>
