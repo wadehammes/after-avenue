@@ -29,6 +29,18 @@ module.exports = {
 				port: "",
 				pathname: "/**",
 			},
+			{
+				protocol: "https",
+				hostname: "downloads.ctfassets.net",
+				port: "",
+				pathname: "/**",
+			},
+			{
+				protocol: "https",
+				hostname: "videos.ctfassets.net",
+				port: "",
+				pathname: "/**",
+			},
 		],
 	},
 	webpack(config) {

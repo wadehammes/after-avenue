@@ -1,7 +1,7 @@
 {
   "name": "next-after-avenue",
   "version": "0.0.0",
-  "packageManager": "pnpm@9.9.0",
+  "packageManager": "pnpm@9.10.0",
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev -p 3005",
@@ -17,22 +17,22 @@
     "types:contentful": "export $(cat .env.local | sed '/^#/d; s/[$\"]//g'); cf-content-types-generator -s $CONTENTFUL_SPACE_ID -t $CONTENTFUL_CMA_TOKEN -o src/contentful/types -X && biome format --write src/contentful/types"
   },
   "dependencies": {
-    "@contentful/rich-text-react-renderer": "^15.22.10",
-    "@contentful/rich-text-types": "^16.8.4",
+    "@contentful/rich-text-react-renderer": "^15.22.11",
+    "@contentful/rich-text-types": "^16.8.5",
     "@faker-js/faker": "^9.0.0",
     "@jest/types": "^29.6.3",
-    "@next/third-parties": "^14.2.8",
+    "@next/third-parties": "^14.2.10",
     "@notionhq/client": "^2.2.15",
     "@svgr/webpack": "^8.1.0",
-    "@tanstack/react-query": "^5.55.0",
+    "@tanstack/react-query": "^5.56.1",
     "classnames": "^2.5.1",
-    "contentful": "^10.15.0",
+    "contentful": "^10.15.1",
     "gsap": "^3.12.5",
-    "html-react-parser": "^5.1.15",
+    "html-react-parser": "^5.1.16",
     "jest-mock": "^29.7.0",
-    "next": "^14.2.8",
+    "next": "^14.2.10",
     "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-preset-env": "^10.0.2",
+    "postcss-preset-env": "^10.0.3",
     "postcss-syntax": "^0.36.2",
     "react": "^18.3.1",
     "react-aria": "^3.34.3",
@@ -49,12 +49,12 @@
     "usehooks-ts": "^3.1.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.3",
+    "@biomejs/biome": "1.9.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.5.2",
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^29.5.13",
     "@types/node": "^22.5.4",
     "@types/react": "^18.3.5",
     "@types/react-google-recaptcha": "^2.1.9",
@@ -70,7 +70,7 @@
     "stylelint-prettier": "^5.0.2",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4",
+    "typescript": "^5.6.2",
     "typescript-plugin-css-modules": "^5.1.0"
   }
 }

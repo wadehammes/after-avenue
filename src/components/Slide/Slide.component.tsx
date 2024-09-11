@@ -2,6 +2,7 @@
 
 import classNames from "classnames";
 import parse from "html-react-parser";
+import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { Media } from "src/components/Media/Media.component";
 import styles from "src/components/Slide/Slide.module.css";
@@ -14,6 +15,7 @@ interface SlideProps {
 
 export const Slide = (props: SlideProps) => {
   const { fields, index } = props;
+  const [hovered, setHovered] = useState(false);
   const { ref, inView } = useInView({
     threshold: 0.25,
   });
@@ -50,6 +52,7 @@ export const Slide = (props: SlideProps) => {
           className={classNames(styles.slideBackgroundMediaContainer, {
             [styles.inView]: inView,
           })}
+          style={{ display: "none" }}
         >
           {backgroundMedia ? (
             <>
@@ -58,7 +61,12 @@ export const Slide = (props: SlideProps) => {
             </>
           ) : null}
         </div>
-        <header className={styles.slideHeader}>
+        <header
+          className={classNames(styles.slideHeader, {
+            [styles.hovered]: hovered,
+          })}
+          onMouseEnter={() => setHovered(true)}
+        >
           {index === 0 ? (
             <h1
               className={classNames({

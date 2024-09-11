@@ -1,17 +1,13 @@
 .slide {
-   width: 100vw;
+  width: 100vw;
   position: relative;
   overflow: hidden;
-
-  @media (min-width: 768px) {
-    height: calc(100vh - 100px);
-  }
 } 
 
 .slideBackgroundMediaContainer {
   width: 100vw;
   height: 100vh;
-  position: fixed;
+  position: relative;
   inset: 0;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
@@ -91,6 +87,12 @@
 
     span {
       color: var(--colors-street-lamp-yellow);
+      opacity: 0.15;
+      transition: opacity 2s ease-in-out;
+
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 
@@ -103,6 +105,10 @@
 
   p {
     font-size: clamp(1.25rem, 4vw, 2rem);
+  }
+
+  &.hovered h1 span {
+    opacity: 1;
   }
 }
 
