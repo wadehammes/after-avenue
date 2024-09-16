@@ -1,7 +1,24 @@
 .contactPageContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  gap: 2rem;
   max-width: 1000px;
   margin: 0 auto;
   width: 100%;
+
+  @media (min-width: 768px) {
+    gap: 4rem;
+  }
+}
+
+.contactAddressContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contactAddress {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
