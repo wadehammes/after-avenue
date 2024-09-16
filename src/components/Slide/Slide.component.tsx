@@ -2,7 +2,6 @@
 
 import classNames from "classnames";
 import parse from "html-react-parser";
-import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { Media } from "src/components/Media/Media.component";
 import styles from "src/components/Slide/Slide.module.css";
@@ -15,7 +14,6 @@ interface SlideProps {
 
 export const Slide = (props: SlideProps) => {
   const { fields, index } = props;
-  const [hovered, setHovered] = useState(false);
   const { ref, inView } = useInView({
     threshold: 0.25,
   });
@@ -24,29 +22,10 @@ export const Slide = (props: SlideProps) => {
     return null;
   }
 
-  const {
-    backgroundMedia,
-    headline,
-    backgroundColor,
-    backgroundOpacity,
-    subheadline,
-  } = fields;
+  const { backgroundMedia, headline, backgroundOpacity, subheadline } = fields;
 
   return (
-    <div
-      className={styles.slide}
-      style={{
-        backgroundColor:
-          backgroundColor === "Yellow"
-            ? "var(--colors-street-lamp-yellow)"
-            : "var(--colors-black)",
-        color:
-          backgroundColor === "Yellow"
-            ? "var(--colors-black)"
-            : "var(--colors-white)",
-      }}
-      ref={ref}
-    >
+    <div className={styles.slide} ref={ref}>
       <div className={styles.slideContent}>
         <div
           className={classNames(styles.slideBackgroundMediaContainer, {
@@ -61,12 +40,7 @@ export const Slide = (props: SlideProps) => {
             </>
           ) : null}
         </div>
-        <header
-          className={classNames(styles.slideHeader, {
-            [styles.hovered]: hovered,
-          })}
-          onMouseEnter={() => setHovered(true)}
-        >
+        <header className={styles.slideHeader}>
           {index === 0 ? (
             <h1
               className={classNames({

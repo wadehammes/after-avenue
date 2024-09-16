@@ -12,7 +12,7 @@ interface HomePageProps {
 
 export const HomePage = (props: HomePageProps) => {
   const { featuredWork, pageFields } = props;
-  const { pageDisplayTitle, pageSubtitle } = pageFields;
+  const { pageDisplayTitle } = pageFields;
 
   return (
     <>
@@ -22,7 +22,7 @@ export const HomePage = (props: HomePageProps) => {
         ))}
         <div className={styles.buttonContainer}>
           <StyledButtonLink href="/work" variant="contained" color="dark">
-            Show Me More
+            Show Me More Work
           </StyledButtonLink>
         </div>
       </section>
@@ -30,9 +30,13 @@ export const HomePage = (props: HomePageProps) => {
         <div className="container column">
           <header className="section-header">
             <h1>{pageDisplayTitle}</h1>
-            <p>{pageSubtitle}</p>
           </header>
           <FeaturedBrands />
+          <div className={styles.buttonContainer}>
+            <StyledButtonLink href="/contact" variant="contained" color="dark">
+              Contact Us Today
+            </StyledButtonLink>
+          </div>
         </div>
       </section>
     </>

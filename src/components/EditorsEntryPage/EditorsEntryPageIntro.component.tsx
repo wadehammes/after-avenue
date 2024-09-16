@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import styles from "src/components/EditorsEntryPage/EditorsEntryPage.module.css";
 import { Editor } from "src/contentful/getEditors";
+import { RichText } from "src/contentful/richText";
 import { createImageUrl } from "src/utils/helpers";
 
 interface EditorsEntryPageIntroProps {
@@ -42,6 +43,11 @@ export const EditorsEntryPageIntro = (props: EditorsEntryPageIntroProps) => {
       </div>
       <h1>{editorEntry.editorName}</h1>
       {editorEntry.editorTitle ? <p>{editorEntry.editorTitle}</p> : null}
+      {editorEntry.editorBio ? (
+        <div className={styles.editorsBio}>
+          <RichText document={editorEntry.editorBio} />
+        </div>
+      ) : null}
     </div>
   );
 };
