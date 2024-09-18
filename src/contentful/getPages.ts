@@ -17,13 +17,15 @@ export type PageEntry = Entry<
 // Our simplified version of a Page.
 // We don't need all the data that Contentful gives us.
 export interface Page {
-  pageTitle: string;
-  pageSlug: string;
+  contactFooterTitle?: string;
+  contactFooterButtonText?: string;
   enableIndexing: boolean;
   metaDescription: string;
-  pageDisplayTitle?: string;
-  pageSubtitle?: string;
   pageDescription?: string;
+  pageDisplayTitle?: string;
+  pageSlug: string;
+  pageSubtitle?: string;
+  pageTitle: string;
   sections: (SectionType | null)[];
   socialImage: ContentfulAsset | null;
   updatedAt: string;
@@ -37,6 +39,8 @@ export function parseContentfulPage(pageEntry?: PageEntry): Page | null {
   }
 
   return {
+    contactFooterButtonText: pageEntry.fields.contactFooterButtonText,
+    contactFooterTitle: pageEntry.fields.contactFooterTitle,
     enableIndexing: pageEntry.fields?.enableIndexing ?? true,
     metaDescription: pageEntry.fields.metaDescription,
     pageDescription: pageEntry.fields.pageDescription,

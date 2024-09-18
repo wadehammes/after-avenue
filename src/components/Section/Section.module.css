@@ -1,7 +1,9 @@
 .section {
+  background-color: var(--color-bg);
   position: relative;
   padding: 4rem 0;
   width: 100%;
+  z-index: 1;
 
   &.noPadding {
     padding: 0;

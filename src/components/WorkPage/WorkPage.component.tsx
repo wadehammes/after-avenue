@@ -1,3 +1,4 @@
+import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import styles from "src/components/WorkPage/WorkPage.module.css";
 import type { Page } from "src/contentful/getPages";
@@ -12,15 +13,23 @@ interface WorkPageProps {
 
 export const WorkPage = (props: WorkPageProps) => {
   const { pageFields, allWork } = props;
-  const { pageSubtitle, pageDisplayTitle, pageTitle } = pageFields;
-
-  const title = pageDisplayTitle ?? pageTitle;
+  const {
+    contactFooterButtonText,
+    contactFooterTitle,
+    pageSubtitle,
+    pageDisplayTitle,
+    pageTitle,
+  } = pageFields;
 
   return (
     <div className="container column">
       <div className="page-container">
         <header className="page-header">
-          {title ? <h1 className="page-title">{title}</h1> : null}
+          {pageDisplayTitle ? (
+            <h1 className="page-title">{pageDisplayTitle}</h1>
+          ) : (
+            <h1 className="hidden-title">{pageTitle}</h1>
+          )}
           {pageSubtitle ? <p className="subtitle">{pageSubtitle}</p> : null}
         </header>
         <div className={styles.workList}>
@@ -30,9 +39,16 @@ export const WorkPage = (props: WorkPageProps) => {
               work={work}
               title={work.workClient}
               subtitle={work.workTitle}
+              autoPlay={false}
             />
           ))}
         </div>
+        <ContactFooter
+          title={
+            contactFooterTitle || "In pursuit of <span>what's next?</span>"
+          }
+          buttonText={contactFooterButtonText || "Work With Us"}
+        />
       </div>
     </div>
   );

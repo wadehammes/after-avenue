@@ -17,6 +17,8 @@ export interface TypePageFields {
   sections?: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<TypeSectionSkeleton>
   >;
+  contactFooterTitle?: EntryFieldTypes.Symbol;
+  contactFooterButtonText?: EntryFieldTypes.Symbol;
   socialImage?: EntryFieldTypes.AssetLink;
   enableIndexing?: EntryFieldTypes.Boolean;
   metaDescription: EntryFieldTypes.Text;

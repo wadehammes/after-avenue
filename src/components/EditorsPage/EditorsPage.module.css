@@ -77,10 +77,10 @@
     object-fit: cover;
 
     @media (min-width: 1200px) {
-      width: 150vw !important;
-      height: 150vh !important;
-      margin-left: -25vw;
-      margin-top: -25vh;
+      width: 200vw !important;
+      height: 200vh !important;
+      margin-left: -50vw;
+      margin-top: -50vh;
     }
   }
 

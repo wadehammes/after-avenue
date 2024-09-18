@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
+import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import styles from "src/components/WorkEntryPage/WorkEntryPage.module.css";
@@ -18,6 +18,8 @@ interface WorkEntryPageProps {
 export const WorkEntryPage = (props: WorkEntryPageProps) => {
   const { workEntry, workSeries, recentWork } = props;
   const {
+    contactFooterButtonText,
+    contactFooterTitle,
     workTitle,
     workVideoUrl,
     workDescription,
@@ -38,7 +40,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
           url={workVideoUrl}
           playing={playVideo === "true"}
           rounded
-          light={!playVideo}
+          autoPlay={playVideo === "true"}
           controls
         />
       </div>
@@ -139,12 +141,10 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
           ) : null}
         </>
       )}
-      <div className={styles.workEntryPageFooter}>
-        <h2>We're the last stop before your story begins.</h2>
-        <StyledButtonLink href="/contact" variant="contained" color="dark">
-          Contact Us Today
-        </StyledButtonLink>
-      </div>
+      <ContactFooter
+        title={contactFooterTitle}
+        buttonText={contactFooterButtonText}
+      />
     </article>
   );
 };

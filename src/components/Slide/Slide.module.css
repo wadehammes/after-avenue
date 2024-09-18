@@ -1,7 +1,10 @@
 .slide {
-   width: 100vw;
+  width: 100vw;
   position: relative;
   overflow: hidden;
+  height: 50vh;
+  min-height: 800px;
+  max-height: 1600px;
 
   @media (min-width: 768px) {
     height: calc(100vh - 100px);
@@ -34,6 +37,8 @@
   align-items: center;
   justify-content: center;
   height: calc(100vh - 75px);
+  min-height: 800px;
+  max-height: 1600px;
   width: 100vw;
   position: relative;
   z-index: 1;
@@ -50,15 +55,14 @@
 
 .mediaOverlay {
   align-items: center;
-  backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(15px);
+  background-color: var(--colors-black);
   background-image: url("/images/dot-bg.png");
   display: flex;
   inset: 0;
   justify-content: center;
   opacity: 0.75;
   position: absolute;
-  transition: opacity 0.2s ease-in-out;
   z-index: 1;
   padding: var(--default-padding);
   text-align: center;
@@ -79,6 +83,7 @@
     opacity: 0;
     transform: translateY(30px);
     transition: transform 1s ease-in-out, opacity 2s ease-in-out;
+    transition-delay: 0.5s;
     
     &.animated {
       transform: translateY(0);
@@ -90,7 +95,15 @@
     font-size: clamp(3rem, 10vw, 8vw);
 
     span {
+      color: var(--color-bg);
+      text-shadow: -1px -1px 0 var(--colors-street-lamp-yellow), 1px -1px 0 var(--colors-street-lamp-yellow), -1px 1px 0 var(--colors-street-lamp-yellow), 1px 1px 0 var(--colors-street-lamp-yellow);
+      transition: color 1s ease-in-out, text-shadow 1s ease-in-out;
+      transition-delay: 2s;
+    }
+
+    &.animated span {
       color: var(--colors-street-lamp-yellow);
+      text-shadow: -1px -1px 0 var(--color-bg), 1px -1px 0 var(--color-bg), -1px 1px 0 var(--color-bg), 1px 1px 0 var(--color-bg);
     }
   }
 

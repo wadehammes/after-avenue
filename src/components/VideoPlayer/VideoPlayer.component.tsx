@@ -8,9 +8,8 @@ import styles from "src/components/VideoPlayer/VideoPlayer.module.css";
 import { useIsBrowser } from "src/hooks/useIsBrowser";
 
 interface VideoPlayerProps {
+  autoPlay?: boolean;
   controls?: boolean;
-  inView?: boolean;
-  light?: boolean;
   playing?: boolean;
   rounded?: boolean;
   url: string;
@@ -18,11 +17,10 @@ interface VideoPlayerProps {
 
 export const VideoPlayer = (props: VideoPlayerProps) => {
   const {
+    autoPlay = true,
     url,
     rounded = false,
     playing = true,
-    light = false,
-    inView = false,
     controls = false,
   } = props;
   const isBrowser = useIsBrowser();
@@ -44,7 +42,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         loop
         muted
         fallback={<Loader />}
-        light={light && !inView}
+        light={!autoPlay}
         playIcon={<PlayIcon />}
       />
     </div>

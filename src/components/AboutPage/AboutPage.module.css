@@ -7,3 +7,19 @@
     text-align: center;
   }
 }
+
+.aboutConversation {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 100ch;
+  margin: 0 auto;
+  
+  p {
+    font-size: clamp(3rem, 3vw, 5rem);
+    line-height: 1.5;
+  }
+}

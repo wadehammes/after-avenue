@@ -4,11 +4,13 @@ import type { TypeGlobalVariablesSkeleton } from "src/contentful/types";
 
 export interface GlobalVariables {
   address?: string;
-  phoneNumber?: string;
+  contactFooterButtonText?: string;
+  contactFooterTitle?: string;
   email?: string;
   featuredWorkButtonText?: string;
   instagramUrl?: string;
   linkedInUrl?: string;
+  phoneNumber?: string;
   twitterUrl?: string;
 }
 
@@ -27,6 +29,8 @@ export function parseContentfulGlobalVariables(
 
   return {
     address: globalVariables.fields.address,
+    contactFooterButtonText: globalVariables.fields.contactFooterButtonText,
+    contactFooterTitle: globalVariables.fields.contactFooterTitle,
     email: globalVariables.fields.email,
     featuredWorkButtonText: globalVariables.fields.featuredWorkButtonText,
     instagramUrl: globalVariables.fields.instagramUrl,

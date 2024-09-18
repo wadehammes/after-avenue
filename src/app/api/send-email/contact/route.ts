@@ -23,18 +23,18 @@ export async function POST(request: Request) {
   try {
     const data = await resend.emails.send({
       from: `${name} <${email}>`,
-      to: "After Avenue <hello@jamespost.co>",
+      to: "After Avenue <hello@afteravenue.com>",
       subject: `Contact Form Submission - ${companyName}`,
       text: `You have a new message from ${name} at ${companyName}. ${message} Their contact info is: ${email} ${phone}.`,
-      html: `<div>You have a new message from ${name} at ${companyName}!<br /><br />${message}<br /><br />Their contact info is:<br />${name}<br />${email}<br />${phone}</div>`,
+      html: `<div>You have a new message from ${name} at ${companyName}!<br /><br />Message:<br />${message}<br /><br />Their contact info is:<br />${name}<br />${email}<br />${phone}</div>`,
     });
 
     await resend.emails.send({
       to: `${name} <${email}>`,
-      from: "After Avenue <hello@jamespost.co>",
+      from: "After Avenue <hello@afteravenue.com>",
       subject: `We received your contact info.`,
-      text: `Hi, ${name} 👋🏻! We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email whenever. Thanks, After Avenue Team - hello@jamespost.co | https://afteravenue.com`,
-      html: `<div>Hi, ${name} 👋🏻!<br /><br />We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email whenever.<br /><br />Thanks, After Avenue Team<br />hello@jamespost.co<br />https://afteravenue.com</div>`,
+      text: `Hi, ${name} 👋🏻! We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email. Thanks, After Avenue Team - hello@afteravenue.com | https://afteravenue.com`,
+      html: `<div>Hi, ${name} 👋🏻!<br /><br />We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email.<br /><br />Thanks, After Avenue Team<br />hello@afteravenue.com<br />https://afteravenue.com</div>`,
     });
 
     await resend.contacts.create({
