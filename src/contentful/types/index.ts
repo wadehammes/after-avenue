@@ -4,16 +4,6 @@ export type {
   TypeComponentCopyBlockSkeleton,
 } from "./TypeComponentCopyBlock";
 export type {
-  TypeComponentHero,
-  TypeComponentHeroFields,
-  TypeComponentHeroSkeleton,
-} from "./TypeComponentHero";
-export type {
-  TypeComponentLogoTicker,
-  TypeComponentLogoTickerFields,
-  TypeComponentLogoTickerSkeleton,
-} from "./TypeComponentLogoTicker";
-export type {
   TypeComponentSlide,
   TypeComponentSlideFields,
   TypeComponentSlideSkeleton,

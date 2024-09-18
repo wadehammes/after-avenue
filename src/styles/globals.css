@@ -234,6 +234,7 @@ b {
 
 .hidden-title {
   text-indent: -9999px;
+  height: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -307,11 +308,25 @@ p {
 .section-header {
   display: flex;
   flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
   gap: var(--default-padding);
-  max-width: 100ch;
+  max-width: 80ch;
   text-wrap: balance;
   margin: 0 auto 2rem;
   text-align: center;
+
+  &.left {
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  &.right {
+    align-items: flex-end;
+    justify-content: flex-end;
+    text-align: right;
+  }
 
   p {
     font-size: clamp(1.25rem, 3vw, 1.5rem);
@@ -342,34 +357,22 @@ p {
   visibility: hidden !important;
 }
 
-.speech-bubble {
-  display: block;
-  background: var(--colors-white);
-  border-radius: 20px;
-  padding: 4rem;
-  color: var(--colors-black);
-  text-align: left;
-  position: relative;
-  max-width: 20ch;
-  margin: 0 auto;
-  font-family: "area", sans-serif;
-  font-weight: normal;
-  font-size: clamp(1.5rem, 5vw, 4vw);
-  line-height: 1.25;
+p:empty {
+  display: none;
+}
 
-  &:after {
-    content: "";
-    margin-top: -80px;
-    padding-top: 0px;
-    position: relative;
-    bottom: -120px;
-    left: 20px;
-    border-width: 80px 0 0 80px;
-    border-style: solid;
-    border-color: var(--colors-white) transparent;
-    display: block;
-    width: 0;
-  }
+.buttonContainer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  padding: var(--default-padding);
+  width: 100%;
+}
+
+::selection {
+  color: var(--color-bg);
+  background-color: var(--colors-street-lamp-yellow);
 }
 
 /* Pause animation when reduced-motion is set */

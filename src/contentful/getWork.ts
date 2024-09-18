@@ -11,9 +11,11 @@ type WorkEntry = Entry<TypeWorkSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
 // Our simplified version of a Page.
 // We don't need all the data that Contentful gives us.
 export interface Work {
-  id: string;
+  contactFooterButtonText?: string;
+  contactFooterTitle?: string;
   featuredOnHomePage: boolean;
   hideFromWorkFeeds: boolean;
+  id: string;
   updatedAt: string;
   workCategories: (WorkCategory | null)[];
   workClient: string;
@@ -35,6 +37,8 @@ export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
   }
 
   return {
+    contactFooterButtonText: workEntry.fields.contactFooterButtonText,
+    contactFooterTitle: workEntry.fields.contactFooterTitle,
     id: workEntry.sys.id,
     featuredOnHomePage: workEntry.fields?.featuredOnHomePage ?? false,
     hideFromWorkFeeds: workEntry.fields?.hideFromWorkFeeds ?? false,

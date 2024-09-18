@@ -16,6 +16,7 @@ export interface TypeComponentSlideFields {
   >;
   headline?: EntryFieldTypes.Symbol;
   subheadline?: EntryFieldTypes.Symbol;
+  slideCopy?: EntryFieldTypes.Text;
   pageCta?: EntryFieldTypes.EntryLink<TypePageSkeleton>;
 }
 

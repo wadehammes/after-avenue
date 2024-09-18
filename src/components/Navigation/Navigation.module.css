@@ -28,8 +28,13 @@
 
   & > svg {
     margin: auto;
-    height: 3rem;
-    width: 14rem;
+    height: 2.5rem;
+    width: 11rem;
+
+    @media (min-width: 768px) {
+      height: 3rem;
+      width: 14rem;
+    }
   }
 
   &:hover,
@@ -133,9 +138,10 @@
   display: block;
   color: var(--colors-text);
 
-  > * {
-    width: 3rem;
-    height: 3rem;
+  > .mobileSvg {
+    width: 2.5rem;
+    height: 2.5rem;
+    transform: translateY(-0.25rem);
   }
 }
 

@@ -17,6 +17,7 @@ export interface ComponentSlide {
   backgroundOpacity?: number;
   backgroundColor?: string;
   headline?: string;
+  slideCopy?: string;
   subheadline?: string;
   pageCta?: Partial<Page> | null;
 }
@@ -39,6 +40,7 @@ export function parseContentfulComponentSlide(
     backgroundColor: entry.fields.backgroundColor,
     backgroundOpacity: entry.fields.backgroundOpacity,
     headline: entry.fields.headline,
+    slideCopy: entry.fields.slideCopy,
     subheadline: entry.fields.subheadline,
     pageCta: parseContentfulPageForNavigation(entry.fields.pageCta),
   };

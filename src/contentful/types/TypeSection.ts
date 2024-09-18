@@ -6,8 +6,6 @@ import type {
   LocaleCode,
 } from "contentful";
 import type { TypeComponentCopyBlockSkeleton } from "./TypeComponentCopyBlock";
-import type { TypeComponentHeroSkeleton } from "./TypeComponentHero";
-import type { TypeComponentLogoTickerSkeleton } from "./TypeComponentLogoTicker";
 import type { TypeComponentSlideSkeleton } from "./TypeComponentSlide";
 
 export interface TypeSectionFields {
@@ -15,10 +13,7 @@ export interface TypeSectionFields {
   sectionHeader?: EntryFieldTypes.RichText;
   content: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<
-      | TypeComponentCopyBlockSkeleton
-      | TypeComponentHeroSkeleton
-      | TypeComponentLogoTickerSkeleton
-      | TypeComponentSlideSkeleton
+      TypeComponentCopyBlockSkeleton | TypeComponentSlideSkeleton
     >
   >;
 }

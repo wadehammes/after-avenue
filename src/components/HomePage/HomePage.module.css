@@ -26,9 +26,14 @@
 
 .buttonContainer {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
   padding: var(--default-padding);
   width: 100%;
+  gap: var(--default-padding);
+
+  p {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
 }  

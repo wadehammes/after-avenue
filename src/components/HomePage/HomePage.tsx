@@ -32,16 +32,14 @@ export const HomePage = (props: HomePageProps) => {
             <h1>{pageDisplayTitle}</h1>
           </header>
           <FeaturedBrands />
-          <div className={styles.buttonContainer}>
-            <StyledButtonLink
-              href="/contact"
-              variant="contained"
-              color="dark"
-              size="large"
-            >
-              Contact Us Today
-            </StyledButtonLink>
-          </div>
+        </div>
+      </section>
+      <section>
+        <div className={styles.buttonContainer}>
+          <p>The last stop before your story begins.</p>
+          <StyledButtonLink href="/contact" variant="outlined" color="dark">
+            Contact Us Today
+          </StyledButtonLink>
         </div>
       </section>
     </>

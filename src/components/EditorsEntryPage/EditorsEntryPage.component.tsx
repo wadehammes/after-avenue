@@ -1,6 +1,6 @@
+import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
 import styles from "src/components/EditorsEntryPage/EditorsEntryPage.module.css";
 import { EditorsEntryPageIntro } from "src/components/EditorsEntryPage/EditorsEntryPageIntro.component";
-import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import { Editor } from "src/contentful/getEditors";
 import { Work } from "src/contentful/getWork";
@@ -40,12 +40,7 @@ export const EditorsEntryPage = (props: EditorsEntryPageProps) => {
           </div>
         ) : null}
       </div>
-      <div className={styles.editorsEntryPageFooter}>
-        <h2>We're the last stop before your story begins.</h2>
-        <StyledButtonLink href="/contact" variant="contained" color="dark">
-          Contact Us Today
-        </StyledButtonLink>
-      </div>
+      <ContactFooter />
     </div>
   );
 };

@@ -68,14 +68,3 @@
     grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   }
 }
-
-.editorsEntryPageFooter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: column nowrap;
-  gap: var(--default-padding);
-  padding: 4rem 0 var(--default-padding);
-  width: 100%;
-  text-align: center;
-}

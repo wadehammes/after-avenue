@@ -13,10 +13,11 @@ interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {
   work: Work;
   title: string;
   subtitle: string;
+  autoPlay?: boolean;
 }
 
 export const WorkCard = (props: WorkCardProps) => {
-  const { work, title, subtitle } = props;
+  const { autoPlay, work, title, subtitle } = props;
 
   const { inView, ref } = useInView({
     threshold: 0.5,
@@ -33,8 +34,7 @@ export const WorkCard = (props: WorkCardProps) => {
           url={work.workVideoUrl}
           rounded
           playing={inView}
-          light
-          inView={inView}
+          autoPlay={autoPlay}
         />
       </div>
 

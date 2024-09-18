@@ -1,6 +1,7 @@
 import Link from "next/link";
 import styles from "src/components/Navigation/Navigation.module.css";
 import { Page } from "src/contentful/getPages";
+import { useGlobalVariables } from "src/context/globalContext.context";
 import AfterAvenueBrandmark from "src/icons/AfterAvenueBrandmark.svg";
 import Close from "src/icons/Close.svg";
 
@@ -12,6 +13,7 @@ interface MobileNavigationDrawerProps {
 
 export const MobileNavigationDrawer = (props: MobileNavigationDrawerProps) => {
   const { navigationItems, visible, closeMenu } = props;
+  const { email, phoneNumber } = useGlobalVariables();
 
   if (!visible) {
     return null;
@@ -23,7 +25,7 @@ export const MobileNavigationDrawer = (props: MobileNavigationDrawerProps) => {
         <Close className={styles.close} />
       </button>
       <Link href="/" onClick={closeMenu} className={styles.mobileNavLogo}>
-        <AfterAvenueBrandmark />
+        <AfterAvenueBrandmark className={styles.mobileSvg} />
       </Link>
       <div className={styles.mobileNavList}>
         {navigationItems.map((page) => {
@@ -45,19 +47,19 @@ export const MobileNavigationDrawer = (props: MobileNavigationDrawerProps) => {
 
       <a
         className={styles.navLink}
-        href="mailto:hello@afteravenue.com"
+        href={`mailto:${email}`}
         title="Email"
         aria-label="Email"
       >
-        hello@afteravenue.com
+        {email}
       </a>
       <a
         className={styles.navLink}
-        href="tel:(770) 289-0063"
+        href="{`tel:${phoneNumber}`}"
         title="Call Us"
         aria-label="Call Us"
       >
-        (770) 289-0063
+        {phoneNumber}
       </a>
     </div>
   );

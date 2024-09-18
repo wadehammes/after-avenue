@@ -4,11 +4,12 @@ import styles from "src/ui/Button/Button.module.css";
 
 interface ButtonProps extends AriaButtonProps {
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export const Button = forwardRef(
   (props: ButtonProps, ref: Ref<HTMLButtonElement>) => {
-    const { className } = props;
+    const { className, style } = props;
     const buttonRef = useObjectRef(ref);
     const { buttonProps } = useButton(props, buttonRef);
 
@@ -16,6 +17,7 @@ export const Button = forwardRef(
       <button
         {...buttonProps}
         className={className ? className : styles.button}
+        style={style}
       >
         {props.children}
       </button>

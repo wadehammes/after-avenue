@@ -24,6 +24,8 @@ export interface TypeWorkFields {
   workEditors?: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<TypeEditorsSkeleton>
   >;
+  contactFooterTitle?: EntryFieldTypes.Symbol;
+  contactFooterButtonText?: EntryFieldTypes.Symbol;
   featuredOnHomePage?: EntryFieldTypes.Boolean;
   hideFromWorkFeeds?: EntryFieldTypes.Boolean;
 }

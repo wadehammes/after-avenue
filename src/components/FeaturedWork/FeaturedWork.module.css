@@ -1,14 +1,14 @@
 .workOverlay {
   align-items: center;
   backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.55);
   background-image: url("/images/dot-bg.png");
   display: flex;
   inset: 0;
   justify-content: center;
   opacity: 0;
   position: absolute;
-  transition: opacity 0.2s ease-in-out;
+  transition: opacity 0.25s ease-in-out;
   z-index: 1;
   padding: var(--default-padding);
   text-align: center;
@@ -26,6 +26,10 @@
   gap: 1rem;
   max-width: 100ch;
   text-wrap: balance;
+
+  h2 {
+    font-size: clamp(1.5rem, 5vw, 5rem);
+  }
 
   p {
     padding-bottom: 1.5rem
