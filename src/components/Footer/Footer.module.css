@@ -50,6 +50,14 @@
   }
 }
 
+.logo {
+  order: 0;
+
+  @media screen and (min-width: 600px) {
+    order: 3;
+  }
+}
+
 .socialList {
   display: flex;
   align-items: center;

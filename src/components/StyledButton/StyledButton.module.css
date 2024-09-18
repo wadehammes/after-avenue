@@ -17,8 +17,8 @@
   text-decoration: none;
 
   > svg {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
   }
   
   &:not(a) {
@@ -28,6 +28,11 @@
   &.small {
     font-size: 0.9rem;
     padding: clamp(0.8rem, 1vw, 1.1rem) clamp(1em, 10vw, 2rem);
+  }
+
+  &.large {
+    font-size: 1.2rem;
+    padding: clamp(1.2rem, 1vw, 1.3rem) clamp(1em, 10vw, 2rem);
   }
 
   &[disabled] {
@@ -104,8 +109,9 @@
       color: var(--color-bg);
     }
 
-    &.contained {
-      background-color: var(--colors-text);
+    &.outlined {
+      border-color: var(--colors-street-lamp-yellow);
+      background-color: transparent;
       color: var(--colors-street-lamp-yellow);
 
       &:hover {
@@ -114,10 +120,9 @@
       }
     }
 
-    &.outlined {
-      border-color: var(--colors-street-lamp-yellow);
-      background-color: transparent;
-      color: var(--colors-street-lamp-yellow);
+    &.contained {
+      background-color: var(--colors-street-lamp-yellow);
+      color: var(--colors-black);
 
       &:hover {
         background-color: var(--colors-street-lamp-yellow);

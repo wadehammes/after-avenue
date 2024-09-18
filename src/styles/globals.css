@@ -214,7 +214,7 @@ b {
   margin: 0 auto;
   gap: var(--default-padding);
   width: 100%;
-  padding: 0 var(--default-padding);
+  padding: 0 2rem;
   position: relative;
   z-index: 1;
 

@@ -18,20 +18,18 @@ export const EditorsEntryPageIntro = (props: EditorsEntryPageIntroProps) => {
   );
 
   return (
-    <div className={styles.editorsEntryPageIntro}>
-      <div
-        className={styles.editorsEntryPageIntroImage}
-        onMouseEnter={() =>
-          setEditorHeadshot(
-            createImageUrl(editorEntry.editorHeadshotHover?.src ?? ""),
-          )
-        }
-        onMouseLeave={() =>
-          setEditorHeadshot(
-            createImageUrl(editorEntry.editorHeadshot?.src ?? ""),
-          )
-        }
-      >
+    <div
+      className={styles.editorsEntryPageIntro}
+      onMouseEnter={() =>
+        setEditorHeadshot(
+          createImageUrl(editorEntry.editorHeadshotHover?.src ?? ""),
+        )
+      }
+      onMouseLeave={() =>
+        setEditorHeadshot(createImageUrl(editorEntry.editorHeadshot?.src ?? ""))
+      }
+    >
+      <div className={styles.editorsEntryPageIntroImage}>
         {editorEntry.editorHeadshot ? (
           <Image
             src={editorHeadshot}
@@ -41,13 +39,15 @@ export const EditorsEntryPageIntro = (props: EditorsEntryPageIntroProps) => {
           />
         ) : null}
       </div>
-      <h1>{editorEntry.editorName}</h1>
-      {editorEntry.editorTitle ? <p>{editorEntry.editorTitle}</p> : null}
-      {editorEntry.editorBio ? (
-        <div className={styles.editorsBio}>
-          <RichText document={editorEntry.editorBio} />
-        </div>
-      ) : null}
+      <div className={styles.editorsEntryPageIntroContent}>
+        <h1>{editorEntry.editorName}</h1>
+        {editorEntry.editorTitle ? <p>{editorEntry.editorTitle}</p> : null}
+        {editorEntry.editorBio ? (
+          <div className={styles.editorsBio}>
+            <RichText document={editorEntry.editorBio} />
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 };
