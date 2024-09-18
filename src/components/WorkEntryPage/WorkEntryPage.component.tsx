@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import styles from "src/components/WorkEntryPage/WorkEntryPage.module.css";
@@ -38,6 +39,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
           playing={playVideo === "true"}
           rounded
           light={!playVideo}
+          controls
         />
       </div>
       <div className={styles.workContentContainer}>
@@ -137,6 +139,12 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
           ) : null}
         </>
       )}
+      <div className={styles.workEntryPageFooter}>
+        <h2>We're the last stop before your story begins.</h2>
+        <StyledButtonLink href="/contact" variant="contained" color="dark">
+          Contact Us Today
+        </StyledButtonLink>
+      </div>
     </article>
   );
 };

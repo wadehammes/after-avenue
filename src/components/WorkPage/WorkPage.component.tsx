@@ -12,7 +12,7 @@ interface WorkPageProps {
 
 export const WorkPage = (props: WorkPageProps) => {
   const { pageFields, allWork } = props;
-  const { pageDescription, pageDisplayTitle, pageTitle } = pageFields;
+  const { pageSubtitle, pageDisplayTitle, pageTitle } = pageFields;
 
   const title = pageDisplayTitle ?? pageTitle;
 
@@ -21,9 +21,7 @@ export const WorkPage = (props: WorkPageProps) => {
       <div className="page-container">
         <header className="page-header">
           {title ? <h1 className="page-title">{title}</h1> : null}
-          {pageDescription ? (
-            <p className="subtitle">{pageDescription}</p>
-          ) : null}
+          {pageSubtitle ? <p className="subtitle">{pageSubtitle}</p> : null}
         </header>
         <div className={styles.workList}>
           {allWork.map((work) => (

@@ -88,7 +88,7 @@
   width: 100%;
 
   @media screen and (min-width: 600px) {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   }
 }
 
@@ -116,4 +116,15 @@
   @media (min-width: 1920px) {
     min-height: calc(1920px / 1.8);
   }
+}
+
+.workEntryPageFooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+  gap: var(--default-padding);
+  padding: 4rem 0 var(--default-padding);
+  width: 100%;
+  text-align: center;
 }

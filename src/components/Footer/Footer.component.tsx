@@ -18,21 +18,21 @@ export const Footer = () => {
     <footer id="footer" className={classNames(styles.footer)}>
       <div className="container column">
         <div className={styles.footerContainer}>
-          <span className={styles.copyright}>
+          <span className={styles.copyright} style={{ order: 1 }}>
             &copy; {new Date().getFullYear()} After Avenue
           </span>
-          <div className={styles.item}>
+          <div className={styles.item} style={{ order: 2 }}>
             <Link href="/privacy-policy">Privacy Policy</Link>
           </div>
-          <div className={styles.item}>
+          <div className={classNames(styles.item, styles.logo)}>
             <Link href="#top">
               <AfterAvenueBrandmark />
             </Link>
           </div>
-          <div className={styles.item}>
+          <div className={styles.item} style={{ order: 4 }}>
             <Link href="/contact">Contact Us</Link>
           </div>
-          <div className={styles.socialList}>
+          <div className={styles.socialList} style={{ order: 5 }}>
             <a href={linkedInUrl} rel="noopener noreferrer" title="LinkedIn">
               <LinkedIn className={styles.socialIcon} />
             </a>

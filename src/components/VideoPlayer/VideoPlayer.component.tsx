@@ -8,6 +8,7 @@ import styles from "src/components/VideoPlayer/VideoPlayer.module.css";
 import { useIsBrowser } from "src/hooks/useIsBrowser";
 
 interface VideoPlayerProps {
+  controls?: boolean;
   inView?: boolean;
   light?: boolean;
   playing?: boolean;
@@ -22,6 +23,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     playing = true,
     light = false,
     inView = false,
+    controls = false,
   } = props;
   const isBrowser = useIsBrowser();
 
@@ -36,7 +38,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
       })}
     >
       <ReactPlayer
-        controls={rounded}
+        controls={controls}
         url={url}
         playing={playing}
         loop

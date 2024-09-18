@@ -9,11 +9,17 @@ interface StyledButtonProps extends AriaButtonProps {
   fullWidth?: boolean;
   variant?: "contained" | "outlined";
   color?: "light" | "dark";
+  size?: "small" | "medium" | "large";
 }
 
 export const StyledButton = forwardRef(
   (props: StyledButtonProps, ref: Ref<HTMLButtonElement>) => {
-    const { fullWidth, variant = "outlined", color = "dark" } = props;
+    const {
+      fullWidth,
+      variant = "outlined",
+      color = "dark",
+      size = "medium",
+    } = props;
     return (
       <Button
         ref={ref}
@@ -24,6 +30,8 @@ export const StyledButton = forwardRef(
           [styles.fullWidth]: fullWidth,
           [styles.light]: color === "light",
           [styles.outlined]: variant === "outlined",
+          [styles.small]: size === "small",
+          [styles.large]: size === "large",
         })}
       />
     );

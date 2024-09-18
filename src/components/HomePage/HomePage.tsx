@@ -21,8 +21,8 @@ export const HomePage = (props: HomePageProps) => {
           <FeaturedWork fields={work} key={work.workSlug} />
         ))}
         <div className={styles.buttonContainer}>
-          <StyledButtonLink href="/work" variant="contained" color="dark">
-            Show Me More Work
+          <StyledButtonLink href="/work" variant="outlined" color="dark">
+            Show Me More
           </StyledButtonLink>
         </div>
       </section>
@@ -33,7 +33,12 @@ export const HomePage = (props: HomePageProps) => {
           </header>
           <FeaturedBrands />
           <div className={styles.buttonContainer}>
-            <StyledButtonLink href="/contact" variant="contained" color="dark">
+            <StyledButtonLink
+              href="/contact"
+              variant="contained"
+              color="dark"
+              size="large"
+            >
               Contact Us Today
             </StyledButtonLink>
           </div>
