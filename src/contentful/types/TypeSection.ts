@@ -16,6 +16,7 @@ export interface TypeSectionFields {
       TypeComponentCopyBlockSkeleton | TypeComponentSlideSkeleton
     >
   >;
+  slug: EntryFieldTypes.Symbol;
 }
 
 export type TypeSectionSkeleton = EntrySkeletonType<

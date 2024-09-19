@@ -18,6 +18,7 @@ export interface TypeGlobalVariablesFields {
   twitterUrl?: EntryFieldTypes.Symbol;
   contactFooterTitle?: EntryFieldTypes.Symbol;
   contactFooterButtonText?: EntryFieldTypes.Symbol;
+  services?: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;
 }
 
 export type TypeGlobalVariablesSkeleton = EntrySkeletonType<

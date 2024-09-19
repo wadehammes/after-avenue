@@ -13,13 +13,73 @@
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  text-align: left;
+  width: 100%;
+  max-width: 90ch;
+  margin: 0 auto;
+  text-wrap: balance;
+  
+  p {
+    font-size: clamp(2rem, 3vw, 5rem);
+    line-height: 1.5;
+    margin: 0;
+
+    span {
+      color: var(--colors-street-lamp-yellow);
+    }
+  }
+}
+
+.partnershipCopy {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
   width: 100%;
   max-width: 100ch;
   margin: 0 auto;
-  
+  text-wrap: balance;
+  gap: var(--default-padding);
+
   p {
-    font-size: clamp(3rem, 3vw, 5rem);
+    font-size: clamp(2rem, 3vw, 5rem);
     line-height: 1.5;
+    margin: 0;
+
+    span {
+      color: var(--colors-street-lamp-yellow);
+    }
+  }
+
+  > div {
+    justify-content: flex-start;
+  }
+}
+
+.afterAvenueBrandmark {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  
+  svg {
+    height: 3rem;
+    width: 3rem;
+    transition: transform 0.3s ease-in-out;
+
+    @media (min-height: 1100px) {
+      transform: translateY(-8rem);
+    }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  &:hover {
+    color: var(--colors-street-lamp-yellow);
   }
 }

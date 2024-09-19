@@ -27,12 +27,10 @@ export const HomePage = (props: HomePageProps) => {
         </div>
       </section>
       <section className={styles.homeSection}>
-        <div className="container column">
-          <header className="section-header">
-            <h1>{pageDisplayTitle}</h1>
-          </header>
-          <FeaturedBrands />
-        </div>
+        <header className="section-header">
+          <h1>{pageDisplayTitle}</h1>
+        </header>
+        <FeaturedBrands />
       </section>
       <section>
         <div className={styles.buttonContainer}>

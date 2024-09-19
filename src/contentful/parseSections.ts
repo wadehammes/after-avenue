@@ -7,9 +7,10 @@ import { TypeSectionSkeleton } from "src/contentful/types";
 export type Content = ComponentCopyBlockEntry | ComponentSlideEntry | undefined;
 
 export interface SectionType {
+  content: Content[];
   id: string;
   sectionHeader: Document | undefined;
-  content: Content[];
+  slug: string;
 }
 
 export type SectionEntry =
@@ -24,8 +25,9 @@ export function parseContentfulSection(
   }
 
   return {
+    content: section.fields.content.map((entry) => entry as Content),
     id: section.sys.id,
     sectionHeader: section.fields.sectionHeader,
-    content: section.fields.content.map((entry) => entry as Content),
+    slug: section.fields.slug,
   };
 }

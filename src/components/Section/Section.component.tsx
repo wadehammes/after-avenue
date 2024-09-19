@@ -1,5 +1,8 @@
+"use client";
+
 import classNames from "classnames";
 import { HTMLAttributes } from "react";
+import { useInView } from "react-intersection-observer";
 import styles from "src/components/Section/Section.module.css";
 import { SectionType } from "src/contentful/parseSections";
 import { RichText } from "src/contentful/richText";
@@ -12,9 +15,14 @@ interface SectionProps extends HTMLAttributes<HTMLDivElement> {
 
 export const Section = (props: SectionProps) => {
   const { section, sectionHeaderAlignment, children, noPadding } = props;
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.75,
+  });
 
   return (
     <section
+      ref={ref}
       className={classNames(styles.section, { [styles.noPadding]: noPadding })}
     >
       {section?.sectionHeader ? (
@@ -27,7 +35,13 @@ export const Section = (props: SectionProps) => {
           <RichText document={section.sectionHeader} />
         </header>
       ) : null}
-      {children}
+      <div
+        className={classNames(styles.sectionContent, {
+          [styles.inView]: inView,
+        })}
+      >
+        {children}
+      </div>
     </section>
   );
 };

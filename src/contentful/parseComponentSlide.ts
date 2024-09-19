@@ -14,12 +14,12 @@ import { TypeComponentSlideSkeleton } from "src/contentful/types";
 export interface ComponentSlide {
   id: string;
   backgroundMedia?: ContentfulAsset | null;
-  backgroundOpacity?: number;
-  backgroundColor?: string;
   headline?: string;
   slideCopy?: string;
+  slug?: string;
   subheadline?: string;
   pageCta?: Partial<Page> | null;
+  pageHash?: string;
 }
 
 export type ComponentSlideEntry =
@@ -37,11 +37,11 @@ export function parseContentfulComponentSlide(
   return {
     id: entry.sys.id,
     backgroundMedia: parseContentfulAsset(entry.fields.backgroundMedia),
-    backgroundColor: entry.fields.backgroundColor,
-    backgroundOpacity: entry.fields.backgroundOpacity,
     headline: entry.fields.headline,
     slideCopy: entry.fields.slideCopy,
     subheadline: entry.fields.subheadline,
+    slug: entry.fields.slug,
     pageCta: parseContentfulPageForNavigation(entry.fields.pageCta),
+    pageHash: entry.fields.pageHash,
   };
 }

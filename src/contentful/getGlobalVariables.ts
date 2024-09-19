@@ -11,6 +11,7 @@ export interface GlobalVariables {
   instagramUrl?: string;
   linkedInUrl?: string;
   phoneNumber?: string;
+  services?: string[];
   twitterUrl?: string;
 }
 
@@ -36,6 +37,7 @@ export function parseContentfulGlobalVariables(
     instagramUrl: globalVariables.fields.instagramUrl,
     linkedInUrl: globalVariables.fields.linkedInUrl,
     phoneNumber: globalVariables.fields.phoneNumber,
+    services: globalVariables.fields.services,
     twitterUrl: globalVariables.fields.twitterUrl,
   };
 }
