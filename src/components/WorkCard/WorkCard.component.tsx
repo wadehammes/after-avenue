@@ -10,14 +10,15 @@ import { Work } from "src/contentful/getWork";
 import ArrowDownIcon from "src/icons/ArrowDown.svg";
 
 interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {
-  work: Work;
-  title: string;
-  subtitle: string;
   autoPlay?: boolean;
+  controls?: boolean;
+  subtitle: string;
+  title: string;
+  work: Work;
 }
 
 export const WorkCard = (props: WorkCardProps) => {
-  const { autoPlay, work, title, subtitle } = props;
+  const { autoPlay, controls = true, work, title, subtitle } = props;
 
   const { inView, ref } = useInView({
     threshold: 0.5,
@@ -31,10 +32,11 @@ export const WorkCard = (props: WorkCardProps) => {
     >
       <div className={styles.workCardVideoContainer}>
         <VideoPlayer
-          url={work.workVideoUrl}
-          rounded
-          playing={inView}
           autoPlay={autoPlay}
+          controls={controls}
+          playing={inView}
+          rounded
+          url={work.workVideoUrl}
         />
       </div>
 
