@@ -109,6 +109,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                     work={work}
                     title={work.workTitle}
                     subtitle={work.workClient}
+                    controls={false}
                   />
                 </li>
               );
@@ -132,6 +133,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                         work={work}
                         title={work.workClient}
                         subtitle={work.workTitle}
+                        controls={false}
                       />
                     </li>
                   );

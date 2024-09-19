@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { ReactNode } from "react";
 import styles from "src/components/Marquee/Marquee.module.css";
 
@@ -9,17 +10,18 @@ export interface MarqueeItem {
 
 interface MarqueeProps {
   items: MarqueeItem[];
+  reverse?: boolean;
 }
 
 export const Marquee = (props: MarqueeProps) => {
-  const { items } = props;
+  const { items, reverse } = props;
 
   if (!items || items.length === 0) {
     return null;
   }
 
   return (
-    <div className={styles.marquee}>
+    <div className={classNames(styles.marquee, { [styles.reverse]: reverse })}>
       <ul className={styles.marqueeContent}>
         {items.map((item) => (
           <li

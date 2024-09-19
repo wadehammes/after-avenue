@@ -78,7 +78,11 @@ export const AboutPage = (props: AboutPageProps) => {
       </div>
       <div id="about-collaboration" />
       {collaborateSlideFields ? (
-        <Section section={collaborateSection} sectionHeaderAlignment="center">
+        <Section
+          section={collaborateSection}
+          sectionHeaderAlignment="center"
+          style={{ paddingBottom: "8rem" }}
+        >
           <div className="container column">
             <div
               className={classNames(styles.aboutConversation, "speechBubble")}
@@ -89,14 +93,24 @@ export const AboutPage = (props: AboutPageProps) => {
         </Section>
       ) : null}
       <Section>
-        <ServicesMarquee />
+        <div className={styles.marqueeContainer}>
+          <ServicesMarquee />
+          <ServicesMarquee reverse />
+        </div>
       </Section>
       {partnershipSlideFields ? (
         <Section section={partnershipSection} sectionHeaderAlignment="left">
           <div className="container column">
             <div className={styles.partnershipCopy}>
               {parse(partnershipCopy)}
-              <div className="buttonContainer">
+              <div
+                className="buttonContainer"
+                style={{
+                  textAlign: "left",
+                  justifyContent: "flex-start",
+                  alignItems: "flex-start",
+                }}
+              >
                 <StyledButtonLink
                   href="/editors"
                   variant="outlined"

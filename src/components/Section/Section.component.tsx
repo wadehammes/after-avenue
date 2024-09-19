@@ -11,10 +11,11 @@ interface SectionProps extends HTMLAttributes<HTMLDivElement> {
   section?: SectionType | null;
   sectionHeaderAlignment?: "left" | "center" | "right";
   noPadding?: boolean;
+  style?: React.CSSProperties;
 }
 
 export const Section = (props: SectionProps) => {
-  const { section, sectionHeaderAlignment, children, noPadding } = props;
+  const { section, sectionHeaderAlignment, children, noPadding, style } = props;
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.75,
@@ -24,6 +25,7 @@ export const Section = (props: SectionProps) => {
     <section
       ref={ref}
       className={classNames(styles.section, { [styles.noPadding]: noPadding })}
+      style={style}
     >
       {section?.sectionHeader ? (
         <header

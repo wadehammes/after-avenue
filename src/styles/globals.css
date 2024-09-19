@@ -214,7 +214,7 @@ b {
   margin: 0 auto;
   gap: var(--default-padding);
   width: 100%;
-  padding: 0 2rem;
+  padding: 0 var(--default-padding);
   position: relative;
   z-index: 1;
 
@@ -289,11 +289,15 @@ p {
   width: 100%;
   max-width: 140ch;
   color: var(--colors-text);
-  margin-bottom: var(--default-padding);
+  margin-bottom: 2rem;
 
   h1 {
     font-size: clamp(2rem, 10vw, 5rem);
     line-height: 1.1;
+  }
+
+  @media (min-width: 768px) {
+    margin-bottom: 4rem;
   }
 }
 
@@ -311,7 +315,7 @@ p {
   align-items: center;
   justify-content: center;
   gap: var(--default-padding);
-  max-width: 80ch;
+  max-width: 70ch;
   text-wrap: balance;
   margin: 0 auto 2rem;
   text-align: center;
@@ -363,11 +367,19 @@ p:empty {
 
 .buttonContainer {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
+  gap: var(--default-padding);
   padding: var(--default-padding) 0;
   width: 100%;
+  
+  p {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    text-align: center;
+    line-height: 1.5;
+    text-wrap: balance;
+  }
 }
 
 .speechBubble {
