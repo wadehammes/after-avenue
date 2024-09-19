@@ -1,3 +1,4 @@
+import parse from "html-react-parser";
 import { FeaturedBrands } from "src/components/FeaturedBrands/FeaturedBrands.component";
 import { FeaturedWork } from "src/components/FeaturedWork/FeaturedWork.component";
 import styles from "src/components/HomePage/HomePage.module.css";
@@ -27,9 +28,11 @@ export const HomePage = (props: HomePageProps) => {
         </div>
       </section>
       <section className={styles.homeSection}>
-        <header className="section-header">
-          <h1>{pageDisplayTitle}</h1>
-        </header>
+        {pageDisplayTitle ? (
+          <header className="section-header">
+            <h1>{parse(pageDisplayTitle)}</h1>
+          </header>
+        ) : null}
         <FeaturedBrands />
       </section>
       <section>

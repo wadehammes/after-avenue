@@ -249,6 +249,10 @@ h1 {
   font-size: clamp(2.25rem, 5vw, 5rem);
   color: currentColor;
 
+  span {
+    color: var(--colors-street-lamp-yellow);
+  }
+
   strong {
     color: var(--color-bg);
     text-shadow: -1px -1px 0 var(--colors-white), 1px -1px 0 var(--colors-white), -1px 1px 0 var(--colors-white), 1px 1px 0 var(--colors-white);
@@ -315,7 +319,7 @@ p {
   align-items: center;
   justify-content: center;
   gap: var(--default-padding);
-  max-width: 70ch;
+  max-width: 80ch;
   text-wrap: balance;
   margin: 0 auto 2rem;
   text-align: center;
