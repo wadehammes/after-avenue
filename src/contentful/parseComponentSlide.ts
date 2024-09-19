@@ -12,14 +12,15 @@ import { TypeComponentSlideSkeleton } from "src/contentful/types";
 // Our simplified version of an slide entry.
 // We don't need all the data that Contentful gives us.
 export interface ComponentSlide {
-  id: string;
   backgroundMedia?: ContentfulAsset | null;
+  ctaText?: string;
   headline?: string;
+  id: string;
+  pageCta?: Partial<Page> | null;
+  pageHash?: string;
   slideCopy?: string;
   slug?: string;
   subheadline?: string;
-  pageCta?: Partial<Page> | null;
-  pageHash?: string;
 }
 
 export type ComponentSlideEntry =
@@ -35,13 +36,14 @@ export function parseContentfulComponentSlide(
   }
 
   return {
-    id: entry.sys.id,
     backgroundMedia: parseContentfulAsset(entry.fields.backgroundMedia),
+    ctaText: entry.fields.ctaText,
     headline: entry.fields.headline,
-    slideCopy: entry.fields.slideCopy,
-    subheadline: entry.fields.subheadline,
-    slug: entry.fields.slug,
+    id: entry.sys.id,
     pageCta: parseContentfulPageForNavigation(entry.fields.pageCta),
     pageHash: entry.fields.pageHash,
+    slideCopy: entry.fields.slideCopy,
+    slug: entry.fields.slug,
+    subheadline: entry.fields.subheadline,
   };
 }

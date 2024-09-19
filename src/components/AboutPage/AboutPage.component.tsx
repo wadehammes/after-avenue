@@ -116,7 +116,7 @@ export const AboutPage = (props: AboutPageProps) => {
                   variant="outlined"
                   color="dark"
                 >
-                  Meet Our Editors
+                  Meet our Editors
                 </StyledButtonLink>
               </div>
             </div>

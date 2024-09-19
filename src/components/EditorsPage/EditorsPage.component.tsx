@@ -52,29 +52,31 @@ export const EditorsPage = (props: EditorsPageProps) => {
       {isBrowser ? (
         <div className={styles.videoBackground}>
           <div className={styles.overlay} />
-          {editors.map((editor) => {
-            if (!editor.featuredWork) {
-              return null;
-            }
+          {editors
+            .sort((a, b) => b.priority - a.priority)
+            .map((editor) => {
+              if (!editor.featuredWork) {
+                return null;
+              }
 
-            return (
-              <ReactPlayer
-                key={editor.editorSlug}
-                style={{
-                  opacity: currentVideoId === editor.featuredWork?.id ? 1 : 0,
-                  transition: "opacity 1s ease-in-out",
-                  zIndex: currentVideoId === editor.featuredWork?.id ? 1 : 0,
-                  position: "absolute",
-                  inset: 0,
-                }}
-                controls={false}
-                playing
-                loop
-                muted
-                url={editor.featuredWork.workVideoUrl}
-              />
-            );
-          })}
+              return (
+                <ReactPlayer
+                  key={editor.editorSlug}
+                  style={{
+                    opacity: currentVideoId === editor.featuredWork?.id ? 1 : 0,
+                    transition: "opacity 1s ease-in-out",
+                    zIndex: currentVideoId === editor.featuredWork?.id ? 1 : 0,
+                    position: "absolute",
+                    inset: 0,
+                  }}
+                  controls={false}
+                  playing
+                  loop
+                  muted
+                  url={editor.featuredWork.workVideoUrl}
+                />
+              );
+            })}
           <video
             className={styles.staticVideo}
             playsInline
