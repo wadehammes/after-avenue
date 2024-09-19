@@ -22,7 +22,11 @@ export const EditorsEntryPageIntro = (props: EditorsEntryPageIntroProps) => {
       className={styles.editorsEntryPageIntro}
       onMouseEnter={() =>
         setEditorHeadshot(
-          createImageUrl(editorEntry.editorHeadshotHover?.src ?? ""),
+          createImageUrl(
+            editorEntry.editorHeadshotHover?.src ??
+              editorEntry.editorHeadshot?.src ??
+              "",
+          ),
         )
       }
       onMouseLeave={() =>

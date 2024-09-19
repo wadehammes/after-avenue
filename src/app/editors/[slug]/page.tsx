@@ -80,6 +80,7 @@ export async function generateMetadata({
       process.env.ENVIRONMENT === "production"
         ? "index, follow"
         : "noindex, nofollow",
+    description: editorEntry.metaDescription,
   };
 }
 

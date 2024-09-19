@@ -59,7 +59,7 @@ export const Slide = (props: SlideProps) => {
                   variant="outlined"
                   color="dark"
                 >
-                  Learn More
+                  {fields.ctaText}
                 </StyledButtonLink>
               </div>
             ) : null}

@@ -23,6 +23,8 @@ export interface Editor {
   editorHeadshotHover: ContentfulAsset | null;
   featuredWork: Partial<Work> | null;
   updatedAt: string;
+  metaDescription: string;
+  priority: number;
 }
 
 // A function to transform an editor entry
@@ -45,6 +47,8 @@ export function parseContentfulEditor(
     editorTitle: editorEntry.fields.editorTitle,
     featuredWork: parseContentfulFeaturedWork(editorEntry.fields.featuredWork),
     updatedAt: editorEntry.sys.updatedAt,
+    metaDescription: editorEntry.fields.metaDescription,
+    priority: editorEntry.fields.priority ? 1 : 0,
   };
 }
 
