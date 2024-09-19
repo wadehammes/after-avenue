@@ -3,30 +3,3 @@
   width: 100%;
   padding-top: var(--default-padding);
 }
-
-.featuredBrands {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4rem;
-  animation: scroll 30s linear infinite;
-}
-
-.brandItem {
-  flex-shrink: 0;
-  text-align: center;
-}
-
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-33.33%);
-  }
-}
-
-/* Pause animation on hover */
-.featuredBrands:hover {
-  animation-play-state: paused;
-}

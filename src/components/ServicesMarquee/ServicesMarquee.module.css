@@ -1,0 +1,12 @@
+.serviceMarqueeItem {
+  border-radius: 1000px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid currentColor;
+  padding: clamp(1.5rem, 5vw, 2.75rem) clamp(3rem, 5vw, 5rem);
+  width: 100%;
+  color: currentColor;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1;
+}

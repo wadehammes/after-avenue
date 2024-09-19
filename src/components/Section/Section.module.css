@@ -10,10 +10,22 @@
   }
 
   @media screen and (min-width: 800px) {
-    padding: 8rem 0;
+    padding: 6rem 0;
 
     &.noPadding {
       padding: 0;
     }
+  }
+}
+
+.sectionContent {
+  opacity: 0.25;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  width: 100%;
+
+  &.inView {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

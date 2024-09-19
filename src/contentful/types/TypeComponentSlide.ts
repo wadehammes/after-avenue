@@ -10,14 +10,12 @@ import type { TypePageSkeleton } from "./TypePage";
 export interface TypeComponentSlideFields {
   entryTitle?: EntryFieldTypes.Symbol;
   backgroundMedia?: EntryFieldTypes.AssetLink;
-  backgroundOpacity?: EntryFieldTypes.Number;
-  backgroundColor?: EntryFieldTypes.Symbol<
-    "Black" | "Transparent" | "White" | "Yellow"
-  >;
   headline?: EntryFieldTypes.Symbol;
   subheadline?: EntryFieldTypes.Symbol;
   slideCopy?: EntryFieldTypes.Text;
   pageCta?: EntryFieldTypes.EntryLink<TypePageSkeleton>;
+  pageHash?: EntryFieldTypes.Symbol;
+  slug: EntryFieldTypes.Symbol;
 }
 
 export type TypeComponentSlideSkeleton = EntrySkeletonType<

@@ -238,7 +238,7 @@ b {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "arida", serif;
+  font-family: var(--font-family-heading);
   font-weight: 900;
   position: relative;
   text-wrap: balance;
@@ -262,9 +262,9 @@ h2 {
 
 h3 {
   font-size: clamp(0.8rem, 3vw, 1rem);
-  font-family: "area", sans-serif;
   font-weight: normal;
   line-height: 1;
+  font-family: var(--font-family-text);
 }
 
 p {
@@ -366,20 +366,52 @@ p:empty {
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
-  padding: var(--default-padding);
+  padding: var(--default-padding) 0;
   width: 100%;
+}
+
+.speechBubble {
+  position: relative;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--default-padding);
+  padding: 3rem;
+  border-radius: 20px;
+  width: 100%;
+  border: 2px solid var(--colors-street-lamp-yellow);
+
+  &:before {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 74px;
+    height: 4px;
+    width: 50px;
+    background-color: var(--color-bg);
+    z-index: 1;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: -70px;
+    left: 20px;
+    width: 100px;
+    height: 70px;
+    background-color: var(--color-bg);
+    border-radius: 0 50px 0 0;
+    border: 2px solid var(--colors-street-lamp-yellow);
+    border-left: 0;
+    border-bottom: 0;
+    z-index: 2;
+  }
 }
 
 ::selection {
   color: var(--color-bg);
   background-color: var(--colors-street-lamp-yellow);
-}
-
-/* Pause animation when reduced-motion is set */
-@media (prefers-reduced-motion: reduce) {
-  .marquee-content {
-    animation-play-state: paused !important;
-  }
 }
 
 [data-theme="light"] {
@@ -391,7 +423,6 @@ p:empty {
   --colors-black: #171818;
   --colors-white: #E5E2DA;
   --colors-street-lamp-yellow: #D78D2D;
-  --colors-street-lamp-yellow-alpha: #D78D2D;
   --colors-sunset-yellow: #FFBF71;
   --colors-red-wine: #60140A;
 
@@ -400,7 +431,13 @@ p:empty {
 
   --default-padding: 1.25rem;
 
+  --font-family-heading: "arida", serif;
+  --font-family-text: "area", sans-serif;
+
+  --gap: 2rem;
+
   @media screen and (min-width: 600px) {
     --default-padding: 2rem;
+    --gap: 4rem;
   }
 }
