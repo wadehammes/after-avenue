@@ -20,7 +20,7 @@ export const HomePage = (props: HomePageProps) => {
         {featuredWork.map((work) => (
           <FeaturedWork fields={work} key={work.workSlug} />
         ))}
-        <div className={styles.buttonContainer}>
+        <div className="buttonContainer">
           <StyledButtonLink href="/work" variant="outlined" color="dark">
             Show Me More
           </StyledButtonLink>
@@ -33,11 +33,13 @@ export const HomePage = (props: HomePageProps) => {
         <FeaturedBrands />
       </section>
       <section>
-        <div className={styles.buttonContainer}>
-          <p>The last stop before your story begins.</p>
-          <StyledButtonLink href="/contact" variant="outlined" color="dark">
-            Contact Us Today
-          </StyledButtonLink>
+        <div className="container column">
+          <div className="buttonContainer">
+            <p>The last stop before your story begins.</p>
+            <StyledButtonLink href="/contact" variant="outlined" color="dark">
+              Contact Us Today
+            </StyledButtonLink>
+          </div>
         </div>
       </section>
     </>

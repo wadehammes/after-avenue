@@ -18,6 +18,7 @@
   padding: 0;
   width: 100%;
   flex: 1;
+  line-height: 1.5;
 
   @media screen and (min-width: 768px) {
     background-image: url("/images/dot-bg.png");
@@ -25,7 +26,7 @@
   }
 
   h3 {
-    font-family: "arida", serif;
+    font-family: var(--font-family-heading);
     font-weight: 900;
     text-align: left;
     line-height: 1;
@@ -100,7 +101,7 @@
   width: 100%;
 
   h3 {
-    font-family: "arida", serif;
+    font-family: var(--font-family-heading);
     font-weight: 900;
     text-align: left;
     line-height: 1.25;

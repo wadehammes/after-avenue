@@ -128,7 +128,9 @@ async function WorkCategoryEntry({ params }: WorkCategoryProps) {
 
   const workPageWithCategory = {
     ...workPage,
-    pageDescription: workCategory.categoryName,
+    pageDisplayTitle: workCategory.categoryName,
+    contactFooterButtonText: "Contact Us Today",
+    contactFooterTitle: "The last stop before <span>your story begins.</span>",
   };
 
   return (

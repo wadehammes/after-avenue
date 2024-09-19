@@ -4,7 +4,12 @@ import { Marquee } from "src/components/Marquee/Marquee.component";
 import styles from "src/components/ServicesMarquee/ServicesMarquee.module.css";
 import { useGlobalVariables } from "src/context/globalContext.context";
 
-export const ServicesMarquee = () => {
+interface ServicesMarqueeProps {
+  reverse?: boolean;
+}
+
+export const ServicesMarquee = (props: ServicesMarqueeProps) => {
+  const { reverse } = props;
   const { services } = useGlobalVariables();
 
   if (!services || services.length === 0) {
@@ -16,5 +21,5 @@ export const ServicesMarquee = () => {
     name: service,
   }));
 
-  return <Marquee items={serviceMarqueeItems} />;
+  return <Marquee items={serviceMarqueeItems} reverse={reverse} />;
 };

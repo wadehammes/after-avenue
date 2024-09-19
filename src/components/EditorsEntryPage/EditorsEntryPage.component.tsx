@@ -32,6 +32,7 @@ export const EditorsEntryPage = (props: EditorsEntryPageProps) => {
                       work={work}
                       title={work.workTitle}
                       subtitle={work.workClient}
+                      controls={false}
                     />
                   </li>
                 );

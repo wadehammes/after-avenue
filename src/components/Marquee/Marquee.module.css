@@ -8,6 +8,11 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  max-height: 7.5rem;
+
+  @media (min-width: 768px) {
+    max-height: 10rem;
+  }
 
   > * {
     margin: auto;
@@ -39,6 +44,10 @@
 
   &:hover .marqueeContent {
     animation-play-state: paused;
+  }
+
+  &.reverse .marqueeContent {
+    animation-direction: reverse;
   }
 }
 
