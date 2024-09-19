@@ -25,7 +25,10 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: "/",
     },
     title: `${editorsPage.pageTitle} | After Avenue`,
-    robots: "index, follow",
+    robots:
+      editorsPage.enableIndexing && process.env.ENVIRONMENT === "production"
+        ? "index, follow"
+        : "noindex, nofollow",
   };
 }
 

@@ -80,7 +80,10 @@ export async function generateMetadata({
       canonical: "/",
     },
     title: `${page.pageTitle} | After Avenue`,
-    robots: page.enableIndexing ? "index, follow" : "noindex, nofollow",
+    robots:
+      page.enableIndexing && process.env.ENVIRONMENT === "production"
+        ? "index, follow"
+        : "noindex, nofollow",
     description: page.pageDescription,
   };
 }

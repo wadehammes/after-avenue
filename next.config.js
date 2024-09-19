@@ -10,6 +10,7 @@ module.exports = {
 		ignoreDuringBuilds: true,
 	},
 	env: {
+		ENVIRONMENT: process.env.ENVIRONMENT,
 		CONTENTFUL_CONTENT_DELIVERY_API_KEY:
 			process.env.CONTENTFUL_CONTENT_DELIVERY_API_KEY,
 		CONTENTFUL_PREVIEW_API_KEY: process.env.CONTENTFUL_PREVIEW_API_KEY,
