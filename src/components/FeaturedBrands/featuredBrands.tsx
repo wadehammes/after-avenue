@@ -7,18 +7,16 @@ import Disney from "src/icons/Disney.svg";
 import Dove from "src/icons/Dove.svg";
 import FisherPrice from "src/icons/FisherPrice.svg";
 import GE from "src/icons/GE.svg";
+import Microsoft from "src/icons/Microsoft.svg";
+import Pfizer from "src/icons/Pfizer.svg";
 import Samsung from "src/icons/Samsung.svg";
 import TheAtlantic from "src/icons/TheAtlantic.svg";
+import TheMacallan from "src/icons/TheMacallan.svg";
 
 export const featuredBrands: MarqueeItem[] = [
   {
     name: "Axios",
     content: <Axios />,
-    maxWidth: "clamp(11rem, 5vw, 13rem)",
-  },
-  {
-    name: "Audible",
-    content: <Audible />,
     maxWidth: "clamp(11rem, 5vw, 13rem)",
   },
   {
@@ -32,9 +30,19 @@ export const featuredBrands: MarqueeItem[] = [
     maxWidth: "clamp(11rem, 5vw, 13rem)",
   },
   {
+    name: "Audible",
+    content: <Audible />,
+    maxWidth: "clamp(11rem, 5vw, 13rem)",
+  },
+  {
     name: "Samsung",
     content: <Samsung />,
     maxWidth: "clamp(12rem, 5vw, 14rem)",
+  },
+  {
+    name: "GE",
+    content: <GE />,
+    maxWidth: "clamp(5rem, 5vw, 6rem)",
   },
   {
     name: "Disney",
@@ -47,11 +55,6 @@ export const featuredBrands: MarqueeItem[] = [
     maxWidth: "clamp(10rem, 5vw, 12rem)",
   },
   {
-    name: "GE",
-    content: <GE />,
-    maxWidth: "clamp(5rem, 5vw, 6rem)",
-  },
-  {
     name: "Adidas",
     content: <Adidas />,
     maxWidth: "clamp(5rem, 5vw, 6rem)",
@@ -59,6 +62,21 @@ export const featuredBrands: MarqueeItem[] = [
   {
     name: "Fisher Price",
     content: <FisherPrice />,
+    maxWidth: "clamp(12rem, 5vw, 14rem)",
+  },
+  {
+    name: "Pfizer",
+    content: <Pfizer />,
+    maxWidth: "clamp(12rem, 5vw, 14rem)",
+  },
+  {
+    name: "The Macallan",
+    content: <TheMacallan />,
+    maxWidth: "clamp(12rem, 5vw, 14rem)",
+  },
+  {
+    name: "Microsoft",
+    content: <Microsoft />,
     maxWidth: "clamp(12rem, 5vw, 14rem)",
   },
 ];

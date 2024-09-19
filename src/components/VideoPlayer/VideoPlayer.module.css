@@ -25,15 +25,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--colors-street-lamp-yellow);
-  backdrop-filter: blur(10px);
+  border: 2px solid var(--colors-street-lamp-yellow);
   border-radius: 1000px;
-  color: var(--colors-black);
+  color: var(--colors-street-lamp-yellow);
   padding: 0.55rem;
+  position: relative;
+  z-index: 1;
 
   svg {
     width: 1.65rem;
     height: 1.65rem;
     margin: auto;
+    transform: translateX(2px);
   }
+}
+
+.playIconOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.375);
+  background-image: url("/images/dot-bg.png");
+  z-index: 0;
 }

@@ -48,7 +48,7 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
       </div>
       {workVideoUrl ? (
         <div className={styles.videoContainer}>
-          <VideoPlayer url={workVideoUrl} />
+          <VideoPlayer url={workVideoUrl} autoPlay />
         </div>
       ) : null}
     </div>

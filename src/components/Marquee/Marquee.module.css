@@ -17,10 +17,15 @@
     width: 100%;
     height: auto;
     max-width: var(--max-width, auto);
+    filter: grayscale(1);
   }
   
   li {
     min-width: 15rem;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
   }
 }
 
