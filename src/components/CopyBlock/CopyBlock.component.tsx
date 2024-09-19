@@ -16,7 +16,9 @@ export const CopyBlock = (props: CopyBlockProps) => {
 
   return (
     <div className={styles.copyBlock} style={{ textAlign }}>
-      <RichText document={copy} />
+      <div className="container column">
+        <RichText document={copy} />
+      </div>
     </div>
   );
 };

@@ -45,6 +45,10 @@ export async function POST(request: Request) {
       audienceId: process.env.RESEND_GENERAL_AUDIENCE_ID as string,
     });
 
+    if (data.error) {
+      return Response.json({ error: data.error });
+    }
+
     return Response.json(data);
   } catch (error) {
     return Response.json({ error });

@@ -29,11 +29,13 @@ export const HomePage = (props: HomePageProps) => {
         </div>
       </section>
       <section className={styles.homeSection}>
-        {pageDisplayTitle ? (
-          <header className="section-header">
-            <h1>{parse(pageDisplayTitle)}</h1>
-          </header>
-        ) : null}
+        <div className="container column">
+          {pageDisplayTitle ? (
+            <header className="section-header">
+              <h1>{parse(pageDisplayTitle)}</h1>
+            </header>
+          ) : null}
+        </div>
         <FeaturedBrands />
       </section>
       <section>
