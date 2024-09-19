@@ -17,7 +17,7 @@
 .inputWrapper {
   background-color: white;
   border: 1px solid var(--colors-white);
-  border-radius: 20px;
+  border-radius: 10px;
   min-width: 25ch;
   min-height: auto;
   display: flex;

@@ -1,5 +1,6 @@
 "use client";
 
+import parse from "html-react-parser";
 import Link from "next/link";
 import { ContactForm } from "src/components/ContactForm/ContactForm.component";
 import styles from "src/components/ContactPage/ContactPage.module.css";
@@ -12,15 +13,15 @@ interface ContactPageProps {
 
 export const ContactPage = (props: ContactPageProps) => {
   const { pageFields } = props;
-  const { pageTitle, pageDisplayTitle, pageDescription } = pageFields;
+  const { pageTitle, pageDisplayTitle, pageSubtitle } = pageFields;
 
   const globalVariables = useGlobalVariables();
 
   return (
     <div className="container column">
       <header className="page-header">
-        <h1>{pageDisplayTitle ?? pageTitle}</h1>
-        <p className="subtitle">{pageDescription}</p>
+        <h1>{parse(pageDisplayTitle ?? pageTitle)}</h1>
+        {pageSubtitle ? <p className="subtitle">{pageSubtitle}</p> : null}
       </header>
       <div className={styles.contactPageContainer}>
         <div className={styles.contactAddressContainer}>
