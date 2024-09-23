@@ -13,7 +13,6 @@ export interface TypeWorkFields {
   workTitle: EntryFieldTypes.Symbol;
   workSlug: EntryFieldTypes.Symbol;
   workClient?: EntryFieldTypes.Symbol;
-  workDirector?: EntryFieldTypes.Symbol;
   workVideoUrl: EntryFieldTypes.Symbol;
   workDescription?: EntryFieldTypes.RichText;
   workCredits?: EntryFieldTypes.RichText;

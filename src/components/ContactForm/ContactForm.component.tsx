@@ -72,8 +72,12 @@ export const ContactForm = () => {
   if (isSubmitSuccessful) {
     return (
       <div className={styles.formSubmitSuccess}>
-        Thanks for the request! We can't wait to talk to you. Check your inbox
-        in the next 24-48 hours.
+        <div className="speech-bubble">
+          <p>
+            We can't wait to talk to you. Check your inbox in the next 24-48
+            hours.
+          </p>
+        </div>
       </div>
     );
   }
@@ -87,7 +91,7 @@ export const ContactForm = () => {
         render={({ field: { onChange, value, name, ref } }) => (
           <StyledInput
             largeInput
-            placeholder="Your name, please."
+            placeholder="Your name"
             ref={ref}
             name={name}
             onChange={onChange}
@@ -105,7 +109,7 @@ export const ContactForm = () => {
         render={({ field: { onChange, value, name, ref } }) => (
           <StyledInput
             largeInput
-            placeholder="Your email, please."
+            placeholder="your@email.com"
             ref={ref}
             name={name}
             onChange={(e) => {
@@ -122,17 +126,17 @@ export const ContactForm = () => {
       <Controller
         control={control}
         name="phone"
-        rules={{ required: true, pattern: PHONE_NUMBER_VALIDATION_REGEX }}
+        rules={{ pattern: PHONE_NUMBER_VALIDATION_REGEX }}
         render={({ field: { onChange, value, name, ref } }) => (
           <StyledInput
             largeInput
-            placeholder="Your phone number"
+            placeholder="555-555-5555"
             ref={ref}
             name={name}
             onChange={onChange}
             value={value}
             hasError={errors.phone}
-            label="Your phone number *"
+            label="Your phone number"
             id="phone"
           />
         )}
@@ -166,7 +170,7 @@ export const ContactForm = () => {
             onChange={onChange}
             value={value}
             hasError={errors.briefDescription}
-            label="Tell us a little about your needs"
+            label="What can we help you with?"
             id="briefDescription"
           />
         )}

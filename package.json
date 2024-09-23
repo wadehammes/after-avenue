@@ -32,7 +32,7 @@
     "jest-mock": "^29.7.0",
     "next": "^14.2.13",
     "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-preset-env": "^10.0.3",
+    "postcss-preset-env": "^10.0.5",
     "postcss-syntax": "^0.36.2",
     "react": "^18.3.1",
     "react-aria": "^3.34.3",

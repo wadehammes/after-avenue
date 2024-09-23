@@ -21,7 +21,6 @@ export interface Work {
   workClient: string;
   workCredits: Document | undefined | null;
   workDescription: Document | undefined | null;
-  workDirector: string;
   workEditors?: (Editor | null)[];
   workSeriesCategory: WorkCategory | null;
   workSlug: string;
@@ -50,7 +49,6 @@ export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
     workClient: workEntry.fields?.workClient ?? "",
     workCredits: workEntry.fields.workCredits,
     workDescription: workEntry.fields.workDescription,
-    workDirector: workEntry.fields?.workDirector ?? "",
     workEditors: workEntry.fields?.workEditors?.map((editor) =>
       editor ? parseContentfulEditor(editor) : null,
     ),

@@ -9,7 +9,9 @@ import type {
 export interface TypeGlobalVariablesFields {
   entryTitle?: EntryFieldTypes.Symbol;
   id?: EntryFieldTypes.Symbol;
+  companyName?: EntryFieldTypes.Symbol;
   address?: EntryFieldTypes.Symbol;
+  addressLine2?: EntryFieldTypes.Symbol;
   phoneNumber?: EntryFieldTypes.Symbol;
   email?: EntryFieldTypes.Symbol;
   featuredWorkButtonText?: EntryFieldTypes.Symbol;

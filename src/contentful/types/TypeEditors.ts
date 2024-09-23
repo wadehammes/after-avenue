@@ -16,6 +16,8 @@ export interface TypeEditorsFields {
   editorHeadshot?: EntryFieldTypes.AssetLink;
   editorHeadshotHover?: EntryFieldTypes.AssetLink;
   featuredWork?: EntryFieldTypes.EntryLink<TypeWorkSkeleton>;
+  contactFooterTitle?: EntryFieldTypes.Symbol;
+  contactFooterButtonText?: EntryFieldTypes.Symbol;
   priority?: EntryFieldTypes.Boolean;
   metaDescription: EntryFieldTypes.Text;
 }
