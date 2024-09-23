@@ -26,8 +26,11 @@ export const ContactPage = (props: ContactPageProps) => {
       <div className={styles.contactPageContainer}>
         <div className={styles.contactAddressContainer}>
           <div className={styles.contactAddress}>
-            <p>After Avenue</p>
-            {globalVariables.address}
+            <p>{globalVariables.companyName}</p>
+            {globalVariables.address ? <p>{globalVariables.address}</p> : null}
+            {globalVariables.addressLine2 ? (
+              <p>{globalVariables.addressLine2}</p>
+            ) : null}
           </div>
           <Link href={`mailto:${globalVariables.email}`}>
             {globalVariables.email}

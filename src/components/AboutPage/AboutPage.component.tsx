@@ -99,7 +99,11 @@ export const AboutPage = (props: AboutPageProps) => {
         </div>
       </Section>
       {partnershipSlideFields ? (
-        <Section section={partnershipSection} sectionHeaderAlignment="left">
+        <Section
+          section={partnershipSection}
+          sectionHeaderAlignment="left"
+          style={{ backgroundColor: "var(--colors-street-lamp-yellow)" }}
+        >
           <div className="container column">
             <div className={styles.partnershipCopy}>
               {parse(partnershipCopy)}
