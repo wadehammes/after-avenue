@@ -8,14 +8,22 @@ import { SectionType } from "src/contentful/parseSections";
 import { RichText } from "src/contentful/richText";
 
 interface SectionProps extends HTMLAttributes<HTMLDivElement> {
+  className?: string;
+  noPadding?: boolean;
   section?: SectionType | null;
   sectionHeaderAlignment?: "left" | "center" | "right";
-  noPadding?: boolean;
   style?: React.CSSProperties;
 }
 
 export const Section = (props: SectionProps) => {
-  const { section, sectionHeaderAlignment, children, noPadding, style } = props;
+  const {
+    className,
+    section,
+    sectionHeaderAlignment,
+    children,
+    noPadding,
+    style,
+  } = props;
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.75,
@@ -24,7 +32,9 @@ export const Section = (props: SectionProps) => {
   return (
     <section
       ref={ref}
-      className={classNames(styles.section, { [styles.noPadding]: noPadding })}
+      className={classNames(className, styles.section, {
+        [styles.noPadding]: noPadding,
+      })}
       style={style}
     >
       {section?.sectionHeader ? (

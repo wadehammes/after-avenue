@@ -76,6 +76,7 @@
       color: var(--color-bg);
 
       &:hover {
+        border-color: var(--color-bg);
         background-color: var(--color-bg);
         color: var(--colors-text);
       }
@@ -90,7 +91,7 @@
 
     &:hover {
       cursor: pointer;
-      border-color: var(--colors-text);
+      border-color: var(--color-bg);
       background-color: var(--colors-text);
       color: var(--color-bg);
     }

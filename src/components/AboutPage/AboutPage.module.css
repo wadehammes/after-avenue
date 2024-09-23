@@ -29,6 +29,10 @@
   }
 }
 
+.partnershipSection {
+  background-color: var(--colors-street-lamp-yellow) !important;
+}
+
 .partnershipCopy {
   display: flex;
   flex-flow: column nowrap;
@@ -46,9 +50,10 @@
     font-size: clamp(2rem, 3vw, 5rem);
     line-height: 1.5;
     margin: 0;
+    color: var(--color-bg);
 
     span {
-      color: var(--colors-street-lamp-yellow);
+      color: var(--color-text);
     }
   }
 
