@@ -102,7 +102,7 @@ export const AboutPage = (props: AboutPageProps) => {
         <Section
           section={partnershipSection}
           sectionHeaderAlignment="left"
-          style={{ backgroundColor: "var(--colors-street-lamp-yellow)" }}
+          className={styles.partnershipSection}
         >
           <div className="container column">
             <div className={styles.partnershipCopy}>
@@ -118,7 +118,7 @@ export const AboutPage = (props: AboutPageProps) => {
                 <StyledButtonLink
                   href="/editors"
                   variant="outlined"
-                  color="dark"
+                  color="light"
                 >
                   Meet our Editors
                 </StyledButtonLink>
