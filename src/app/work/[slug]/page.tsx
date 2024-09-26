@@ -2,7 +2,9 @@ import { documentToPlainTextString } from "@contentful/rich-text-plain-text-rend
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import { Suspense } from "react";
+import { WebPage } from "schema-dts";
 import { WorkEntryPage } from "src/components/WorkEntryPage/WorkEntryPage.component";
 import type { Work } from "src/contentful/getWork";
 import {
@@ -120,8 +122,52 @@ async function WorkEntry({ params }: WorkProps) {
     .filter((work) => workEntry.workSlug !== work.workSlug)
     .filter((work) => !work.hideFromWorkFeeds);
 
+  const { workClient, workTitle, workDescription, publishDate, updatedAt } =
+    workEntry;
+
+  const jsonLd: WebPage = {
+    "@type": "WebPage",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 0,
+          name: "Home",
+        },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Work",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: `${workClient} - ${workTitle}`,
+        },
+      ],
+    },
+    description: workDescription
+      ? documentToPlainTextString(workDescription)
+      : "",
+    datePublished: publishDate,
+    dateModified: updatedAt,
+    name: `${workClient} - ${workTitle}`,
+    publisher: {
+      "@type": "Organization",
+      name: "After Avenue",
+    },
+  };
+
   return (
     <Suspense>
+      <Script
+        id="workEntrySchema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+      >
+        {JSON.stringify(jsonLd)}
+      </Script>
       <WorkEntryPage
         workEntry={workEntry}
         workSeries={workSeriesUnique}

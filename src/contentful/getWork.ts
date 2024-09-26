@@ -15,8 +15,8 @@ export interface Work {
   contactFooterTitle?: string;
   featuredOnHomePage: boolean;
   hideFromWorkFeeds: boolean;
+  publishDate: string;
   id: string;
-  publishDate?: string;
   updatedAt: string;
   workCategories: (WorkCategory | null)[];
   workClient: string;
