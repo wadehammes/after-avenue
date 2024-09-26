@@ -3,7 +3,6 @@
 import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import Script from "next/script";
 import type { WebPage } from "schema-dts";
 import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
@@ -74,10 +73,9 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
 
   return (
     <article className="container column">
-      <Script
+      <script
         id="workSchema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />

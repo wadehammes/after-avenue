@@ -1,4 +1,3 @@
-import Script from "next/script";
 import { WebPage } from "schema-dts";
 import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
 import PageComponent from "src/components/Page/Page.component";
@@ -47,10 +46,9 @@ export const WorkPage = (props: WorkPageProps) => {
 
   return (
     <PageComponent fields={pageFields}>
-      <Script
+      <script
         id="workSchema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />

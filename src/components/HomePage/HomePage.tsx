@@ -1,5 +1,4 @@
 import parse from "html-react-parser";
-import Script from "next/script";
 import { WebPage } from "schema-dts";
 import { FeaturedBrands } from "src/components/FeaturedBrands/FeaturedBrands.component";
 import { FeaturedWork } from "src/components/FeaturedWork/FeaturedWork.component";
@@ -49,10 +48,9 @@ export const HomePage = (props: HomePageProps) => {
   return (
     <>
       <section className={styles.featuredWorkContainer}>
-        <Script
+        <script
           id="homeSchema"
           type="application/ld+json"
-          strategy="beforeInteractive"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
