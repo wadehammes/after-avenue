@@ -14,6 +14,12 @@
   }
 }
 
+.workList {
+  list-style: none;
+  padding: 0; 
+  width: 100%;
+}
+
 .homeSection {
   display: flex;
   flex-flow: column nowrap;

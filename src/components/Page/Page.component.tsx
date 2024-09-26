@@ -10,18 +10,25 @@ interface PageComponentProps extends HTMLAttributes<HTMLDivElement> {
 export const PageComponent = (props: PageComponentProps) => {
   const { fields, children } = props;
 
-  const { sections, pageDisplayTitle } = fields;
+  const { sections, pageDisplayTitle, pageSubtitle, pageTitle } = fields;
 
   return (
-    <>
-      {pageDisplayTitle ? (
-        <header className="page-header">
-          <h1>{parse(pageDisplayTitle)}</h1>
-        </header>
-      ) : null}
-      {children}
-      <SectionRenderer sections={sections} />
-    </>
+    <div className="container column">
+      <div className="page-container">
+        {pageDisplayTitle ? (
+          <header className="page-header">
+            <h1 className="page-title">{parse(pageDisplayTitle)}</h1>
+            {pageSubtitle ? (
+              <p className="subtitle">{parse(pageSubtitle)}</p>
+            ) : null}
+          </header>
+        ) : (
+          <h1 className="hidden-title">{pageTitle}</h1>
+        )}
+        {children}
+        <SectionRenderer sections={sections} />
+      </div>
+    </div>
   );
 };
 

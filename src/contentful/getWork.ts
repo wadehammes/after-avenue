@@ -16,6 +16,7 @@ export interface Work {
   featuredOnHomePage: boolean;
   hideFromWorkFeeds: boolean;
   id: string;
+  publishDate?: string;
   updatedAt: string;
   workCategories: (WorkCategory | null)[];
   workClient: string;
@@ -58,6 +59,7 @@ export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
     workSlug: workEntry.fields.workSlug,
     workTitle: workEntry.fields.workTitle,
     workVideoUrl: workEntry.fields?.workVideoUrl ?? "",
+    publishDate: workEntry.sys.createdAt,
   };
 }
 
