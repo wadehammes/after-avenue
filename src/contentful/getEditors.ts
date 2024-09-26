@@ -25,6 +25,7 @@ export interface Editor {
   updatedAt: string;
   metaDescription: string;
   priority: number;
+  publishDate: string;
 }
 
 // A function to transform an editor entry
@@ -49,6 +50,7 @@ export function parseContentfulEditor(
     updatedAt: editorEntry.sys.updatedAt,
     metaDescription: editorEntry.fields.metaDescription,
     priority: editorEntry.fields.priority ? 1 : 0,
+    publishDate: editorEntry.sys.createdAt,
   };
 }
 

@@ -1,7 +1,10 @@
 "use client";
 
+import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import Script from "next/script";
+import type { WebPage } from "schema-dts";
 import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
@@ -28,14 +31,57 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
     workEditors,
     workCategories,
     hideFromWorkFeeds,
+    publishDate,
+    updatedAt,
   } = workEntry;
   const searchParams = useSearchParams();
 
   const playVideo = searchParams.get("playVideo");
 
+  const jsonLd: WebPage = {
+    "@type": "WebPage",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 0,
+          name: "Home",
+        },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Work",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: `${workClient} - ${workTitle}`,
+        },
+      ],
+    },
+    description: workDescription
+      ? documentToPlainTextString(workDescription)
+      : "",
+    datePublished: publishDate,
+    dateModified: updatedAt,
+    name: `${workClient} - ${workTitle}`,
+    publisher: {
+      "@type": "Organization",
+      name: "After Avenue",
+    },
+  };
+
   return (
     <article className="container column">
-      <div className={styles.videoContainer}>
+      <Script
+        id="workSchema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className={styles.videoContainer} aria-label={workClient}>
         <VideoPlayer
           url={workVideoUrl}
           playing={playVideo === "true"}

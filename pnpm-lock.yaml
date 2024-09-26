@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@contentful/rich-text-plain-text-renderer':
+        specifier: ^16.2.10
+        version: 16.2.10
       '@contentful/rich-text-react-renderer':
         specifier: ^15.22.11
         version: 15.22.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -86,6 +89,9 @@ importers:
       safe-json-stringify:
         specifier: ^1.2.0
         version: 1.2.0
+      schema-dts:
+        specifier: ^1.1.2
+        version: 1.1.2(typescript@5.6.2)
       stylelint-webpack-plugin:
         specifier: ^5.0.1
         version: 5.0.1(stylelint@16.9.0(typescript@5.6.2))(webpack@5.95.0)
@@ -887,6 +893,10 @@ packages:
 
   '@contentful/content-source-maps@0.11.3':
     resolution: {integrity: sha512-RFF9reUVU6o6A/Rm1662Ez+BhyVgcATs8yvNKIVJWvXQkwsgevLLZduAn2jU7Dl/q1EgJLeJFeuOREtk8LY3zQ==}
+
+  '@contentful/rich-text-plain-text-renderer@16.2.10':
+    resolution: {integrity: sha512-B3VhPtAeriHmlJzwWoNBq8dqzpbkYGT0Bf9MfizAeHK9onOuP9LldW476cUqmoeJwtyEbSNp5/kC9wdr/wzprg==}
+    engines: {node: '>=6.0.0'}
 
   '@contentful/rich-text-react-renderer@15.22.11':
     resolution: {integrity: sha512-IDDdiFSab+C3G2HZRbFegTFuagl8dZpJHgWevoS9ODbatgC9GU6LcLz2hz7KKazsxuBJzgxnFsPd2v5+EtTHrg==}
@@ -4537,6 +4547,11 @@ packages:
   scheduler@0.23.2:
     resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
 
+  schema-dts@1.1.2:
+    resolution: {integrity: sha512-MpNwH0dZJHinVxk9bT8XUdjKTxMYrA5bLtrrGmFA6PTLwlOKnhi67XoRd6/ty+Djt6ZC0slR57qFhZDNMI6DhQ==}
+    peerDependencies:
+      typescript: '>=4.1.0'
+
   schema-utils@3.3.0:
     resolution: {integrity: sha512-pN/yOAvcC+5rQ5nERGuwrjLlYvLTbCibnZ1I7B1LaiAz9BRBlE9GMgE/eqV30P7aJQUf7Ddimy/RsbYO/GrVGg==}
     engines: {node: '>= 10.13.0'}
@@ -6053,6 +6068,10 @@ snapshots:
     dependencies:
       '@vercel/stega': 0.1.2
       json-pointer: 0.6.2
+
+  '@contentful/rich-text-plain-text-renderer@16.2.10':
+    dependencies:
+      '@contentful/rich-text-types': 16.8.5
 
   '@contentful/rich-text-react-renderer@15.22.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
@@ -10546,6 +10565,10 @@ snapshots:
   scheduler@0.23.2:
     dependencies:
       loose-envify: 1.4.0
+
+  schema-dts@1.1.2(typescript@5.6.2):
+    dependencies:
+      typescript: 5.6.2
 
   schema-utils@3.3.0:
     dependencies:

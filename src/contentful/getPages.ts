@@ -29,6 +29,7 @@ export interface Page {
   sections: (SectionType | null)[];
   socialImage: ContentfulAsset | null;
   updatedAt: string;
+  publishDate?: string;
 }
 
 // A function to transform a Contentful page
@@ -54,6 +55,7 @@ export function parseContentfulPage(pageEntry?: PageEntry): Page | null {
       ) ?? [],
     socialImage: parseContentfulAsset(pageEntry.fields.socialImage),
     updatedAt: pageEntry.sys.updatedAt,
+    publishDate: pageEntry.sys.createdAt,
   };
 }
 

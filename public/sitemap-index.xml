@@ -6,4 +6,10 @@
   <sitemap>
     <loc>http://www.provisioner.agency/generated-sitemap-work.xml</loc>
   </sitemap>
+  <sitemap>
+    <loc>http://www.provisioner.agency/generated-sitemap-editors.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>http://www.provisioner.agency/generated-sitemap-workCategories.xml</loc>
+  </sitemap>
 </sitemapindex>

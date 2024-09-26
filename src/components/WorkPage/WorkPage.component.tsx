@@ -1,4 +1,7 @@
+import Script from "next/script";
+import { WebPage } from "schema-dts";
 import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
+import PageComponent from "src/components/Page/Page.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import styles from "src/components/WorkPage/WorkPage.module.css";
 import type { Page } from "src/contentful/getPages";
@@ -13,44 +16,61 @@ interface WorkPageProps {
 
 export const WorkPage = (props: WorkPageProps) => {
   const { pageFields, allWork } = props;
-  const {
-    contactFooterButtonText,
-    contactFooterTitle,
-    pageSubtitle,
-    pageDisplayTitle,
-    pageTitle,
-  } = pageFields;
+  const { contactFooterButtonText, contactFooterTitle } = pageFields;
+
+  const jsonLd: WebPage = {
+    "@type": "WebPage",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 0,
+          name: "Home",
+        },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Work",
+        },
+      ],
+    },
+    description: pageFields.pageDescription,
+    datePublished: pageFields.publishDate,
+    dateModified: pageFields.updatedAt,
+    name: "Work",
+    publisher: {
+      "@type": "Organization",
+      name: "After Avenue",
+    },
+  };
 
   return (
-    <div className="container column">
-      <div className="page-container">
-        <header className="page-header">
-          {pageDisplayTitle ? (
-            <h1 className="page-title">{pageDisplayTitle}</h1>
-          ) : (
-            <h1 className="hidden-title">{pageTitle}</h1>
-          )}
-          {pageSubtitle ? <p className="subtitle">{pageSubtitle}</p> : null}
-        </header>
-        <div className={styles.workList}>
-          {allWork.map((work) => (
+    <PageComponent fields={pageFields}>
+      <Script
+        id="workSchema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ul className={styles.workList}>
+        {allWork.map((work) => (
+          <li key={work.workSlug} aria-label={work.workClient}>
             <WorkCard
-              key={work.workSlug}
               work={work}
               title={work.workClient}
               subtitle={work.workTitle}
               autoPlay={false}
               controls
             />
-          ))}
-        </div>
-        <ContactFooter
-          title={
-            contactFooterTitle || "In pursuit of <span>what's next?</span>"
-          }
-          buttonText={contactFooterButtonText || "Work With Us"}
-        />
-      </div>
-    </div>
+          </li>
+        ))}
+      </ul>
+      <ContactFooter
+        title={contactFooterTitle || "In pursuit of <span>what's next?</span>"}
+        buttonText={contactFooterButtonText || "Work With Us"}
+      />
+    </PageComponent>
   );
 };
