@@ -2,7 +2,6 @@
 
 import classNames from "classnames";
 import Link from "next/link";
-import Script from "next/script";
 import { useState } from "react";
 import ReactPlayer from "react-player/lazy";
 import { WebPage } from "schema-dts";
@@ -57,10 +56,9 @@ export const EditorsPage = (props: EditorsPageProps) => {
 
   return (
     <>
-      <Script
+      <script
         id="editorsSchema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />

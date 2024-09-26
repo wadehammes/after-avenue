@@ -1,5 +1,4 @@
 import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
-import Script from "next/script";
 import { WebPage } from "schema-dts";
 import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
 import styles from "src/components/EditorsEntryPage/EditorsEntryPage.module.css";
@@ -52,10 +51,9 @@ export const EditorsEntryPage = (props: EditorsEntryPageProps) => {
 
   return (
     <div className={styles.editorsEntryPage}>
-      <Script
+      <script
         id="editorsSchema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
