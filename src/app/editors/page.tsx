@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import Script from "next/script";
+import { WebPage } from "schema-dts";
 import { EditorsPage } from "src/components/EditorsPage/EditorsPage.component";
 import { fetchAllEditors } from "src/contentful/getEditors";
 import { fetchPage } from "src/contentful/getPages";
@@ -50,7 +52,47 @@ async function Editors() {
     return notFound();
   }
 
-  return <EditorsPage pageFields={editorsPage} editors={allEditors} />;
+  const { pageDescription, publishDate, updatedAt } = editorsPage;
+
+  const jsonLd: WebPage = {
+    "@type": "WebPage",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+        },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Editors",
+        },
+      ],
+    },
+    name: "Editors",
+    description: pageDescription,
+    datePublished: publishDate,
+    dateModified: updatedAt,
+    publisher: {
+      "@type": "Organization",
+      name: "After Avenue",
+    },
+  };
+
+  return (
+    <>
+      <Script
+        id="editorsSchema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+      >
+        {JSON.stringify(jsonLd)}
+      </Script>
+      <EditorsPage pageFields={editorsPage} editors={allEditors} />
+    </>
+  );
 }
 
 export default Editors;

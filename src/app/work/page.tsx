@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import Script from "next/script";
+import { WebPage } from "schema-dts";
 import { WorkPage } from "src/components/WorkPage/WorkPage.component";
 import { fetchPage } from "src/contentful/getPages";
 import { fetchAllWork } from "src/contentful/getWork";
@@ -65,12 +67,50 @@ async function Work() {
     )
     .filter((work) => !work.hideFromWorkFeeds);
 
+  const { pageDescription, publishDate, updatedAt } = workPage;
+
+  const jsonLd: WebPage = {
+    "@type": "WebPage",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 0,
+          name: "Home",
+        },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Work",
+        },
+      ],
+    },
+    description: pageDescription,
+    datePublished: publishDate,
+    dateModified: updatedAt,
+    name: "Work",
+    publisher: {
+      "@type": "Organization",
+      name: "After Avenue",
+    },
+  };
+
   return (
-    <WorkPage
-      pageFields={workPage}
-      allWork={allWorkSortedFeaturedFirst}
-      allWorkCategories={allWorkCategories}
-    />
+    <>
+      <Script
+        id="workSchema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+      >
+        {JSON.stringify(jsonLd)}
+      </Script>
+      <WorkPage
+        pageFields={workPage}
+        allWork={allWorkSortedFeaturedFirst}
+        allWorkCategories={allWorkCategories}
+      />
+    </>
   );
 }
 

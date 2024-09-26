@@ -1,6 +1,9 @@
+import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import Script from "next/script";
+import { WebPage } from "schema-dts";
 import { EditorsEntryPage } from "src/components/EditorsEntryPage/EditorsEntryPage.component";
 import type { Editor } from "src/contentful/getEditors";
 import { fetchAllEditors, fetchEditorBySlug } from "src/contentful/getEditors";
@@ -104,8 +107,51 @@ async function EditorEntry({ params }: EditorsProps) {
     preview: draftMode().isEnabled,
   });
 
+  const { editorName, editorBio, publishDate, updatedAt } = editorEntry;
+
+  const jsonLd: WebPage = {
+    "@type": "WebPage",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+        },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Editors",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: editorName,
+        },
+      ],
+    },
+    name: editorName,
+    description: editorBio ? documentToPlainTextString(editorBio) : "",
+    datePublished: publishDate,
+    dateModified: updatedAt,
+    publisher: {
+      "@type": "Organization",
+      name: "After Avenue",
+    },
+  };
+
   return (
-    <EditorsEntryPage editorEntry={editorEntry} editorsWork={editorsWork} />
+    <>
+      <Script
+        id="editorsEntrySchema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+      >
+        {JSON.stringify(jsonLd)}
+      </Script>
+      <EditorsEntryPage editorEntry={editorEntry} editorsWork={editorsWork} />
+    </>
   );
 }
 

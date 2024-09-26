@@ -4,7 +4,6 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useState } from "react";
 import ReactPlayer from "react-player/lazy";
-import { WebPage } from "schema-dts";
 import styles from "src/components/EditorsPage/EditorsPage.module.css";
 import { Editor } from "src/contentful/getEditors";
 import { Page } from "src/contentful/getPages";
@@ -17,7 +16,7 @@ interface EditorsPageProps {
 
 export const EditorsPage = (props: EditorsPageProps) => {
   const { editors, pageFields } = props;
-  const { pageTitle, pageDescription, publishDate, updatedAt } = pageFields;
+  const { pageTitle } = pageFields;
   const isBrowser = useIsBrowser();
   const [currentVideoId, setCurrentVideoId] = useState<string>(
     editors[0].featuredWork?.id ?? "",
@@ -27,41 +26,8 @@ export const EditorsPage = (props: EditorsPageProps) => {
     return null;
   }
 
-  const jsonLd: WebPage = {
-    "@type": "WebPage",
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-        },
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Editors",
-        },
-      ],
-    },
-    name: "Editors",
-    description: pageDescription,
-    datePublished: publishDate,
-    dateModified: updatedAt,
-    publisher: {
-      "@type": "Organization",
-      name: "After Avenue",
-    },
-  };
-
   return (
     <>
-      <script
-        id="editorsSchema"
-        type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <h1 className="hidden-title">{pageTitle}</h1>
       <div className={styles.editorsPageContent}>
         <div className={styles.editorsList}>
