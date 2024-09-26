@@ -77,7 +77,7 @@ export async function generateMetadata({
     alternates: {
       canonical: "/",
     },
-    title: `$(workEntry.workClient} - ${workEntry.workTitle} | After Avenue`,
+    title: `${workEntry.workClient} - ${workEntry.workTitle} | After Avenue`,
     description: workEntry.workDescription
       ? documentToPlainTextString(workEntry.workDescription)
       : "",
