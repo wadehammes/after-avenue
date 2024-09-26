@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import Script from "next/script";
 import { WebPage } from "schema-dts";
 import { WorkPage } from "src/components/WorkPage/WorkPage.component";
 import { fetchPage } from "src/contentful/getPages";
@@ -98,13 +97,12 @@ async function Work() {
 
   return (
     <>
-      <Script
+      <script
         id="workSchema"
         type="application/ld+json"
-        strategy="beforeInteractive"
-      >
-        {JSON.stringify(jsonLd)}
-      </Script>
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <WorkPage
         pageFields={workPage}
         allWork={allWorkSortedFeaturedFirst}

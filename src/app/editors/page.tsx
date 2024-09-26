@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import Script from "next/script";
 import { WebPage } from "schema-dts";
 import { EditorsPage } from "src/components/EditorsPage/EditorsPage.component";
 import { fetchAllEditors } from "src/contentful/getEditors";
@@ -83,13 +82,12 @@ async function Editors() {
 
   return (
     <>
-      <Script
+      <script
         id="editorsSchema"
         type="application/ld+json"
-        strategy="beforeInteractive"
-      >
-        {JSON.stringify(jsonLd)}
-      </Script>
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <EditorsPage pageFields={editorsPage} editors={allEditors} />
     </>
   );

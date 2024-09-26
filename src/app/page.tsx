@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import { WebPage } from "schema-dts";
 import { HomePage } from "src/components/HomePage/HomePage";
 import { fetchPage } from "src/contentful/getPages";
 import { fetchAllFeaturedWork } from "src/contentful/getWork";
@@ -39,7 +40,41 @@ const Home = async () => {
     preview: draftMode().isEnabled,
   });
 
-  return <HomePage featuredWork={featuredWork} pageFields={page} />;
+  const { pageDescription, publishDate, updatedAt } = page;
+
+  const jsonLd: WebPage = {
+    "@type": "WebPage",
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 0,
+          name: "Home",
+        },
+      ],
+    },
+    name: "After Avenue",
+    description: pageDescription,
+    datePublished: publishDate,
+    dateModified: updatedAt,
+    publisher: {
+      "@type": "Organization",
+      name: "After Avenue",
+    },
+  };
+
+  return (
+    <>
+      <script
+        id="homeSchema"
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <HomePage featuredWork={featuredWork} pageFields={page} />
+    </>
+  );
 };
 
 export default Home;
