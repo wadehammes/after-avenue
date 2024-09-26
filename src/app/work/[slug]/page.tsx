@@ -2,7 +2,6 @@ import { documentToPlainTextString } from "@contentful/rich-text-plain-text-rend
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import Script from "next/script";
 import { Suspense } from "react";
 import { WebPage } from "schema-dts";
 import { WorkEntryPage } from "src/components/WorkEntryPage/WorkEntryPage.component";
@@ -161,13 +160,12 @@ async function WorkEntry({ params }: WorkProps) {
 
   return (
     <Suspense>
-      <Script
+      <script
         id="workEntrySchema"
         type="application/ld+json"
-        strategy="beforeInteractive"
-      >
-        {JSON.stringify(jsonLd)}
-      </Script>
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <WorkEntryPage
         workEntry={workEntry}
         workSeries={workSeriesUnique}

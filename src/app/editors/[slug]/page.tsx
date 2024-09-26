@@ -2,7 +2,6 @@ import { documentToPlainTextString } from "@contentful/rich-text-plain-text-rend
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import Script from "next/script";
 import { WebPage } from "schema-dts";
 import { EditorsEntryPage } from "src/components/EditorsEntryPage/EditorsEntryPage.component";
 import type { Editor } from "src/contentful/getEditors";
@@ -143,13 +142,12 @@ async function EditorEntry({ params }: EditorsProps) {
 
   return (
     <>
-      <Script
+      <script
         id="editorsEntrySchema"
         type="application/ld+json"
-        strategy="beforeInteractive"
-      >
-        {JSON.stringify(jsonLd)}
-      </Script>
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <EditorsEntryPage editorEntry={editorEntry} editorsWork={editorsWork} />
     </>
   );
