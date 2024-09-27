@@ -14,6 +14,7 @@ export interface Work {
   contactFooterButtonText?: string;
   contactFooterTitle?: string;
   featuredOnHomePage: boolean;
+  featuredHomePriority: number;
   hideFromWorkFeeds: boolean;
   publishDate: string;
   id: string;
@@ -41,6 +42,7 @@ export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
     contactFooterTitle: workEntry.fields.contactFooterTitle,
     id: workEntry.sys.id,
     featuredOnHomePage: workEntry.fields?.featuredOnHomePage ?? false,
+    featuredHomePriority: workEntry.fields?.featuredHomePriority ?? 0,
     hideFromWorkFeeds: workEntry.fields?.hideFromWorkFeeds ?? false,
     updatedAt: workEntry.sys.updatedAt,
     workCategories:
@@ -179,7 +181,8 @@ export async function fetchAllFeaturedWork({
       content_type: "work",
       include: 10,
       "fields.featuredOnHomePage": true,
-      limit: 5,
+      limit: 8,
+      order: ["fields.featuredHomePriority"],
     });
 
   return workResult.items.map(

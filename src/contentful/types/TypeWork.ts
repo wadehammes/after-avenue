@@ -26,6 +26,7 @@ export interface TypeWorkFields {
   contactFooterTitle?: EntryFieldTypes.Symbol;
   contactFooterButtonText?: EntryFieldTypes.Symbol;
   featuredOnHomePage?: EntryFieldTypes.Boolean;
+  featuredHomePriority?: EntryFieldTypes.Integer;
   hideFromWorkFeeds?: EntryFieldTypes.Boolean;
 }
 
