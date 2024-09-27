@@ -19,13 +19,9 @@ export const HomePage = (props: HomePageProps) => {
   return (
     <>
       <section className={styles.featuredWorkContainer}>
-        <ul className={styles.workList}>
-          {featuredWork.map((work) => (
-            <li key={work.workSlug} aria-label={work.workClient}>
-              <FeaturedWork fields={work} />
-            </li>
-          ))}
-        </ul>
+        {featuredWork.map((work) => (
+          <FeaturedWork fields={work} key={work.workSlug} />
+        ))}
 
         <div className="buttonContainer">
           <StyledButtonLink href="/work" variant="outlined" color="dark">
