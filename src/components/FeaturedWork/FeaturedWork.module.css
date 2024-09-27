@@ -52,7 +52,7 @@
     border-radius: 0;
   }
 
-  @media (max-width: 600px) or (min-width: 1920px) {
+  @media (max-width: 800px) or (min-width: 1920px) {
     &.inView {
       border-radius: 20px;
     }
