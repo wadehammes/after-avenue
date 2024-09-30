@@ -4,4 +4,25 @@
   gap: 1rem;
   max-width: 80ch;
   margin: 0 auto;
+
+  h2, h3, h4, p {
+    font-family: var(--font-family-text);
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 5vw, 2rem);
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+  }
+
+  h4 {
+    font-size: clamp(1rem, 5vw, 1.25rem);
+    font-weight: 700;
+  }
+
+  ul, ol {
+    padding-left: 2rem;
+  }
 }
