@@ -19,13 +19,5 @@
 }
 
 .sectionContent {
-  opacity: 0.25;
-  transform: translateY(2rem);
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
   width: 100%;
-
-  &.inView {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

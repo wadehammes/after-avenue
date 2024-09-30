@@ -1,6 +1,7 @@
 "use client";
 
 import classNames from "classnames";
+import { useState } from "react";
 import ReactPlayer from "react-player";
 import { Loader } from "src/components/Loader/Loader.component";
 import { PlayIcon } from "src/components/VideoPlayer/PlayIcon.component";
@@ -17,13 +18,8 @@ interface VideoPlayerProps {
 }
 
 export const VideoPlayer = (props: VideoPlayerProps) => {
-  const {
-    autoPlay = true,
-    controls = false,
-    playing = true,
-    rounded = false,
-    url,
-  } = props;
+  const { autoPlay = false, controls = false, rounded = false, url } = props;
+  const [playing, setPlaying] = useState(false);
   const isBrowser = useIsBrowser();
   const isFocused = useWindowFocus();
 
@@ -41,12 +37,15 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         controls={controls}
         fallback={<Loader />}
         light={!autoPlay}
-        loop={isFocused}
+        loop={playing && isFocused}
         muted
         playIcon={<PlayIcon />}
-        playing={playing && isFocused}
         url={url}
         volume={0}
+        playing={autoPlay || (playing && isFocused)}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onClickPreview={() => setPlaying(true)}
       />
     </div>
   );
