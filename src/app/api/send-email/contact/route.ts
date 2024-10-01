@@ -21,6 +21,14 @@ export async function POST(request: Request) {
   }
 
   try {
+    await resend.contacts.create({
+      email,
+      firstName,
+      lastName,
+      unsubscribed: false,
+      audienceId: process.env.RESEND_GENERAL_AUDIENCE_ID as string,
+    });
+
     const data = await resend.emails.send({
       from: `${name} <${email}>`,
       to: "After Avenue <hello@afteravenue.com>",
@@ -35,14 +43,6 @@ export async function POST(request: Request) {
       subject: `We received your contact info.`,
       text: `Hi, ${name} 👋🏻! We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email. Thanks, After Avenue Team - hello@afteravenue.com | https://afteravenue.com`,
       html: `<div>Hi, ${name} 👋🏻!<br /><br />We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email.<br /><br />Thanks, After Avenue Team<br />hello@afteravenue.com<br />https://afteravenue.com</div>`,
-    });
-
-    await resend.contacts.create({
-      email,
-      firstName,
-      lastName,
-      unsubscribed: false,
-      audienceId: process.env.RESEND_GENERAL_AUDIENCE_ID as string,
     });
 
     if (data.error) {

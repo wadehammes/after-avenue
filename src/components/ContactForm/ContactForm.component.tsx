@@ -72,12 +72,10 @@ export const ContactForm = () => {
   if (isSubmitSuccessful) {
     return (
       <div className={styles.formSubmitSuccess}>
-        <div className="speech-bubble">
-          <p>
-            We can't wait to talk to you. Check your inbox in the next 24-48
-            hours.
-          </p>
-        </div>
+        <p>
+          We can't wait to talk to you. Check your inbox in the next 24-48
+          hours.
+        </p>
       </div>
     );
   }
