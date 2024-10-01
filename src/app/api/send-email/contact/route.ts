@@ -7,9 +7,9 @@ export async function POST(request: Request) {
   const res: ContactFormInputs = await request.json();
   const email = res.email;
   const name = res.name;
-  const phone = res.phone;
-  const companyName = res.companyName;
-  const message = res.briefDescription;
+  const phone = res.phone || "No phone number provided.";
+  const companyName = res.companyName || "No company name provided.";
+  const message = res.briefDescription || "No message provided.";
 
   const firstName = name.split(" ")[0] || "";
   const lastName = name.split(" ")[1] || "";
