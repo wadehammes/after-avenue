@@ -24,9 +24,11 @@
 }
 
 .formSubmitSuccess {
-  margin-bottom: 6rem;
   border: 1px solid var(--colors-light-green);
   border-radius: 10px;
   padding: 1.5rem;
   font-size: 1.25rem;
+  max-width: 50ch;
+  margin: 0 auto;
+  text-wrap: balance;
 }
