@@ -43,6 +43,9 @@ export const MobileNavigationDrawer = (props: MobileNavigationDrawerProps) => {
             </Link>
           );
         })}
+        <Link href={"/contact"} onClick={closeMenu}>
+          Contact Us
+        </Link>
       </div>
 
       <a

@@ -19,7 +19,8 @@ export const Footer = () => {
       <div className="container column">
         <div className={styles.footerContainer}>
           <span className={styles.copyright} style={{ order: 1 }}>
-            &copy; {new Date().getFullYear()} After Avenue
+            &copy; {new Date().getFullYear()}{" "}
+            {globalVariables.footerCopyrightText || "After Avenue"}
           </span>
           <div className={styles.item} style={{ order: 2 }}>
             <Link href="/privacy-policy">Privacy Policy</Link>
@@ -33,15 +34,25 @@ export const Footer = () => {
             <Link href="/contact">Contact Us</Link>
           </div>
           <div className={styles.socialList} style={{ order: 5 }}>
-            <a href={linkedInUrl} rel="noopener noreferrer" title="LinkedIn">
-              <LinkedIn className={styles.socialIcon} />
-            </a>
-            <a href={instagramUrl} rel="noopener noreferrer" title="Instagram">
-              <Instagram className={styles.socialIcon} />
-            </a>
-            <a href={twitterUrl} rel="noopener noreferrer" title="Twitter">
-              <Twitter className={styles.twitterIcon} />
-            </a>
+            {linkedInUrl ? (
+              <a href={linkedInUrl} rel="noopener noreferrer" title="LinkedIn">
+                <LinkedIn className={styles.socialIcon} />
+              </a>
+            ) : null}
+            {instagramUrl ? (
+              <a
+                href={instagramUrl}
+                rel="noopener noreferrer"
+                title="Instagram"
+              >
+                <Instagram className={styles.socialIcon} />
+              </a>
+            ) : null}
+            {twitterUrl ? (
+              <a href={twitterUrl} rel="noopener noreferrer" title="Twitter">
+                <Twitter className={styles.twitterIcon} />
+              </a>
+            ) : null}
           </div>
         </div>
       </div>
