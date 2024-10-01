@@ -12,6 +12,7 @@ export interface GlobalVariables {
   contactFormSuccessMessage?: string;
   email?: string;
   featuredWorkButtonText?: string;
+  footerCopyrightText?: string;
   instagramUrl?: string;
   linkedInUrl?: string;
   phoneNumber?: string;
@@ -43,6 +44,7 @@ export function parseContentfulGlobalVariables(
     contactFormSuccessMessage: globalVariables.fields.contactFormSuccessMessage,
     email: globalVariables.fields.email,
     featuredWorkButtonText: globalVariables.fields.featuredWorkButtonText,
+    footerCopyrightText: globalVariables.fields.footerCopyrightText,
     instagramUrl: globalVariables.fields.instagramUrl,
     linkedInUrl: globalVariables.fields.linkedInUrl,
     phoneNumber: globalVariables.fields.phoneNumber,

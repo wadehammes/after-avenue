@@ -23,6 +23,7 @@ export interface TypeGlobalVariablesFields {
   contactFooterTitle?: EntryFieldTypes.Symbol;
   contactFooterButtonText?: EntryFieldTypes.Symbol;
   services?: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;
+  footerCopyrightText?: EntryFieldTypes.Symbol;
 }
 
 export type TypeGlobalVariablesSkeleton = EntrySkeletonType<
