@@ -43,8 +43,8 @@
 .playIconOverlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.35);
   background-image: url("/images/dot-bg.png");
   z-index: 0;
-  opacity: 0.85;
+  opacity: 0.65;
 }

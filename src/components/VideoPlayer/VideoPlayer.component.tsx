@@ -19,13 +19,15 @@ interface VideoPlayerProps {
 
 export const VideoPlayer = (props: VideoPlayerProps) => {
   const { autoPlay = false, controls = false, rounded = false, url } = props;
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(autoPlay);
   const isBrowser = useIsBrowser();
   const isFocused = useWindowFocus();
 
   if (!isBrowser) {
     return null;
   }
+
+  const shouldPlayAlways = autoPlay ? true : playing && isFocused;
 
   return (
     <div
@@ -37,12 +39,12 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         controls={controls}
         fallback={<Loader />}
         light={!autoPlay}
-        loop={playing && isFocused}
+        loop={shouldPlayAlways}
         muted
         playIcon={<PlayIcon />}
         url={url}
         volume={0}
-        playing={autoPlay || (playing && isFocused)}
+        playing={shouldPlayAlways}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         onClickPreview={() => setPlaying(true)}
