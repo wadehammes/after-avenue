@@ -23,6 +23,20 @@
   }
 }
 
+.marketingConsentContainer {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.marketingConsent {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .formSubmitSuccess {
   border: 1px solid var(--colors-street-lamp-yellow);
   border-radius: 10px;

@@ -9,10 +9,8 @@ export const api = {
       name,
       phone,
       briefDescription,
-    }: Pick<
-      ContactFormInputs,
-      "email" | "name" | "companyName" | "phone" | "briefDescription"
-    >) =>
+      marketingConsent,
+    }: ContactFormInputs) =>
       fetch(
         "/api/send-email/contact",
         fetchOptions({
@@ -23,6 +21,7 @@ export const api = {
             name,
             phone,
             briefDescription,
+            marketingConsent,
           }),
         }),
       ),

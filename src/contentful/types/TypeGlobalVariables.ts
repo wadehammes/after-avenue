@@ -18,6 +18,8 @@ export interface TypeGlobalVariablesFields {
   instagramUrl?: EntryFieldTypes.Symbol;
   linkedInUrl?: EntryFieldTypes.Symbol;
   twitterUrl?: EntryFieldTypes.Symbol;
+  contactFormMarketingConsentText?: EntryFieldTypes.Symbol;
+  contactFormSuccessMessage?: EntryFieldTypes.Symbol;
   contactFooterTitle?: EntryFieldTypes.Symbol;
   contactFooterButtonText?: EntryFieldTypes.Symbol;
   services?: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;

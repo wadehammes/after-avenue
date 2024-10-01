@@ -62,14 +62,14 @@
   gap: 1rem;
   padding: 0 0 var(--default-padding);
   width: 100%;
-  flex: 2;
+  flex: 1.75;
 }
 
 .workDescription {
   display: flex;
   flex-flow: column nowrap;
   gap: 1.5rem;
-  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-size: clamp(1rem, 3vw, 1.25rem);
   text-wrap: balance;
   line-height: 1.5;
   padding-top: 1rem;
