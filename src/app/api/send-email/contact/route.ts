@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
+import { isNonNullable } from "src/utils/helpers";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -10,6 +11,9 @@ export async function POST(request: Request) {
   const phone = res.phone || "No phone number provided.";
   const companyName = res.companyName || "No company name provided.";
   const message = res.briefDescription || "No message provided.";
+  const marketingConsent = isNonNullable(res.marketingConsent)
+    ? res.marketingConsent
+    : true;
 
   const firstName = name.split(" ")[0] || "";
   const lastName = name.split(" ")[1] || "";
@@ -25,7 +29,7 @@ export async function POST(request: Request) {
       email,
       firstName,
       lastName,
-      unsubscribed: false,
+      unsubscribed: !marketingConsent,
       audienceId: process.env.RESEND_GENERAL_AUDIENCE_ID as string,
     });
 

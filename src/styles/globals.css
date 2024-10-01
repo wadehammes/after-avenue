@@ -275,6 +275,10 @@ p {
   color: currentColor;
 }
 
+i {
+  font-style: italic;
+}
+
 .page-container {
   padding: 0 0 var(--default-padding);
   width: 100%;
@@ -423,6 +427,10 @@ p:empty {
     border-bottom: 0;
     z-index: 2;
   }
+}
+
+input[type="checkbox"] {
+  accent-color: var(--colors-street-lamp-yellow);
 }
 
 ::selection {

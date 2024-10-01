@@ -9,12 +9,17 @@
     font-family: var(--font-family-text);
   }
 
+  h2, h3, h4 {
+    line-height: 1.25;
+  }
+
   h2 {
     font-size: clamp(1.75rem, 5vw, 2rem);
   }
 
   h3 {
     font-size: clamp(1.25rem, 5vw, 1.75rem);
+    font-weight: 700;
   }
 
   h4 {
@@ -22,7 +27,14 @@
     font-weight: 700;
   }
 
+  p {
+    line-height: 1.5;
+  }
+
   ul, ol {
     padding-left: 2rem;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1rem;
   }
 }

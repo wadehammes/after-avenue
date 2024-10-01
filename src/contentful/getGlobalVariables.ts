@@ -8,6 +8,8 @@ export interface GlobalVariables {
   companyName?: string;
   contactFooterButtonText?: string;
   contactFooterTitle?: string;
+  contactFormMarketingConsentText?: string;
+  contactFormSuccessMessage?: string;
   email?: string;
   featuredWorkButtonText?: string;
   instagramUrl?: string;
@@ -36,6 +38,9 @@ export function parseContentfulGlobalVariables(
     companyName: globalVariables.fields.companyName,
     contactFooterButtonText: globalVariables.fields.contactFooterButtonText,
     contactFooterTitle: globalVariables.fields.contactFooterTitle,
+    contactFormMarketingConsentText:
+      globalVariables.fields.contactFormMarketingConsentText,
+    contactFormSuccessMessage: globalVariables.fields.contactFormSuccessMessage,
     email: globalVariables.fields.email,
     featuredWorkButtonText: globalVariables.fields.featuredWorkButtonText,
     instagramUrl: globalVariables.fields.instagramUrl,

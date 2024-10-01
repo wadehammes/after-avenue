@@ -7,6 +7,7 @@ import styles from "src/components/ContactForm/ContactForm.module.css";
 import { StyledButton } from "src/components/StyledButton/StyledButton.component";
 import { StyledInput } from "src/components/StyledInput/StyledInput.component";
 import { StyledTextArea } from "src/components/StyledInput/StyledTextArea.component";
+import { useGlobalVariables } from "src/context/globalContext.context";
 import { useSendContactEmailApiMutation } from "src/hooks/mutations/useSendContactEmailApi.mutation";
 import {
   EMAIL_VALIDATION_REGEX,
@@ -17,6 +18,7 @@ export interface ContactFormInputs {
   briefDescription: string;
   companyName: string;
   email: string;
+  marketingConsent: boolean;
   name: string;
   phone: string;
 }
@@ -25,17 +27,20 @@ const defaultValues: ContactFormInputs = {
   briefDescription: "",
   companyName: "",
   email: "",
+  marketingConsent: true,
   name: "",
   phone: "",
 };
 
 export const ContactForm = () => {
+  const globalVariables = useGlobalVariables();
   const reCaptcha = useRef<ReCAPTCHA>(null);
   const {
     handleSubmit,
     control,
     clearErrors,
     formState: { isSubmitting, errors, isSubmitSuccessful },
+    register,
   } = useForm({
     defaultValues,
     mode: "onBlur",
@@ -50,17 +55,25 @@ export const ContactForm = () => {
       const captcha = await reCaptcha.current.executeAsync();
 
       if (captcha) {
-        const { companyName, email, name, phone, briefDescription } = data;
+        const {
+          briefDescription,
+          companyName,
+          email,
+          marketingConsent,
+          name,
+          phone,
+        } = data;
 
         const emailToLowerCase = email.toLowerCase();
 
         try {
           await useSendContactEmailApi.mutateAsync({
+            briefDescription,
             companyName,
             email: emailToLowerCase,
+            marketingConsent,
             name,
             phone,
-            briefDescription,
           });
         } catch (_e) {
           throw new Error("Failed to submit contact. Please try again.");
@@ -74,10 +87,7 @@ export const ContactForm = () => {
   if (isSubmitSuccessful) {
     return (
       <div className={styles.formSubmitSuccess}>
-        <p>
-          We can't wait to talk to you about your project. Check your inbox in
-          the next 24-48 hours for a message back from us.
-        </p>
+        <p>{globalVariables.contactFormSuccessMessage}</p>
       </div>
     );
   }
@@ -175,6 +185,18 @@ export const ContactForm = () => {
           />
         )}
       />
+      {globalVariables.contactFormMarketingConsentText ? (
+        <div className={styles.marketingConsentContainer}>
+          <label htmlFor="marketingConsent" className={styles.marketingConsent}>
+            <input
+              {...register("marketingConsent")}
+              type="checkbox"
+              id="marketingConsent"
+            />
+            {globalVariables.contactFormMarketingConsentText}
+          </label>
+        </div>
+      ) : null}
       <div className={styles.formSubmitContainer}>
         <div>
           {hasMissingFields ? (
