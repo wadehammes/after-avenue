@@ -24,11 +24,11 @@
 }
 
 .formSubmitSuccess {
-  border: 1px solid var(--colors-light-green);
+  border: 1px solid var(--colors-street-lamp-yellow);
   border-radius: 10px;
   padding: 1.5rem;
   font-size: 1.25rem;
-  max-width: 50ch;
-  margin: 0 auto;
   text-wrap: balance;
+  line-height: 1.5;
+  width: 100%;
 }
