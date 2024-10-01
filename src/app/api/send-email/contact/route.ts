@@ -38,15 +38,19 @@ export async function POST(request: Request) {
       html: `<div>You have a new message from ${name} at ${companyName}!<br /><br />Message:<br />${message}<br /><br />Their contact info is:<br />${name}<br />${email}<br />${phone}</div>`,
     });
 
-    await resend.emails.send({
-      to: `${name} <${email}>`,
-      from: "After Avenue <hello@afteravenue.com>",
-      subject: `We received your contact info.`,
-      text: `Hi, ${name} 👋🏻! We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email. Thanks, After Avenue Team - hello@afteravenue.com | https://afteravenue.com`,
-      html: `<div>Hi, ${name} 👋🏻!<br /><br />We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email.<br /><br />Thanks, After Avenue Team<br />hello@afteravenue.com<br />https://afteravenue.com</div>`,
-    });
+    const delayConfirmationEmail = setTimeout(async () => {
+      await resend.emails.send({
+        to: `${name} <${email}>`,
+        from: "After Avenue <hello@afteravenue.com>",
+        subject: `We received your contact info.`,
+        text: `Hi, ${name}! We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email. Thanks, After Avenue - hello@afteravenue.com | https://afteravenue.com`,
+        html: `<div>Hi, ${name}!<br /><br />We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email.<br /><br />Thanks, After Avenue<br />hello@afteravenue.com<br />https://afteravenue.com</div>`,
+      });
+    }, 1000);
 
     if (data.error) {
+      clearTimeout(delayConfirmationEmail);
+
       return Response.json({ error: data.error });
     }
 
