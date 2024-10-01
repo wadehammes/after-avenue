@@ -1,4 +1,4 @@
-import { FetchMethods, fetchOptions, fetchResponse } from "src/api/helpers";
+import { FetchMethods, fetchOptions } from "src/api/helpers";
 import { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
 
 export const api = {
@@ -7,23 +7,24 @@ export const api = {
       companyName,
       email,
       name,
-    }: Pick<ContactFormInputs, "email" | "name" | "companyName">) =>
+      phone,
+      briefDescription,
+    }: Pick<
+      ContactFormInputs,
+      "email" | "name" | "companyName" | "phone" | "briefDescription"
+    >) =>
       fetch(
         "/api/send-email/contact",
         fetchOptions({
           method: FetchMethods.Post,
-          body: JSON.stringify({ email, name, companyName }),
-        }),
-      ),
-    welcome: ({ email }: { email: string }) =>
-      fetchResponse<{ data: { id: string } }>(
-        fetch(
-          "/api/send-email/welcome",
-          fetchOptions({
-            method: FetchMethods.Post,
-            body: JSON.stringify({ email }),
+          body: JSON.stringify({
+            companyName,
+            email,
+            name,
+            phone,
+            briefDescription,
           }),
-        ),
+        }),
       ),
   },
 };

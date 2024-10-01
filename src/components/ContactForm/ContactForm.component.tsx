@@ -50,7 +50,7 @@ export const ContactForm = () => {
       const captcha = await reCaptcha.current.executeAsync();
 
       if (captcha) {
-        const { companyName, email, name } = data;
+        const { companyName, email, name, phone, briefDescription } = data;
 
         const emailToLowerCase = email.toLowerCase();
 
@@ -59,6 +59,8 @@ export const ContactForm = () => {
             companyName,
             email: emailToLowerCase,
             name,
+            phone,
+            briefDescription,
           });
         } catch (_e) {
           throw new Error("Failed to submit contact. Please try again.");
@@ -73,8 +75,8 @@ export const ContactForm = () => {
     return (
       <div className={styles.formSubmitSuccess}>
         <p>
-          We can't wait to talk to you. Check your inbox in the next 24-48
-          hours.
+          We can't wait to talk to you about your project. Check your inbox in
+          the next 24-48 hours for a message back from us.
         </p>
       </div>
     );
