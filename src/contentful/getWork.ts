@@ -22,6 +22,7 @@ export interface Work {
   workCategories: (WorkCategory | null)[];
   workClient: string;
   workCredits: Document | undefined | null;
+  workDate: string | null;
   workDescription: Document | undefined | null;
   workEditors?: (Editor | null)[];
   workSeriesCategory: WorkCategory | null;
@@ -51,6 +52,7 @@ export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
       ) ?? [],
     workClient: workEntry.fields?.workClient ?? "",
     workCredits: workEntry.fields.workCredits,
+    workDate: workEntry.fields.workDate ?? null,
     workDescription: workEntry.fields.workDescription,
     workEditors: workEntry.fields?.workEditors?.map((editor) =>
       editor ? parseContentfulEditor(editor) : null,
@@ -95,6 +97,7 @@ export async function fetchAllWork({
       content_type: "work",
       include: 10,
       limit: 1000,
+      order: ["-fields.featuredOnHomePage", "-fields.workDate"],
     });
 
   return workResult.items.map(

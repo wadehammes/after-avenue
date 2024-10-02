@@ -15,6 +15,7 @@ export interface TypeWorkFields {
   workClient?: EntryFieldTypes.Symbol;
   workVideoUrl: EntryFieldTypes.Symbol;
   workDescription?: EntryFieldTypes.RichText;
+  workDate?: EntryFieldTypes.Date;
   workCredits?: EntryFieldTypes.RichText;
   workCategories?: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<TypeWorkCategorySkeleton>
