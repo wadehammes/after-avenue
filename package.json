@@ -10,8 +10,8 @@
     "export": "next export",
     "biome:fix": "biome format --write .",
     "tsc:ci": "tsc --strict",
-    "lint:ci": "biome lint .",
-    "lint:fix": "biome lint --apply .",
+    "lint:ci": "biome check",
+    "lint:fix": "biome check --fix",
     "lint:css": "stylelint ./src/**/*.css",
     "test:ci": "jest --passWithNoTests",
     "types:contentful": "export $(cat .env.local | sed '/^#/d; s/[$\"]//g'); cf-content-types-generator -s $CONTENTFUL_SPACE_ID -t $CONTENTFUL_CMA_TOKEN -o src/contentful/types -X && biome format --write src/contentful/types"

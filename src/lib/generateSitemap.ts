@@ -3,8 +3,8 @@ import fs from "fs";
 const baseUrl = "https://www.afteravenue.com";
 
 export interface SitemapItem {
-	route: string;
-	modTime: string;
+  route: string;
+  modTime: string;
 }
 
 const generateSitemapItem = ({ route, modTime }: SitemapItem): string => `
@@ -18,23 +18,23 @@ const generateSitemapItem = ({ route, modTime }: SitemapItem): string => `
 export const generateSitemap = (routes: SitemapItem[]): string => `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     ${routes
-			.map((route) =>
-				generateSitemapItem({
-					route: route.route,
-					modTime: route.modTime,
-				}),
-			)
-			.join("")}
+      .map((route) =>
+        generateSitemapItem({
+          route: route.route,
+          modTime: route.modTime,
+        }),
+      )
+      .join("")}
 </urlset>
 `;
 
 export const outputSitemap = (routes: SitemapItem[], filename: string) => {
-	if (!routes || !filename) {
-		// eslint-disable-next-line no-console -- displays error
-		return console.error("Missing routes or filename");
-	}
+  if (!routes || !filename) {
+    // eslint-disable-next-line no-console -- displays error
+    return console.error("Missing routes or filename");
+  }
 
-	const sitemap = generateSitemap(routes);
+  const sitemap = generateSitemap(routes);
 
-	fs.writeFileSync(`./public/generated-sitemap-${filename}.xml`, sitemap);
+  fs.writeFileSync(`./public/generated-sitemap-${filename}.xml`, sitemap);
 };
