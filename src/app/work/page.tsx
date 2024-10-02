@@ -7,7 +7,7 @@ import { fetchPage } from "src/contentful/getPages";
 import { fetchAllWork } from "src/contentful/getWork";
 import { fetchAllWorkCategories } from "src/contentful/getWorkCategories";
 import { WORK_SLUG } from "src/utils/constants";
-import { convertBooleanToNumber, envUrl } from "src/utils/helpers";
+import { envUrl } from "src/utils/helpers";
 
 // Fetch the work page, tell Next.js which metadata
 // (e.g. page title) to display.
@@ -58,14 +58,6 @@ async function Work() {
     return notFound();
   }
 
-  const allWorkSortedFeaturedFirst = allWork
-    .sort(
-      (a, b) =>
-        convertBooleanToNumber(b.featuredOnHomePage) -
-        convertBooleanToNumber(a.featuredOnHomePage),
-    )
-    .filter((work) => !work.hideFromWorkFeeds);
-
   const { pageDescription, publishDate, updatedAt } = workPage;
 
   const jsonLd: WebPage = {
@@ -105,7 +97,7 @@ async function Work() {
       />
       <WorkPage
         pageFields={workPage}
-        allWork={allWorkSortedFeaturedFirst}
+        allWork={allWork}
         allWorkCategories={allWorkCategories}
       />
     </>
