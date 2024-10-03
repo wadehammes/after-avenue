@@ -100,9 +100,9 @@ export async function fetchAllWork({
       order: ["-fields.featuredOnHomePage", "-fields.workDate"],
     });
 
-  return workResult.items.map(
-    (pageEntry) => parseContentfulWork(pageEntry) as Work,
-  );
+  return workResult.items
+    .filter((pageEntry) => !pageEntry.fields.hideFromWorkFeeds)
+    .map((pageEntry) => parseContentfulWork(pageEntry) as Work);
 }
 
 interface FetchWorkByCategoryOptions {

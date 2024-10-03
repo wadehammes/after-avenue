@@ -72,21 +72,13 @@
   z-index: 2;
   
   svg {
-    height: 3rem;
-    width: 3rem;
-    transition: transform 0.3s ease-in-out;
-
-    @media (min-height: 1100px) {
-      transform: translateY(-8rem);
-    }
-
-    @media (max-width: 768px) {
-      display: none;
-    }
+    height: 5rem;
+    width: 5rem;
+    transform: translateY(2.15rem);
   }
 
-  &:hover {
-    color: var(--colors-street-lamp-yellow);
+  @media (max-width: 768px) {
+    display: none;
   }
 }
 
