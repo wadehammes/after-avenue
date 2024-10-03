@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import parse from "html-react-parser";
-import Link from "next/link";
 import styles from "src/components/AboutPage/AboutPage.module.css";
 import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
 import { ContentRenderer } from "src/components/ContentRenderer/ContentRenderer.component";
@@ -71,11 +70,6 @@ export const AboutPage = (props: AboutPageProps) => {
           )}
         </Section>
       ) : null}
-      <div className={styles.afterAvenueBrandmark}>
-        <Link href="#about-collaboration">
-          <AfterAvenueBrandmark />
-        </Link>
-      </div>
       <div id="about-collaboration" />
       {collaborateSlideFields ? (
         <Section
@@ -127,6 +121,9 @@ export const AboutPage = (props: AboutPageProps) => {
           </div>
         </Section>
       ) : null}
+      <div className={styles.afterAvenueBrandmark}>
+        <AfterAvenueBrandmark />
+      </div>
       <ContactFooter
         title={contactFooterTitle || "Let's <span>get after it.</span>"}
         buttonText={contactFooterButtonText || "Contact Us Today"}
