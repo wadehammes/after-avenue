@@ -1,5 +1,5 @@
 import { FetchMethods, fetchOptions } from "src/api/helpers";
-import { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
+import type { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
 
 export const api = {
   sendEmail: {

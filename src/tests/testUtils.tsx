@@ -1,7 +1,7 @@
-import { RenderOptions, render } from "@testing-library/react";
+import { type RenderOptions, render } from "@testing-library/react";
 import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
-import { FC, ReactElement } from "react";
-import { PropsWithChildrenOnly } from "src/@types/react";
+import type { FC, ReactElement } from "react";
+import type { PropsWithChildrenOnly } from "src/@types/react";
 import Providers from "src/app/providers";
 import { mockedUseRouterReturnValue } from "src/tests/mocks/mockNextRouter";
 

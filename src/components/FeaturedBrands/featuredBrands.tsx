@@ -1,4 +1,4 @@
-import { MarqueeItem } from "src/components/Marquee/Marquee.component";
+import type { MarqueeItem } from "src/components/Marquee/Marquee.component";
 import Adidas from "src/icons/Adidas.svg";
 import Ancestry from "src/icons/Ancestry.svg";
 import Audible from "src/icons/Audible.svg";

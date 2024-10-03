@@ -4,7 +4,7 @@ import parse from "html-react-parser";
 import Link from "next/link";
 import { ContactForm } from "src/components/ContactForm/ContactForm.component";
 import styles from "src/components/ContactPage/ContactPage.module.css";
-import { Page } from "src/contentful/getPages";
+import type { Page } from "src/contentful/getPages";
 import { useGlobalVariables } from "src/context/globalContext.context";
 
 interface ContactPageProps {

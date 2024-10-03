@@ -1,8 +1,8 @@
-import { Document } from "@contentful/rich-text-types";
-import { Entry } from "contentful";
-import { ComponentCopyBlockEntry } from "src/contentful/parseComponentCopyBlock";
-import { ComponentSlideEntry } from "src/contentful/parseComponentSlide";
-import { TypeSectionSkeleton } from "src/contentful/types";
+import type { Document } from "@contentful/rich-text-types";
+import type { Entry } from "contentful";
+import type { ComponentCopyBlockEntry } from "src/contentful/parseComponentCopyBlock";
+import type { ComponentSlideEntry } from "src/contentful/parseComponentSlide";
+import type { TypeSectionSkeleton } from "src/contentful/types";
 
 export type Content = ComponentCopyBlockEntry | ComponentSlideEntry | undefined;
 

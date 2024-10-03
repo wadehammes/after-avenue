@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import { HTMLAttributes } from "react";
+import type { HTMLAttributes } from "react";
 import styles from "src/components/Section/Section.module.css";
-import { SectionType } from "src/contentful/parseSections";
+import type { SectionType } from "src/contentful/parseSections";
 import { RichText } from "src/contentful/richText";
 
 interface SectionProps extends HTMLAttributes<HTMLDivElement> {

@@ -1,13 +1,13 @@
 import type { Entry } from "contentful";
 import {
-  Page,
+  type Page,
   parseContentfulPageForNavigation,
 } from "src/contentful/getPages";
 import {
-  ContentfulAsset,
+  type ContentfulAsset,
   parseContentfulAsset,
 } from "src/contentful/parseContentfulAsset";
-import { TypeComponentSlideSkeleton } from "src/contentful/types";
+import type { TypeComponentSlideSkeleton } from "src/contentful/types";
 
 // Our simplified version of an slide entry.
 // We don't need all the data that Contentful gives us.

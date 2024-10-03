@@ -1,8 +1,8 @@
 import classnames from "classnames";
-import { Ref, forwardRef } from "react";
+import { type Ref, forwardRef } from "react";
 import type { AriaTextFieldProps } from "react-aria";
 import { useObjectRef, useTextField } from "react-aria";
-import { FieldError } from "react-hook-form";
+import type { FieldError } from "react-hook-form";
 import styles from "src/components/StyledInput/StyledInput.module.css";
 
 interface StyledTextAreaProps extends AriaTextFieldProps {

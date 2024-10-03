@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 import ReactPlayer from "react-player/lazy";
 import styles from "src/components/EditorsPage/EditorsPage.module.css";
-import { Editor } from "src/contentful/getEditors";
-import { Page } from "src/contentful/getPages";
+import type { Editor } from "src/contentful/getEditors";
+import type { Page } from "src/contentful/getPages";
 import { useIsBrowser } from "src/hooks/useIsBrowser";
 
 interface EditorsPageProps {
@@ -72,6 +72,21 @@ export const EditorsPage = (props: EditorsPageProps) => {
                 loop
                 muted
                 url={editor.featuredWork.workVideoUrl}
+                config={{
+                  youtube: {
+                    playerVars: {
+                      end: 50,
+                      start: 25,
+                    },
+                  },
+                  vimeo: {
+                    playerOptions: {
+                      end_time: 50,
+
+                      start_time: 25,
+                    },
+                  },
+                }}
               />
             );
           })}
@@ -83,7 +98,7 @@ export const EditorsPage = (props: EditorsPageProps) => {
             autoPlay
             muted
           >
-            <source src="/video/static.mp4" type="video/mp4"></source>
+            <source src="/video/static.mp4" type="video/mp4" />
           </video>
         </div>
       ) : null}

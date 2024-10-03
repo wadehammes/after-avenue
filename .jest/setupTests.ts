@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import ReCAPTCHA from "react-google-recaptcha";
+import type ReCAPTCHA from "react-google-recaptcha";
 import { setupIntersectionObserverMock } from "src/tests/mocks/mockIntersectionObserver";
 import { setupMockMatchMedia } from "src/tests/mocks/mockMatchMedia";
 import { mockedUseRouterReturnValue } from "src/tests/mocks/mockNextRouter";

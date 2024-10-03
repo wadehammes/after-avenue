@@ -2,11 +2,11 @@
 
 import classNames from "classnames";
 import Link from "next/link";
-import { HTMLAttributes } from "react";
+import type { HTMLAttributes } from "react";
 import { useInView } from "react-intersection-observer";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import styles from "src/components/WorkCard/WorkCard.module.css";
-import { Work } from "src/contentful/getWork";
+import type { Work } from "src/contentful/getWork";
 import ArrowDownIcon from "src/icons/ArrowDown.svg";
 
 interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {

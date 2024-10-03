@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import { WebPage } from "schema-dts";
+import type { WebPage } from "schema-dts";
 import { WorkPage } from "src/components/WorkPage/WorkPage.component";
 import { fetchPage } from "src/contentful/getPages";
 import { fetchAllWork } from "src/contentful/getWork";

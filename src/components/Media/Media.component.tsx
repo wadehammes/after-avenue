@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import Image from "next/image";
-import { ContentfulAsset } from "src/contentful/parseContentfulAsset";
+import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
 import { createImageUrl, isVideo } from "src/utils/helpers";
 
 interface AnimatedMediaProps {
@@ -29,7 +29,7 @@ export const Media = (props: AnimatedMediaProps) => {
         className={classNames(className)}
         style={{ opacity }}
       >
-        <source src={createImageUrl(media?.src)} type="video/mp4"></source>
+        <source src={createImageUrl(media?.src)} type="video/mp4" />
       </video>
     );
   }

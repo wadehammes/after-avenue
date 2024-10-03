@@ -1,4 +1,4 @@
-import { Document } from "@contentful/rich-text-types";
+import type { Document } from "@contentful/rich-text-types";
 import styles from "src/components/CopyBlock/CopyBlock.module.css";
 import { RichText } from "src/contentful/richText";
 

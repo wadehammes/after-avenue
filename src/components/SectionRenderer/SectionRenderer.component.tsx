@@ -1,6 +1,6 @@
 import { ContentRenderer } from "src/components/ContentRenderer/ContentRenderer.component";
 import { Section } from "src/components/Section/Section.component";
-import { SectionType } from "src/contentful/parseSections";
+import type { SectionType } from "src/contentful/parseSections";
 
 interface SectionRendererProps {
   sections: (SectionType | null)[];

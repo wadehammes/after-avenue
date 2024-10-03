@@ -1,7 +1,7 @@
 import type { Document } from "@contentful/rich-text-types";
 import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
-import { Editor, parseContentfulEditor } from "src/contentful/getEditors";
+import { type Editor, parseContentfulEditor } from "src/contentful/getEditors";
 import type { WorkCategory } from "src/contentful/getWorkCategories";
 import { parseContentfulWorkCategory } from "src/contentful/getWorkCategories";
 import type { TypeWorkSkeleton } from "src/contentful/types";
@@ -93,7 +93,6 @@ export async function fetchAllWork({
 
   const workResult =
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
-      // biome-ignore lint/style/useNamingConvention: Contentful standards
       content_type: "work",
       include: 10,
       limit: 1000,
@@ -122,7 +121,6 @@ export async function fetchWorkByCategory({
 
   const workResult =
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
-      // biome-ignore lint/style/useNamingConvention: Contentful standards
       content_type: "work",
       include: 10,
       limit: 1000,
@@ -152,7 +150,6 @@ export async function fetchWorkByEditor({
 
   const workResult =
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
-      // biome-ignore lint/style/useNamingConvention: Contentful standards
       content_type: "work",
       include: 10,
       limit: 1000,
@@ -180,7 +177,6 @@ export async function fetchAllFeaturedWork({
 
   const workResult =
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
-      // biome-ignore lint/style/useNamingConvention: Contentful standards
       content_type: "work",
       include: 10,
       "fields.featuredOnHomePage": true,
@@ -200,7 +196,6 @@ export async function fetchRecentWork({
 
   const workResult =
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
-      // biome-ignore lint/style/useNamingConvention: Contentful standards
       content_type: "work",
       include: 10,
       limit: 3,
@@ -218,7 +213,6 @@ export async function fetchRandomWork({
 
   const workResults =
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
-      // biome-ignore lint/style/useNamingConvention: Contentful standards
       content_type: "work",
       limit: 0,
     });
@@ -227,7 +221,6 @@ export async function fetchRandomWork({
 
   const workResult =
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
-      // biome-ignore lint/style/useNamingConvention: Contentful standards
       content_type: "work",
       include: 10,
       limit: 3,
@@ -254,7 +247,6 @@ export async function fetchWorkBySlug({
 
   const pagesResult =
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
-      // biome-ignore lint/style/useNamingConvention: Contentful standards
       content_type: "work",
       "fields.workSlug": slug,
       include: 10,

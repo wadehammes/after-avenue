@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import styles from "src/components/EditorsEntryPage/EditorsEntryPage.module.css";
-import { Editor } from "src/contentful/getEditors";
+import type { Editor } from "src/contentful/getEditors";
 import { RichText } from "src/contentful/richText";
 import { createImageUrl } from "src/utils/helpers";
 

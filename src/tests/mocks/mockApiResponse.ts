@@ -1,4 +1,4 @@
-import { MockedFunction } from "jest-mock";
+import type { MockedFunction } from "jest-mock";
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function mockApiResponse<T extends (...args: any[]) => any>(
