@@ -90,18 +90,36 @@ export async function fetchAllWork({
   preview,
 }: FetchAllWorkOptions): Promise<Work[]> {
   const contentful = contentfulClient({ preview });
+  const limit = 10;
+  let total = 0;
+  let skip = 0;
+  let allWork: Work[] = [];
 
-  const workResult =
-    await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
-      content_type: "work",
-      include: 10,
-      limit: 1000,
-      order: ["-fields.featuredOnHomePage", "-fields.workDate"],
-    });
+  do {
+    const workResult =
+      await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
+        content_type: "work",
+        include: 10,
+        limit,
+        skip,
+        order: ["-fields.featuredOnHomePage", "-fields.workDate"],
+      });
 
-  return workResult.items
-    .filter((pageEntry) => !pageEntry.fields.hideFromWorkFeeds)
-    .map((pageEntry) => parseContentfulWork(pageEntry) as Work);
+    const filteredWork = workResult.items
+      .filter((pageEntry) => !pageEntry.fields.hideFromWorkFeeds)
+      .map((pageEntry) => parseContentfulWork(pageEntry) as Work);
+
+    total = workResult.total;
+    skip += limit;
+
+    allWork = [...allWork, ...filteredWork];
+
+    if (total < limit) {
+      break;
+    }
+  } while (skip < total);
+
+  return allWork;
 }
 
 interface FetchWorkByCategoryOptions {
