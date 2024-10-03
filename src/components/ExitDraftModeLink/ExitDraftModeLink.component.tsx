@@ -1,6 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { HTMLProps } from "react";
+import type { HTMLProps } from "react";
 
 export const ExitDraftModeLink = (props: HTMLProps<HTMLAnchorElement>) => {
   const pathname = usePathname();

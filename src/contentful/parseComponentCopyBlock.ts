@@ -1,6 +1,6 @@
-import { Document } from "@contentful/rich-text-types";
+import type { Document } from "@contentful/rich-text-types";
 import type { Entry } from "contentful";
-import { TypeComponentCopyBlockSkeleton } from "src/contentful/types";
+import type { TypeComponentCopyBlockSkeleton } from "src/contentful/types";
 
 // Our simplified version of an copy block entry.
 // We don't need all the data that Contentful gives us.

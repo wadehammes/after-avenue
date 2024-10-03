@@ -6,9 +6,9 @@ import { ContentRenderer } from "src/components/ContentRenderer/ContentRenderer.
 import { Section } from "src/components/Section/Section.component";
 import { ServicesMarquee } from "src/components/ServicesMarquee/ServicesMarquee.component";
 import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
-import { Page } from "src/contentful/getPages";
+import type { Page } from "src/contentful/getPages";
 import {
-  ComponentSlideEntry,
+  type ComponentSlideEntry,
   parseContentfulComponentSlide,
 } from "src/contentful/parseComponentSlide";
 import AfterAvenueBrandmark from "src/icons/AfterAvenueBrandmark.svg";

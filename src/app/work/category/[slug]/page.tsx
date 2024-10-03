@@ -5,7 +5,7 @@ import { WorkPage } from "src/components/WorkPage/WorkPage.component";
 import { fetchPage } from "src/contentful/getPages";
 import { fetchAllWork } from "src/contentful/getWork";
 import {
-  WorkCategory,
+  type WorkCategory,
   fetchAllWorkCategories,
   fetchWorkCategoryBySlug,
 } from "src/contentful/getWorkCategories";

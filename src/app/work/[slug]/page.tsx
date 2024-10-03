@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { WebPage } from "schema-dts";
+import type { WebPage } from "schema-dts";
 import { WorkEntryPage } from "src/components/WorkEntryPage/WorkEntryPage.component";
 import type { Work } from "src/contentful/getWork";
 import {

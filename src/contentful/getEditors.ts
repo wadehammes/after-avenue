@@ -1,7 +1,7 @@
 import type { Document } from "@contentful/rich-text-types";
 import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
-import { Work, parseContentfulFeaturedWork } from "src/contentful/getWork";
+import { type Work, parseContentfulFeaturedWork } from "src/contentful/getWork";
 import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
 import { parseContentfulAsset } from "src/contentful/parseContentfulAsset";
 import type { TypeEditorsSkeleton } from "src/contentful/types";
@@ -67,7 +67,6 @@ export async function fetchAllEditors({
 
   const editorResults =
     await contentful.withoutUnresolvableLinks.getEntries<TypeEditorsSkeleton>({
-      // biome-ignore lint/style/useNamingConvention: Contentful standards
       content_type: "editors",
       include: 10,
       limit: 1000,
@@ -94,7 +93,6 @@ export async function fetchEditorBySlug({
 
   const pagesResult =
     await contentful.withoutUnresolvableLinks.getEntries<TypeEditorsSkeleton>({
-      // biome-ignore lint/style/useNamingConvention: Contentful standards
       content_type: "editors",
       "fields.editorSlug": slug,
       include: 10,

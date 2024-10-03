@@ -1,7 +1,7 @@
 import parse from "html-react-parser";
-import { HTMLAttributes } from "react";
+import type { HTMLAttributes } from "react";
 import { SectionRenderer } from "src/components/SectionRenderer/SectionRenderer.component";
-import { Page } from "src/contentful/getPages";
+import type { Page } from "src/contentful/getPages";
 
 interface PageComponentProps extends HTMLAttributes<HTMLDivElement> {
   fields: Page;

@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { Ref, forwardRef } from "react";
+import { type Ref, forwardRef } from "react";
 import type { AriaTextFieldProps } from "react-aria";
 import { useObjectRef, useTextField } from "react-aria";
 import styles from "src/ui/TextField/TextField.module.css";
@@ -16,7 +16,9 @@ export const TextField = forwardRef(
 
     return (
       <fieldset className={styles.fieldset}>
-        <label {...labelProps}>{label}</label>
+        <label {...labelProps} htmlFor={inputProps.name}>
+          {label}
+        </label>
         <input
           {...inputProps}
           className={classnames(className, styles.input)}

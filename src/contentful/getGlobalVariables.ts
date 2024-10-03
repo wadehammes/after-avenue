@@ -67,7 +67,6 @@ export async function fetchGlobalVariables({
   const globalVariables =
     await contentful.withoutUnresolvableLinks.getEntries<TypeGlobalVariablesSkeleton>(
       {
-        // biome-ignore lint/style/useNamingConvention: Contentful standards
         content_type: "globalVariables",
         "fields.id": "global-variables",
         include: 10,

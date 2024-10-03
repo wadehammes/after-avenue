@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "src/components/Navigation/Navigation.module.css";
-import { Page } from "src/contentful/getPages";
+import type { Page } from "src/contentful/getPages";
 import { useGlobalVariables } from "src/context/globalContext.context";
 import AfterAvenueBrandmark from "src/icons/AfterAvenueBrandmark.svg";
 import Close from "src/icons/Close.svg";

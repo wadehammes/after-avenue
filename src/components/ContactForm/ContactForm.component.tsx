@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 import styles from "src/components/ContactForm/ContactForm.module.css";
 import { StyledButton } from "src/components/StyledButton/StyledButton.component";
 import { StyledInput } from "src/components/StyledInput/StyledInput.component";
@@ -51,7 +51,7 @@ export const ContactForm = () => {
   const submitToNotion: SubmitHandler<ContactFormInputs> = async (data) => {
     clearErrors("email");
 
-    if (reCaptcha && reCaptcha.current) {
+    if (reCaptcha?.current) {
       const captcha = await reCaptcha.current.executeAsync();
 
       if (captcha) {

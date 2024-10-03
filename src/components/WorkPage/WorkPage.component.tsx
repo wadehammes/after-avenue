@@ -4,7 +4,7 @@ import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import styles from "src/components/WorkPage/WorkPage.module.css";
 import type { Page } from "src/contentful/getPages";
 import type { Work } from "src/contentful/getWork";
-import { WorkCategory } from "src/contentful/getWorkCategories";
+import type { WorkCategory } from "src/contentful/getWorkCategories";
 
 interface WorkPageProps {
   allWork: Work[];

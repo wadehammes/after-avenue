@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
+import type { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
 import { isNonNullable } from "src/utils/helpers";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
       await resend.emails.send({
         to: `${name} <${email}>`,
         from: "After Avenue <hello@afteravenue.com>",
-        subject: `We received your contact info.`,
+        subject: "We received your contact info.",
         text: `Hi, ${name}! We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email. Thanks, After Avenue - hello@afteravenue.com | https://afteravenue.com`,
         html: `<div>Hi, ${name}!<br /><br />We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email.<br /><br />Thanks, After Avenue<br />hello@afteravenue.com<br />https://afteravenue.com</div>`,
       });

@@ -2,7 +2,7 @@ import { documentToPlainTextString } from "@contentful/rich-text-plain-text-rend
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import { WebPage } from "schema-dts";
+import type { WebPage } from "schema-dts";
 import { EditorsEntryPage } from "src/components/EditorsEntryPage/EditorsEntryPage.component";
 import type { Editor } from "src/contentful/getEditors";
 import { fetchAllEditors, fetchEditorBySlug } from "src/contentful/getEditors";

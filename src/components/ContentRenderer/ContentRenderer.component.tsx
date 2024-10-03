@@ -1,11 +1,11 @@
 import { CopyBlock } from "src/components/CopyBlock/CopyBlock.component";
 import { Slide } from "src/components/Slide/Slide.component";
-import { ComponentCopyBlock } from "src/contentful/parseComponentCopyBlock";
+import type { ComponentCopyBlock } from "src/contentful/parseComponentCopyBlock";
 import {
-  ComponentSlideEntry,
+  type ComponentSlideEntry,
   parseContentfulComponentSlide,
 } from "src/contentful/parseComponentSlide";
-import { Content } from "src/contentful/parseSections";
+import type { Content } from "src/contentful/parseSections";
 
 interface ContentRendererProps {
   content: Content;

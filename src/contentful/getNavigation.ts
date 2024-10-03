@@ -1,10 +1,10 @@
-import { Entry } from "contentful";
+import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
 import {
-  Page,
+  type Page,
   parseContentfulPageForNavigation,
 } from "src/contentful/getPages";
-import { TypeNavigationSkeleton } from "src/contentful/types";
+import type { TypeNavigationSkeleton } from "src/contentful/types";
 
 type NavigationEntry = Entry<
   TypeNavigationSkeleton,
@@ -50,7 +50,6 @@ export async function fetchNavigation({
   const NavigationResult =
     await contentful.withoutUnresolvableLinks.getEntries<TypeNavigationSkeleton>(
       {
-        // biome-ignore lint/style/useNamingConvention: Contentful standards
         content_type: "navigation",
         "fields.id": id,
         include: 10,

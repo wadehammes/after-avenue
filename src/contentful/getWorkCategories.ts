@@ -42,7 +42,6 @@ export async function fetchAllWorkCategories({
   const categoryEntries =
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkCategorySkeleton>(
       {
-        // biome-ignore lint/style/useNamingConvention: Contentful standards
         content_type: "workCategory",
         include: 10,
         limit: 1000,
@@ -68,7 +67,6 @@ export async function fetchWorkCategoryBySlug({
   const categoryEntries =
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkCategorySkeleton>(
       {
-        // biome-ignore lint/style/useNamingConvention: Contentful standards
         content_type: "workCategory",
         "fields.slug": slug,
         include: 10,

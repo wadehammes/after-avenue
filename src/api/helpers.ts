@@ -20,7 +20,6 @@ export const fetchOptions = ({
   let authorization = {};
 
   if (authKey) {
-    // biome-ignore lint/style/useNamingConvention: Headers
     authorization = { Authorization: `Bearer ${authKey}` };
   }
 
@@ -28,7 +27,7 @@ export const fetchOptions = ({
     method,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      // biome-ignore lint/style/useNamingConvention: Headers
+
       Accept: "application/json",
       ...authorization,
       ...headers,
