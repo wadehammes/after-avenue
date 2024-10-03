@@ -29,7 +29,7 @@
     "classnames": "^2.5.1",
     "contentful": "^11.0.3",
     "gsap": "^3.12.5",
-    "html-react-parser": "^5.1.16",
+    "html-react-parser": "^5.1.17",
     "jest-mock": "^29.7.0",
     "next": "^14.2.14",
     "postcss-flexbugs-fixes": "^5.0.2",
