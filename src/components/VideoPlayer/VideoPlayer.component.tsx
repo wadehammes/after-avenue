@@ -12,13 +12,19 @@ import useWindowFocus from "src/hooks/useWindowFocus";
 interface VideoPlayerProps {
   autoPlay?: boolean;
   controls?: boolean;
-  playing?: boolean;
+  playInView?: boolean;
   rounded?: boolean;
   url: string;
 }
 
 export const VideoPlayer = (props: VideoPlayerProps) => {
-  const { autoPlay = false, controls = false, rounded = false, url } = props;
+  const {
+    autoPlay = false,
+    controls = false,
+    playInView = false,
+    rounded = false,
+    url,
+  } = props;
   const [playing, setPlaying] = useState(autoPlay);
   const isBrowser = useIsBrowser();
   const isFocused = useWindowFocus();
@@ -27,7 +33,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     return null;
   }
 
-  const shouldPlayAlways = autoPlay ? true : playing && isFocused;
+  const shouldPlayAlways = autoPlay ? playInView : playing && isFocused;
 
   return (
     <div
@@ -39,13 +45,12 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         controls={controls}
         fallback={<Loader />}
         light={!autoPlay}
-        loop={shouldPlayAlways}
+        loop
         muted
         playIcon={<PlayIcon />}
         url={url}
         volume={0}
         playing={shouldPlayAlways}
-        onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         onClickPreview={() => setPlaying(true)}
       />
