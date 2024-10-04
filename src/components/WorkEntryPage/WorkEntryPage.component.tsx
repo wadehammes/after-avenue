@@ -38,7 +38,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
       <div className={styles.videoContainer} aria-label={workClient}>
         <VideoPlayer
           url={workVideoUrl}
-          playing={playVideo === "true"}
+          playInView={playVideo === "true"}
           rounded
           autoPlay={playVideo === "true"}
           controls

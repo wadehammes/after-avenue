@@ -113,6 +113,7 @@
   inset: 0;
   width: 100vw;
   height: 100vh;
+  min-height: 400px;
   background-color: var(--color-bg);
   background-image: url("/images/dot-bg.png");
   z-index: 99;
@@ -120,10 +121,12 @@
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 6rem 2rem;
+  padding-top: calc(100px + 1rem);
   font-size: 3rem;
   gap: 2rem;
   color: var(--colors-text);
+  overflow: auto;
   
   > a {
     text-decoration: none;
