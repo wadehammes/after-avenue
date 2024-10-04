@@ -1,5 +1,6 @@
-import { FetchMethods, fetchOptions } from "src/api/helpers";
+import { FetchMethods, fetchOptions, fetchResponse } from "src/api/helpers";
 import type { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
+import type { VercelDeploymentsResponse } from "src/interfaces/vercel.interfaces";
 
 export const api = {
   sendEmail: {
@@ -41,4 +42,8 @@ export const api = {
         }),
       ),
   },
+  vercel: () =>
+    fetchResponse<VercelDeploymentsResponse>(
+      fetch("/api/vercel", fetchOptions({ method: FetchMethods.Post })),
+    ),
 };
