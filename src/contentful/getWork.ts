@@ -208,24 +208,6 @@ export async function fetchAllFeaturedWork({
   );
 }
 
-export async function fetchRecentWork({
-  preview,
-}: FetchAllWorkOptions): Promise<Work[]> {
-  const contentful = contentfulClient({ preview });
-
-  const workResult =
-    await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
-      content_type: "work",
-      include: 10,
-      limit: 4,
-      "fields.hideFromWorkFeeds": false,
-    });
-
-  return workResult.items.map(
-    (pageEntry) => parseContentfulWork(pageEntry) as Work,
-  );
-}
-
 export async function fetchRandomWork({
   preview,
 }: FetchAllWorkOptions): Promise<Work[]> {
@@ -235,7 +217,8 @@ export async function fetchRandomWork({
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
       content_type: "work",
       include: 10,
-      limit: 100,
+      limit: 200,
+      "fields.hideFromWorkFeeds": false,
     });
 
   const shuffledWork = allWork.items.sort(() => Math.random() - 0.5);
