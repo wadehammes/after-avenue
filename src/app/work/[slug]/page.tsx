@@ -119,7 +119,7 @@ async function WorkEntry({ params }: WorkProps) {
 
   const randomRecentWorkUnique = randomRecentWork
     .filter((work) => workEntry.workSlug !== work.workSlug)
-    .filter((work) => !work.hideFromWorkFeeds);
+    .slice(0, 3);
 
   const { workClient, workTitle, workDescription, publishDate, updatedAt } =
     workEntry;

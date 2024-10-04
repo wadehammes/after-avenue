@@ -102,12 +102,13 @@ export async function fetchAllWork({
         include: 10,
         limit,
         skip,
+        "fields.hideFromWorkFeeds": false,
         order: ["-fields.featuredOnHomePage", "-fields.workDate"],
       });
 
-    const filteredWork = workResult.items
-      .filter((pageEntry) => !pageEntry.fields.hideFromWorkFeeds)
-      .map((pageEntry) => parseContentfulWork(pageEntry) as Work);
+    const filteredWork = workResult.items.map(
+      (pageEntry) => parseContentfulWork(pageEntry) as Work,
+    );
 
     total = workResult.total;
     skip += limit;
@@ -216,7 +217,8 @@ export async function fetchRecentWork({
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
       content_type: "work",
       include: 10,
-      limit: 3,
+      limit: 4,
+      "fields.hideFromWorkFeeds": false,
     });
 
   return workResult.items.map(
@@ -229,25 +231,18 @@ export async function fetchRandomWork({
 }: FetchAllWorkOptions): Promise<Work[]> {
   const contentful = contentfulClient({ preview });
 
-  const workResults =
-    await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
-      content_type: "work",
-      limit: 0,
-    });
-
-  const workCount = workResults.total;
-
-  const workResult =
+  const allWork =
     await contentful.withoutUnresolvableLinks.getEntries<TypeWorkSkeleton>({
       content_type: "work",
       include: 10,
-      limit: 3,
-      skip: Math.floor(Math.random() * (workCount - 3)),
+      limit: 100,
     });
 
-  return workResult.items.map(
-    (pageEntry) => parseContentfulWork(pageEntry) as Work,
-  );
+  const shuffledWork = allWork.items.sort(() => Math.random() - 0.5);
+
+  return shuffledWork
+    .slice(0, 4)
+    .map((work) => parseContentfulWork(work) as Work);
 }
 
 // A function to fetch a single page by its slug.
