@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>http://www.afteravenue.com/generated-sitemap-pages.xml</loc>
+    <loc>https://www.afteravenue.com/generated-sitemap-pages.xml</loc>
   </sitemap>
   <sitemap>
-    <loc>http://www.afteravenue.com/generated-sitemap-work.xml</loc>
+    <loc>https://www.afteravenue.com/generated-sitemap-work.xml</loc>
   </sitemap>
   <sitemap>
-    <loc>http://www.afteravenue.com/generated-sitemap-editors.xml</loc>
+    <loc>https://www.afteravenue.com/generated-sitemap-editors.xml</loc>
   </sitemap>
   <sitemap>
-    <loc>http://www.afteravenue.com/generated-sitemap-workCategories.xml</loc>
+    <loc>https://www.afteravenue.com/generated-sitemap-workCategories.xml</loc>
   </sitemap>
 </sitemapindex>
