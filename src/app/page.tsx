@@ -5,6 +5,7 @@ import type { WebPage } from "schema-dts";
 import { HomePage } from "src/components/HomePage/HomePage";
 import { fetchPage } from "src/contentful/getPages";
 import { fetchAllFeaturedWork } from "src/contentful/getWork";
+import { envUrl } from "src/utils/helpers";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await fetchPage({
@@ -17,6 +18,10 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
+    metadataBase: new URL(`${envUrl()}/`),
+    alternates: {
+      canonical: "/",
+    },
     title: `${page.pageTitle} | After Avenue`,
     robots:
       page.enableIndexing && process.env.ENVIRONMENT === "production"
