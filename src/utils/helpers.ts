@@ -8,7 +8,7 @@ export const envUrl = () => {
   }
 
   if (process.env.ENVIRONMENT === "staging") {
-    return "https://after-avenue.vercel.app/";
+    return "https://staging.afteravenue.com";
   }
 
   return "https://www.afteravenue.com";
