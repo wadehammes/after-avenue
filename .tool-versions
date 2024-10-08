@@ -1,2 +1,10 @@
 nodejs 20.17.0
+<<<<<<< HEAD
 pnpm 9.14.4
+=======
+<<<<<<< HEAD
+pnpm 9.12.2
+=======
+pnpm 9.12.1
+>>>>>>> 1978458 (Chore: add home page canonical (#94))
+>>>>>>> 5727175 (Chore: add home page canonical (#94))
