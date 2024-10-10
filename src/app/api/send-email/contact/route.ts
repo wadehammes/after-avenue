@@ -38,8 +38,8 @@ export async function POST(request: Request) {
       replyTo: `${name} <${email}>`,
       to: "After Avenue <hello@afteravenue.com>",
       subject: `Contact Form Submission - ${companyName}`,
-      text: `You have a new message from ${name} at ${companyName}. ${message} Their contact info is: ${email} ${phone}.`,
-      html: `<div>You have a new message from ${name} at ${companyName}!<br /><br />Message:<br />${message}<br /><br />Their contact info is:<br />${name}<br />${email}<br />${phone}</div>`,
+      text: `You have a new message from ${name} at ${companyName}. ${message} Their contact info is: ${email} ${phone}. They have been added to Hubspot and Resend if they are a new contact lead.`,
+      html: `<div>You have a new message from ${name} at ${companyName}!<br /><br />Message:<br />${message}<br /><br />Their contact info is:<br />${name}<br />${email}<br />${phone}<br /><br />They have been added to Hubspot and Resend if they are a new contact lead.<br /><br />View this lead in Hubspot: https://app.hubspot.com/contacts/${process.env.HUBSPOT_PORTAL_ID}/lists/2/filters?query=${email}</div>`,
     });
 
     const delayConfirmationEmail = setTimeout(async () => {
@@ -48,9 +48,9 @@ export async function POST(request: Request) {
         from: "After Avenue <hello@afteravenue.com>",
         subject: "We received your contact info.",
         text: `Hi, ${name}! We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email. Thanks, After Avenue - hello@afteravenue.com | https://afteravenue.com`,
-        html: `<div>Hi, ${name}!<br /><br />We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email.<br /><br />Thanks, After Avenue<br />hello@afteravenue.com<br />https://afteravenue.com</div>`,
+        html: `<div>Hi, ${name}!<br /><br />We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email.<br /><br />Thanks, After Avenue<br />hello@afteravenue.com<br />https://www.afteravenue.com</div>`,
       });
-    }, 1000);
+    }, 500);
 
     if (data.error) {
       clearTimeout(delayConfirmationEmail);
