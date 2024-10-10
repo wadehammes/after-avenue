@@ -26,4 +26,19 @@ export const api = {
         }),
       ),
   },
+  hubspot: {
+    leadGeneration: ({
+      companyName,
+      email,
+      name,
+      phone,
+    }: Partial<ContactFormInputs>) =>
+      fetch(
+        "/api/hubspot/lead-generation",
+        fetchOptions({
+          method: FetchMethods.Post,
+          body: JSON.stringify({ companyName, email, name, phone }),
+        }),
+      ),
+  },
 };

@@ -8,6 +8,7 @@ import { StyledButton } from "src/components/StyledButton/StyledButton.component
 import { StyledInput } from "src/components/StyledInput/StyledInput.component";
 import { StyledTextArea } from "src/components/StyledInput/StyledTextArea.component";
 import { useGlobalVariables } from "src/context/globalContext.context";
+import { useHubspotLeadGenerationFormApiMutation } from "src/hooks/mutations/useHubspotLeadGenerationFormApi.mutation";
 import { useSendContactEmailApiMutation } from "src/hooks/mutations/useSendContactEmailApi.mutation";
 import {
   EMAIL_VALIDATION_REGEX,
@@ -47,6 +48,8 @@ export const ContactForm = () => {
     reValidateMode: "onBlur",
   });
   const useSendContactEmailApi = useSendContactEmailApiMutation();
+  const useHubspotLeadGenerationFormApi =
+    useHubspotLeadGenerationFormApiMutation();
 
   const submitToNotion: SubmitHandler<ContactFormInputs> = async (data) => {
     clearErrors("email");
@@ -72,6 +75,13 @@ export const ContactForm = () => {
             companyName,
             email: emailToLowerCase,
             marketingConsent,
+            name,
+            phone,
+          });
+
+          await useHubspotLeadGenerationFormApi.mutateAsync({
+            companyName,
+            email: emailToLowerCase,
             name,
             phone,
           });
