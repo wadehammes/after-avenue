@@ -21,6 +21,7 @@ export interface Page {
   contactFooterButtonText?: string;
   enableIndexing: boolean;
   metaDescription: string;
+  metaKeywords: string[];
   pageDescription?: string;
   pageDisplayTitle?: string;
   pageSlug: string;
@@ -44,6 +45,7 @@ export function parseContentfulPage(pageEntry?: PageEntry): Page | null {
     contactFooterTitle: pageEntry.fields.contactFooterTitle,
     enableIndexing: pageEntry.fields?.enableIndexing ?? true,
     metaDescription: pageEntry.fields.metaDescription,
+    metaKeywords: pageEntry.fields.metaKeywords ?? [],
     pageDescription: pageEntry.fields.pageDescription,
     pageSlug: pageEntry.fields.pageSlug,
     pageDisplayTitle: pageEntry.fields.pageDisplayTitle,

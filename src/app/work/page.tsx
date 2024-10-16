@@ -27,6 +27,8 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: "/",
     },
     title: `${workPage.pageTitle} | After Avenue`,
+    description: workPage.metaDescription,
+    keywords: workPage.metaKeywords.join(","),
     robots:
       process.env.ENVIRONMENT === "production"
         ? workPage?.enableIndexing

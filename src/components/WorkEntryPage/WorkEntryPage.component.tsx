@@ -84,6 +84,9 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                   </Link>
                 ) : null,
               )}
+              <Link className={styles.workCategory} href="/">
+                After Avenue Post House
+              </Link>
             </div>
           ) : null}
         </div>
