@@ -25,7 +25,8 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: "/",
     },
-    title: `${editorsPage.pageTitle} | After Avenue`,
+    title: `${editorsPage.pageTitle} - ${editorsPage.pageDisplayTitle} | After Avenue`,
+    keywords: editorsPage.metaKeywords.join(","),
     robots:
       editorsPage.enableIndexing && process.env.ENVIRONMENT === "production"
         ? "index, follow"
@@ -80,6 +81,8 @@ async function Editors() {
     },
   };
 
+  const title = `Editors - ${editorsPage.pageDisplayTitle} | After Avenue`;
+
   return (
     <>
       <script
@@ -88,6 +91,7 @@ async function Editors() {
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <h1 className="hidden-title">{title}</h1>
       <EditorsPage pageFields={editorsPage} editors={allEditors} />
     </>
   );

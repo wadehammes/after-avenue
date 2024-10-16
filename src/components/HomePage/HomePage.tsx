@@ -13,8 +13,14 @@ interface HomePageProps {
 
 export const HomePage = (props: HomePageProps) => {
   const { featuredWork, pageFields } = props;
-  const { pageDisplayTitle, contactFooterTitle, contactFooterButtonText } =
-    pageFields;
+  const {
+    pageDisplayTitle,
+    pageTitle,
+    contactFooterTitle,
+    contactFooterButtonText,
+  } = pageFields;
+
+  const title = `After Avenue | ${pageTitle}`;
 
   return (
     <>
@@ -33,7 +39,10 @@ export const HomePage = (props: HomePageProps) => {
         <div className="container column">
           {pageDisplayTitle ? (
             <header className="section-header">
-              <h1>{parse(pageDisplayTitle)}</h1>
+              <h1 className="hidden-title">{title}</h1>
+              <h2 className={styles.homeMainTitle}>
+                {parse(pageDisplayTitle)}
+              </h2>
             </header>
           ) : null}
         </div>

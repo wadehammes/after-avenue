@@ -22,12 +22,13 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: "/",
     },
-    title: `${page.pageTitle} | After Avenue`,
+    title: `After Avenue | ${page.pageTitle}`,
     robots:
       page.enableIndexing && process.env.ENVIRONMENT === "production"
         ? "index, follow"
         : "noindex, nofollow",
     description: page.metaDescription,
+    keywords: page.metaKeywords.join(","),
   };
 }
 

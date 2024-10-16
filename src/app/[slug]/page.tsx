@@ -79,12 +79,13 @@ export async function generateMetadata({
     alternates: {
       canonical: "/",
     },
-    title: `${page.pageTitle} | After Avenue`,
+    title: `${page.pageDisplayTitle} | After Avenue`,
     robots:
       page.enableIndexing && process.env.ENVIRONMENT === "production"
         ? "index, follow"
         : "noindex, nofollow",
     description: page.pageDescription,
+    keywords: page.metaKeywords.join(","),
   };
 }
 

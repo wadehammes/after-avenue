@@ -238,16 +238,12 @@ b {
 }
 
 h1, h2, h3, h4, h5, h6 {
+  color: currentColor;
   font-family: var(--font-family-heading);
   font-weight: 900;
   position: relative;
   text-wrap: balance;
   z-index: 1;
-}
-
-h1 {
-  font-size: clamp(2.25rem, 5vw, 5rem);
-  color: currentColor;
 
   span {
     color: var(--colors-street-lamp-yellow);
@@ -259,9 +255,12 @@ h1 {
   }
 }
 
+h1 {
+  font-size: clamp(2.25rem, 5vw, 5rem);
+}
+
 h2 {
   font-size: clamp(2rem, 5vw, 4rem);
-  color: currentColor;
 }
 
 h3 {
