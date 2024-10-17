@@ -71,24 +71,26 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
               })}
             </div>
           ) : null}
-          {workCategories.length ? (
-            <div className={styles.workCategoriesList}>
-              {workCategories.map((category) =>
+          <ul className={styles.workCategoriesList}>
+            {workCategories.length > 0 &&
+              workCategories.map((category) =>
                 category ? (
-                  <Link
-                    key={category.slug}
-                    className={styles.workCategory}
-                    href={`/work/category/${category.slug}`}
-                  >
-                    {category?.categoryName}
-                  </Link>
+                  <li key={category.slug}>
+                    <Link
+                      className={styles.workCategory}
+                      href={`/work/category/${category.slug}`}
+                    >
+                      {category?.categoryName}
+                    </Link>
+                  </li>
                 ) : null,
               )}
+            <li>
               <Link className={styles.workCategory} href="/">
                 After Avenue Post House
               </Link>
-            </div>
-          ) : null}
+            </li>
+          </ul>
         </div>
         {workCredits ? (
           <div className={styles.workCredits}>
