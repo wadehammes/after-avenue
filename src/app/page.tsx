@@ -72,6 +72,11 @@ const Home = async () => {
 
   return (
     <>
+      <link
+        rel="preload"
+        as="image"
+        href="https://i.vimeocdn.com/video/1930339589-b66d9665a265b4aec5af999f9b67e63603dbd29477edd5a8d8297499da25473d-d_640"
+      />
       <script
         id="homeSchema"
         type="application/ld+json"
