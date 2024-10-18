@@ -22,6 +22,7 @@ export interface TypePageFields {
   socialImage?: EntryFieldTypes.AssetLink;
   enableIndexing?: EntryFieldTypes.Boolean;
   metaDescription: EntryFieldTypes.Text;
+  metaKeywords?: EntryFieldTypes.Array<EntryFieldTypes.Symbol>;
 }
 
 export type TypePageSkeleton = EntrySkeletonType<TypePageFields, "page">;

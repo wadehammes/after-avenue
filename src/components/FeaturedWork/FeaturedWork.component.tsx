@@ -25,6 +25,7 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
 
   const { inView, ref } = useInView({
     threshold: 0.5,
+    fallbackInView: true,
   });
 
   return !isMobile ? (

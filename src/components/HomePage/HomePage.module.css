@@ -23,3 +23,7 @@
   padding: 4rem 0;
   width: 100%;
 }
+
+.homeMainTitle {
+  font-size: clamp(2.5rem, 5vw, 5rem);
+}

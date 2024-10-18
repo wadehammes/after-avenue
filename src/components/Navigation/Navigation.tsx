@@ -96,6 +96,7 @@ export const Navigation = (props: NavigationProps) => {
               type="button"
               className={styles.mobileNavToggle}
               onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle mobile navigation"
             >
               <Menu className={styles.menu} />
             </button>

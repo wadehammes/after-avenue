@@ -26,8 +26,8 @@ export const Footer = () => {
             <Link href="/privacy-policy">Privacy Policy</Link>
           </div>
           <div className={classNames(styles.item, styles.logo)}>
-            <Link href="#top">
-              <AfterAvenueBrandmark />
+            <Link href="#top" aria-label="Back to top">
+              <AfterAvenueBrandmark aria-hidden />
             </Link>
           </div>
           <div className={styles.item} style={{ order: 4 }}>

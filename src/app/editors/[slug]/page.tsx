@@ -77,7 +77,7 @@ export async function generateMetadata({
     alternates: {
       canonical: "/",
     },
-    title: `${editorEntry.editorName} | After Avenue`,
+    title: `Editors - ${editorEntry.editorName} - Award-winning Post House in Atlanta, GA | After Avenue`,
     robots:
       process.env.ENVIRONMENT === "production"
         ? "index, follow"

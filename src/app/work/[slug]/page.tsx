@@ -82,6 +82,9 @@ export async function generateMetadata({
     description: workEntry.workDescription
       ? documentToPlainTextString(workEntry.workDescription)
       : "",
+    keywords: workEntry.workCategories
+      .map((category) => (category ? category.categoryName : ""))
+      .join(","),
     robots:
       process.env.ENVIRONMENT === "production"
         ? "index, follow"

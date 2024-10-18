@@ -75,15 +75,14 @@ export const EditorsPage = (props: EditorsPageProps) => {
                 config={{
                   youtube: {
                     playerVars: {
-                      end: 50,
-                      start: 25,
+                      end: 60,
+                      start: 30,
                     },
                   },
                   vimeo: {
                     playerOptions: {
-                      end_time: 50,
-
-                      start_time: 25,
+                      end_time: 60,
+                      start_time: 30,
                     },
                   },
                 }}

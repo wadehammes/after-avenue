@@ -5,6 +5,7 @@ import type { WebPage } from "schema-dts";
 import { HomePage } from "src/components/HomePage/HomePage";
 import { fetchPage } from "src/contentful/getPages";
 import { fetchAllFeaturedWork } from "src/contentful/getWork";
+import { envUrl } from "src/utils/helpers";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await fetchPage({
@@ -17,12 +18,17 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
-    title: `${page.pageTitle} | After Avenue`,
+    metadataBase: new URL(`${envUrl()}/`),
+    alternates: {
+      canonical: "/",
+    },
+    title: `After Avenue | ${page.pageTitle}`,
     robots:
       page.enableIndexing && process.env.ENVIRONMENT === "production"
         ? "index, follow"
         : "noindex, nofollow",
     description: page.metaDescription,
+    keywords: page.metaKeywords.join(","),
   };
 }
 
@@ -66,6 +72,11 @@ const Home = async () => {
 
   return (
     <>
+      <link
+        rel="preload"
+        as="image"
+        href="https://i.vimeocdn.com/video/1930339589-b66d9665a265b4aec5af999f9b67e63603dbd29477edd5a8d8297499da25473d-d_640"
+      />
       <script
         id="homeSchema"
         type="application/ld+json"

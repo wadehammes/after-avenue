@@ -172,6 +172,7 @@ export async function fetchWorkByEditor({
       content_type: "work",
       include: 10,
       limit: 1000,
+      order: ["-fields.workDate"],
     });
 
   const parseWorkResults = workResult.items.map(
