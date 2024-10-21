@@ -3,7 +3,6 @@ const StylelintPlugin = require("stylelint-webpack-plugin");
 module.exports = {
 	reactStrictMode: true,
 	productionBrowserSourceMaps: false,
-	swcMinify: true,
 	eslint: {
 		// Warning: This allows production builds to successfully complete even if
 		// your project has ESLint errors.

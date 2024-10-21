@@ -11,9 +11,11 @@ import { envUrl } from "src/utils/helpers";
 // Fetch the editors page, tell Next.js which metadata
 // (e.g. page title) to display.
 export async function generateMetadata(): Promise<Metadata> {
+  const draft = await draftMode();
+
   const editorsPage = await fetchPage({
     slug: EDITORS_PAGE_SLUG,
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   if (!editorsPage) {
@@ -36,15 +38,17 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // The actual EditorsPage component.
 async function Editors() {
+  const draft = await draftMode();
+
   // Fetch the editors page entry by slug,
   // using the content preview if draft mode is enabled:
   const editorsPage = await fetchPage({
     slug: EDITORS_PAGE_SLUG,
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   // Fetch all editors
-  const allEditors = await fetchAllEditors({ preview: draftMode().isEnabled });
+  const allEditors = await fetchAllEditors({ preview: draft.isEnabled });
 
   if (!editorsPage) {
     // If a page can't be found,

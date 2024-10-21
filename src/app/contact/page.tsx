@@ -6,9 +6,11 @@ import { fetchPage } from "src/contentful/getPages";
 import { envUrl } from "src/utils/helpers";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const draft = await draftMode();
+
   const page = await fetchPage({
     slug: "contact",
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   if (!page) {
@@ -31,9 +33,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const Contact = async () => {
+  const draft = await draftMode();
+
   const page = await fetchPage({
     slug: "contact",
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   if (!page) {

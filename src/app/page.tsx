@@ -8,9 +8,11 @@ import { fetchAllFeaturedWork } from "src/contentful/getWork";
 import { envUrl } from "src/utils/helpers";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const draft = await draftMode();
+
   const page = await fetchPage({
     slug: "home",
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   if (!page) {
@@ -33,9 +35,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const Home = async () => {
+  const draft = await draftMode();
+
   const page = await fetchPage({
     slug: "home",
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   if (!page) {
@@ -43,7 +47,7 @@ const Home = async () => {
   }
 
   const featuredWork = await fetchAllFeaturedWork({
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   const { pageDescription, publishDate, updatedAt } = page;

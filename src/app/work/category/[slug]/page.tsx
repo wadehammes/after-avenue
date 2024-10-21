@@ -19,7 +19,7 @@ interface WorkCategoryParams {
 }
 
 interface WorkCategoryProps {
-  params: WorkCategoryParams;
+  params: Promise<WorkCategoryParams>;
 }
 
 // Tell Next.js about all our work categories
@@ -65,9 +65,12 @@ export async function generateStaticParams(): Promise<WorkCategoryParams[]> {
 export async function generateMetadata({
   params,
 }: WorkCategoryProps): Promise<Metadata> {
+  const { slug } = await params;
+  const draft = await draftMode();
+
   const workCategory = await fetchWorkCategoryBySlug({
-    slug: params.slug,
-    preview: draftMode().isEnabled,
+    slug,
+    preview: draft.isEnabled,
   });
 
   if (!workCategory) {
@@ -90,11 +93,14 @@ export async function generateMetadata({
 
 // The actual WorkCategoryEntry component.
 async function WorkCategoryEntry({ params }: WorkCategoryProps) {
+  const { slug } = await params;
+  const draft = await draftMode();
+
   // Fetch a single work category entry by slug,
   // using the content preview if draft mode is enabled:
   const workCategory = await fetchWorkCategoryBySlug({
-    slug: params.slug,
-    preview: draftMode().isEnabled,
+    slug,
+    preview: draft.isEnabled,
   });
 
   if (!workCategory) {
@@ -106,12 +112,12 @@ async function WorkCategoryEntry({ params }: WorkCategoryProps) {
   const allWorkCategories = await fetchAllWorkCategories({ preview: false });
 
   const allWork = await fetchAllWork({
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   const workPage = await fetchPage({
     slug: "work",
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   if (!workPage) {
