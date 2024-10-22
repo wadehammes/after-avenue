@@ -25,7 +25,7 @@ interface WorkParams {
 }
 
 interface WorkProps {
-  params: WorkParams;
+  params: Promise<WorkParams>;
 }
 
 // Tell Next.js about all our work entries so
@@ -64,9 +64,12 @@ export async function generateStaticParams(): Promise<WorkParams[]> {
 export async function generateMetadata({
   params,
 }: WorkProps): Promise<Metadata> {
+  const draft = await draftMode();
+  const { slug } = await params;
+
   const workEntry = await fetchWorkBySlug({
-    slug: params.slug,
-    preview: draftMode().isEnabled,
+    slug,
+    preview: draft.isEnabled,
   });
 
   if (!workEntry) {
@@ -94,11 +97,14 @@ export async function generateMetadata({
 
 // The actual WorkEntry component.
 async function WorkEntry({ params }: WorkProps) {
+  const draft = await draftMode();
+  const { slug } = await params;
+
   // Fetch a single work entry by slug,
   // using the content preview if draft mode is enabled:
   const workEntry = await fetchWorkBySlug({
-    slug: params.slug,
-    preview: draftMode().isEnabled,
+    slug,
+    preview: draft.isEnabled,
   });
 
   if (!workEntry) {
@@ -109,7 +115,7 @@ async function WorkEntry({ params }: WorkProps) {
 
   const workSeries = await fetchWorkByCategory({
     category: workEntry.workSeriesCategory?.categoryName ?? "",
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   const workSeriesUnique = workSeries.filter((work) => {
@@ -117,7 +123,7 @@ async function WorkEntry({ params }: WorkProps) {
   });
 
   const randomRecentWork = await fetchRandomWork({
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   const randomRecentWorkUnique = randomRecentWork

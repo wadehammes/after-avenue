@@ -27,7 +27,7 @@ export const MobileNavigationDrawer = (props: MobileNavigationDrawerProps) => {
       <Link href="/" onClick={closeMenu} className={styles.mobileNavLogo}>
         <AfterAvenueBrandmark className={styles.mobileSvg} />
       </Link>
-      <div className={styles.mobileNavList}>
+      <nav className={styles.mobileNavList}>
         {navigationItems.map((page) => {
           if (!page) {
             return null;
@@ -43,10 +43,7 @@ export const MobileNavigationDrawer = (props: MobileNavigationDrawerProps) => {
             </Link>
           );
         })}
-        <Link href={"/contact"} onClick={closeMenu}>
-          Contact Us
-        </Link>
-      </div>
+      </nav>
 
       <a
         className={styles.navLink}

@@ -28,13 +28,15 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const draft = await draftMode();
+
   const nav = await fetchNavigation({
     id: NAVIGATION_ID,
     preview: false,
   });
 
   const globalVariables = await fetchGlobalVariables({
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   return (
@@ -65,7 +67,7 @@ export default async function RootLayout({
         />
       </head>
       <body>
-        {draftMode().isEnabled ? (
+        {draft.isEnabled ? (
           <div className="draftMode">
             You are previewing in draft mode!{" "}
             <ExitDraftModeLink style={{ textDecoration: "underline" }} />

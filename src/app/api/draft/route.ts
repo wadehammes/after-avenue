@@ -1,7 +1,8 @@
 import { draftMode } from "next/headers";
 import { redirect } from "next/navigation";
 
-export function GET(request: Request) {
+export async function GET(request: Request) {
+  const draft = await draftMode();
   const { searchParams } = new URL(request.url);
 
   if (
@@ -10,7 +11,7 @@ export function GET(request: Request) {
     return new Response("Invalid token", { status: 401 });
   }
 
-  draftMode().enable();
+  draft.enable();
 
   redirect(searchParams.get("redirect") || "/");
 }

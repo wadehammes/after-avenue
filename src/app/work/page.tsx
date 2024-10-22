@@ -12,9 +12,11 @@ import { envUrl } from "src/utils/helpers";
 // Fetch the work page, tell Next.js which metadata
 // (e.g. page title) to display.
 export async function generateMetadata(): Promise<Metadata> {
+  const draft = await draftMode();
+
   const workPage = await fetchPage({
     slug: WORK_SLUG,
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   if (!workPage) {
@@ -40,19 +42,21 @@ export async function generateMetadata(): Promise<Metadata> {
 
 // The actual Work component.
 async function Work() {
+  const draft = await draftMode();
+
   // Fetch the work page entry by slug,
   // using the content preview if draft mode is enabled:
   const workPage = await fetchPage({
     slug: WORK_SLUG,
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   const allWorkCategories = await fetchAllWorkCategories({
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   // Fetch all work entries
-  const allWork = await fetchAllWork({ preview: draftMode().isEnabled });
+  const allWork = await fetchAllWork({ preview: draft.isEnabled });
 
   if (!workPage || !allWork) {
     // If a work entry can't be found,

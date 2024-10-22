@@ -20,7 +20,7 @@ interface EditorParams {
 }
 
 interface EditorsProps {
-  params: EditorParams;
+  params: Promise<EditorParams>;
 }
 
 // Tell Next.js about all our editor entries so
@@ -63,9 +63,12 @@ export async function generateStaticParams(): Promise<EditorParams[]> {
 export async function generateMetadata({
   params,
 }: EditorsProps): Promise<Metadata> {
+  const { slug } = await params;
+  const draft = await draftMode();
+
   const editorEntry = await fetchEditorBySlug({
-    slug: params.slug,
-    preview: draftMode().isEnabled,
+    slug,
+    preview: draft.isEnabled,
   });
 
   if (!editorEntry) {
@@ -88,11 +91,14 @@ export async function generateMetadata({
 
 // The actual EditorEntry component.
 async function EditorEntry({ params }: EditorsProps) {
+  const { slug } = await params;
+  const draft = await draftMode();
+
   // Fetch a single editor entry by slug,
   // using the content preview if draft mode is enabled:
   const editorEntry = await fetchEditorBySlug({
-    slug: params.slug,
-    preview: draftMode().isEnabled,
+    slug,
+    preview: draft.isEnabled,
   });
 
   if (!editorEntry) {
@@ -103,7 +109,7 @@ async function EditorEntry({ params }: EditorsProps) {
 
   const editorsWork = await fetchWorkByEditor({
     editorSlug: editorEntry.editorSlug,
-    preview: draftMode().isEnabled,
+    preview: draft.isEnabled,
   });
 
   const { editorName, editorBio, publishDate, updatedAt } = editorEntry;

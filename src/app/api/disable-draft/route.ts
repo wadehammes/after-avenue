@@ -1,10 +1,11 @@
 import { draftMode } from "next/headers";
 import { redirect } from "next/navigation";
 
-export function GET(request: Request) {
+export async function GET(request: Request) {
+  const draft = await draftMode();
   const { searchParams } = new URL(request.url);
 
-  draftMode().disable();
+  draft.disable();
 
   redirect(searchParams.get("redirect") || "/");
 }

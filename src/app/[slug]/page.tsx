@@ -19,7 +19,7 @@ interface PageParams {
 }
 
 interface PageProps {
-  params: PageParams;
+  params: Promise<PageParams>;
 }
 
 // Tell Next.js about all our pages so
@@ -65,9 +65,12 @@ export async function generateStaticParams(): Promise<PageParams[]> {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const draft = await draftMode();
+
   const page = await fetchPage({
-    slug: params.slug,
-    preview: draftMode().isEnabled,
+    slug,
+    preview: draft.isEnabled,
   });
 
   if (!page) {
@@ -91,11 +94,14 @@ export async function generateMetadata({
 
 // The actual Page component.
 async function Page({ params }: PageProps) {
+  const { slug } = await params;
+  const draft = await draftMode();
+
   // Fetch a single page by slug,
   // using the content preview if draft mode is enabled:
   const page = await fetchPage({
-    slug: params.slug,
-    preview: draftMode().isEnabled,
+    slug,
+    preview: draft.isEnabled,
   });
 
   if (!page) {
