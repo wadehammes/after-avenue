@@ -31,8 +31,8 @@
       {
         "name": "next"
       },
-      { 
-        "name": "typescript-plugin-css-modules" 
+      {
+        "name": "typescript-plugin-css-modules"
       }
     ]
   },
@@ -46,6 +46,6 @@
   ],
   "exclude": [
     "node_modules",
-    "next.config.js"
+    "next.config.ts"
   ]
 }
