@@ -38,7 +38,7 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
           <h2>{fields.workClient}</h2>
           <p>{fields.workTitle}</p>
           <StyledButtonLink
-            href={`/work/${fields.workSlug}?playVideo=true`}
+            href={`/work/${fields.workSlug}/?playVideo=true`}
             variant="outlined"
             color="dark"
           >

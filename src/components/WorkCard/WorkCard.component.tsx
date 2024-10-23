@@ -40,7 +40,7 @@ export const WorkCard = (props: WorkCardProps) => {
       </div>
 
       <Link
-        href={`/work/${work.workSlug}?playVideo=true`}
+        href={`/work/${work.workSlug}/?playVideo=true`}
         className={styles.workCardMeta}
       >
         <div className={styles.workCardTitle}>
