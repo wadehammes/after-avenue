@@ -46,18 +46,11 @@ export const Navigation = (props: NavigationProps) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [isOpen]);
-
   return (
     <nav
       id="top"
       className={classNames(styles.navigation, {
+        "is-mobile-nav-open": isOpen,
         [styles.scrolled]: scrolled,
         [styles.noBackground]:
           pathname.includes("editors") || pathname.includes("about"),

@@ -127,6 +127,10 @@ body {
   overflow-x: hidden;
   padding: 0;
   position: relative;
+
+  &:has(.is-mobile-nav-open) {
+    overflow: hidden;
+  }
 }
 
 .draftMode {
