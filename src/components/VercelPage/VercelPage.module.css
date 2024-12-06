@@ -1,0 +1,36 @@
+.statusTable {
+    border-collapse: collapse;
+}
+.statusTable div {
+    display: flex;
+    justify-content: center;
+
+}
+  
+.statusTable table {
+    border-radius: 10px;
+    width: 80vw;
+    margin: 20px auto;
+}
+  
+.statusTable th,
+.statusTable td {
+    border: 1px solid var(--colors-white);
+    padding: 10px;
+    text-align: center;
+}  
+  
+.statusTable th {
+    background-color: var(--colors-white);
+    color: var(--colors-black);
+    font-weight: bold;
+}
+
+.statusTable tr {
+    color: var(--colors-white);
+}
+  
+.statusTable tr:hover {
+    /* background-color: var(--colors-street-lamp-yellow); */
+    color: var(--colors-street-lamp-yellow);
+}  
