@@ -5,7 +5,7 @@ import { useObjectRef, useTextField } from "react-aria";
 import type { FieldError } from "react-hook-form";
 import styles from "src/components/StyledInput/StyledInput.module.css";
 
-interface StyledTextAreaProps extends AriaTextFieldProps {
+interface StyledTextAreaProps extends AriaTextFieldProps<HTMLTextAreaElement> {
   hasError?: FieldError;
   largeInput?: boolean;
 }
@@ -36,7 +36,6 @@ export const StyledTextArea = forwardRef(
             {...restInputProps}
             id={id}
             className={classnames(styles.input, styles.textarea, {
-              [styles.variantLarge]: largeInput,
               [styles.hasError]: Boolean(hasError),
             })}
             ref={inputRef}
