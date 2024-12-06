@@ -1,14 +1,17 @@
 import classnames from "classnames";
 import { type Ref, forwardRef } from "react";
-import type { AriaTextFieldProps } from "react-aria";
-import { useObjectRef, useTextField } from "react-aria";
+import {
+  type AriaTextFieldProps,
+  useObjectRef,
+  useTextField,
+} from "react-aria";
 import styles from "src/ui/TextField/TextField.module.css";
 
-interface TextFieldProps extends AriaTextFieldProps {
+interface TextFieldProps extends AriaTextFieldProps<HTMLTextAreaElement> {
   className?: string;
 }
 
-export const TextField = forwardRef(
+export const TextArea = forwardRef(
   (props: TextFieldProps, ref: Ref<HTMLTextAreaElement>) => {
     const { label, className } = props;
     const inputRef = useObjectRef(ref);

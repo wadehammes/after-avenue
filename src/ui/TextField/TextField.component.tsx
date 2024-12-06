@@ -4,7 +4,7 @@ import type { AriaTextFieldProps } from "react-aria";
 import { useObjectRef, useTextField } from "react-aria";
 import styles from "src/ui/TextField/TextField.module.css";
 
-interface TextFieldProps extends AriaTextFieldProps {
+interface TextFieldProps extends AriaTextFieldProps<HTMLInputElement> {
   className?: string;
 }
 
