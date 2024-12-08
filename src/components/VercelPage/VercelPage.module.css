@@ -1,36 +1,17 @@
-.statusTable {
-    border-collapse: collapse;
-}
-.statusTable div {
-    display: flex;
-    justify-content: center;
-
-}
-  
-.statusTable table {
-    border-radius: 10px;
-    width: 80vw;
-    margin: 20px auto;
-}
-  
-.statusTable th,
-.statusTable td {
-    border: 1px solid var(--colors-white);
-    padding: 10px;
-    text-align: center;
-}  
-  
-.statusTable th {
-    background-color: var(--colors-white);
-    color: var(--colors-black);
-    font-weight: bold;
+.vercelPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 15%;
 }
 
-.statusTable tr {
-    color: var(--colors-white);
+.vercelPage p {
+    font-size: 1.25rem;
+    font-family: var(--font-family-text);
 }
-  
-.statusTable tr:hover {
-    /* background-color: var(--colors-street-lamp-yellow); */
-    color: var(--colors-street-lamp-yellow);
-}  
+
+.cards {
+  display: flex;
+  flex-direction: column;
+}
