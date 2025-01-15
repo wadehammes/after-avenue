@@ -114,7 +114,6 @@ body {
 
 html {
   height: stretch;
-  height: -webkit-stretch;
   scroll-behavior: smooth;
 }
 
@@ -123,7 +122,6 @@ body {
   min-height: 100vh;
   min-height: 100svh;
   min-height: stretch;
-  min-height: -webkit-stretch;
   overflow-x: hidden;
   padding: 0;
   position: relative;
