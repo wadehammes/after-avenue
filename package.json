@@ -1,7 +1,7 @@
 {
   "name": "next-after-avenue",
   "version": "0.0.0",
-  "packageManager": "pnpm@10.8.1",
+  "packageManager": "pnpm@10.11.0",
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev -p 3005",
