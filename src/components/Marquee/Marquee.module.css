@@ -24,7 +24,7 @@
     max-width: var(--max-width, auto);
     filter: grayscale(1);
   }
-  
+
   li {
     min-width: 15rem;
     display: flex;

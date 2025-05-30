@@ -11,13 +11,13 @@
   }
 
   &.scrolled {
-    background-color: rgba(0,0,0,.35);
+    background-color: rgba(0, 0, 0, 0.35);
     background-image: url("/images/dot-bg.png");
   }
 
   @media (orientation: landscape) and (hover: none) and (pointer: coarse) {
     background-color: var(--black);
-    position: relative;  
+    position: relative;
   }
 }
 
@@ -126,7 +126,7 @@
   gap: 2rem;
   color: var(--colors-text);
   overflow: auto;
-  
+
   > a {
     text-decoration: none;
   }
@@ -155,7 +155,7 @@
   text-align: center;
   gap: 2rem;
   padding: var(--default-padding);
-  
+
   > a {
     text-decoration: none;
   }

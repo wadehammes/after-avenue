@@ -162,7 +162,8 @@ body {
   padding-top: 100px;
 }
 
-img, video {
+img,
+video {
   width: 100%;
   max-width: 100%;
   height: auto;
@@ -174,7 +175,8 @@ a {
   text-decoration: underline;
   font-weight: normal;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     outline: 0;
     color: var(--colors-street-lamp-yellow);
   }
@@ -216,7 +218,6 @@ b {
   position: relative;
   z-index: 1;
 
-
   &.column {
     align-items: flex-start;
     justify-content: flex-start;
@@ -235,7 +236,12 @@ b {
   height: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: currentColor;
   font-family: var(--font-family-heading);
   font-weight: 900;
@@ -249,7 +255,8 @@ h1, h2, h3, h4, h5, h6 {
 
   strong {
     color: var(--color-bg);
-    text-shadow: -1px -1px 0 var(--colors-white), 1px -1px 0 var(--colors-white), -1px 1px 0 var(--colors-white), 1px 1px 0 var(--colors-white);
+    text-shadow: -1px -1px 0 var(--colors-white), 1px -1px 0 var(--colors-white),
+      -1px 1px 0 var(--colors-white), 1px 1px 0 var(--colors-white);
   }
 }
 
@@ -362,7 +369,7 @@ i {
   border-radius: 20px;
 }
 
-.grecaptcha-badge { 
+.grecaptcha-badge {
   visibility: hidden !important;
 }
 
@@ -378,7 +385,7 @@ p:empty {
   gap: var(--default-padding);
   padding: var(--default-padding) 0;
   width: 100%;
-  
+
   p {
     font-size: clamp(1.5rem, 5vw, 2rem);
     text-align: center;
@@ -442,10 +449,10 @@ input[type="checkbox"] {
 
 :root {
   --colors-black: #171818;
-  --colors-white: #E5E2DA;
-  --colors-street-lamp-yellow: #D78D2D;
-  --colors-sunset-yellow: #FFBF71;
-  --colors-red-wine: #60140A;
+  --colors-white: #e5e2da;
+  --colors-street-lamp-yellow: #d78d2d;
+  --colors-sunset-yellow: #ffbf71;
+  --colors-red-wine: #60140a;
 
   --color-text: var(--colors-white);
   --color-bg: var(--colors-black);

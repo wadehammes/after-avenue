@@ -7,12 +7,11 @@ import styles from "src/components/StyledInput/StyledInput.module.css";
 
 interface StyledTextAreaProps extends AriaTextFieldProps<HTMLTextAreaElement> {
   hasError?: FieldError;
-  largeInput?: boolean;
 }
 
 export const StyledTextArea = forwardRef(
   (props: StyledTextAreaProps, ref: Ref<HTMLTextAreaElement>) => {
-    const { label, hasError, largeInput } = props;
+    const { label, hasError } = props;
     const inputRef = useObjectRef(ref);
     const { labelProps, inputProps } = useTextField(
       { ...props, inputElementType: "textarea" },

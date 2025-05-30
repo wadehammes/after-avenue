@@ -15,11 +15,13 @@
     padding: 6rem 0 var(--default-padding);
   }
 
-  h1, h2 {
+  h1,
+  h2 {
     font-size: clamp(3rem, 10vw, 4rem);
   }
 
-  h1 span, h2 span {
+  h1 span,
+  h2 span {
     color: var(--colors-street-lamp-yellow);
   }
 

@@ -11,8 +11,7 @@
     "tsc:ci": "tsc --strict",
     "lint": "biome check",
     "lint:ci": "biome ci --reporter=github",
-    "lint:fix": "biome check --fix",
-    "lint:css": "stylelint ./src/**/*.css",
+    "lint:fix": "biome check --fix .",
     "test:ci": "jest --passWithNoTests",
     "types:contentful": "export $(cat .env.local | sed '/^#/d; s/[$\"]//g'); cf-content-types-generator -s $CONTENTFUL_SPACE_ID -t $CONTENTFUL_CMA_TOKEN -o src/contentful/types -X && biome format --write src/contentful/types"
   },
@@ -63,11 +62,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "react-is": "^19.1.0",
-    "stylelint": "^16.19.1",
-    "stylelint-config-css-modules": "^4.4.0",
-    "stylelint-config-recommended": "^16.0.0",
-    "stylelint-prettier": "^5.0.3",
-    "ts-jest": "^29.3.3",
+    "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "typescript-plugin-css-modules": "^5.1.0"
