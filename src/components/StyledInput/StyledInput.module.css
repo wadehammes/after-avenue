@@ -28,7 +28,11 @@
   &:focus-within {
     border-color: var(--colors-street-lamp-yellow);
     color: var(--colors-black);
-    background-color: color-mix(in srgb, var(--colors-street-lamp-yellow) 25%, white);
+    background-color: color-mix(
+      in srgb,
+      var(--colors-street-lamp-yellow) 25%,
+      white
+    );
     outline: 0;
   }
 }
@@ -49,7 +53,8 @@
 
 .inputHasError {
   border-color: var(--colors-red-wine);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.25), 0 -1px 1px var(--colors-red-wine), 0 1px 0 var(--colors-red-wine);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 -1px 1px
+    var(--colors-red-wine), 0 1px 0 var(--colors-red-wine);
   background-color: color-mix(in srgb, var(--colors-red-wine) 20%, white);
 }
 

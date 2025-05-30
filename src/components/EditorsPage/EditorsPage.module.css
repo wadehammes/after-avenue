@@ -74,7 +74,8 @@
     z-index: 2;
   }
 
-  video, iframe {
+  video,
+  iframe {
     object-fit: cover;
   }
 

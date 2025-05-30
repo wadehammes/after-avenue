@@ -1,7 +1,7 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.7.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "formatter": {
-    "include": ["*.ts", "*.tsx", "*.mts", "*.cts"],
+    "include": ["*.ts", "*.tsx", "*.mts", "*.cts", "*.css", "*.module.css"],
     "enabled": true,
     "formatWithErrors": true,
     "indentStyle": "space",
@@ -9,7 +9,7 @@
     "lineEnding": "lf",
     "lineWidth": 80,
     "attributePosition": "auto",
-    "ignore": ["**/*.json", "**/*.md", "**/.eslintrc"]
+    "ignore": ["**/*.json", "**/*.md", "**/.eslintrc", ".vscode"]
   },
   "organizeImports": { "enabled": true },
   "vcs": {
@@ -18,12 +18,52 @@
     "useIgnoreFile": true,
     "defaultBranch": "staging"
   },
+  "css": {
+    "parser": {
+      "cssModules": true
+    },
+    "formatter": {
+      "enabled": true,
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineWidth": 80
+    },
+    "linter": {
+      "enabled": true
+    }
+  },
+  "files": {
+    "ignore": ["**/node_modules/**", "**/dist/**"],
+    "include": ["**/*.ts", "**/*.tsx", "**/*.css", "**/*.module.css"]
+  },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      },
+      "complexity": {
+        "noForEach": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "warn",
+        "noUnusedVariables": "error",
+        "noUnusedImports": "error",
+        "noUnknownProperty": "error"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "warn"
+      },
+      "style": {
+        "useLiteralEnumMembers": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off"
+      }
     },
-    "ignore": ["**/next.config.js"]
+    "ignore": ["**/next.config.js", ".vscode"],
+    "include": ["*.ts", "*.tsx", "*.mts", "*.cts", "*.css", "*.module.css"]
   },
   "javascript": {
     "formatter": {

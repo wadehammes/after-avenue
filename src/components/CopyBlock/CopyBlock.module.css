@@ -5,11 +5,16 @@
   max-width: 80ch;
   margin: 0 auto;
 
-  h2, h3, h4, p {
+  h2,
+  h3,
+  h4,
+  p {
     font-family: var(--font-family-text);
   }
 
-  h2, h3, h4 {
+  h2,
+  h3,
+  h4 {
     line-height: 1.25;
   }
 
@@ -31,7 +36,8 @@
     line-height: 1.5;
   }
 
-  ul, ol {
+  ul,
+  ol {
     padding-left: 2rem;
     display: flex;
     flex-flow: column nowrap;

@@ -110,7 +110,6 @@ export const ContactForm = () => {
         rules={{ required: true }}
         render={({ field: { onChange, value, name, ref } }) => (
           <StyledInput
-            largeInput
             placeholder="Your name"
             ref={ref}
             name={name}
@@ -128,7 +127,6 @@ export const ContactForm = () => {
         rules={{ required: true, pattern: EMAIL_VALIDATION_REGEX }}
         render={({ field: { onChange, value, name, ref } }) => (
           <StyledInput
-            largeInput
             placeholder="your@email.com"
             ref={ref}
             name={name}
@@ -149,7 +147,6 @@ export const ContactForm = () => {
         rules={{ pattern: PHONE_NUMBER_VALIDATION_REGEX }}
         render={({ field: { onChange, value, name, ref } }) => (
           <StyledInput
-            largeInput
             placeholder="555-555-5555"
             ref={ref}
             name={name}
@@ -166,7 +163,6 @@ export const ContactForm = () => {
         name="companyName"
         render={({ field: { onChange, value, name, ref } }) => (
           <StyledInput
-            largeInput
             placeholder="Your company's name"
             ref={ref}
             name={name}
@@ -183,7 +179,6 @@ export const ContactForm = () => {
         name="briefDescription"
         render={({ field: { onChange, value, name, ref } }) => (
           <StyledTextArea
-            largeInput
             placeholder="Your message"
             ref={ref}
             name={name}
