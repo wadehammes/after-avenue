@@ -49,11 +49,11 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-.editorsEntryPageIntro:hover .editorHeadshot {
+.editorsEntryPageIntro:has(.editorHeadshotHover):hover .editorHeadshot {
   opacity: 0;
 }
 
-.editorsEntryPageIntro:hover .editorHeadshotHover {
+.editorsEntryPageIntro:has(.editorHeadshotHover):hover .editorHeadshotHover {
   opacity: 1;
 }
 
