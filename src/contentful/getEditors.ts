@@ -1,7 +1,7 @@
 import type { Document } from "@contentful/rich-text-types";
 import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
-import { type Work, parseContentfulFeaturedWork } from "src/contentful/getWork";
+import { parseContentfulFeaturedWork, type Work } from "src/contentful/getWork";
 import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
 import { parseContentfulAsset } from "src/contentful/parseContentfulAsset";
 import type { TypeEditorsSkeleton } from "src/contentful/types";

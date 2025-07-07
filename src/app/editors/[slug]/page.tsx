@@ -7,8 +7,8 @@ import { EditorsEntryPage } from "src/components/EditorsEntryPage/EditorsEntryPa
 import type { Editor } from "src/contentful/getEditors";
 import { fetchAllEditors, fetchEditorBySlug } from "src/contentful/getEditors";
 import { fetchWorkByEditor } from "src/contentful/getWork";
-import { outputSitemap } from "src/lib/generateSitemap";
 import type { SitemapItem } from "src/lib/generateSitemap";
+import { outputSitemap } from "src/lib/generateSitemap";
 import {
   EXCLUDED_PAGE_SLUGS_FROM_BUILD,
   TEST_PAGE_SLUG,

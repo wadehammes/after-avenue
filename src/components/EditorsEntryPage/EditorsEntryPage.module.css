@@ -39,6 +39,24 @@
   }
 }
 
+.editorHeadshot {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.editorHeadshotHover {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.editorsEntryPageIntro:hover .editorHeadshot {
+  opacity: 0;
+}
+
+.editorsEntryPageIntro:hover .editorHeadshotHover {
+  opacity: 1;
+}
+
 .editorsEntryPageIntroContent {
   display: flex;
   flex-flow: column nowrap;

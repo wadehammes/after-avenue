@@ -11,7 +11,9 @@
   background-color: transparent;
   color: var(--colors-text);
   border-radius: 1000px;
-  transition: color 0.1s linear, background 0.1s linear;
+  transition:
+    color 0.1s linear,
+    background 0.1s linear;
   line-height: 0.9;
   text-align: center;
   text-decoration: none;
@@ -27,8 +29,10 @@
   }
 
   &:not(a) {
-    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>🚀</text></svg>")
-      16 0, auto;
+    cursor:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>🚀</text></svg>")
+      16 0,
+      auto;
   }
 
   &.small {
@@ -44,8 +48,10 @@
   &[disabled] {
     pointer-events: none;
     opacity: 0.8;
-    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>❌</text></svg>")
-      16 0, auto;
+    cursor:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>❌</text></svg>")
+      16 0,
+      auto;
   }
 
   &.fullWidth {
@@ -86,7 +92,9 @@
 
     &:focus {
       outline: 0;
-      box-shadow: 0 0 0 1px var(--color-bg), 0 0 0 3px var(--colors-text);
+      box-shadow:
+        0 0 0 1px var(--color-bg),
+        0 0 0 3px var(--colors-text);
       background-color: var(--colors-text);
       color: var(--color-bg);
     }
@@ -105,8 +113,9 @@
 
     &:focus {
       outline: 0;
-      box-shadow: 0 0 0 1px var(--colors-text), 0 0 0 3px
-        var(--colors-street-lamp-yellow);
+      box-shadow:
+        0 0 0 1px var(--colors-text),
+        0 0 0 3px var(--colors-street-lamp-yellow);
       background-color: var(--colors-street-lamp-yellow);
       color: var(--color-bg);
     }

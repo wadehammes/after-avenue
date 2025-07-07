@@ -26,10 +26,8 @@
   flex: 1;
 
   @container editorsCard (width < 500px) {
-    flex-flow: column nowrap;
-    align-items: stretch;
+    flex-direction: column;
     justify-content: stretch;
-    gap: var(--default-padding);
   }
 }
 

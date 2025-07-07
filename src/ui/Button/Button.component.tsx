@@ -1,4 +1,4 @@
-import { type Ref, forwardRef } from "react";
+import { forwardRef, type Ref } from "react";
 import { type AriaButtonProps, useButton, useObjectRef } from "react-aria";
 import styles from "src/ui/Button/Button.module.css";
 

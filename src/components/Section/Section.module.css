@@ -5,16 +5,16 @@
   width: 100%;
   z-index: 1;
 
-  &.noPadding {
-    padding: 0;
-  }
-
   @media screen and (min-width: 800px) {
     padding: 6rem 0;
 
     &.noPadding {
       padding: 0;
     }
+  }
+
+  &.noPadding {
+    padding: 0;
   }
 }
 

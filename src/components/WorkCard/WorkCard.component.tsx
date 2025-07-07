@@ -35,7 +35,7 @@ export const WorkCard = (props: WorkCardProps) => {
           autoPlay={autoPlay}
           controls={controls}
           rounded
-          url={work.workVideoUrl}
+          src={work.workVideoUrl}
         />
       </div>
 

@@ -12,8 +12,8 @@ import {
   fetchWorkByCategory,
   fetchWorkBySlug,
 } from "src/contentful/getWork";
-import { outputSitemap } from "src/lib/generateSitemap";
 import type { SitemapItem } from "src/lib/generateSitemap";
+import { outputSitemap } from "src/lib/generateSitemap";
 import {
   EXCLUDED_PAGE_SLUGS_FROM_BUILD,
   TEST_PAGE_SLUG,
