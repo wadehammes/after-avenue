@@ -3,8 +3,8 @@ import { contentfulClient } from "src/contentful/client";
 import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
 import { parseContentfulAsset } from "src/contentful/parseContentfulAsset";
 import {
-  type SectionType,
   parseContentfulSection,
+  type SectionType,
 } from "src/contentful/parseSections";
 import type { TypePageSkeleton } from "src/contentful/types/TypePage";
 

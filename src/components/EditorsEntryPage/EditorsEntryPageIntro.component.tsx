@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import { useState } from "react";
 import styles from "src/components/EditorsEntryPage/EditorsEntryPage.module.css";
 import type { Editor } from "src/contentful/getEditors";
 import { RichText } from "src/contentful/richText";
@@ -13,33 +10,26 @@ interface EditorsEntryPageIntroProps {
 
 export const EditorsEntryPageIntro = (props: EditorsEntryPageIntroProps) => {
   const { editorEntry } = props;
-  const [editorHeadshot, setEditorHeadshot] = useState<string>(
-    createImageUrl(editorEntry.editorHeadshot?.src ?? ""),
-  );
 
   return (
-    <div
-      className={styles.editorsEntryPageIntro}
-      onMouseEnter={() =>
-        setEditorHeadshot(
-          createImageUrl(
-            editorEntry.editorHeadshotHover?.src ??
-              editorEntry.editorHeadshot?.src ??
-              "",
-          ),
-        )
-      }
-      onMouseLeave={() =>
-        setEditorHeadshot(createImageUrl(editorEntry.editorHeadshot?.src ?? ""))
-      }
-    >
+    <div className={styles.editorsEntryPageIntro}>
       <div className={styles.editorsEntryPageIntroImage}>
         {editorEntry.editorHeadshot ? (
           <Image
-            src={editorHeadshot}
+            src={createImageUrl(editorEntry.editorHeadshot?.src ?? "")}
             alt={editorEntry.editorName}
             width={editorEntry.editorHeadshot?.width}
             height={editorEntry.editorHeadshot?.height}
+            className={styles.editorHeadshot}
+          />
+        ) : null}
+        {editorEntry.editorHeadshotHover ? (
+          <Image
+            src={createImageUrl(editorEntry.editorHeadshotHover?.src ?? "")}
+            alt={editorEntry.editorName}
+            width={editorEntry.editorHeadshotHover?.width}
+            height={editorEntry.editorHeadshotHover?.height}
+            className={styles.editorHeadshotHover}
           />
         ) : null}
       </div>

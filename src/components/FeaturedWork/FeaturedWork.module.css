@@ -41,22 +41,24 @@
   overflow: hidden;
   position: relative;
   opacity: 0.5;
-  transition: opacity 0.2s ease-in-out, transform 0.5s ease-in-out,
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.5s ease-in-out,
     border-radius 0.2s ease-in-out;
   transform: scale(0.9);
   transform-origin: center;
   width: 100%;
 
-  &.inView {
-    opacity: 1;
-    transform: scale(1);
-    border-radius: 0;
-  }
-
   @media (max-width: 800px) or (min-width: 1920px) {
     &.inView {
       border-radius: 20px;
     }
+  }
+
+  &.inView {
+    opacity: 1;
+    transform: scale(1);
+    border-radius: 0;
   }
 
   &:hover {

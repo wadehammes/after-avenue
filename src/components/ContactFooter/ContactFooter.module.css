@@ -9,7 +9,8 @@
   width: 100%;
   text-align: center;
   opacity: 0.25;
-  transition: opacity 0.5s ease-in-out,;
+  transition:
+    opacity 0.5s ease-in-out,;
 
   @media (min-width: 768px) {
     padding: 6rem 0 var(--default-padding);

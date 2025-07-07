@@ -49,7 +49,7 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
       </div>
       {workVideoUrl ? (
         <div className={styles.videoContainer}>
-          <VideoPlayer url={workVideoUrl} autoPlay playInView={inView} />
+          <VideoPlayer src={workVideoUrl} autoPlay playInView={inView} />
         </div>
       ) : null}
     </div>

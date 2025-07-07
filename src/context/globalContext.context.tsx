@@ -1,4 +1,4 @@
-import { type ReactNode, createContext, useContext } from "react";
+import { createContext, type ReactNode, useContext } from "react";
 import type { GlobalVariables } from "src/contentful/getGlobalVariables";
 
 const GlobalVariablesContext = createContext<GlobalVariables | null>(null);

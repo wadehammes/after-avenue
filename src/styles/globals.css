@@ -119,9 +119,7 @@ html {
 
 body {
   line-height: 1;
-  min-height: 100vh;
   min-height: 100svh;
-  min-height: stretch;
   overflow-x: hidden;
   padding: 0;
   position: relative;
@@ -255,8 +253,11 @@ h6 {
 
   strong {
     color: var(--color-bg);
-    text-shadow: -1px -1px 0 var(--colors-white), 1px -1px 0 var(--colors-white),
-      -1px 1px 0 var(--colors-white), 1px 1px 0 var(--colors-white);
+    text-shadow:
+      -1px -1px 0 var(--colors-white),
+      1px -1px 0 var(--colors-white),
+      -1px 1px 0 var(--colors-white),
+      1px 1px 0 var(--colors-white);
   }
 }
 

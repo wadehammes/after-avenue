@@ -3,7 +3,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { useState } from "react";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player";
 import styles from "src/components/EditorsPage/EditorsPage.module.css";
 import type { Editor } from "src/contentful/getEditors";
 import type { Page } from "src/contentful/getPages";
@@ -66,12 +66,15 @@ export const EditorsPage = (props: EditorsPageProps) => {
                   zIndex: currentVideoId === editor.featuredWork?.id ? 1 : 0,
                   position: "absolute",
                   inset: 0,
+                  width: "150%",
+                  height: "150%",
+                  transform: "translate(-25%, -25%)",
                 }}
                 controls={false}
-                playing
+                playing={currentVideoId === editor.featuredWork?.id}
                 loop
                 muted
-                url={editor.featuredWork.workVideoUrl}
+                src={editor.featuredWork.workVideoUrl}
                 config={{
                   youtube: {
                     playerVars: {

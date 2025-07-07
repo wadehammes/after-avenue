@@ -5,12 +5,12 @@ import { WorkPage } from "src/components/WorkPage/WorkPage.component";
 import { fetchPage } from "src/contentful/getPages";
 import { fetchAllWork } from "src/contentful/getWork";
 import {
-  type WorkCategory,
   fetchAllWorkCategories,
   fetchWorkCategoryBySlug,
+  type WorkCategory,
 } from "src/contentful/getWorkCategories";
-import { outputSitemap } from "src/lib/generateSitemap";
 import type { SitemapItem } from "src/lib/generateSitemap";
+import { outputSitemap } from "src/lib/generateSitemap";
 import { TEST_PAGE_SLUG } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 

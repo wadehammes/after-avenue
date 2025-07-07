@@ -35,9 +35,9 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
 
   return (
     <article className="container column">
-      <div className={styles.videoContainer} aria-label={workClient}>
+      <div className={styles.videoContainer}>
         <VideoPlayer
-          url={workVideoUrl}
+          src={workVideoUrl}
           playInView={playVideo === "true"}
           rounded
           autoPlay={playVideo === "true"}
@@ -121,33 +121,29 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
             })}
           </ul>
         </div>
-      ) : (
-        <>
-          {!hideFromWorkFeeds ? (
-            <div className={styles.workSeries}>
-              <h3>Other work</h3>
-              <ul className={styles.workSeriesList}>
-                {recentWork.map((work) => {
-                  if (!work) {
-                    return null;
-                  }
+      ) : !hideFromWorkFeeds ? (
+        <div className={styles.workSeries}>
+          <h3>Other work</h3>
+          <ul className={styles.workSeriesList}>
+            {recentWork.map((work) => {
+              if (!work) {
+                return null;
+              }
 
-                  return (
-                    <li key={work.workSlug}>
-                      <WorkCard
-                        work={work}
-                        title={work.workClient}
-                        subtitle={work.workTitle}
-                        autoPlay={false}
-                      />
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ) : null}
-        </>
-      )}
+              return (
+                <li key={work.workSlug}>
+                  <WorkCard
+                    work={work}
+                    title={work.workClient}
+                    subtitle={work.workTitle}
+                    autoPlay={false}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
       <ContactFooter
         title={contactFooterTitle}
         buttonText={contactFooterButtonText}

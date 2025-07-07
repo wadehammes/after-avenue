@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { type Ref, forwardRef } from "react";
+import { forwardRef, type Ref } from "react";
 import type { AriaTextFieldProps } from "react-aria";
 import { useObjectRef, useTextField } from "react-aria";
 import styles from "src/ui/TextField/TextField.module.css";

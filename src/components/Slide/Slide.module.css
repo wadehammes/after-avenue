@@ -102,11 +102,14 @@
 
     span {
       color: var(--color-bg);
-      text-shadow: -1px -1px 0 var(--colors-street-lamp-yellow), 1px -1px 0
-        var(--colors-street-lamp-yellow), -1px 1px 0
-        var(--colors-street-lamp-yellow), 1px 1px 0
-        var(--colors-street-lamp-yellow);
-      transition: color 1s ease-in-out, text-shadow 1s ease-in-out;
+      text-shadow:
+        -1px -1px 0 var(--colors-street-lamp-yellow),
+        1px -1px 0 var(--colors-street-lamp-yellow),
+        -1px 1px 0 var(--colors-street-lamp-yellow),
+        1px 1px 0 var(--colors-street-lamp-yellow);
+      transition:
+        color 1s ease-in-out,
+        text-shadow 1s ease-in-out;
       transition-delay: 2s;
     }
   }
@@ -116,8 +119,11 @@
 
     h1 span {
       color: var(--colors-street-lamp-yellow);
-      text-shadow: -1px -1px 0 var(--color-bg), 1px -1px 0 var(--color-bg), -1px
-        1px 0 var(--color-bg), 1px 1px 0 var(--color-bg);
+      text-shadow:
+        -1px -1px 0 var(--color-bg),
+        1px -1px 0 var(--color-bg),
+        -1px 1px 0 var(--color-bg),
+        1px 1px 0 var(--color-bg);
     }
   }
 }

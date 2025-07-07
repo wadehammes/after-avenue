@@ -1,20 +1,16 @@
 "use client";
 
 import classNames from "classnames";
-import { useState } from "react";
 import ReactPlayer from "react-player";
-import { Loader } from "src/components/Loader/Loader.component";
-import { PlayIcon } from "src/components/VideoPlayer/PlayIcon.component";
 import styles from "src/components/VideoPlayer/VideoPlayer.module.css";
 import { useIsBrowser } from "src/hooks/useIsBrowser";
-import useWindowFocus from "src/hooks/useWindowFocus";
 
 interface VideoPlayerProps {
   autoPlay?: boolean;
   controls?: boolean;
   playInView?: boolean;
   rounded?: boolean;
-  url: string;
+  src: string;
 }
 
 export const VideoPlayer = (props: VideoPlayerProps) => {
@@ -23,17 +19,13 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     controls = false,
     playInView = false,
     rounded = false,
-    url,
+    src,
   } = props;
-  const [playing, setPlaying] = useState(autoPlay);
   const isBrowser = useIsBrowser();
-  const isFocused = useWindowFocus();
 
   if (!isBrowser) {
     return null;
   }
-
-  const shouldPlayAlways = autoPlay ? playInView : playing && isFocused;
 
   return (
     <div
@@ -43,16 +35,12 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     >
       <ReactPlayer
         controls={controls}
-        fallback={<Loader />}
-        light={!autoPlay}
         loop
         muted
-        playIcon={<PlayIcon />}
-        url={url}
-        volume={0}
-        playing={shouldPlayAlways}
-        onPause={() => setPlaying(false)}
-        onClickPreview={() => setPlaying(true)}
+        src={src}
+        playing={autoPlay && playInView}
+        width="100%"
+        height="100%"
       />
     </div>
   );
