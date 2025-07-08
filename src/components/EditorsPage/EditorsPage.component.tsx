@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import styles from "src/components/EditorsPage/EditorsPage.module.css";
 import type { Editor } from "src/contentful/getEditors";
@@ -20,6 +20,25 @@ export const EditorsPage = (props: EditorsPageProps) => {
   const isBrowser = useIsBrowser();
   const [currentVideoId, setCurrentVideoId] = useState<string>(
     editors[0].featuredWork?.id ?? "",
+  );
+
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+
+  const handleMouseEnter = useCallback(
+    (videoId: string) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        if (videoId !== currentVideoId) {
+          setCurrentVideoId(videoId);
+        }
+      }, 100); // 100ms delay to prevent rapid changes
+    },
+    [currentVideoId],
   );
 
   if (!editors) {
@@ -40,7 +59,7 @@ export const EditorsPage = (props: EditorsPageProps) => {
                   currentVideoId === editor.featuredWork?.id,
               })}
               onMouseEnter={() =>
-                setCurrentVideoId(editor.featuredWork?.id ?? "")
+                handleMouseEnter(editor.featuredWork?.id ?? "")
               }
             >
               {editor.editorName}
@@ -66,8 +85,8 @@ export const EditorsPage = (props: EditorsPageProps) => {
                   zIndex: currentVideoId === editor.featuredWork?.id ? 1 : 0,
                   position: "absolute",
                   inset: 0,
-                  width: "150%",
-                  height: "150%",
+                  width: "200%",
+                  height: "200%",
                   transform: "translate(-25%, -25%)",
                 }}
                 controls={false}
