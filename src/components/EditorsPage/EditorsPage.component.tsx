@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import ReactPlayer from "react-player";
 import styles from "src/components/EditorsPage/EditorsPage.module.css";
 import type { Editor } from "src/contentful/getEditors";
@@ -22,6 +22,20 @@ export const EditorsPage = (props: EditorsPageProps) => {
     editors[0].featuredWork?.id ?? "",
   );
 
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  const handleMouseEnter = useCallback((videoId: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
+    timeoutRef.current = setTimeout(() => {
+      if (videoId !== currentVideoId) {
+        setCurrentVideoId(videoId);
+      }
+    }, 100); // 100ms delay to prevent rapid changes
+  }, [currentVideoId]);
+
   if (!editors) {
     return null;
   }
@@ -40,7 +54,7 @@ export const EditorsPage = (props: EditorsPageProps) => {
                   currentVideoId === editor.featuredWork?.id,
               })}
               onMouseEnter={() =>
-                setCurrentVideoId(editor.featuredWork?.id ?? "")
+                handleMouseEnter(editor.featuredWork?.id ?? "")
               }
             >
               {editor.editorName}
