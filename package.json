@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev -p 3005",
     "build": "next build && make sitemap",
+    "build:analyze": "ANALYZE=true next build && make sitemap",
     "start": "next start -p 3005",
     "export": "next export",
     "tsc:ci": "tsc --strict",
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
+    "@next/bundle-analyzer": "^15.3.5",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",

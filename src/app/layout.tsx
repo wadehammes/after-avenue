@@ -3,6 +3,7 @@ import Providers from "src/app/providers";
 import { ExitDraftModeLink } from "src/components/ExitDraftModeLink/ExitDraftModeLink.component";
 import { Footer } from "src/components/Footer/Footer.component";
 import { Navigation } from "src/components/Navigation/Navigation";
+import { PerformanceMonitor } from "src/components/PerformanceMonitor/PerformanceMonitor.component";
 import "src/styles/fonts.css";
 import "src/styles/globals.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
@@ -79,6 +80,7 @@ export default async function RootLayout({
             <main className="page-content">{children}</main>
             <Footer />
           </div>
+          <PerformanceMonitor />
         </Providers>
       </body>
       <GoogleAnalytics gaId={process.env.GA_MEASUREMENT_ID as string} />

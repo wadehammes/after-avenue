@@ -1,8 +1,14 @@
 import type { NextConfig } from "next";
 
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   productionBrowserSourceMaps: false,
+  compress: true,
+  poweredByHeader: false,
   env: {
     CONTENTFUL_CONTENT_DELIVERY_API_KEY:
       process.env.CONTENTFUL_CONTENT_DELIVERY_API_KEY,
@@ -42,8 +48,10 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+    formats: ["image/webp", "image/avif"],
+    minimumCacheTTL: 31536000, // 1 year
   },
-  webpack(config) {
+  webpack(config, { dev, isServer }) {
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.(".svg"),
     );
@@ -60,6 +68,14 @@ const nextConfig: NextConfig = {
                 name: "removeViewBox",
                 active: false,
               },
+              {
+                name: "removeEmptyAttrs",
+                active: true,
+              },
+              {
+                name: "removeUselessDefs",
+                active: true,
+              },
             ],
           },
         },
@@ -68,6 +84,35 @@ const nextConfig: NextConfig = {
 
     // Modify the file loader rule to ignore *.svg, since we have it handled now.
     fileLoaderRule.exclude = /\.svg$/i;
+
+    // Performance optimizations for production builds
+    if (!dev && !isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: "all",
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: "vendors",
+              chunks: "all",
+            },
+            react: {
+              test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+              name: "react",
+              chunks: "all",
+              priority: 10,
+            },
+            contentful: {
+              test: /[\\/]node_modules[\\/](@contentful|contentful)[\\/]/,
+              name: "contentful",
+              chunks: "all",
+              priority: 5,
+            },
+          },
+        },
+      };
+    }
 
     return config;
   },
@@ -85,7 +130,30 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "s-maxage=1, stale-while-revalidate",
+            value:
+              "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800",
+          },
+          ...securityHeaders,
+        ],
+      },
+      {
+        source: "/work/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value:
+              "public, max-age=1800, s-maxage=43200, stale-while-revalidate=604800",
+          },
+          ...securityHeaders,
+        ],
+      },
+      {
+        source: "/editors/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value:
+              "public, max-age=1800, s-maxage=43200, stale-while-revalidate=604800",
           },
           ...securityHeaders,
         ],
@@ -95,7 +163,18 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "s-maxage=1, stale-while-revalidate",
+            value:
+              "public, max-age=600, s-maxage=3600, stale-while-revalidate=86400",
+          },
+          ...securityHeaders,
+        ],
+      },
+      {
+        source: "/api/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "no-cache, no-store, must-revalidate",
           },
           ...securityHeaders,
         ],
@@ -196,4 +275,4 @@ const securityHeaders = [
   },
 ];
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

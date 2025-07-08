@@ -10,6 +10,7 @@ import { StyledTextArea } from "src/components/StyledInput/StyledTextArea.compon
 import { useGlobalVariables } from "src/context/globalContext.context";
 import { useHubspotLeadGenerationFormApiMutation } from "src/hooks/mutations/useHubspotLeadGenerationFormApi.mutation";
 import { useSendContactEmailApiMutation } from "src/hooks/mutations/useSendContactEmailApi.mutation";
+import { usePassiveTouchEvents } from "src/hooks/usePassiveTouchEvents";
 import {
   EMAIL_VALIDATION_REGEX,
   PHONE_NUMBER_VALIDATION_REGEX,
@@ -36,6 +37,7 @@ const defaultValues: ContactFormInputs = {
 export const ContactForm = () => {
   const globalVariables = useGlobalVariables();
   const reCaptcha = useRef<ReCAPTCHA>(null);
+  const formRef = usePassiveTouchEvents<HTMLFormElement>();
   const {
     handleSubmit,
     control,
@@ -103,7 +105,11 @@ export const ContactForm = () => {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(submitToNotion)}>
+    <form
+      ref={formRef}
+      className={styles.form}
+      onSubmit={handleSubmit(submitToNotion)}
+    >
       <Controller
         control={control}
         name="name"

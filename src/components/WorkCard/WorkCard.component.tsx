@@ -3,6 +3,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import type { HTMLAttributes } from "react";
+import { memo } from "react";
 import { useInView } from "react-intersection-observer";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import styles from "src/components/WorkCard/WorkCard.module.css";
@@ -17,7 +18,7 @@ interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {
   work: Work;
 }
 
-export const WorkCard = (props: WorkCardProps) => {
+export const WorkCard = memo((props: WorkCardProps) => {
   const { autoPlay = false, controls = true, work, title, subtitle } = props;
 
   const { inView, ref } = useInView({
@@ -53,4 +54,4 @@ export const WorkCard = (props: WorkCardProps) => {
       </Link>
     </div>
   );
-};
+});

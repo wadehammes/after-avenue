@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { useState, useEffect, useRef } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import styles from "src/components/VideoPlayer/VideoPlayer.module.css";
 import { useIsBrowser } from "src/hooks/useIsBrowser";
@@ -14,7 +14,7 @@ interface VideoPlayerProps {
   src: string;
 }
 
-export const VideoPlayer = (props: VideoPlayerProps) => {
+export const VideoPlayer = memo((props: VideoPlayerProps) => {
   const {
     autoPlay = false,
     controls = false,
@@ -24,13 +24,17 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
   } = props;
   const isBrowser = useIsBrowser();
   const [debouncedPlayInView, setDebouncedPlayInView] = useState(playInView);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+  const playerRef = useRef<HTMLDivElement>(null);
+  const playerInstanceRef = useRef<any>(null);
 
   useEffect(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    
+
     timeoutRef.current = setTimeout(() => {
       setDebouncedPlayInView(playInView);
     }, 200); // 200ms delay to prevent rapid play/pause
@@ -48,11 +52,13 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
 
   return (
     <div
+      ref={playerRef}
       className={classNames(styles.videoPlayer, {
         [styles.rounded]: rounded,
       })}
     >
       <ReactPlayer
+        ref={playerInstanceRef}
         controls={controls}
         loop
         muted
@@ -86,4 +92,4 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
       />
     </div>
   );
-};
+});
