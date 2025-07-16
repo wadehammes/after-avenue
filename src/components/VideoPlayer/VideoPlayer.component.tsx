@@ -64,25 +64,18 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         height="100%"
         config={{
           youtube: {
-            playerVars: {
-              controls: controls ? 1 : 0,
-              disablekb: !controls,
-              fs: controls ? 1 : 0,
-              iv_load_policy: 3,
-              modestbranding: 1,
-              rel: 0,
-              showinfo: 0,
-            },
+            disablekb: !controls ? 1 : 0,
+            fs: controls ? 1 : 0,
+            iv_load_policy: 3,
+            rel: 0,
           },
           vimeo: {
-            playerOptions: {
-              controls: controls,
-              autopause: !autoPlay,
-              background: false,
-              dnt: true,
-              responsive: true,
-              title: 0,
-            },
+            controls: controls,
+            autopause: !autoPlay,
+            background: false,
+            dnt: true,
+            responsive: true,
+            title: false,
           },
         }}
       />

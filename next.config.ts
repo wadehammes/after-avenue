@@ -2,7 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  productionBrowserSourceMaps: false,
+  productionBrowserSourceMaps: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   env: {
     CONTENTFUL_CONTENT_DELIVERY_API_KEY:
       process.env.CONTENTFUL_CONTENT_DELIVERY_API_KEY,
@@ -22,6 +25,9 @@ const nextConfig: NextConfig = {
     VERCEL_TEAM_ID: process.env.VERCEL_TEAM_ID,
   },
   images: {
+    formats: ["image/webp", "image/avif"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
       {
         protocol: "https",
@@ -43,7 +49,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack(config) {
+  webpack(config, { dev, isServer }) {
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.(".svg"),
     );
@@ -69,6 +75,17 @@ const nextConfig: NextConfig = {
     // Modify the file loader rule to ignore *.svg, since we have it handled now.
     fileLoaderRule.exclude = /\.svg$/i;
 
+    // Bundle analyzer for production builds
+    if (!dev && !isServer && process.env.ANALYZE === "true") {
+      const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: "static",
+          openAnalyzer: false,
+        }),
+      );
+    }
+
     return config;
   },
   async redirects() {
@@ -85,7 +102,8 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "s-maxage=1, stale-while-revalidate",
+            value:
+              "public, max-age=3600, s-maxage=86400, stale-while-revalidate=31536000",
           },
           ...securityHeaders,
         ],
@@ -95,9 +113,28 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Cache-Control",
-            value: "s-maxage=1, stale-while-revalidate",
+            value:
+              "public, max-age=3600, s-maxage=86400, stale-while-revalidate=31536000",
           },
           ...securityHeaders,
+        ],
+      },
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
         ],
       },
     ];
