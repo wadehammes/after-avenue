@@ -96,16 +96,12 @@ export const EditorsPage = (props: EditorsPageProps) => {
                 src={editor.featuredWork.workVideoUrl}
                 config={{
                   youtube: {
-                    playerVars: {
-                      end: 60,
-                      start: 30,
-                    },
+                    end: 60,
+                    start: 30,
                   },
                   vimeo: {
-                    playerOptions: {
-                      end_time: 60,
-                      start_time: 30,
-                    },
+                    end_time: 60,
+                    start_time: 30,
                   },
                 }}
               />
