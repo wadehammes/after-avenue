@@ -2,6 +2,7 @@
 
 import classNames from "classnames";
 import Link from "next/link";
+import { useId } from "react";
 import styles from "src/components/Footer/Footer.module.css";
 import { useGlobalVariables } from "src/context/globalContext.context";
 import AfterAvenueBrandmark from "src/icons/AfterAvenueBrandmark.svg";
@@ -14,8 +15,10 @@ export const Footer = () => {
 
   const { instagramUrl, linkedInUrl, twitterUrl } = globalVariables;
 
+  const footerId = useId();
+
   return (
-    <footer id="footer" className={classNames(styles.footer)}>
+    <footer id={footerId} className={classNames(styles.footer)}>
       <div className="container column">
         <div className={styles.footerContainer}>
           <span className={styles.copyright} style={{ order: 1 }}>

@@ -371,7 +371,7 @@ i {
 }
 
 .grecaptcha-badge {
-  visibility: hidden !important;
+  visibility: hidden;
 }
 
 p:empty {

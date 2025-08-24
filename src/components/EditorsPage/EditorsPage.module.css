@@ -80,15 +80,15 @@
   }
 
   > div {
-    width: 300vw !important;
-    height: 300vh !important;
+    width: 300vw;
+    height: 300vh;
     margin-left: -100vw;
     margin-top: -100vh;
     object-fit: cover;
 
     @media (min-width: 1200px) {
-      width: 200vw !important;
-      height: 200vh !important;
+      width: 200vw;
+      height: 200vh;
       margin-left: -50vw;
       margin-top: -50vh;
     }

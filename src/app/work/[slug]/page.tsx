@@ -170,7 +170,6 @@ async function WorkEntry({ params }: WorkProps) {
   return (
     <Suspense>
       <script
-        id="workEntrySchema"
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

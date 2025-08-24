@@ -16,6 +16,7 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "prettier.enable": false,
+  "biome.lsp.bin": "node_modules/.bin/biome",
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
