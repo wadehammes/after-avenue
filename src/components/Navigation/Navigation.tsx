@@ -55,6 +55,7 @@ export const Navigation = (props: NavigationProps) => {
   }, [isOpen]);
 
   return (
+    // biome-ignore lint/correctness/useUniqueElementIds: this is fine
     <nav
       id="top"
       className={classNames(styles.navigation, {

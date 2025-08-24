@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useId, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 import styles from "src/components/ContactForm/ContactForm.module.css";
@@ -47,6 +47,13 @@ export const ContactForm = () => {
     mode: "onBlur",
     reValidateMode: "onBlur",
   });
+  const nameId = useId();
+  const emailId = useId();
+  const phoneId = useId();
+  const companyNameId = useId();
+  const briefDescriptionId = useId();
+  const marketingConsentId = useId();
+
   const useSendContactEmailApi = useSendContactEmailApiMutation();
   const useHubspotLeadGenerationFormApi =
     useHubspotLeadGenerationFormApiMutation();
@@ -117,7 +124,7 @@ export const ContactForm = () => {
             value={value}
             hasError={errors.name}
             label="Your full name *"
-            id="name"
+            id={nameId}
           />
         )}
       />
@@ -137,7 +144,7 @@ export const ContactForm = () => {
             value={value}
             hasError={errors.email}
             label="Your email *"
-            id="email"
+            id={emailId}
           />
         )}
       />
@@ -154,7 +161,7 @@ export const ContactForm = () => {
             value={value}
             hasError={errors.phone}
             label="Your phone number"
-            id="phone"
+            id={phoneId}
           />
         )}
       />
@@ -170,7 +177,7 @@ export const ContactForm = () => {
             value={value}
             hasError={errors.companyName}
             label="Your company name"
-            id="companyName"
+            id={companyNameId}
           />
         )}
       />
@@ -186,7 +193,7 @@ export const ContactForm = () => {
             value={value}
             hasError={errors.briefDescription}
             label="What can we help you with?"
-            id="briefDescription"
+            id={briefDescriptionId}
           />
         )}
       />
@@ -196,7 +203,7 @@ export const ContactForm = () => {
             <input
               {...register("marketingConsent")}
               type="checkbox"
-              id="marketingConsent"
+              id={marketingConsentId}
             />
             {globalVariables.contactFormMarketingConsentText}
           </label>

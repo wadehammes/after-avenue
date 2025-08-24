@@ -96,7 +96,6 @@ async function Work() {
   return (
     <>
       <script
-        id="workSchema"
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

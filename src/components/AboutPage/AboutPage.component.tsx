@@ -70,6 +70,7 @@ export const AboutPage = (props: AboutPageProps) => {
           )}
         </Section>
       ) : null}
+      {/*  biome-ignore lint/correctness/useUniqueElementIds: this is fine */}
       <div id="about-collaboration" />
       {collaborateSlideFields ? (
         <Section

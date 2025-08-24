@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/schema.json",
   "formatter": {
     "includes": [
       "**/*.ts",
@@ -48,8 +48,8 @@
       "**/*.tsx",
       "**/*.css",
       "**/*.module.css",
-      "!**/node_modules/**",
-      "!**/dist/**"
+      "!**/node_modules",
+      "!**/dist"
     ]
   },
   "linter": {
@@ -60,6 +60,7 @@
         "noSvgWithoutTitle": "off"
       },
       "complexity": {
+        "noImportantStyles": "warn",
         "noForEach": "off"
       },
       "correctness": {
