@@ -1,11 +1,40 @@
 import { Resend } from "resend";
 import type { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
 import { isNonNullable } from "src/utils/helpers";
+import { checkRateLimit } from "src/utils/rateLimit";
+import { verifyRecaptchaToken } from "src/utils/recaptcha";
+import { isSpam } from "src/utils/spamDetection";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
-  const res: ContactFormInputs = await request.json();
+  const res = (await request.json()) as ContactFormInputs & {
+    recaptchaToken?: string;
+    website?: string;
+  };
+
+  // Honeypot check - if website field is filled, it's a bot
+  if (res.website) {
+    // Silently reject - don't let bots know they were caught
+    return Response.json({ success: true }, { status: 200 });
+  }
+
+  // Verify reCAPTCHA token
+  if (!res.recaptchaToken) {
+    return Response.json(
+      { error: "reCAPTCHA verification required" },
+      { status: 400 },
+    );
+  }
+
+  const isRecaptchaValid = await verifyRecaptchaToken(res.recaptchaToken);
+  if (!isRecaptchaValid) {
+    return Response.json(
+      { error: "reCAPTCHA verification failed" },
+      { status: 400 },
+    );
+  }
+
   const email = res.email;
   const name = res.name;
   const phone = res.phone || "No phone number provided.";
@@ -15,14 +44,46 @@ export async function POST(request: Request) {
     ? res.marketingConsent
     : true;
 
+  if (!email) {
+    return Response.json({ error: "Email is required" }, { status: 400 });
+  }
+
+  // Rate limiting - limit by email and IP
+  const clientIp =
+    request.headers.get("x-forwarded-for")?.split(",")[0] ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
+  const rateLimitKey = `${email}-${clientIp}`;
+
+  if (checkRateLimit(rateLimitKey, 5, 15 * 60 * 1000)) {
+    // 5 requests per 15 minutes
+    return Response.json(
+      { error: "Too many requests. Please try again later." },
+      { status: 429 },
+    );
+  }
+
+  // Spam detection
+  const spamCheck = isSpam({
+    email,
+    message,
+    name,
+    companyName,
+  });
+
+  if (spamCheck.isSpam) {
+    // Log spam attempts for monitoring
+    console.warn("Spam detected:", {
+      email,
+      reasons: spamCheck.reasons,
+      ip: clientIp,
+    });
+    // Silently reject spam - don't let spammers know they were caught
+    return Response.json({ success: true }, { status: 200 });
+  }
+
   const firstName = name.split(" ")[0] || "";
   const lastName = name.split(" ")[1] || "";
-
-  if (!email) {
-    return new Response("no to: email provided", {
-      status: 404,
-    });
-  }
 
   try {
     await resend.contacts.create({
@@ -60,6 +121,10 @@ export async function POST(request: Request) {
 
     return Response.json(data);
   } catch (error) {
-    return Response.json({ error });
+    console.error("Error sending contact email:", error);
+    return Response.json(
+      { error: "Failed to send email. Please try again later." },
+      { status: 500 },
+    );
   }
 }

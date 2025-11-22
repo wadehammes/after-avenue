@@ -22,6 +22,7 @@ export interface ContactFormInputs {
   marketingConsent: boolean;
   name: string;
   phone: string;
+  website?: string; // Honeypot field - should always be empty
 }
 
 const defaultValues: ContactFormInputs = {
@@ -31,6 +32,7 @@ const defaultValues: ContactFormInputs = {
   marketingConsent: true,
   name: "",
   phone: "",
+  website: "",
 };
 
 export const ContactForm = () => {
@@ -40,6 +42,7 @@ export const ContactForm = () => {
     handleSubmit,
     control,
     clearErrors,
+    setError,
     formState: { isSubmitting, errors, isSubmitSuccessful },
     register,
   } = useForm({
@@ -53,49 +56,83 @@ export const ContactForm = () => {
   const companyNameId = useId();
   const briefDescriptionId = useId();
   const marketingConsentId = useId();
+  const websiteId = useId();
 
   const useSendContactEmailApi = useSendContactEmailApiMutation();
   const useHubspotLeadGenerationFormApi =
     useHubspotLeadGenerationFormApiMutation();
 
-  const submitToNotion: SubmitHandler<ContactFormInputs> = async (data) => {
+  const onSubmitForm: SubmitHandler<ContactFormInputs> = async (data) => {
     clearErrors("email");
+
+    // Honeypot check - if website field is filled, it's a bot
+    if (data.website) {
+      // Silently fail - don't let bots know they were caught
+      return;
+    }
 
     if (reCaptcha?.current) {
       const captcha = await reCaptcha.current.executeAsync();
 
-      if (captcha) {
-        const {
+      if (!captcha) {
+        throw new Error("reCAPTCHA verification failed. Please try again.");
+      }
+
+      const {
+        briefDescription,
+        companyName,
+        email,
+        marketingConsent,
+        name,
+        phone,
+      } = data;
+
+      const emailToLowerCase = email.toLowerCase();
+
+      try {
+        await useSendContactEmailApi.mutateAsync({
           briefDescription,
           companyName,
-          email,
+          email: emailToLowerCase,
           marketingConsent,
           name,
           phone,
-        } = data;
+          recaptchaToken: captcha,
+        });
 
-        const emailToLowerCase = email.toLowerCase();
+        await useHubspotLeadGenerationFormApi.mutateAsync({
+          companyName,
+          email: emailToLowerCase,
+          name,
+          phone,
+        });
+      } catch (error) {
+        // Reset reCAPTCHA on error
+        reCaptcha.current?.reset();
 
-        try {
-          await useSendContactEmailApi.mutateAsync({
-            briefDescription,
-            companyName,
-            email: emailToLowerCase,
-            marketingConsent,
-            name,
-            phone,
-          });
-
-          await useHubspotLeadGenerationFormApi.mutateAsync({
-            companyName,
-            email: emailToLowerCase,
-            name,
-            phone,
-          });
-        } catch (_e) {
-          throw new Error("Failed to submit contact. Please try again.");
+        // Extract error message from API response
+        let errorMessage = "Failed to submit contact. Please try again.";
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        } else if (
+          typeof error === "object" &&
+          error !== null &&
+          "message" in error
+        ) {
+          errorMessage = String(error.message);
         }
+
+        // Set form error so user can see it
+        setError("root", {
+          type: "manual",
+          message: errorMessage,
+        });
+
+        // Re-throw to stop form submission
+        throw error;
       }
+    } else {
+      throw new Error("reCAPTCHA not loaded. Please refresh the page.");
     }
   };
 
@@ -110,7 +147,7 @@ export const ContactForm = () => {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(submitToNotion)}>
+    <form className={styles.form} onSubmit={handleSubmit(onSubmitForm)}>
       <Controller
         control={control}
         name="name"
@@ -209,10 +246,27 @@ export const ContactForm = () => {
           </label>
         </div>
       ) : null}
+      {/* Honeypot field - hidden from users but visible to bots */}
+      <div className={styles.honeypot}>
+        <label htmlFor={websiteId}>
+          <input
+            {...register("website")}
+            type="text"
+            id={websiteId}
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+          />
+        </label>
+      </div>
       <div className={styles.formSubmitContainer}>
         <div>
           {hasMissingFields ? (
             <p>You are missing some required fields!</p>
+          ) : null}
+          {errors.root ? (
+            <p className={styles.errorMessage}>{errors.root.message}</p>
           ) : null}
         </div>
         <div>

@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
       process.env.HUBSPOT_LEAD_GENERATION_FORM_ID,
     HUBSPOT_PORTAL_ID: process.env.HUBSPOT_PORTAL_ID,
     RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
+    RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_GENERAL_AUDIENCE_ID: process.env.RESEND_GENERAL_AUDIENCE_ID,
     VERCEL_API_TOKEN: process.env.VERCEL_API_TOKEN,
@@ -48,6 +49,30 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  turbopack: {
+    rules: {
+      "*.svg": {
+        as: "*.js",
+        loaders: [
+          {
+            loader: "@svgr/webpack",
+            options: {
+              ref: true,
+              svgoConfig: {
+                plugins: [
+                  {
+                    active: false,
+                    name: "removeViewBox",
+                  },
+                ],
+              },
+              titleProp: true,
+            },
+          },
+        ],
+      },
+    },
   },
   webpack(config, { dev, isServer }) {
     const fileLoaderRule = config.module.rules.find((rule) =>

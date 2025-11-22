@@ -3,15 +3,16 @@ import type { ContactFormInputs } from "src/components/ContactForm/ContactForm.c
 
 export const api = {
   sendEmail: {
-    contact: ({
+    contact: async ({
       companyName,
       email,
       name,
       phone,
       briefDescription,
       marketingConsent,
-    }: ContactFormInputs) =>
-      fetch(
+      recaptchaToken,
+    }: ContactFormInputs & { recaptchaToken?: string }) => {
+      const response = await fetch(
         "/api/send-email/contact",
         fetchOptions({
           method: FetchMethods.Post,
@@ -22,9 +23,20 @@ export const api = {
             phone,
             briefDescription,
             marketingConsent,
+            recaptchaToken,
           }),
         }),
-      ),
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage =
+          errorData.error || `Request failed with status ${response.status}`;
+        throw new Error(errorMessage);
+      }
+
+      return response.json();
+    },
   },
   hubspot: {
     leadGeneration: ({
