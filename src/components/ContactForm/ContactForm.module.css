@@ -18,9 +18,15 @@
 
   p {
     color: var(--colors-habanero);
-    text-align: left;
     line-height: 1.25;
+    text-align: left;
   }
+}
+
+.errorMessage {
+  color: var(--colors-habanero);
+  line-height: 1.25;
+  text-align: left;
 }
 
 .marketingConsentContainer {
@@ -45,4 +51,12 @@
   font-size: 1.25rem;
   line-height: 1.5;
   width: 100%;
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
