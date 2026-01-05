@@ -11,6 +11,12 @@ import {
 } from "src/contentful/getWorkCategories";
 import type { SitemapItem } from "src/lib/generateSitemap";
 import { outputSitemap } from "src/lib/generateSitemap";
+import {
+  createBreadcrumbSchema,
+  createOrganizationSchema,
+  createSchemaGraph,
+  createWebPageSchema,
+} from "src/lib/schema";
 import { TEST_PAGE_SLUG } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
@@ -143,12 +149,39 @@ async function WorkCategoryEntry({ params }: WorkCategoryProps) {
     contactFooterTitle: "The last stop before <span>your story begins.</span>",
   };
 
+  const pageUrl = `${envUrl()}/work/category/${workCategory.slug}`;
+  const publisher = createOrganizationSchema();
+  const breadcrumb = createBreadcrumbSchema([
+    { name: "Home", url: envUrl() },
+    { name: "Work", url: `${envUrl()}/work` },
+    { name: workCategory.categoryName, url: pageUrl },
+  ]);
+
+  const webPage = createWebPageSchema({
+    url: pageUrl,
+    name: workCategory.categoryName,
+    description: `All of our ${workCategory.categoryName} work`,
+    datePublished: workPage.publishDate,
+    dateModified: workCategory.updatedAt,
+    breadcrumb,
+    publisher,
+  });
+
+  const schemaGraph = createSchemaGraph([webPage]);
+
   return (
-    <WorkPage
-      pageFields={workPageWithCategory}
-      allWork={allWorkByCategory}
-      allWorkCategories={allWorkCategories}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
+      />
+      <WorkPage
+        pageFields={workPageWithCategory}
+        allWork={allWorkByCategory}
+        allWorkCategories={allWorkCategories}
+      />
+    </>
   );
 }
 

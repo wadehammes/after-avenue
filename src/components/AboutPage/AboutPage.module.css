@@ -43,7 +43,6 @@
   width: 100%;
   max-width: 100ch;
   margin: 0 auto;
-  text-wrap: balance;
   gap: var(--default-padding);
   position: relative;
 
@@ -51,10 +50,14 @@
     font-size: clamp(2rem, 3vw, 5rem);
     line-height: 1.5;
     margin: 0;
-    color: var(--color-bg);
+    color: var(--color-text);
 
     span {
       color: var(--color-text);
+      text-decoration: underline;
+      text-decoration-color: var(--colors-street-lamp-yellow);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
     }
   }
 

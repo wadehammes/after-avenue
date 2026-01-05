@@ -14,11 +14,12 @@ import {
 import AfterAvenueBrandmark from "src/icons/AfterAvenueBrandmark.svg";
 
 interface AboutPageProps {
+  isEditorsPagePublished?: boolean;
   pageFields: Page;
 }
 
 export const AboutPage = (props: AboutPageProps) => {
-  const { pageFields } = props;
+  const { isEditorsPagePublished = false, pageFields } = props;
   const { contactFooterButtonText, contactFooterTitle, sections } = pageFields;
 
   if (!sections || sections.length === 0) {
@@ -70,7 +71,6 @@ export const AboutPage = (props: AboutPageProps) => {
           )}
         </Section>
       ) : null}
-      {/*  biome-ignore lint/correctness/useUniqueElementIds: this is fine */}
       <div id="about-collaboration" />
       {collaborateSlideFields ? (
         <Section
@@ -102,22 +102,24 @@ export const AboutPage = (props: AboutPageProps) => {
           <div className="container column">
             <div className={styles.partnershipCopy}>
               {parse(partnershipCopy)}
-              <div
-                className="buttonContainer"
-                style={{
-                  textAlign: "left",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
-                }}
-              >
-                <StyledButtonLink
-                  href="/editors"
-                  variant="outlined"
-                  color="light"
+              {isEditorsPagePublished ? (
+                <div
+                  className="buttonContainer"
+                  style={{
+                    textAlign: "left",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                  }}
                 >
-                  Meet our Editors
-                </StyledButtonLink>
-              </div>
+                  <StyledButtonLink
+                    href="/editors"
+                    variant="outlined"
+                    color="dark"
+                  >
+                    Meet our Editors
+                  </StyledButtonLink>
+                </div>
+              ) : null}
             </div>
           </div>
         </Section>

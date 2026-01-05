@@ -20,7 +20,7 @@ export const SectionRenderer = (props: SectionRendererProps) => {
     }
 
     return (
-      <Section key={section.id} noPadding={noPadding}>
+      <Section key={section.id} section={section} noPadding={noPadding}>
         {section.content.map((content) => {
           if (!content) {
             return null;

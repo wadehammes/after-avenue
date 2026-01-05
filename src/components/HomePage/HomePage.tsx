@@ -1,4 +1,8 @@
+"use client";
+
+import classNames from "classnames";
 import parse from "html-react-parser";
+import { useEffect, useState } from "react";
 import { FeaturedBrands } from "src/components/FeaturedBrands/FeaturedBrands.component";
 import { FeaturedWork } from "src/components/FeaturedWork/FeaturedWork.component";
 import styles from "src/components/HomePage/HomePage.module.css";
@@ -20,14 +24,42 @@ export const HomePage = (props: HomePageProps) => {
     contactFooterButtonText,
   } = pageFields;
 
+  const [isAnimated, setIsAnimated] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsAnimated(true);
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const title = `After Avenue | ${pageTitle}`;
 
   return (
     <>
+      <section className={styles.homeTitleSection}>
+        <div className="container column">
+          {pageDisplayTitle ? (
+            <header className="section-header">
+              <h1 className="hidden-title">{title}</h1>
+              <h2
+                className={classNames(styles.homeMainTitle, {
+                  [styles.animated]: isAnimated,
+                })}
+              >
+                {parse(pageDisplayTitle)}
+              </h2>
+            </header>
+          ) : null}
+        </div>
+      </section>
       <section className={styles.featuredWorkContainer}>
-        {featuredWork.map((work) => (
-          <FeaturedWork fields={work} key={work.workSlug} />
-        ))}
+        <div className="container column">
+          {featuredWork.map((work) => (
+            <FeaturedWork fields={work} key={work.workSlug} />
+          ))}
+        </div>
 
         <div className="buttonContainer">
           <StyledButtonLink href="/work" variant="outlined" color="dark">
@@ -35,17 +67,7 @@ export const HomePage = (props: HomePageProps) => {
           </StyledButtonLink>
         </div>
       </section>
-      <section className={styles.homeSection}>
-        <div className="container column">
-          {pageDisplayTitle ? (
-            <header className="section-header">
-              <h1 className="hidden-title">{title}</h1>
-              <h2 className={styles.homeMainTitle}>
-                {parse(pageDisplayTitle)}
-              </h2>
-            </header>
-          ) : null}
-        </div>
+      <section>
         <FeaturedBrands />
       </section>
       <section>

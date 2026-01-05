@@ -2,13 +2,22 @@ import { documentToPlainTextString } from "@contentful/rich-text-plain-text-rend
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import type { WebPage } from "schema-dts";
+import type { Thing } from "schema-dts";
 import { EditorsEntryPage } from "src/components/EditorsEntryPage/EditorsEntryPage.component";
 import type { Editor } from "src/contentful/getEditors";
 import { fetchAllEditors, fetchEditorBySlug } from "src/contentful/getEditors";
 import { fetchWorkByEditor } from "src/contentful/getWork";
 import type { SitemapItem } from "src/lib/generateSitemap";
 import { outputSitemap } from "src/lib/generateSitemap";
+import {
+  createBreadcrumbSchema,
+  createOrganizationSchema,
+  createPersonSchema,
+  createSchemaGraph,
+  createVideoListSchema,
+  createVideoObjectSchema,
+  createWebPageSchema,
+} from "src/lib/schema";
 import {
   EXCLUDED_PAGE_SLUGS_FROM_BUILD,
   TEST_PAGE_SLUG,
@@ -112,46 +121,101 @@ async function EditorEntry({ params }: EditorsProps) {
     preview: draft.isEnabled,
   });
 
-  const { editorName, editorBio, publishDate, updatedAt } = editorEntry;
+  const {
+    editorName,
+    editorBio,
+    editorTitle,
+    editorHeadshot,
+    publishDate,
+    updatedAt,
+  } = editorEntry;
 
-  const jsonLd: WebPage = {
-    "@type": "WebPage",
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-        },
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Editors",
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: editorName,
-        },
-      ],
-    },
+  const pageUrl = `${envUrl()}/editors/${editorEntry.editorSlug}`;
+  const descriptionText = editorBio ? documentToPlainTextString(editorBio) : "";
+  const publisher = createOrganizationSchema();
+  const breadcrumb = createBreadcrumbSchema([
+    { name: "Home", url: envUrl() },
+    { name: "Editors", url: `${envUrl()}/editors` },
+    { name: editorName, url: pageUrl },
+  ]);
+
+  // Create Person schema for the editor
+  const personImage = editorHeadshot?.src
+    ? `https:${editorHeadshot.src}`
+    : undefined;
+  const person = createPersonSchema({
     name: editorName,
-    description: editorBio ? documentToPlainTextString(editorBio) : "",
+    description: descriptionText,
+    jobTitle: editorTitle,
+    url: pageUrl,
+    worksFor: publisher,
+    image: personImage,
+  });
+
+  // Create VideoObject schemas for each work item
+  const videoObjects = editorsWork
+    .filter((work) => work?.workVideoUrl)
+    .map((work) => {
+      if (!work) {
+        return null;
+      }
+
+      const workUrl = `${envUrl()}/work/${work.workSlug}`;
+      const workDescription = work.workDescription
+        ? documentToPlainTextString(work.workDescription)
+        : "";
+      const workTitle = `${work.workClient} - ${work.workTitle}`;
+
+      return createVideoObjectSchema({
+        name: workTitle,
+        description: workDescription,
+        contentUrl: work.workVideoUrl,
+        embedUrl: work.workVideoUrl,
+        uploadDate: work.publishDate,
+        datePublished: work.publishDate,
+        dateModified: work.updatedAt,
+        publisher,
+        creator: person,
+        url: workUrl,
+      });
+    })
+    .filter((video): video is NonNullable<typeof video> => video !== null);
+
+  // Create ItemList for the videos
+  const videoList =
+    videoObjects.length > 0
+      ? createVideoListSchema({
+          name: `Editorial Credits by ${editorName}`,
+          description: `A collection of videos edited by ${editorName}`,
+          items: videoObjects,
+        })
+      : null;
+
+  const webPage = createWebPageSchema({
+    url: pageUrl,
+    name: editorName,
+    description: descriptionText,
     datePublished: publishDate,
     dateModified: updatedAt,
-    publisher: {
-      "@type": "Organization",
-      name: "After Avenue",
-    },
-  };
+    breadcrumb,
+    publisher,
+  });
+
+  // Build the schema graph with all entities
+  const schemas: Thing[] = [webPage, person, ...videoObjects];
+
+  if (videoList) {
+    schemas.push(videoList);
+  }
+
+  const schemaGraph = createSchemaGraph(schemas);
 
   return (
     <>
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
       />
       <EditorsEntryPage editorEntry={editorEntry} editorsWork={editorsWork} />
     </>

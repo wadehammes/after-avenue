@@ -24,6 +24,40 @@
   width: 100%;
 }
 
+.homeTitleSection {
+  padding: 2rem 0 4rem;
+
+  @media screen and (min-width: 768px) {
+    padding: 6rem 0 12rem;
+  }
+}
+
 .homeMainTitle {
-  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-size: clamp(3rem, 5vw, 5rem);
+  mix-blend-mode: exclusion;
+  text-align: center;
+
+  span {
+    color: var(--color-bg);
+    text-shadow:
+      -1px -1px 0 var(--colors-street-lamp-yellow),
+      1px -1px 0 var(--colors-street-lamp-yellow),
+      -1px 1px 0 var(--colors-street-lamp-yellow),
+      1px 1px 0 var(--colors-street-lamp-yellow);
+    transition:
+      color 1s ease-in-out,
+      text-shadow 1s ease-in-out;
+    transition-delay: 500ms;
+  }
+
+  &.animated {
+    span {
+      color: var(--colors-street-lamp-yellow);
+      text-shadow:
+        -1px -1px 0 var(--color-bg),
+        1px -1px 0 var(--color-bg),
+        -1px 1px 0 var(--color-bg),
+        1px 1px 0 var(--color-bg);
+    }
+  }
 }

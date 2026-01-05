@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import type { WebPage } from "schema-dts";
 import { WorkPage } from "src/components/WorkPage/WorkPage.component";
 import { fetchPage } from "src/contentful/getPages";
 import { fetchAllWork } from "src/contentful/getWork";
 import { fetchAllWorkCategories } from "src/contentful/getWorkCategories";
+import {
+  createBreadcrumbSchema,
+  createOrganizationSchema,
+  createSchemaGraph,
+  createWebPageSchema,
+} from "src/lib/schema";
 import { WORK_SLUG } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
@@ -66,39 +71,31 @@ async function Work() {
 
   const { pageDescription, publishDate, updatedAt } = workPage;
 
-  const jsonLd: WebPage = {
-    "@type": "WebPage",
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 0,
-          name: "Home",
-        },
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Work",
-        },
-      ],
-    },
+  const pageUrl = `${envUrl()}/work`;
+  const publisher = createOrganizationSchema();
+  const breadcrumb = createBreadcrumbSchema([
+    { name: "Home", url: envUrl() },
+    { name: "Work", url: pageUrl },
+  ]);
+
+  const webPage = createWebPageSchema({
+    url: pageUrl,
+    name: "Work",
     description: pageDescription,
     datePublished: publishDate,
     dateModified: updatedAt,
-    name: "Work",
-    publisher: {
-      "@type": "Organization",
-      name: "After Avenue",
-    },
-  };
+    breadcrumb,
+    publisher,
+  });
+
+  const schemaGraph = createSchemaGraph([webPage]);
 
   return (
     <>
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
       />
       <WorkPage
         pageFields={workPage}
