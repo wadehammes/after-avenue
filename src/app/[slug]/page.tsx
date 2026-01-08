@@ -8,6 +8,13 @@ import { fetchPage, fetchPages } from "src/contentful/getPages";
 import type { SitemapItem } from "src/lib/generateSitemap";
 import { outputSitemap } from "src/lib/generateSitemap";
 import {
+  createBreadcrumbSchema,
+  createOrganizationSchema,
+  createSchemaGraph,
+  createWebPageSchema,
+} from "src/lib/schema";
+import {
+  EDITORS_PAGE_SLUG,
   EXCLUDED_PAGE_SLUGS_FROM_BUILD,
   HOME_PAGE_SLUG,
   TEST_PAGE_SLUG,
@@ -110,11 +117,66 @@ async function Page({ params }: PageProps) {
     return notFound();
   }
 
-  if (page.pageSlug === "about") {
-    return <AboutPage pageFields={page} />;
+  const pageUrl =
+    page.pageSlug === HOME_PAGE_SLUG
+      ? envUrl()
+      : `${envUrl()}/${page.pageSlug}`;
+  const publisher = createOrganizationSchema();
+  const breadcrumbItems = [{ name: "Home", url: envUrl() }];
+
+  if (page.pageSlug !== HOME_PAGE_SLUG) {
+    breadcrumbItems.push({
+      name: page.pageDisplayTitle || page.pageTitle,
+      url: pageUrl,
+    });
   }
 
-  return <PageComponent fields={page} />;
+  const breadcrumb = createBreadcrumbSchema(breadcrumbItems);
+
+  const webPage = createWebPageSchema({
+    url: pageUrl,
+    name: page.pageDisplayTitle || page.pageTitle,
+    description: page.pageDescription,
+    datePublished: page.publishDate,
+    dateModified: page.updatedAt,
+    breadcrumb,
+    publisher,
+  });
+
+  const schemaGraph = createSchemaGraph([webPage]);
+
+  if (page.pageSlug === "about") {
+    const editorsPage = await fetchPage({
+      slug: EDITORS_PAGE_SLUG,
+      preview: false,
+    });
+    const isEditorsPagePublished = editorsPage !== null;
+
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
+        />
+        <AboutPage
+          pageFields={page}
+          isEditorsPagePublished={isEditorsPagePublished}
+        />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
+      />
+      <PageComponent fields={page} />
+    </>
+  );
 }
 
 export default Page;

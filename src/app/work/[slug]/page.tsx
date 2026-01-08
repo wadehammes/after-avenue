@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import type { WebPage } from "schema-dts";
 import { WorkEntryPage } from "src/components/WorkEntryPage/WorkEntryPage.component";
 import type { Work } from "src/contentful/getWork";
 import {
@@ -14,6 +13,13 @@ import {
 } from "src/contentful/getWork";
 import type { SitemapItem } from "src/lib/generateSitemap";
 import { outputSitemap } from "src/lib/generateSitemap";
+import {
+  createBreadcrumbSchema,
+  createOrganizationSchema,
+  createSchemaGraph,
+  createVideoObjectSchema,
+  createWebPageSchema,
+} from "src/lib/schema";
 import {
   EXCLUDED_PAGE_SLUGS_FROM_BUILD,
   TEST_PAGE_SLUG,
@@ -130,49 +136,59 @@ async function WorkEntry({ params }: WorkProps) {
     .filter((work) => workEntry.workSlug !== work.workSlug)
     .slice(0, 3);
 
-  const { workClient, workTitle, workDescription, publishDate, updatedAt } =
-    workEntry;
+  const {
+    workClient,
+    workTitle,
+    workDescription,
+    publishDate,
+    updatedAt,
+    workVideoUrl,
+  } = workEntry;
 
-  const jsonLd: WebPage = {
-    "@type": "WebPage",
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 0,
-          name: "Home",
-        },
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Work",
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: `${workClient} - ${workTitle}`,
-        },
-      ],
-    },
-    description: workDescription
-      ? documentToPlainTextString(workDescription)
-      : "",
+  const pageUrl = `${envUrl()}/work/${workEntry.workSlug}`;
+  const descriptionText = workDescription
+    ? documentToPlainTextString(workDescription)
+    : "";
+  const fullTitle = `${workClient} - ${workTitle}`;
+
+  const publisher = createOrganizationSchema();
+
+  const breadcrumb = createBreadcrumbSchema([
+    { name: "Home", url: envUrl() },
+    { name: "Work", url: `${envUrl()}/work` },
+    { name: fullTitle, url: pageUrl },
+  ]);
+
+  const videoObject = createVideoObjectSchema({
+    name: fullTitle,
+    description: descriptionText,
+    contentUrl: workVideoUrl,
+    embedUrl: workVideoUrl,
+    uploadDate: publishDate,
     datePublished: publishDate,
     dateModified: updatedAt,
-    name: `${workClient} - ${workTitle}`,
-    publisher: {
-      "@type": "Organization",
-      name: "After Avenue",
-    },
-  };
+    publisher,
+  });
+
+  const webPage = createWebPageSchema({
+    url: pageUrl,
+    name: fullTitle,
+    description: descriptionText,
+    datePublished: publishDate,
+    dateModified: updatedAt,
+    breadcrumb,
+    publisher,
+    video: videoObject,
+  });
+
+  const schemaGraph = createSchemaGraph([webPage, videoObject]);
 
   return (
     <Suspense>
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
       />
       <WorkEntryPage
         workEntry={workEntry}

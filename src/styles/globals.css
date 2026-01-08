@@ -208,7 +208,7 @@ b {
   align-items: center;
   justify-content: flex-start;
   flex-flow: row nowrap;
-  max-width: 1920px;
+  max-width: 1660px;
   margin: 0 auto;
   gap: var(--default-padding);
   width: 100%;
@@ -384,7 +384,7 @@ p:empty {
   align-items: center;
   justify-content: center;
   gap: var(--default-padding);
-  padding: var(--default-padding) 0;
+  padding: 3rem 0;
   width: 100%;
 
   p {

@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import type { WebPage } from "schema-dts";
 import { EditorsPage } from "src/components/EditorsPage/EditorsPage.component";
 import { fetchAllEditors } from "src/contentful/getEditors";
 import { fetchPage } from "src/contentful/getPages";
+import {
+  createBreadcrumbSchema,
+  createOrganizationSchema,
+  createSchemaGraph,
+  createWebPageSchema,
+} from "src/lib/schema";
 import { EDITORS_PAGE_SLUG } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
@@ -58,33 +63,24 @@ async function Editors() {
 
   const { pageDescription, publishDate, updatedAt } = editorsPage;
 
-  const jsonLd: WebPage = {
-    "@type": "WebPage",
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-        },
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Editors",
-        },
-      ],
-    },
+  const pageUrl = `${envUrl()}/editors`;
+  const publisher = createOrganizationSchema();
+  const breadcrumb = createBreadcrumbSchema([
+    { name: "Home", url: envUrl() },
+    { name: "Editors", url: pageUrl },
+  ]);
+
+  const webPage = createWebPageSchema({
+    url: pageUrl,
     name: "Editors",
     description: pageDescription,
     datePublished: publishDate,
     dateModified: updatedAt,
-    publisher: {
-      "@type": "Organization",
-      name: "After Avenue",
-    },
-  };
+    breadcrumb,
+    publisher,
+  });
 
+  const schemaGraph = createSchemaGraph([webPage]);
   const title = `Editors - ${editorsPage.pageDisplayTitle} | After Avenue`;
 
   return (
@@ -92,7 +88,7 @@ async function Editors() {
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
       />
       <h1 className="hidden-title">{title}</h1>
       <EditorsPage pageFields={editorsPage} editors={allEditors} />

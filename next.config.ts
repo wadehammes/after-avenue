@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: false,
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
@@ -29,6 +29,8 @@ const nextConfig: NextConfig = {
     formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Next.js 16 default is 4 hours (14400 seconds)
+    minimumCacheTTL: 14400,
     remotePatterns: [
       {
         protocol: "https",
@@ -50,6 +52,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Turbopack is now the default bundler in Next.js 16.1
   turbopack: {
     rules: {
       "*.svg": {
@@ -73,6 +76,18 @@ const nextConfig: NextConfig = {
         ],
       },
     },
+  },
+  // Experimental features for Next.js 16.1.1
+  experimental: {
+    // Partial Prerendering (PPR) - enables static shell with dynamic streaming
+    // Set to true if you want to enable PPR for better performance
+    ppr: false,
+    // Optimize package imports for better tree-shaking
+    optimizePackageImports: [
+      "@contentful/rich-text-react-renderer",
+      "react-aria",
+      "react-intersection-observer",
+    ],
   },
   webpack(config, { dev, isServer }) {
     const fileLoaderRule = config.module.rules.find((rule) =>
@@ -100,7 +115,8 @@ const nextConfig: NextConfig = {
     // Modify the file loader rule to ignore *.svg, since we have it handled now.
     fileLoaderRule.exclude = /\.svg$/i;
 
-    // Bundle analyzer for production builds
+    // Bundle analyzer for production builds (legacy webpack mode)
+    // Note: Use `next experimental-analyze` for Next.js 16.1+ instead
     if (!dev && !isServer && process.env.ANALYZE === "true") {
       const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
       config.plugins.push(

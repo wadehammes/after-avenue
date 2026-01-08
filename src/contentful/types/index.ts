@@ -1,4 +1,9 @@
 export type {
+  TypeComponentContentCard,
+  TypeComponentContentCardFields,
+  TypeComponentContentCardSkeleton,
+} from "./TypeComponentContentCard";
+export type {
   TypeComponentCopyBlock,
   TypeComponentCopyBlockFields,
   TypeComponentCopyBlockSkeleton,
