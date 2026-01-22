@@ -19,6 +19,8 @@
 
 .imageContainer {
   width: 100%;
+  max-width: 270px;
+  margin: 0 auto;
 
   &.circleImage {
     border-radius: 50%;

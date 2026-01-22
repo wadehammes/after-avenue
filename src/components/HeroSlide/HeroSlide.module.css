@@ -1,14 +1,10 @@
 .heroSlide {
-  height: 100vh;
+  height: calc(100vh - 150px);
+  min-height: calc(100vh - 150px);
   max-height: none;
   overflow: hidden;
   position: relative;
   width: 100vw;
-
-  @media (min-width: 768px) {
-    height: calc(100vh - 150px);
-    min-height: calc(100vh - 150px);
-  }
 }
 
 .slideBackgroundMediaContainer {
