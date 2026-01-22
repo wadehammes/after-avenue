@@ -7,6 +7,11 @@ import type { ContentCardEntry } from "src/contentful/parseContentCard";
 import type { TypeSectionSkeleton } from "src/contentful/types";
 import type { Alignment } from "src/interfaces/common.interfaces";
 
+export enum SectionPadding {
+  None = "None",
+  Regular = "Regular",
+}
+
 export enum SectionBackgroundColor {
   Black = "Black",
   SystemColor = "System Color",
@@ -36,6 +41,7 @@ export interface SectionType {
   sectionHeader: Document | undefined;
   sectionHeaderAlignment: Alignment;
   sectionBackgroundColor: SectionBackgroundColor;
+  sectionPadding: SectionPadding;
   slug: string;
 }
 
@@ -61,6 +67,9 @@ export function parseContentfulSection(
     sectionBackgroundColor:
       (section.fields.sectionBackgroundColor as SectionBackgroundColor) ??
       SectionBackgroundColor.SystemColor,
+    sectionPadding:
+      (section.fields.sectionPadding as SectionPadding) ??
+      SectionPadding.Regular,
     slug: section.fields.slug,
   };
 }
