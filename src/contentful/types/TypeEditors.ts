@@ -20,6 +20,7 @@ export interface TypeEditorsFields {
   contactFooterButtonText?: EntryFieldTypes.Symbol;
   priority?: EntryFieldTypes.Boolean;
   metaDescription: EntryFieldTypes.Text;
+  showOnEditorsPage?: EntryFieldTypes.Boolean;
 }
 
 export type TypeEditorsSkeleton = EntrySkeletonType<
