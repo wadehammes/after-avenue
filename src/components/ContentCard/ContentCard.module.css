@@ -1,0 +1,77 @@
+.contentCard {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: var(--default-padding);
+  width: 100%;
+
+  &.cardStyle {
+    background-color: var(--color-bg);
+    border: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+    border-radius: 8px;
+    padding: var(--default-padding);
+  }
+
+  &.noStyle {
+    background-color: transparent;
+    padding: 0;
+  }
+}
+
+.imageContainer {
+  width: 100%;
+
+  &.circleImage {
+    border-radius: 50%;
+    overflow: hidden;
+    aspect-ratio: 1;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+
+    img,
+    video {
+      border-radius: 50%;
+      height: 100%;
+      object-fit: cover;
+      width: 100%;
+    }
+  }
+
+  &.regularImage {
+    img,
+    video {
+      border-radius: 0;
+      height: auto;
+      width: 100%;
+    }
+  }
+}
+
+.copyContainer {
+  width: 100%;
+
+  h2,
+  h3 {
+    font-family: var(--font-family-heading);
+    line-height: 1.5;
+    font-weight: 900;
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 5vw, 2rem);
+  }
+
+  h3 {
+    font-size: clamp(1.5rem, 5vw, 1.85rem);
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.ctaContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}

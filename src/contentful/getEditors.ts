@@ -100,3 +100,16 @@ export async function fetchEditorBySlug({
 
   return parseContentfulEditor(pagesResult.items[0]);
 }
+
+export const parseContentfulEditorForCta = (
+  editorEntry?: EditorEntry,
+): Partial<Editor> | null => {
+  if (!editorEntry) {
+    return null;
+  }
+
+  return {
+    editorName: editorEntry.fields.editorName,
+    editorSlug: editorEntry.fields.editorSlug,
+  };
+};

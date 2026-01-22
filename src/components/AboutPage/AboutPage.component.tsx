@@ -1,16 +1,7 @@
-import classNames from "classnames";
-import parse from "html-react-parser";
 import styles from "src/components/AboutPage/AboutPage.module.css";
 import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
-import { ContentRenderer } from "src/components/ContentRenderer/ContentRenderer.component";
-import { Section } from "src/components/Section/Section.component";
-import { ServicesMarquee } from "src/components/ServicesMarquee/ServicesMarquee.component";
-import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
+import { SectionRenderer } from "src/components/SectionRenderer/SectionRenderer.component";
 import type { Page } from "src/contentful/getPages";
-import {
-  type ComponentSlideEntry,
-  parseContentfulComponentSlide,
-} from "src/contentful/parseComponentSlide";
 import AfterAvenueBrandmark from "src/icons/AfterAvenueBrandmark.svg";
 
 interface AboutPageProps {
@@ -26,104 +17,12 @@ export const AboutPage = (props: AboutPageProps) => {
     return null;
   }
 
-  const heroSection = sections.find((section) =>
-    section ? section.slug === "about-hero" : null,
-  );
-  const collaborateSection = sections.find((section) =>
-    section ? section.slug === "about-collaboration" : null,
-  );
-  const partnershipSection = sections.find((section) =>
-    section ? section.slug === "about-partnerships" : null,
-  );
-
-  const collaborateSlide = collaborateSection?.content[0]
-    ? collaborateSection.content[0]
-    : null;
-
-  const partnershipSlide = partnershipSection?.content[0]
-    ? partnershipSection.content[0]
-    : null;
-
-  const collaborateSlideFields = collaborateSlide
-    ? parseContentfulComponentSlide(collaborateSlide as ComponentSlideEntry)
-    : null;
-
-  const partnershipSlideFields = partnershipSlide
-    ? parseContentfulComponentSlide(partnershipSlide as ComponentSlideEntry)
-    : null;
-
-  const conversation = collaborateSlideFields?.slideCopy ?? "";
-
-  const partnershipCopy = partnershipSlideFields?.slideCopy ?? "";
-
   return (
     <>
-      {heroSection?.content ? (
-        <Section noPadding>
-          {heroSection.content.map((content, index) =>
-            content ? (
-              <ContentRenderer
-                key={content.sys.id}
-                content={content}
-                index={index}
-              />
-            ) : null,
-          )}
-        </Section>
-      ) : null}
-      <div id="about-collaboration" />
-      {collaborateSlideFields ? (
-        <Section
-          section={collaborateSection}
-          sectionHeaderAlignment="center"
-          style={{ paddingBottom: "8rem" }}
-        >
-          <div className="container column">
-            <div
-              className={classNames(styles.aboutConversation, "speechBubble")}
-            >
-              {parse(conversation)}
-            </div>
-          </div>
-        </Section>
-      ) : null}
-      <Section>
-        <div className={styles.marqueeContainer}>
-          <ServicesMarquee />
-          <ServicesMarquee reverse />
-        </div>
-      </Section>
-      {partnershipSlideFields ? (
-        <Section
-          section={partnershipSection}
-          sectionHeaderAlignment="left"
-          className={styles.partnershipSection}
-        >
-          <div className="container column">
-            <div className={styles.partnershipCopy}>
-              {parse(partnershipCopy)}
-              {isEditorsPagePublished ? (
-                <div
-                  className="buttonContainer"
-                  style={{
-                    textAlign: "left",
-                    justifyContent: "flex-start",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <StyledButtonLink
-                    href="/editors"
-                    variant="outlined"
-                    color="dark"
-                  >
-                    Meet our Editors
-                  </StyledButtonLink>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </Section>
-      ) : null}
+      <SectionRenderer
+        sections={sections}
+        isEditorsPagePublished={isEditorsPagePublished}
+      />
       <div className={styles.afterAvenueBrandmark}>
         <AfterAvenueBrandmark />
       </div>

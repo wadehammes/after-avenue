@@ -9,6 +9,11 @@ export type {
   TypeComponentCopyBlockSkeleton,
 } from "./TypeComponentCopyBlock";
 export type {
+  TypeComponentModules,
+  TypeComponentModulesFields,
+  TypeComponentModulesSkeleton,
+} from "./TypeComponentModules";
+export type {
   TypeComponentSlide,
   TypeComponentSlideFields,
   TypeComponentSlideSkeleton,

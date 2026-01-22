@@ -17,6 +17,9 @@ export interface TypeComponentSlideFields {
   pageCta?: EntryFieldTypes.EntryLink<TypePageSkeleton>;
   pageHash?: EntryFieldTypes.Symbol;
   slug: EntryFieldTypes.Symbol;
+  slideType?: EntryFieldTypes.Symbol<
+    "Conversation Bubble" | "Hero" | "Regular"
+  >;
 }
 
 export type TypeComponentSlideSkeleton = EntrySkeletonType<

@@ -9,6 +9,8 @@ import {
 } from "src/contentful/parseContentfulAsset";
 import type { TypeComponentSlideSkeleton } from "src/contentful/types";
 
+export type SlideType = "Conversation Bubble" | "Hero" | "Regular";
+
 // Our simplified version of an slide entry.
 // We don't need all the data that Contentful gives us.
 export interface ComponentSlide {
@@ -21,6 +23,7 @@ export interface ComponentSlide {
   slideCopy?: string;
   slug?: string;
   subheadline?: string;
+  slideType?: SlideType;
 }
 
 export type ComponentSlideEntry =
@@ -45,5 +48,6 @@ export function parseContentfulComponentSlide(
     slideCopy: entry.fields.slideCopy,
     slug: entry.fields.slug,
     subheadline: entry.fields.subheadline,
+    slideType: entry.fields.slideType as SlideType,
   };
 }
