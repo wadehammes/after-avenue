@@ -47,12 +47,12 @@
 .singleColumn {
   display: flex;
   flex-flow: column nowrap;
-  gap: var(--default-padding);
+  gap: 4rem;
 }
 
 .twoColumn {
   display: grid;
-  gap: var(--default-padding);
+  gap: 4rem;
   grid-template-columns: 1fr;
 
   @media screen and (min-width: 768px) {
@@ -62,7 +62,7 @@
 
 .threeColumn {
   display: grid;
-  gap: var(--default-padding);
+  gap: 4rem;
   grid-template-columns: 1fr;
 
   @media screen and (min-width: 768px) {
@@ -76,7 +76,7 @@
 
 .fourColumn {
   display: grid;
-  gap: var(--default-padding);
+  gap: 4rem;
   grid-template-columns: 1fr;
 
   @media screen and (min-width: 600px) {
