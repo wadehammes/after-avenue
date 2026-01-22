@@ -21,6 +21,8 @@ export const EditorsEntryPageIntro = (props: EditorsEntryPageIntroProps) => {
             width={editorEntry.editorHeadshot?.width}
             height={editorEntry.editorHeadshot?.height}
             className={styles.editorHeadshot}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority
           />
         ) : null}
         {editorEntry.editorHeadshotHover ? (
@@ -30,6 +32,8 @@ export const EditorsEntryPageIntro = (props: EditorsEntryPageIntroProps) => {
             width={editorEntry.editorHeadshotHover?.width}
             height={editorEntry.editorHeadshotHover?.height}
             className={styles.editorHeadshotHover}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            loading="lazy"
           />
         ) : null}
       </div>

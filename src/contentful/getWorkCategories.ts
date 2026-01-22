@@ -48,9 +48,17 @@ export async function fetchAllWorkCategories({
       },
     );
 
-  return categoryEntries.items.map(
-    (category) => parseContentfulWorkCategory(category) as WorkCategory,
-  );
+  const seenSlugs = new Set<string>();
+
+  return categoryEntries.items
+    .map((category) => parseContentfulWorkCategory(category) as WorkCategory)
+    .filter((category) => {
+      if (!category || seenSlugs.has(category.slug)) {
+        return false;
+      }
+      seenSlugs.add(category.slug);
+      return true;
+    });
 }
 
 interface FetchCategoryBySlugProps {

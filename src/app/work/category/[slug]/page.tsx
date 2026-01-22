@@ -20,6 +20,9 @@ import {
 import { TEST_PAGE_SLUG } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
+export const revalidate = 3600;
+export const dynamicParams = false;
+
 interface WorkCategoryParams {
   slug: string;
 }

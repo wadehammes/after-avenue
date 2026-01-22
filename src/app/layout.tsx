@@ -18,6 +18,13 @@ export function generateMetadata(): Metadata {
     keywords: ["videography", "post production"],
     creator: "After Avenue",
     publisher: "After Avenue",
+    applicationName: "After Avenue",
+    referrer: "origin-when-cross-origin",
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
   };
 }
 

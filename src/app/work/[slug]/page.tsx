@@ -2,7 +2,6 @@ import { documentToPlainTextString } from "@contentful/rich-text-plain-text-rend
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import { WorkEntryPage } from "src/components/WorkEntryPage/WorkEntryPage.component";
 import type { Work } from "src/contentful/getWork";
 import {
@@ -25,6 +24,9 @@ import {
   TEST_PAGE_SLUG,
 } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
+
+export const revalidate = 3600;
+export const dynamicParams = false;
 
 interface WorkParams {
   slug: string;
@@ -82,15 +84,19 @@ export async function generateMetadata({
     return notFound();
   }
 
+  const url = `${envUrl()}/work/${workEntry.workSlug}`;
+  const title = `${workEntry.workClient} - ${workEntry.workTitle} | After Avenue`;
+  const description = workEntry.workDescription
+    ? documentToPlainTextString(workEntry.workDescription)
+    : "";
+
   return {
-    metadataBase: new URL(`${envUrl()}/work/${workEntry.workSlug}`),
+    metadataBase: new URL(url),
     alternates: {
       canonical: "/",
     },
-    title: `${workEntry.workClient} - ${workEntry.workTitle} | After Avenue`,
-    description: workEntry.workDescription
-      ? documentToPlainTextString(workEntry.workDescription)
-      : "",
+    title,
+    description,
     keywords: workEntry.workCategories
       .map((category) => (category ? category.categoryName : ""))
       .join(","),
@@ -98,13 +104,26 @@ export async function generateMetadata({
       process.env.ENVIRONMENT === "production"
         ? "index, follow"
         : "noindex, nofollow",
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: "After Avenue",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 
 // The actual WorkEntry component.
 async function WorkEntry({ params }: WorkProps) {
-  const draft = await draftMode();
   const { slug } = await params;
+
+  const draft = await draftMode();
 
   // Fetch a single work entry by slug,
   // using the content preview if draft mode is enabled:
@@ -119,17 +138,18 @@ async function WorkEntry({ params }: WorkProps) {
     return notFound();
   }
 
-  const workSeries = await fetchWorkByCategory({
-    category: workEntry.workSeriesCategory?.categoryName ?? "",
-    preview: draft.isEnabled,
-  });
+  const [workSeries, randomRecentWork] = await Promise.all([
+    fetchWorkByCategory({
+      category: workEntry.workSeriesCategory?.categoryName ?? "",
+      preview: draft.isEnabled,
+    }),
+    fetchRandomWork({
+      preview: draft.isEnabled,
+    }),
+  ]);
 
   const workSeriesUnique = workSeries.filter((work) => {
     return workEntry.workSlug !== work.workSlug;
-  });
-
-  const randomRecentWork = await fetchRandomWork({
-    preview: draft.isEnabled,
   });
 
   const randomRecentWorkUnique = randomRecentWork
@@ -184,7 +204,7 @@ async function WorkEntry({ params }: WorkProps) {
   const schemaGraph = createSchemaGraph([webPage, videoObject]);
 
   return (
-    <Suspense>
+    <>
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
@@ -195,7 +215,7 @@ async function WorkEntry({ params }: WorkProps) {
         workSeries={workSeriesUnique}
         recentWork={randomRecentWorkUnique}
       />
-    </Suspense>
+    </>
   );
 }
 

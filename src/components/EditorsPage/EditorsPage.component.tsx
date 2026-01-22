@@ -1,13 +1,17 @@
 "use client";
 
 import classNames from "classnames";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
-import ReactPlayer from "react-player";
 import styles from "src/components/EditorsPage/EditorsPage.module.css";
 import type { Editor } from "src/contentful/getEditors";
 import type { Page } from "src/contentful/getPages";
 import { useIsBrowser } from "src/hooks/useIsBrowser";
+
+const ReactPlayer = dynamic(() => import("react-player"), {
+  ssr: false,
+});
 
 interface EditorsPageProps {
   pageFields: Page;

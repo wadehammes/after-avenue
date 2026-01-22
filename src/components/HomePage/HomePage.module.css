@@ -7,11 +7,7 @@
   padding: 0;
   max-width: 1920px;
   margin: 0 auto;
-
-  @media (max-width: 800px) or (min-width: 1920px) {
-    gap: var(--default-padding);
-    padding: 0 var(--default-padding);
-  }
+  gap: var(--default-padding);
 }
 
 .homeSection {
@@ -44,20 +40,26 @@
       1px -1px 0 var(--colors-street-lamp-yellow),
       -1px 1px 0 var(--colors-street-lamp-yellow),
       1px 1px 0 var(--colors-street-lamp-yellow);
-    transition:
-      color 1s ease-in-out,
-      text-shadow 1s ease-in-out;
-    transition-delay: 500ms;
+    animation: titleAnimation 1s ease-in-out 500ms forwards;
   }
 
-  &.animated {
-    span {
-      color: var(--colors-street-lamp-yellow);
-      text-shadow:
-        -1px -1px 0 var(--color-bg),
-        1px -1px 0 var(--color-bg),
-        -1px 1px 0 var(--color-bg),
-        1px 1px 0 var(--color-bg);
-    }
+  &.animated span {
+    color: var(--colors-street-lamp-yellow);
+    text-shadow:
+      -1px -1px 0 var(--color-bg),
+      1px -1px 0 var(--color-bg),
+      -1px 1px 0 var(--color-bg),
+      1px 1px 0 var(--color-bg);
+  }
+}
+
+@keyframes titleAnimation {
+  to {
+    color: var(--colors-street-lamp-yellow);
+    text-shadow:
+      -1px -1px 0 var(--color-bg),
+      1px -1px 0 var(--color-bg),
+      -1px 1px 0 var(--color-bg),
+      1px 1px 0 var(--color-bg);
   }
 }

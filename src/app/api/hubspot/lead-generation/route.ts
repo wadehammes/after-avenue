@@ -1,6 +1,9 @@
 import { FetchMethods } from "src/api/helpers";
 import type { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
 
+export const dynamic = "force-dynamic";
+export const maxDuration = 30;
+
 export async function POST(request: Request) {
   const res: ContactFormInputs = await request.json();
 

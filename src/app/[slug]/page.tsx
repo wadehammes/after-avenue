@@ -21,6 +21,9 @@ import {
 } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
+export const revalidate = 3600;
+export const dynamicParams = false;
+
 interface PageParams {
   slug: string;
 }
@@ -84,18 +87,36 @@ export async function generateMetadata({
     return notFound();
   }
 
+  const url =
+    page.pageSlug === HOME_PAGE_SLUG
+      ? envUrl()
+      : `${envUrl()}/${page.pageSlug}`;
+  const title = `${page.pageDisplayTitle} | After Avenue`;
+
   return {
-    metadataBase: new URL(`${envUrl()}/${page.pageSlug}`),
+    metadataBase: new URL(url),
     alternates: {
       canonical: "/",
     },
-    title: `${page.pageDisplayTitle} | After Avenue`,
+    title,
+    description: page.pageDescription,
+    keywords: page.metaKeywords.join(","),
     robots:
       page.enableIndexing && process.env.ENVIRONMENT === "production"
         ? "index, follow"
         : "noindex, nofollow",
-    description: page.pageDescription,
-    keywords: page.metaKeywords.join(","),
+    openGraph: {
+      title,
+      description: page.pageDescription,
+      url,
+      siteName: "After Avenue",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: page.pageDescription,
+    },
   };
 }
 

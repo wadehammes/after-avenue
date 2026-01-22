@@ -93,7 +93,8 @@ export async function fetchAllWork({
   const limit = 10;
   let total = 0;
   let skip = 0;
-  let allWork: Work[] = [];
+  const allWork: Work[] = [];
+  const seenIds = new Set<string>();
 
   do {
     const workResult =
@@ -106,18 +107,20 @@ export async function fetchAllWork({
         order: ["-fields.featuredOnHomePage", "-fields.workDate"],
       });
 
-    const filteredWork = workResult.items.map(
-      (pageEntry) => parseContentfulWork(pageEntry) as Work,
-    );
-
     total = workResult.total;
+
+    const filteredWork = workResult.items
+      .map((pageEntry) => parseContentfulWork(pageEntry) as Work)
+      .filter((work) => {
+        if (!work || seenIds.has(work.id)) {
+          return false;
+        }
+        seenIds.add(work.id);
+        return true;
+      });
+
+    allWork.push(...filteredWork);
     skip += limit;
-
-    allWork = [...allWork, ...filteredWork];
-
-    if (total < limit) {
-      break;
-    }
   } while (skip < total);
 
   return allWork;
@@ -147,9 +150,17 @@ export async function fetchWorkByCategory({
       "fields.workSeriesCategory.fields.categoryName": category,
     });
 
-  return workResult.items.map(
-    (pageEntry) => parseContentfulWork(pageEntry) as Work,
-  );
+  const seenIds = new Set<string>();
+
+  return workResult.items
+    .map((pageEntry) => parseContentfulWork(pageEntry) as Work)
+    .filter((work) => {
+      if (!work || seenIds.has(work.id)) {
+        return false;
+      }
+      seenIds.add(work.id);
+      return true;
+    });
 }
 
 interface FetchWorkByEditorOptions {
@@ -175,9 +186,17 @@ export async function fetchWorkByEditor({
       order: ["-fields.workDate"],
     });
 
-  const parseWorkResults = workResult.items.map(
-    (pageEntry) => parseContentfulWork(pageEntry) as Work,
-  );
+  const seenIds = new Set<string>();
+
+  const parseWorkResults = workResult.items
+    .map((pageEntry) => parseContentfulWork(pageEntry) as Work)
+    .filter((work) => {
+      if (!work || seenIds.has(work.id)) {
+        return false;
+      }
+      seenIds.add(work.id);
+      return true;
+    });
 
   return parseWorkResults.filter((work) => {
     if (!work || !work.workEditors) {
@@ -204,9 +223,17 @@ export async function fetchAllFeaturedWork({
       order: ["fields.featuredHomePriority"],
     });
 
-  return workResult.items.map(
-    (pageEntry) => parseContentfulWork(pageEntry) as Work,
-  );
+  const seenIds = new Set<string>();
+
+  return workResult.items
+    .map((pageEntry) => parseContentfulWork(pageEntry) as Work)
+    .filter((work) => {
+      if (!work || seenIds.has(work.id)) {
+        return false;
+      }
+      seenIds.add(work.id);
+      return true;
+    });
 }
 
 export async function fetchRandomWork({
@@ -222,11 +249,21 @@ export async function fetchRandomWork({
       "fields.hideFromWorkFeeds": false,
     });
 
-  const shuffledWork = allWork.items.sort(() => Math.random() - 0.5);
+  const seenIds = new Set<string>();
 
-  return shuffledWork
-    .slice(0, 4)
-    .map((work) => parseContentfulWork(work) as Work);
+  const uniqueWork = allWork.items
+    .map((work) => parseContentfulWork(work) as Work)
+    .filter((work) => {
+      if (!work || seenIds.has(work.id)) {
+        return false;
+      }
+      seenIds.add(work.id);
+      return true;
+    });
+
+  const shuffledWork = uniqueWork.sort(() => Math.random() - 0.5);
+
+  return shuffledWork.slice(0, 4);
 }
 
 // A function to fetch a single page by its slug.

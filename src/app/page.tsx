@@ -12,6 +12,8 @@ import {
 } from "src/lib/schema";
 import { envUrl } from "src/utils/helpers";
 
+export const revalidate = 3600;
+
 export async function generateMetadata(): Promise<Metadata> {
   const draft = await draftMode();
 
@@ -24,18 +26,33 @@ export async function generateMetadata(): Promise<Metadata> {
     return notFound();
   }
 
+  const url = envUrl();
+  const title = `After Avenue | ${page.pageTitle}`;
+
   return {
-    metadataBase: new URL(`${envUrl()}/`),
+    metadataBase: new URL(url),
     alternates: {
       canonical: "/",
     },
-    title: `After Avenue | ${page.pageTitle}`,
+    title,
+    description: page.metaDescription,
+    keywords: page.metaKeywords.join(","),
     robots:
       page.enableIndexing && process.env.ENVIRONMENT === "production"
         ? "index, follow"
         : "noindex, nofollow",
-    description: page.metaDescription,
-    keywords: page.metaKeywords.join(","),
+    openGraph: {
+      title,
+      description: page.metaDescription,
+      url,
+      siteName: "After Avenue",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: page.metaDescription,
+    },
   };
 }
 
