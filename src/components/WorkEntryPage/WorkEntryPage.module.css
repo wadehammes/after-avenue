@@ -115,12 +115,8 @@
 
 .videoContainer {
   display: block;
-  min-height: calc(100vw / 1.8);
   width: 100%;
-
-  @media (min-width: 1920px) {
-    min-height: calc(1920px / 1.8);
-  }
+  aspect-ratio: 16 / 9;
 }
 
 .workEntryPageFooter {

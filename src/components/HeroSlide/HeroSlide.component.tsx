@@ -2,33 +2,62 @@
 
 import classNames from "classnames";
 import parse from "html-react-parser";
-import type { ReactNode } from "react";
-import { useInView } from "react-intersection-observer";
+import type { MouseEvent, ReactNode } from "react";
+import { useEffect, useState } from "react";
+import styles from "src/components/HeroSlide/HeroSlide.module.css";
 import { Media } from "src/components/Media/Media.component";
-import styles from "src/components/Slide/Slide.module.css";
 import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
 import type { ComponentSlide } from "src/contentful/parseComponentSlide";
 
-interface SlideProps {
+interface HeroSlideProps {
   fields?: ComponentSlide | null;
   index: number;
   children?: ReactNode;
 }
 
-export const Slide = (props: SlideProps) => {
+export const HeroSlide = (props: HeroSlideProps) => {
   const { fields, index, children } = props;
-  const { ref, inView } = useInView({
-    threshold: 0.25,
-    triggerOnce: true,
-  });
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleHashClick = (e: MouseEvent<Element>) => {
+    const target = e.currentTarget as HTMLAnchorElement;
+    const href = target.getAttribute("href");
+    if (href?.startsWith("#")) {
+      const id = href.slice(1);
+      const element = document.getElementById(id);
+
+      if (element) {
+        e.preventDefault();
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - 100;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+
+  if (!fields) {
+    return null;
+  }
 
   return (
-    <div className={styles.slide} ref={ref}>
+    <div className={styles.heroSlide}>
       <div
         className={classNames(styles.slideBackgroundMediaContainer, {
-          [styles.inView]: inView,
+          [styles.inView]: isVisible,
         })}
-        style={{ opacity: !inView ? 0 : 1 }}
+        style={{ opacity: isVisible ? 1 : 0 }}
       >
         {fields?.backgroundMedia ? (
           <>
@@ -41,7 +70,7 @@ export const Slide = (props: SlideProps) => {
         {fields?.headline ? (
           <header
             className={classNames(styles.slideHeader, {
-              [styles.animated]: inView,
+              [styles.animated]: isVisible,
             })}
           >
             {index === 0 ? (
@@ -58,6 +87,7 @@ export const Slide = (props: SlideProps) => {
                   href={fields?.pageHash}
                   variant="outlined"
                   color="dark"
+                  onClick={handleHashClick}
                 >
                   {fields.ctaText}
                 </StyledButtonLink>

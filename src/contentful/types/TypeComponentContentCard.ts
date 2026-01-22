@@ -5,6 +5,7 @@ import type {
   EntrySkeletonType,
   LocaleCode,
 } from "contentful";
+import type { TypeEditorsSkeleton } from "./TypeEditors";
 
 export interface TypeComponentContentCardFields {
   entryTitle?: EntryFieldTypes.Symbol;
@@ -13,6 +14,8 @@ export interface TypeComponentContentCardFields {
   copy: EntryFieldTypes.RichText;
   copyAlignment?: EntryFieldTypes.Symbol<"Center" | "Left" | "Right">;
   style?: EntryFieldTypes.Symbol<"Card" | "No Style">;
+  editorCta?: EntryFieldTypes.EntryLink<TypeEditorsSkeleton>;
+  externalCta?: EntryFieldTypes.Symbol;
 }
 
 export type TypeComponentContentCardSkeleton = EntrySkeletonType<

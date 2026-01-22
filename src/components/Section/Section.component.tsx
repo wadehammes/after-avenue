@@ -2,43 +2,73 @@ import classNames from "classnames";
 import type { HTMLAttributes } from "react";
 import styles from "src/components/Section/Section.module.css";
 import type { SectionType } from "src/contentful/parseSections";
+import {
+  ContentLayout,
+  SectionBackgroundColor,
+} from "src/contentful/parseSections";
 import { RichText } from "src/contentful/richText";
+import { Alignment } from "src/interfaces/common.interfaces";
 
 interface SectionProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
   noPadding?: boolean;
   section?: SectionType | null;
-  sectionHeaderAlignment?: "left" | "center" | "right";
+  sectionHeaderAlignment?: Alignment;
+  sectionBackgroundColor?: SectionBackgroundColor;
   style?: React.CSSProperties;
 }
 
-export const Section = (props: SectionProps) => {
-  const {
-    className,
-    section,
-    sectionHeaderAlignment,
-    children,
-    noPadding,
-    style,
-  } = props;
+export const Section = ({
+  className,
+  section,
+  sectionHeaderAlignment,
+  children,
+  noPadding,
+  style,
+  sectionBackgroundColor,
+}: SectionProps) => {
   return (
     <section
+      id={section?.slug}
       className={classNames(className, styles.section, {
         [styles.noPadding]: noPadding,
+        [styles.sectionBackgroundColorBlack]:
+          sectionBackgroundColor === SectionBackgroundColor.Black,
+        [styles.sectionBackgroundColorWhite]:
+          sectionBackgroundColor === SectionBackgroundColor.White,
+        [styles.sectionBackgroundColorYellow]:
+          sectionBackgroundColor === SectionBackgroundColor.Yellow,
       })}
       style={style}
     >
-      {section?.sectionHeader ? (
+      {section?.sectionHeader && (
         <header
           className={classNames("section-header", {
-            left: sectionHeaderAlignment === "left",
-            right: sectionHeaderAlignment === "right",
+            left: sectionHeaderAlignment === Alignment.Left,
+            right: sectionHeaderAlignment === Alignment.Right,
+            center: sectionHeaderAlignment === Alignment.Center,
           })}
         >
           <RichText document={section.sectionHeader} />
         </header>
-      ) : null}
-      <div className={classNames(styles.sectionContent)}>{children}</div>
+      )}
+      <div
+        className={classNames(styles.sectionContent, {
+          [styles.container]:
+            section?.contentLayout !== ContentLayout.FullWidth &&
+            section?.contentLayout !== undefined,
+          [styles.singleColumn]:
+            section?.contentLayout === ContentLayout.SingleColumn,
+          [styles.twoColumn]:
+            section?.contentLayout === ContentLayout.TwoColumn,
+          [styles.threeColumn]:
+            section?.contentLayout === ContentLayout.ThreeColumn,
+          [styles.fourColumn]:
+            section?.contentLayout === ContentLayout.FourColumn,
+        })}
+      >
+        {children}
+      </div>
     </section>
   );
 };

@@ -5,18 +5,34 @@ import type {
   EntrySkeletonType,
   LocaleCode,
 } from "contentful";
+import type { TypeComponentContentCardSkeleton } from "./TypeComponentContentCard";
 import type { TypeComponentCopyBlockSkeleton } from "./TypeComponentCopyBlock";
+import type { TypeComponentModulesSkeleton } from "./TypeComponentModules";
 import type { TypeComponentSlideSkeleton } from "./TypeComponentSlide";
 
 export interface TypeSectionFields {
   entryTitle?: EntryFieldTypes.Symbol;
+  slug: EntryFieldTypes.Symbol;
   sectionHeader?: EntryFieldTypes.RichText;
+  sectionHeaderAlignment?: EntryFieldTypes.Symbol<"Center" | "Left" | "Right">;
+  sectionBackgroundColor?: EntryFieldTypes.Symbol<
+    "Black" | "System Color" | "White" | "Yellow"
+  >;
   content: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<
-      TypeComponentCopyBlockSkeleton | TypeComponentSlideSkeleton
+      | TypeComponentContentCardSkeleton
+      | TypeComponentCopyBlockSkeleton
+      | TypeComponentModulesSkeleton
+      | TypeComponentSlideSkeleton
     >
   >;
-  slug: EntryFieldTypes.Symbol;
+  contentLayout?: EntryFieldTypes.Symbol<
+    | "Four Column"
+    | "Full Width"
+    | "Single Column"
+    | "Three Column"
+    | "Two Column"
+  >;
 }
 
 export type TypeSectionSkeleton = EntrySkeletonType<
