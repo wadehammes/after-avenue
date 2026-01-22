@@ -5,6 +5,7 @@ import type { SectionType } from "src/contentful/parseSections";
 import {
   ContentLayout,
   SectionBackgroundColor,
+  SectionPadding,
 } from "src/contentful/parseSections";
 import { RichText } from "src/contentful/richText";
 import { Alignment } from "src/interfaces/common.interfaces";
@@ -27,11 +28,14 @@ export const Section = ({
   style,
   sectionBackgroundColor,
 }: SectionProps) => {
+  const noSectionPadding =
+    noPadding || section?.sectionPadding === SectionPadding.None;
+
   return (
     <section
       id={section?.slug}
       className={classNames(className, styles.section, {
-        [styles.noPadding]: noPadding,
+        [styles.noPadding]: noSectionPadding,
         [styles.sectionBackgroundColorBlack]:
           sectionBackgroundColor === SectionBackgroundColor.Black,
         [styles.sectionBackgroundColorWhite]:

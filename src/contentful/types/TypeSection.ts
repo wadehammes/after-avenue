@@ -18,6 +18,7 @@ export interface TypeSectionFields {
   sectionBackgroundColor?: EntryFieldTypes.Symbol<
     "Black" | "System Color" | "White" | "Yellow"
   >;
+  sectionPadding?: EntryFieldTypes.Symbol<"None" | "Regular">;
   content: EntryFieldTypes.Array<
     EntryFieldTypes.EntryLink<
       | TypeComponentContentCardSkeleton
