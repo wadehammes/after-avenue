@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { EditorsPage } from "src/components/EditorsPage/EditorsPage.component";
-import { fetchAllEditors } from "src/contentful/getEditors";
+import { fetchAllEditorsForMainPage } from "src/contentful/getEditors";
 import { fetchPage } from "src/contentful/getPages";
 import {
   createBreadcrumbSchema,
@@ -47,15 +47,15 @@ export async function generateMetadata(): Promise<Metadata> {
 async function Editors() {
   const draft = await draftMode();
 
-  // Fetch the editors page entry by slug,
-  // using the content preview if draft mode is enabled:
-  const editorsPage = await fetchPage({
-    slug: EDITORS_PAGE_SLUG,
-    preview: draft.isEnabled,
-  });
-
-  // Fetch all editors
-  const allEditors = await fetchAllEditors({ preview: draft.isEnabled });
+  const [editorsPage, allEditors] = await Promise.all([
+    fetchPage({
+      slug: EDITORS_PAGE_SLUG,
+      preview: draft.isEnabled,
+    }),
+    fetchAllEditorsForMainPage({
+      preview: draft.isEnabled,
+    }),
+  ]);
 
   if (!editorsPage) {
     // If a page can't be found,

@@ -26,6 +26,7 @@ export interface Editor {
   metaDescription: string;
   priority: number;
   publishDate: string;
+  showOnEditorsPage: boolean;
 }
 
 // A function to transform an editor entry
@@ -51,6 +52,7 @@ export function parseContentfulEditor(
     metaDescription: editorEntry.fields.metaDescription,
     priority: editorEntry.fields.priority ? 1 : 0,
     publishDate: editorEntry.sys.createdAt,
+    showOnEditorsPage: editorEntry.fields.showOnEditorsPage ?? false,
   };
 }
 
@@ -73,17 +75,9 @@ export async function fetchAllEditors({
       order: ["fields.priority"],
     });
 
-  const seenSlugs = new Set<string>();
-
   return editorResults.items
-    .map((pageEntry) => parseContentfulEditor(pageEntry) as Editor)
-    .filter((editor) => {
-      if (!editor || seenSlugs.has(editor.editorSlug)) {
-        return false;
-      }
-      seenSlugs.add(editor.editorSlug);
-      return true;
-    });
+    .map((pageEntry) => parseContentfulEditor(pageEntry))
+    .filter((editor): editor is Editor => editor !== null);
 }
 
 // A function to fetch a single editor by its slug.
@@ -107,6 +101,25 @@ export async function fetchEditorBySlug({
     });
 
   return parseContentfulEditor(pagesResult.items[0]);
+}
+
+export async function fetchAllEditorsForMainPage({
+  preview,
+}: FetchAllWorkOptions): Promise<Editor[]> {
+  const contentful = contentfulClient({ preview });
+
+  const editorResults =
+    await contentful.withoutUnresolvableLinks.getEntries<TypeEditorsSkeleton>({
+      content_type: "editors",
+      "fields.showOnEditorsPage": true,
+      include: 10,
+      limit: 1000,
+      order: ["fields.priority"],
+    });
+
+  return editorResults.items
+    .map((pageEntry) => parseContentfulEditor(pageEntry))
+    .filter((editor): editor is Editor => editor !== null);
 }
 
 export const parseContentfulEditorForCta = (
