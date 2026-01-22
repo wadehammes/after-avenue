@@ -8,7 +8,6 @@ export const CONTACT_PAGE_SLUG = "contact";
 export const TEST_PAGE_SLUG = "test-page";
 
 export const EXCLUDED_PAGE_SLUGS_FROM_BUILD = [
-  ABOUT_PAGE_SLUG,
   CONTACT_PAGE_SLUG,
   EDITORS_PAGE_SLUG,
   HOME_PAGE_SLUG,
