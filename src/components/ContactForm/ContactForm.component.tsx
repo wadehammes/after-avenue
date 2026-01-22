@@ -1,8 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useId, useRef } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import type ReCAPTCHAComponent from "react-google-recaptcha";
 import { Controller, type SubmitHandler, useForm } from "react-hook-form";
+
+const ReCAPTCHA = dynamic(() => import("react-google-recaptcha"), {
+  ssr: false,
+}) as typeof ReCAPTCHAComponent;
+
 import styles from "src/components/ContactForm/ContactForm.module.css";
 import { StyledButton } from "src/components/StyledButton/StyledButton.component";
 import { StyledInput } from "src/components/StyledInput/StyledInput.component";
@@ -37,7 +43,7 @@ const defaultValues: ContactFormInputs = {
 
 export const ContactForm = () => {
   const globalVariables = useGlobalVariables();
-  const reCaptcha = useRef<ReCAPTCHA>(null);
+  const reCaptcha = useRef<ReCAPTCHAComponent>(null);
   const {
     handleSubmit,
     control,

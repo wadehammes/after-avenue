@@ -29,6 +29,8 @@ export const EditorsCard = (props: EditorsCardProps) => {
           alt={editor.editorName}
           width={editor.editorHeadshot?.width}
           height={editor.editorHeadshot?.height}
+          sizes="(max-width: 768px) 50vw, 25vw"
+          loading="lazy"
         />
       </div>
       <div className={styles.editorsCardMeta}>

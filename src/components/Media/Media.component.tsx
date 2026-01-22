@@ -42,6 +42,7 @@ export const Media = (props: AnimatedMediaProps) => {
       width={media.width}
       height={media.height}
       loading="lazy"
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       style={{ height: "auto", opacity }}
       className={classNames(className)}
       quality={85}

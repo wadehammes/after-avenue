@@ -5,6 +5,9 @@ import { checkRateLimit } from "src/utils/rateLimit";
 import { verifyRecaptchaToken } from "src/utils/recaptcha";
 import { isSpam } from "src/utils/spamDetection";
 
+export const dynamic = "force-dynamic";
+export const maxDuration = 30;
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {

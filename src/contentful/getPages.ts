@@ -93,9 +93,17 @@ export async function fetchPages({
       limit: 1000,
     });
 
-  return pageResult.items.map(
-    (pageEntry) => parseContentfulPage(pageEntry) as Page,
-  );
+  const seenSlugs = new Set<string>();
+
+  return pageResult.items
+    .map((pageEntry) => parseContentfulPage(pageEntry) as Page)
+    .filter((page) => {
+      if (!page || seenSlugs.has(page.pageSlug)) {
+        return false;
+      }
+      seenSlugs.add(page.pageSlug);
+      return true;
+    });
 }
 
 // A function to fetch a single page by its slug.

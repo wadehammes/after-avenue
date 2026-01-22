@@ -24,6 +24,9 @@ import {
 } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
+export const revalidate = 3600;
+export const dynamicParams = false;
+
 interface EditorParams {
   slug: string;
 }
@@ -101,6 +104,7 @@ export async function generateMetadata({
 // The actual EditorEntry component.
 async function EditorEntry({ params }: EditorsProps) {
   const { slug } = await params;
+
   const draft = await draftMode();
 
   // Fetch a single editor entry by slug,

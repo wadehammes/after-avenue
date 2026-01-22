@@ -2,7 +2,6 @@
 
 import classNames from "classnames";
 import parse from "html-react-parser";
-import { useEffect, useState } from "react";
 import { FeaturedBrands } from "src/components/FeaturedBrands/FeaturedBrands.component";
 import { FeaturedWork } from "src/components/FeaturedWork/FeaturedWork.component";
 import styles from "src/components/HomePage/HomePage.module.css";
@@ -24,16 +23,6 @@ export const HomePage = (props: HomePageProps) => {
     contactFooterButtonText,
   } = pageFields;
 
-  const [isAnimated, setIsAnimated] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsAnimated(true);
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   const title = `After Avenue | ${pageTitle}`;
 
   return (
@@ -43,11 +32,7 @@ export const HomePage = (props: HomePageProps) => {
           {pageDisplayTitle ? (
             <header className="section-header">
               <h1 className="hidden-title">{title}</h1>
-              <h2
-                className={classNames(styles.homeMainTitle, {
-                  [styles.animated]: isAnimated,
-                })}
-              >
+              <h2 className={classNames(styles.homeMainTitle, styles.animated)}>
                 {parse(pageDisplayTitle)}
               </h2>
             </header>

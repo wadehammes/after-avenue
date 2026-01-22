@@ -73,9 +73,17 @@ export async function fetchAllEditors({
       order: ["fields.priority"],
     });
 
-  return editorResults.items.map(
-    (pageEntry) => parseContentfulEditor(pageEntry) as Editor,
-  );
+  const seenSlugs = new Set<string>();
+
+  return editorResults.items
+    .map((pageEntry) => parseContentfulEditor(pageEntry) as Editor)
+    .filter((editor) => {
+      if (!editor || seenSlugs.has(editor.editorSlug)) {
+        return false;
+      }
+      seenSlugs.add(editor.editorSlug);
+      return true;
+    });
 }
 
 // A function to fetch a single editor by its slug.

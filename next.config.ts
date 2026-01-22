@@ -87,6 +87,9 @@ const nextConfig: NextConfig = {
       "@contentful/rich-text-react-renderer",
       "react-aria",
       "react-intersection-observer",
+      "react-player",
+      "html-react-parser",
+      "react-google-recaptcha",
     ],
   },
   webpack(config, { dev, isServer }) {
