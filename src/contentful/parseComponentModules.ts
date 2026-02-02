@@ -1,19 +1,22 @@
 import type { Entry } from "contentful";
-import type { TypeComponentModulesSkeleton } from "src/contentful/types";
+import type { ExtractSymbolType } from "src/contentful/helpers";
+import type {
+  TypeComponentModulesFields,
+  TypeComponentModulesSkeleton,
+} from "src/contentful/types";
 
-export type Module = "Featured Brands Marquee" | "Services Marquee" | undefined;
+export type ModuleType = ExtractSymbolType<
+  NonNullable<TypeComponentModulesFields["module"]>
+>;
 
-// Our simplified version of a module entry.
-// We don't need all the data that Contentful gives us.
 export interface ComponentModules {
-  module: Module;
+  module: ModuleType;
 }
 
 export type ComponentModulesEntry =
   | Entry<TypeComponentModulesSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>
   | undefined;
 
-// A function to transform a Contentful component modules component
 export function parseContentfulComponentModules(
   entry: ComponentModulesEntry,
 ): ComponentModules | null {
@@ -21,7 +24,11 @@ export function parseContentfulComponentModules(
     return null;
   }
 
+  if (!("fields" in entry)) {
+    return null;
+  }
+
   return {
-    module: entry.fields.module as Module,
+    module: entry.fields.module as ModuleType,
   };
 }

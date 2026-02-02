@@ -1,15 +1,17 @@
 import type { Document } from "@contentful/rich-text-types";
 import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
-import { type Editor, parseContentfulEditor } from "src/contentful/getEditors";
+import {
+  type EditorType,
+  parseContentfulEditor,
+} from "src/contentful/getEditors";
 import type { WorkCategory } from "src/contentful/getWorkCategories";
 import { parseContentfulWorkCategory } from "src/contentful/getWorkCategories";
-import type { TypeWorkSkeleton } from "src/contentful/types";
+import type { ContentfulTypeCheck } from "src/contentful/helpers";
+import type { TypeWorkFields, TypeWorkSkeleton } from "src/contentful/types";
 
 type WorkEntry = Entry<TypeWorkSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
 
-// Our simplified version of a Page.
-// We don't need all the data that Contentful gives us.
 export interface Work {
   contactFooterButtonText?: string;
   contactFooterTitle?: string;
@@ -24,17 +26,25 @@ export interface Work {
   workCredits: Document | undefined | null;
   workDate: string | null;
   workDescription: Document | undefined | null;
-  workEditors?: (Editor | null)[];
+  workEditors?: (EditorType | null)[];
   workSeriesCategory: WorkCategory | null;
   workSlug: string;
   workTitle: string;
   workVideoUrl: string;
 }
 
-// A function to transform a Contentful page
-// into our own Page object.
+const _workTypeValidation: ContentfulTypeCheck<
+  Work,
+  TypeWorkFields,
+  "id" | "publishDate" | "updatedAt"
+> = true;
+
 export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
   if (!workEntry) {
+    return null;
+  }
+
+  if (!("fields" in workEntry)) {
     return null;
   }
 
@@ -80,8 +90,6 @@ export function parseContentfulFeaturedWork(
   };
 }
 
-// A function to fetch all pages.
-// Optionally uses the Contentful content preview.
 interface FetchAllWorkOptions {
   preview: boolean;
 }

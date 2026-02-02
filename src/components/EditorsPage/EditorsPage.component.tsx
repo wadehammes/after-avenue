@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import styles from "src/components/EditorsPage/EditorsPage.module.css";
-import type { Editor } from "src/contentful/getEditors";
+import type { EditorType } from "src/contentful/getEditors";
 import type { Page } from "src/contentful/getPages";
 import { useIsBrowser } from "src/hooks/useIsBrowser";
 
@@ -15,7 +15,7 @@ const ReactPlayer = dynamic(() => import("react-player"), {
 
 interface EditorsPageProps {
   pageFields: Page;
-  editors: Editor[];
+  editors: EditorType[];
 }
 
 export const EditorsPage = (props: EditorsPageProps) => {

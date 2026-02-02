@@ -1,12 +1,16 @@
 import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
+import type { ContentfulTypeCheck } from "src/contentful/helpers";
 import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
 import { parseContentfulAsset } from "src/contentful/parseContentfulAsset";
 import {
   parseContentfulSection,
   type SectionType,
 } from "src/contentful/parseSections";
-import type { TypePageSkeleton } from "src/contentful/types/TypePage";
+import type {
+  TypePageFields,
+  TypePageSkeleton,
+} from "src/contentful/types/TypePage";
 
 export type PageEntry = Entry<
   TypePageSkeleton,
@@ -14,9 +18,8 @@ export type PageEntry = Entry<
   string
 >;
 
-// Our simplified version of a Page.
-// We don't need all the data that Contentful gives us.
 export interface Page {
+  id: string;
   contactFooterTitle?: string;
   contactFooterButtonText?: string;
   enableIndexing: boolean;
@@ -30,17 +33,26 @@ export interface Page {
   sections: (SectionType | null)[];
   socialImage: ContentfulAsset | null;
   updatedAt: string;
-  publishDate?: string;
+  publishDate: string;
 }
 
-// A function to transform a Contentful page
-// into our own Page object.
+const _pageTypeValidation: ContentfulTypeCheck<
+  Page,
+  TypePageFields,
+  "id" | "publishDate" | "updatedAt"
+> = true;
+
 export function parseContentfulPage(pageEntry?: PageEntry): Page | null {
   if (!pageEntry) {
     return null;
   }
 
+  if (!("fields" in pageEntry)) {
+    return null;
+  }
+
   return {
+    id: pageEntry.sys.id,
     contactFooterButtonText: pageEntry.fields.contactFooterButtonText,
     contactFooterTitle: pageEntry.fields.contactFooterTitle,
     enableIndexing: pageEntry.fields?.enableIndexing ?? true,

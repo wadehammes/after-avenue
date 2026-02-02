@@ -2,9 +2,13 @@ import type { Document } from "@contentful/rich-text-types";
 import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
 import { parseContentfulFeaturedWork, type Work } from "src/contentful/getWork";
+import type { ContentfulTypeCheck } from "src/contentful/helpers";
 import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
 import { parseContentfulAsset } from "src/contentful/parseContentfulAsset";
-import type { TypeEditorsSkeleton } from "src/contentful/types";
+import type {
+  TypeEditorsFields,
+  TypeEditorsSkeleton,
+} from "src/contentful/types";
 
 type EditorEntry = Entry<
   TypeEditorsSkeleton,
@@ -12,9 +16,8 @@ type EditorEntry = Entry<
   string
 >;
 
-// Our simplified version of an Editor.
-// We don't need all the data that Contentful gives us.
-export interface Editor {
+export interface EditorType {
+  id: string;
   editorBio: Document | undefined | null;
   editorName: string;
   editorTitle?: string;
@@ -29,16 +32,25 @@ export interface Editor {
   showOnEditorsPage: boolean;
 }
 
-// A function to transform an editor entry
-// into our own Page object.
+const _editorTypeValidation: ContentfulTypeCheck<
+  EditorType,
+  TypeEditorsFields,
+  "id" | "publishDate" | "updatedAt"
+> = true;
+
 export function parseContentfulEditor(
   editorEntry?: EditorEntry,
-): Editor | null {
+): EditorType | null {
   if (!editorEntry) {
     return null;
   }
 
+  if (!("fields" in editorEntry)) {
+    return null;
+  }
+
   return {
+    id: editorEntry.sys.id,
     editorBio: editorEntry.fields.editorBio,
     editorHeadshot: parseContentfulAsset(editorEntry.fields.editorHeadshot),
     editorHeadshotHover: parseContentfulAsset(
@@ -56,15 +68,13 @@ export function parseContentfulEditor(
   };
 }
 
-// A function to fetch all editors.
-// Optionally uses the Contentful content preview.
 interface FetchAllWorkOptions {
   preview: boolean;
 }
 
 export async function fetchAllEditors({
   preview,
-}: FetchAllWorkOptions): Promise<Editor[]> {
+}: FetchAllWorkOptions): Promise<EditorType[]> {
   const contentful = contentfulClient({ preview });
 
   const editorResults =
@@ -77,11 +87,9 @@ export async function fetchAllEditors({
 
   return editorResults.items
     .map((pageEntry) => parseContentfulEditor(pageEntry))
-    .filter((editor): editor is Editor => editor !== null);
+    .filter((editor): editor is EditorType => editor !== null);
 }
 
-// A function to fetch a single editor by its slug.
-// Optionally uses the Contentful content preview.
 interface FetchEditorBySlugOptions {
   slug: string;
   preview: boolean;
@@ -90,7 +98,7 @@ interface FetchEditorBySlugOptions {
 export async function fetchEditorBySlug({
   slug,
   preview,
-}: FetchEditorBySlugOptions): Promise<Editor | null> {
+}: FetchEditorBySlugOptions): Promise<EditorType | null> {
   const contentful = contentfulClient({ preview });
 
   const pagesResult =
@@ -105,7 +113,7 @@ export async function fetchEditorBySlug({
 
 export async function fetchAllEditorsForMainPage({
   preview,
-}: FetchAllWorkOptions): Promise<Editor[]> {
+}: FetchAllWorkOptions): Promise<EditorType[]> {
   const contentful = contentfulClient({ preview });
 
   const editorResults =
@@ -119,12 +127,12 @@ export async function fetchAllEditorsForMainPage({
 
   return editorResults.items
     .map((pageEntry) => parseContentfulEditor(pageEntry))
-    .filter((editor): editor is Editor => editor !== null);
+    .filter((editor): editor is EditorType => editor !== null);
 }
 
 export const parseContentfulEditorForCta = (
   editorEntry?: EditorEntry,
-): Partial<Editor> | null => {
+): Partial<EditorType> | null => {
   if (!editorEntry) {
     return null;
   }

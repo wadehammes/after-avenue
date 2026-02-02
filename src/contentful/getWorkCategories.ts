@@ -1,12 +1,22 @@
 import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
-import type { TypeWorkCategorySkeleton } from "src/contentful/types";
+import type { ContentfulTypeCheck } from "src/contentful/helpers";
+import type {
+  TypeWorkCategoryFields,
+  TypeWorkCategorySkeleton,
+} from "src/contentful/types";
 
 export interface WorkCategory {
   categoryName: string;
   slug: string;
   updatedAt: string;
 }
+
+const _workCategoryTypeValidation: ContentfulTypeCheck<
+  WorkCategory,
+  TypeWorkCategoryFields,
+  "updatedAt"
+> = true;
 
 type WorkCategoryEntry = Entry<
   TypeWorkCategorySkeleton,
@@ -21,6 +31,10 @@ export function parseContentfulWorkCategory(
     return null;
   }
 
+  if (!("fields" in category)) {
+    return null;
+  }
+
   return {
     categoryName: category.fields.categoryName,
     slug: category.fields.slug,
@@ -28,8 +42,6 @@ export function parseContentfulWorkCategory(
   };
 }
 
-// A function to fetch all pages.
-// Optionally uses the Contentful content preview.
 interface FetchAllWorkOptions {
   preview: boolean;
 }

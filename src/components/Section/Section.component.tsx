@@ -1,11 +1,9 @@
 import classNames from "classnames";
 import type { HTMLAttributes } from "react";
 import styles from "src/components/Section/Section.module.css";
-import type { SectionType } from "src/contentful/parseSections";
-import {
-  ContentLayout,
-  SectionBackgroundColor,
-  SectionPadding,
+import type {
+  SectionBackgroundColorType,
+  SectionType,
 } from "src/contentful/parseSections";
 import { RichText } from "src/contentful/richText";
 import { Alignment } from "src/interfaces/common.interfaces";
@@ -15,7 +13,7 @@ interface SectionProps extends HTMLAttributes<HTMLDivElement> {
   noPadding?: boolean;
   section?: SectionType | null;
   sectionHeaderAlignment?: Alignment;
-  sectionBackgroundColor?: SectionBackgroundColor;
+  sectionBackgroundColor?: SectionBackgroundColorType;
   style?: React.CSSProperties;
 }
 
@@ -28,8 +26,7 @@ export const Section = ({
   style,
   sectionBackgroundColor,
 }: SectionProps) => {
-  const noSectionPadding =
-    noPadding || section?.sectionPadding === SectionPadding.None;
+  const noSectionPadding = noPadding || section?.sectionPadding === "None";
 
   return (
     <section
@@ -37,11 +34,11 @@ export const Section = ({
       className={classNames(className, styles.section, {
         [styles.noPadding]: noSectionPadding,
         [styles.sectionBackgroundColorBlack]:
-          sectionBackgroundColor === SectionBackgroundColor.Black,
+          sectionBackgroundColor === "Black",
         [styles.sectionBackgroundColorWhite]:
-          sectionBackgroundColor === SectionBackgroundColor.White,
+          sectionBackgroundColor === "White",
         [styles.sectionBackgroundColorYellow]:
-          sectionBackgroundColor === SectionBackgroundColor.Yellow,
+          sectionBackgroundColor === "Yellow",
       })}
       style={style}
     >
@@ -59,16 +56,12 @@ export const Section = ({
       <div
         className={classNames(styles.sectionContent, {
           [styles.container]:
-            section?.contentLayout !== ContentLayout.FullWidth &&
+            section?.contentLayout !== "Full Width" &&
             section?.contentLayout !== undefined,
-          [styles.singleColumn]:
-            section?.contentLayout === ContentLayout.SingleColumn,
-          [styles.twoColumn]:
-            section?.contentLayout === ContentLayout.TwoColumn,
-          [styles.threeColumn]:
-            section?.contentLayout === ContentLayout.ThreeColumn,
-          [styles.fourColumn]:
-            section?.contentLayout === ContentLayout.FourColumn,
+          [styles.singleColumn]: section?.contentLayout === "Single Column",
+          [styles.twoColumn]: section?.contentLayout === "Two Column",
+          [styles.threeColumn]: section?.contentLayout === "Three Column",
+          [styles.fourColumn]: section?.contentLayout === "Four Column",
         })}
       >
         {children}

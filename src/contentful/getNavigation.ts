@@ -4,7 +4,11 @@ import {
   type Page,
   parseContentfulPageForNavigation,
 } from "src/contentful/getPages";
-import type { TypeNavigationSkeleton } from "src/contentful/types";
+import type { ContentfulTypeCheck } from "src/contentful/helpers";
+import type {
+  TypeNavigationFields,
+  TypeNavigationSkeleton,
+} from "src/contentful/types";
 
 type NavigationEntry = Entry<
   TypeNavigationSkeleton,
@@ -12,11 +16,16 @@ type NavigationEntry = Entry<
   string
 >;
 
-// Our simplified version of our Navigation.
-// We don't need all the data that Contentful gives us.
 export interface NavigationType {
+  id: string;
   navigationItems: Partial<Page | null>[];
 }
+
+const _navigationTypeValidation: ContentfulTypeCheck<
+  NavigationType,
+  TypeNavigationFields,
+  "id"
+> = true;
 
 // A function to transform a Contentful case study
 // into our own Case Study object.
@@ -27,15 +36,19 @@ export function parseContentfulNavigation(
     return null;
   }
 
+  if (!("fields" in navigationEntry)) {
+    return null;
+  }
+
   return {
-    navigationItems: navigationEntry.fields.navigationItems.map((page) =>
-      parseContentfulPageForNavigation(page),
-    ),
+    id: navigationEntry.sys.id,
+    navigationItems:
+      navigationEntry.fields.navigationItems?.map((page) =>
+        parseContentfulPageForNavigation(page),
+      ) ?? [],
   };
 }
 
-// A function to fetch our navigation by its ID.
-// Optionally uses the Contentful content preview.
 interface FetchNavigationOptions {
   id: string;
   preview: boolean;

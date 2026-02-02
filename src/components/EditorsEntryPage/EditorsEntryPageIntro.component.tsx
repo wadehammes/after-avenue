@@ -1,11 +1,11 @@
 import Image from "next/image";
 import styles from "src/components/EditorsEntryPage/EditorsEntryPage.module.css";
-import type { Editor } from "src/contentful/getEditors";
+import type { EditorType } from "src/contentful/getEditors";
 import { RichText } from "src/contentful/richText";
 import { createImageUrl } from "src/utils/helpers";
 
 interface EditorsEntryPageIntroProps {
-  editorEntry: Editor;
+  editorEntry: EditorType;
 }
 
 export const EditorsEntryPageIntro = (props: EditorsEntryPageIntroProps) => {

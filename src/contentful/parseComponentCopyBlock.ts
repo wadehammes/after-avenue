@@ -1,19 +1,32 @@
 import type { Document } from "@contentful/rich-text-types";
 import type { Entry } from "contentful";
-import type { TypeComponentCopyBlockSkeleton } from "src/contentful/types";
+import type {
+  ContentfulTypeCheck,
+  ExtractSymbolType,
+} from "src/contentful/helpers";
+import type {
+  TypeComponentCopyBlockFields,
+  TypeComponentCopyBlockSkeleton,
+} from "src/contentful/types";
 
-// Our simplified version of an copy block entry.
-// We don't need all the data that Contentful gives us.
+type CopyBlockTextAlignType = ExtractSymbolType<
+  NonNullable<TypeComponentCopyBlockFields["textAlign"]>
+>;
+
 export interface ComponentCopyBlock {
   copy: Document | null;
-  textAlign?: "left" | "center" | "right";
+  textAlign?: CopyBlockTextAlignType;
 }
+
+const _componentCopyBlockTypeValidation: ContentfulTypeCheck<
+  ComponentCopyBlock,
+  TypeComponentCopyBlockFields
+> = true;
 
 export type ComponentCopyBlockEntry =
   | Entry<TypeComponentCopyBlockSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>
   | undefined;
 
-// A function to transform a Contentful copy block entry
 export function parseComponentCopyBlock(
   entry: ComponentCopyBlockEntry,
 ): ComponentCopyBlock | null {

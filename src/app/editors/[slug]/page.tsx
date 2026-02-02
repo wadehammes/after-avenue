@@ -4,7 +4,7 @@ import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import type { Thing } from "schema-dts";
 import { EditorsEntryPage } from "src/components/EditorsEntryPage/EditorsEntryPage.component";
-import type { Editor } from "src/contentful/getEditors";
+import type { EditorType } from "src/contentful/getEditors";
 import { fetchAllEditors, fetchEditorBySlug } from "src/contentful/getEditors";
 import { fetchWorkByEditor } from "src/contentful/getWork";
 import type { SitemapItem } from "src/lib/generateSitemap";
@@ -45,7 +45,7 @@ export async function generateStaticParams(): Promise<EditorParams[]> {
   if (editorEntries) {
     // Generate Sitemap
     const routes: SitemapItem[] = editorEntries
-      .map((editor: Editor) => {
+      .map((editor: EditorType) => {
         if (editor.editorSlug.includes(TEST_PAGE_SLUG)) {
           return {
             route: "",

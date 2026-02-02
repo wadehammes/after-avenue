@@ -1,30 +1,44 @@
 import type { Document } from "@contentful/rich-text-types";
 import type { Entry } from "contentful";
 import {
-  type Editor,
+  type EditorType,
   parseContentfulEditorForCta,
 } from "src/contentful/getEditors";
+import type {
+  ContentfulTypeCheck,
+  ExtractSymbolType,
+} from "src/contentful/helpers";
 import {
   type ContentfulAsset,
   parseContentfulAsset,
 } from "src/contentful/parseContentfulAsset";
-import type { TypeComponentContentCardSkeleton } from "src/contentful/types";
+import type {
+  TypeComponentContentCardFields,
+  TypeComponentContentCardSkeleton,
+} from "src/contentful/types";
 import type { Alignment } from "src/interfaces/common.interfaces";
 
-export type ContentCardStyle = "Card" | "No Style";
-export type ContentCardImageStyle = "Circle" | "Regular";
+export type ContentCardStyleType = ExtractSymbolType<
+  NonNullable<TypeComponentContentCardFields["style"]>
+>;
+export type ContentCardImageStyleType = ExtractSymbolType<
+  NonNullable<TypeComponentContentCardFields["imageStyle"]>
+>;
 
-// Our simplified version of a content card entry.
-// We don't need all the data that Contentful gives us.
 export interface ContentCard {
   image?: ContentfulAsset | null;
   copy: Document | null;
   copyAlignment?: Alignment;
-  style?: ContentCardStyle;
-  imageStyle?: ContentCardImageStyle;
-  editorCta?: Partial<Editor> | null;
+  style?: ContentCardStyleType;
+  imageStyle?: ContentCardImageStyleType;
+  editorCta?: Partial<EditorType> | null;
   externalCta?: string | null;
 }
+
+const _contentCardTypeValidation: ContentfulTypeCheck<
+  ContentCard,
+  TypeComponentContentCardFields
+> = true;
 
 export type ContentCardEntry =
   | Entry<
@@ -34,7 +48,6 @@ export type ContentCardEntry =
     >
   | undefined;
 
-// A function to transform a Contentful content card component
 export function parseContentfulContentCard(
   entry: ContentCardEntry,
 ): ContentCard | null {
@@ -42,12 +55,16 @@ export function parseContentfulContentCard(
     return null;
   }
 
+  if (!("fields" in entry)) {
+    return null;
+  }
+
   return {
     image: parseContentfulAsset(entry.fields.image),
     copy: entry.fields.copy,
     copyAlignment: entry.fields.copyAlignment as Alignment,
-    style: entry.fields.style as ContentCardStyle,
-    imageStyle: entry.fields.imageStyle as ContentCardImageStyle,
+    style: entry.fields.style as ContentCardStyleType,
+    imageStyle: entry.fields.imageStyle as ContentCardImageStyleType,
     editorCta: parseContentfulEditorForCta(entry.fields.editorCta),
     externalCta: entry.fields.externalCta,
   };
