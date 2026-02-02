@@ -3,16 +3,23 @@ import {
   type Page,
   parseContentfulPageForNavigation,
 } from "src/contentful/getPages";
+import type {
+  ContentfulTypeCheck,
+  ExtractSymbolType,
+} from "src/contentful/helpers";
 import {
   type ContentfulAsset,
   parseContentfulAsset,
 } from "src/contentful/parseContentfulAsset";
-import type { TypeComponentSlideSkeleton } from "src/contentful/types";
+import type {
+  TypeComponentSlideFields,
+  TypeComponentSlideSkeleton,
+} from "src/contentful/types";
 
-export type SlideType = "Conversation Bubble" | "Hero" | "Regular";
+export type SlideType = ExtractSymbolType<
+  NonNullable<TypeComponentSlideFields["slideType"]>
+>;
 
-// Our simplified version of an slide entry.
-// We don't need all the data that Contentful gives us.
 export interface ComponentSlide {
   backgroundMedia?: ContentfulAsset | null;
   ctaText?: string;
@@ -21,10 +28,16 @@ export interface ComponentSlide {
   pageCta?: Partial<Page> | null;
   pageHash?: string;
   slideCopy?: string;
-  slug?: string;
+  slug: string;
   subheadline?: string;
   slideType?: SlideType;
 }
+
+const _componentSlideTypeValidation: ContentfulTypeCheck<
+  ComponentSlide,
+  TypeComponentSlideFields,
+  "id" | "slug"
+> = true;
 
 export type ComponentSlideEntry =
   | Entry<TypeComponentSlideSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>
@@ -35,6 +48,10 @@ export function parseContentfulComponentSlide(
   entry: ComponentSlideEntry,
 ): ComponentSlide | null {
   if (!entry) {
+    return null;
+  }
+
+  if (!("fields" in entry)) {
     return null;
   }
 

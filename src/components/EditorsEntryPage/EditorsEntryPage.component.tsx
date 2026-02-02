@@ -2,11 +2,11 @@ import { ContactFooter } from "src/components/ContactFooter/ContactFooter.compon
 import styles from "src/components/EditorsEntryPage/EditorsEntryPage.module.css";
 import { EditorsEntryPageIntro } from "src/components/EditorsEntryPage/EditorsEntryPageIntro.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
-import type { Editor } from "src/contentful/getEditors";
+import type { EditorType } from "src/contentful/getEditors";
 import type { Work } from "src/contentful/getWork";
 
 interface EditorsEntryPageProps {
-  editorEntry: Editor;
+  editorEntry: EditorType;
   editorsWork: Work[];
 }
 

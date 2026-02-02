@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import styles from "src/components/EditorsCard/EditorsCard.module.css";
-import type { Editor } from "src/contentful/getEditors";
+import type { EditorType } from "src/contentful/getEditors";
 import { createImageUrl } from "src/utils/helpers";
 
 interface EditorsCardProps {
-  editor: Editor;
+  editor: EditorType;
 }
 
 export const EditorsCard = (props: EditorsCardProps) => {

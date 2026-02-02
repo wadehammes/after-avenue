@@ -1,6 +1,10 @@
 import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
-import type { TypeGlobalVariablesSkeleton } from "src/contentful/types";
+import type { ContentfulTypeCheck } from "src/contentful/helpers";
+import type {
+  TypeGlobalVariablesFields,
+  TypeGlobalVariablesSkeleton,
+} from "src/contentful/types";
 
 export interface GlobalVariables {
   address?: string;
@@ -20,16 +24,25 @@ export interface GlobalVariables {
   twitterUrl?: string;
 }
 
+const _globalVariablesTypeValidation: ContentfulTypeCheck<
+  GlobalVariables,
+  TypeGlobalVariablesFields
+> = true;
+
 type GlobalVariablesEntry = Entry<
   TypeGlobalVariablesSkeleton,
   "WITHOUT_UNRESOLVABLE_LINKS",
   string
 >;
 
-export function parseContentfulGlobalVariables(
+export const parseContentfulGlobalVariables = (
   globalVariables: GlobalVariablesEntry,
-): GlobalVariables | null {
+): GlobalVariables | null => {
   if (!globalVariables) {
+    return null;
+  }
+
+  if (!("fields" in globalVariables)) {
     return null;
   }
 
@@ -51,10 +64,8 @@ export function parseContentfulGlobalVariables(
     services: globalVariables.fields.services,
     twitterUrl: globalVariables.fields.twitterUrl,
   };
-}
+};
 
-// A function to fetch global variables.
-// Optionally uses the Contentful content preview.
 interface FetchGlobalVariables {
   preview: boolean;
 }
