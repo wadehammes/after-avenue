@@ -1,8 +1,8 @@
 .slide {
-  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  overflow: visible;
   position: relative;
-  overflow: hidden;
-  max-height: 1600px;
+  width: 100vw;
 }
 
 .slideBackgroundMediaContainer {
