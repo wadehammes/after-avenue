@@ -1,8 +1,10 @@
 .heroSlide {
-  height: calc(100vh - 150px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: calc(50% - 50vw);
   min-height: calc(100vh - 150px);
-  max-height: none;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   width: 100vw;
 }
@@ -34,7 +36,6 @@
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
-  min-height: 100%;
   padding: var(--default-padding);
   position: relative;
   width: 100vw;
