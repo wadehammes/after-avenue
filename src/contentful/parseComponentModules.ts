@@ -1,8 +1,8 @@
-import type { Entry } from "contentful";
 import type { ExtractSymbolType } from "src/contentful/helpers";
-import type {
-  TypeComponentModulesFields,
-  TypeComponentModulesSkeleton,
+import {
+  isTypeComponentModules,
+  type TypeComponentModulesFields,
+  type TypeComponentModulesWithoutUnresolvableLinksResponse,
 } from "src/contentful/types";
 
 export type ModuleType = ExtractSymbolType<
@@ -14,17 +14,13 @@ export interface ComponentModules {
 }
 
 export type ComponentModulesEntry =
-  | Entry<TypeComponentModulesSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>
+  | TypeComponentModulesWithoutUnresolvableLinksResponse
   | undefined;
 
 export function parseContentfulComponentModules(
-  entry: ComponentModulesEntry,
+  entry?: ComponentModulesEntry,
 ): ComponentModules | null {
-  if (!entry) {
-    return null;
-  }
-
-  if (!("fields" in entry)) {
+  if (!entry || !isTypeComponentModules(entry)) {
     return null;
   }
 

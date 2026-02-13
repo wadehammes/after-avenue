@@ -1,5 +1,4 @@
 import type { Document } from "@contentful/rich-text-types";
-import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
 import {
   type EditorType,
@@ -8,9 +7,14 @@ import {
 import type { WorkCategory } from "src/contentful/getWorkCategories";
 import { parseContentfulWorkCategory } from "src/contentful/getWorkCategories";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
-import type { TypeWorkFields, TypeWorkSkeleton } from "src/contentful/types";
+import {
+  isTypeWork,
+  type TypeWorkFields,
+  type TypeWorkSkeleton,
+  type TypeWorkWithoutUnresolvableLinksResponse,
+} from "src/contentful/types";
 
-type WorkEntry = Entry<TypeWorkSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>;
+type WorkEntry = TypeWorkWithoutUnresolvableLinksResponse;
 
 export interface Work {
   contactFooterButtonText?: string;
@@ -40,11 +44,7 @@ const _workTypeValidation: ContentfulTypeCheck<
 > = true;
 
 export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
-  if (!workEntry) {
-    return null;
-  }
-
-  if (!("fields" in workEntry)) {
+  if (!workEntry || !isTypeWork(workEntry)) {
     return null;
   }
 
@@ -80,7 +80,7 @@ export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
 export function parseContentfulFeaturedWork(
   workEntry?: WorkEntry,
 ): Partial<Work> | null {
-  if (!workEntry) {
+  if (!workEntry || !isTypeWork(workEntry)) {
     return null;
   }
 
@@ -118,8 +118,8 @@ export async function fetchAllWork({
     total = workResult.total;
 
     const filteredWork = workResult.items
-      .map((pageEntry) => parseContentfulWork(pageEntry) as Work)
-      .filter((work) => {
+      .map((pageEntry) => parseContentfulWork(pageEntry))
+      .filter((work): work is Work => {
         if (!work || seenIds.has(work.id)) {
           return false;
         }
@@ -161,8 +161,8 @@ export async function fetchWorkByCategory({
   const seenIds = new Set<string>();
 
   return workResult.items
-    .map((pageEntry) => parseContentfulWork(pageEntry) as Work)
-    .filter((work) => {
+    .map((pageEntry) => parseContentfulWork(pageEntry))
+    .filter((work): work is Work => {
       if (!work || seenIds.has(work.id)) {
         return false;
       }
@@ -197,8 +197,8 @@ export async function fetchWorkByEditor({
   const seenIds = new Set<string>();
 
   const parseWorkResults = workResult.items
-    .map((pageEntry) => parseContentfulWork(pageEntry) as Work)
-    .filter((work) => {
+    .map((pageEntry) => parseContentfulWork(pageEntry))
+    .filter((work): work is Work => {
       if (!work || seenIds.has(work.id)) {
         return false;
       }
@@ -234,8 +234,8 @@ export async function fetchAllFeaturedWork({
   const seenIds = new Set<string>();
 
   return workResult.items
-    .map((pageEntry) => parseContentfulWork(pageEntry) as Work)
-    .filter((work) => {
+    .map((pageEntry) => parseContentfulWork(pageEntry))
+    .filter((work): work is Work => {
       if (!work || seenIds.has(work.id)) {
         return false;
       }
@@ -260,8 +260,8 @@ export async function fetchRandomWork({
   const seenIds = new Set<string>();
 
   const uniqueWork = allWork.items
-    .map((work) => parseContentfulWork(work) as Work)
-    .filter((work) => {
+    .map((work) => parseContentfulWork(work))
+    .filter((work): work is Work => {
       if (!work || seenIds.has(work.id)) {
         return false;
       }
@@ -274,8 +274,6 @@ export async function fetchRandomWork({
   return shuffledWork.slice(0, 4);
 }
 
-// A function to fetch a single page by its slug.
-// Optionally uses the Contentful content preview.
 interface FetchSingleWorkOptions {
   slug: string;
   preview: boolean;

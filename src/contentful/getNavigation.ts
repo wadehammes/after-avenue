@@ -1,20 +1,17 @@
-import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
 import {
   type Page,
   parseContentfulPageForNavigation,
 } from "src/contentful/getPages";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
-import type {
-  TypeNavigationFields,
-  TypeNavigationSkeleton,
+import {
+  isTypeNavigation,
+  type TypeNavigationFields,
+  type TypeNavigationSkeleton,
+  type TypeNavigationWithoutUnresolvableLinksResponse,
 } from "src/contentful/types";
 
-type NavigationEntry = Entry<
-  TypeNavigationSkeleton,
-  "WITHOUT_UNRESOLVABLE_LINKS",
-  string
->;
+type NavigationEntry = TypeNavigationWithoutUnresolvableLinksResponse;
 
 export interface NavigationType {
   id: string;
@@ -27,16 +24,10 @@ const _navigationTypeValidation: ContentfulTypeCheck<
   "id"
 > = true;
 
-// A function to transform a Contentful case study
-// into our own Case Study object.
 export function parseContentfulNavigation(
   navigationEntry?: NavigationEntry,
 ): NavigationType | null {
-  if (!navigationEntry) {
-    return null;
-  }
-
-  if (!("fields" in navigationEntry)) {
+  if (!navigationEntry || !isTypeNavigation(navigationEntry)) {
     return null;
   }
 

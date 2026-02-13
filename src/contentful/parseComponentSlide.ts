@@ -1,4 +1,3 @@
-import type { Entry } from "contentful";
 import {
   type Page,
   parseContentfulPageForNavigation,
@@ -11,9 +10,10 @@ import {
   type ContentfulAsset,
   parseContentfulAsset,
 } from "src/contentful/parseContentfulAsset";
-import type {
-  TypeComponentSlideFields,
-  TypeComponentSlideSkeleton,
+import {
+  isTypeComponentSlide,
+  type TypeComponentSlideFields,
+  type TypeComponentSlideWithoutUnresolvableLinksResponse,
 } from "src/contentful/types";
 
 export type SlideType = ExtractSymbolType<
@@ -40,18 +40,13 @@ const _componentSlideTypeValidation: ContentfulTypeCheck<
 > = true;
 
 export type ComponentSlideEntry =
-  | Entry<TypeComponentSlideSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>
+  | TypeComponentSlideWithoutUnresolvableLinksResponse
   | undefined;
 
-// A function to transform a Contentful slide component
 export function parseContentfulComponentSlide(
-  entry: ComponentSlideEntry,
+  entry?: ComponentSlideEntry,
 ): ComponentSlide | null {
-  if (!entry) {
-    return null;
-  }
-
-  if (!("fields" in entry)) {
+  if (!entry || !isTypeComponentSlide(entry)) {
     return null;
   }
 

@@ -1,9 +1,10 @@
-import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
-import type {
-  TypeGlobalVariablesFields,
-  TypeGlobalVariablesSkeleton,
+import {
+  isTypeGlobalVariables,
+  type TypeGlobalVariablesFields,
+  type TypeGlobalVariablesSkeleton,
+  type TypeGlobalVariablesWithoutUnresolvableLinksResponse,
 } from "src/contentful/types";
 
 export interface GlobalVariables {
@@ -29,42 +30,36 @@ const _globalVariablesTypeValidation: ContentfulTypeCheck<
   TypeGlobalVariablesFields
 > = true;
 
-type GlobalVariablesEntry = Entry<
-  TypeGlobalVariablesSkeleton,
-  "WITHOUT_UNRESOLVABLE_LINKS",
-  string
->;
+type GlobalVariablesEntry = TypeGlobalVariablesWithoutUnresolvableLinksResponse;
 
-export const parseContentfulGlobalVariables = (
-  globalVariables: GlobalVariablesEntry,
-): GlobalVariables | null => {
-  if (!globalVariables) {
-    return null;
-  }
-
-  if (!("fields" in globalVariables)) {
+export function parseContentfulGlobalVariables(
+  globalVariablesEntry?: GlobalVariablesEntry,
+): GlobalVariables | null {
+  if (!globalVariablesEntry || !isTypeGlobalVariables(globalVariablesEntry)) {
     return null;
   }
 
   return {
-    address: globalVariables.fields.address,
-    addressLine2: globalVariables.fields.addressLine2,
-    companyName: globalVariables.fields.companyName,
-    contactFooterButtonText: globalVariables.fields.contactFooterButtonText,
-    contactFooterTitle: globalVariables.fields.contactFooterTitle,
+    address: globalVariablesEntry.fields.address,
+    addressLine2: globalVariablesEntry.fields.addressLine2,
+    companyName: globalVariablesEntry.fields.companyName,
+    contactFooterButtonText:
+      globalVariablesEntry.fields.contactFooterButtonText,
+    contactFooterTitle: globalVariablesEntry.fields.contactFooterTitle,
     contactFormMarketingConsentText:
-      globalVariables.fields.contactFormMarketingConsentText,
-    contactFormSuccessMessage: globalVariables.fields.contactFormSuccessMessage,
-    email: globalVariables.fields.email,
-    featuredWorkButtonText: globalVariables.fields.featuredWorkButtonText,
-    footerCopyrightText: globalVariables.fields.footerCopyrightText,
-    instagramUrl: globalVariables.fields.instagramUrl,
-    linkedInUrl: globalVariables.fields.linkedInUrl,
-    phoneNumber: globalVariables.fields.phoneNumber,
-    services: globalVariables.fields.services,
-    twitterUrl: globalVariables.fields.twitterUrl,
+      globalVariablesEntry.fields.contactFormMarketingConsentText,
+    contactFormSuccessMessage:
+      globalVariablesEntry.fields.contactFormSuccessMessage,
+    email: globalVariablesEntry.fields.email,
+    featuredWorkButtonText: globalVariablesEntry.fields.featuredWorkButtonText,
+    footerCopyrightText: globalVariablesEntry.fields.footerCopyrightText,
+    instagramUrl: globalVariablesEntry.fields.instagramUrl,
+    linkedInUrl: globalVariablesEntry.fields.linkedInUrl,
+    phoneNumber: globalVariablesEntry.fields.phoneNumber,
+    services: globalVariablesEntry.fields.services,
+    twitterUrl: globalVariablesEntry.fields.twitterUrl,
   };
-};
+}
 
 interface FetchGlobalVariables {
   preview: boolean;
