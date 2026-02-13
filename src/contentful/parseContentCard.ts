@@ -1,5 +1,4 @@
 import type { Document } from "@contentful/rich-text-types";
-import type { Entry } from "contentful";
 import {
   type EditorType,
   parseContentfulEditorForCta,
@@ -12,9 +11,10 @@ import {
   type ContentfulAsset,
   parseContentfulAsset,
 } from "src/contentful/parseContentfulAsset";
-import type {
-  TypeComponentContentCardFields,
-  TypeComponentContentCardSkeleton,
+import {
+  isTypeComponentContentCard,
+  type TypeComponentContentCardFields,
+  type TypeComponentContentCardWithoutUnresolvableLinksResponse,
 } from "src/contentful/types";
 import type { Alignment } from "src/interfaces/common.interfaces";
 
@@ -41,21 +41,13 @@ const _contentCardTypeValidation: ContentfulTypeCheck<
 > = true;
 
 export type ContentCardEntry =
-  | Entry<
-      TypeComponentContentCardSkeleton,
-      "WITHOUT_UNRESOLVABLE_LINKS",
-      string
-    >
+  | TypeComponentContentCardWithoutUnresolvableLinksResponse
   | undefined;
 
 export function parseContentfulContentCard(
-  entry: ContentCardEntry,
+  entry?: ContentCardEntry,
 ): ContentCard | null {
-  if (!entry) {
-    return null;
-  }
-
-  if (!("fields" in entry)) {
+  if (!entry || !isTypeComponentContentCard(entry)) {
     return null;
   }
 

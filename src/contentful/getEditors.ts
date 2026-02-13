@@ -1,20 +1,17 @@
 import type { Document } from "@contentful/rich-text-types";
-import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
 import { parseContentfulFeaturedWork, type Work } from "src/contentful/getWork";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
 import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
 import { parseContentfulAsset } from "src/contentful/parseContentfulAsset";
-import type {
-  TypeEditorsFields,
-  TypeEditorsSkeleton,
+import {
+  isTypeEditors,
+  type TypeEditorsFields,
+  type TypeEditorsSkeleton,
+  type TypeEditorsWithoutUnresolvableLinksResponse,
 } from "src/contentful/types";
 
-type EditorEntry = Entry<
-  TypeEditorsSkeleton,
-  "WITHOUT_UNRESOLVABLE_LINKS",
-  string
->;
+type EditorEntry = TypeEditorsWithoutUnresolvableLinksResponse;
 
 export interface EditorType {
   id: string;
@@ -41,11 +38,7 @@ const _editorTypeValidation: ContentfulTypeCheck<
 export function parseContentfulEditor(
   editorEntry?: EditorEntry,
 ): EditorType | null {
-  if (!editorEntry) {
-    return null;
-  }
-
-  if (!("fields" in editorEntry)) {
+  if (!editorEntry || !isTypeEditors(editorEntry)) {
     return null;
   }
 
@@ -133,7 +126,7 @@ export async function fetchAllEditorsForMainPage({
 export const parseContentfulEditorForCta = (
   editorEntry?: EditorEntry,
 ): Partial<EditorType> | null => {
-  if (!editorEntry) {
+  if (!editorEntry || !isTypeEditors(editorEntry)) {
     return null;
   }
 

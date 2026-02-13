@@ -1,5 +1,4 @@
 import type { Document } from "@contentful/rich-text-types";
-import type { Entry } from "contentful";
 import type {
   ContentfulTypeCheck,
   ExtractSymbolType,
@@ -8,9 +7,10 @@ import type { ComponentCopyBlockEntry } from "src/contentful/parseComponentCopyB
 import type { ComponentModulesEntry } from "src/contentful/parseComponentModules";
 import type { ComponentSlideEntry } from "src/contentful/parseComponentSlide";
 import type { ContentCardEntry } from "src/contentful/parseContentCard";
-import type {
-  TypeSectionFields,
-  TypeSectionSkeleton,
+import {
+  isTypeSection,
+  type TypeSectionFields,
+  type TypeSectionWithoutUnresolvableLinksResponse,
 } from "src/contentful/types";
 import type { Alignment } from "src/interfaces/common.interfaces";
 
@@ -51,32 +51,31 @@ const _sectionTypeValidation: ContentfulTypeCheck<
 > = true;
 
 export type SectionEntry =
-  | Entry<TypeSectionSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>
+  | TypeSectionWithoutUnresolvableLinksResponse
   | undefined;
 
 export function parseContentfulSection(
-  section: SectionEntry,
+  sectionEntry?: SectionEntry,
 ): SectionType | null {
-  if (!section) {
-    return null;
-  }
-
-  if (!("fields" in section)) {
+  if (!sectionEntry || !isTypeSection(sectionEntry)) {
     return null;
   }
 
   return {
-    content: section.fields.content.map((entry) => entry as Content),
+    content: sectionEntry.fields.content.map((entry) => entry as Content),
     contentLayout:
-      (section.fields.contentLayout as ContentLayoutType) || "Single Column",
-    id: section.sys.id,
-    sectionHeader: section.fields.sectionHeader,
-    sectionHeaderAlignment: section.fields.sectionHeaderAlignment as Alignment,
+      (sectionEntry.fields.contentLayout as ContentLayoutType) ||
+      "Single Column",
+    id: sectionEntry.sys.id,
+    sectionHeader: sectionEntry.fields.sectionHeader,
+    sectionHeaderAlignment: sectionEntry.fields
+      .sectionHeaderAlignment as Alignment,
     sectionBackgroundColor:
-      (section.fields.sectionBackgroundColor as SectionBackgroundColorType) ||
+      (sectionEntry.fields
+        .sectionBackgroundColor as SectionBackgroundColorType) ||
       "System Color",
     sectionPadding:
-      (section.fields.sectionPadding as SectionPaddingType) || "Regular",
-    slug: section.fields.slug,
+      (sectionEntry.fields.sectionPadding as SectionPaddingType) || "Regular",
+    slug: sectionEntry.fields.slug,
   };
 }

@@ -30,3 +30,29 @@ export type TypeComponentSlide<
   Modifiers extends ChainModifiers,
   Locales extends LocaleCode = LocaleCode,
 > = Entry<TypeComponentSlideSkeleton, Modifiers, Locales>;
+
+export function isTypeComponentSlide<
+  Modifiers extends ChainModifiers,
+  Locales extends LocaleCode,
+>(
+  entry: Entry<EntrySkeletonType, Modifiers, Locales>,
+): entry is TypeComponentSlide<Modifiers, Locales> {
+  return entry.sys.contentType.sys.id === "componentSlide";
+}
+
+export type TypeComponentSlideWithoutLinkResolutionResponse =
+  TypeComponentSlide<"WITHOUT_LINK_RESOLUTION">;
+export type TypeComponentSlideWithoutUnresolvableLinksResponse =
+  TypeComponentSlide<"WITHOUT_UNRESOLVABLE_LINKS">;
+export type TypeComponentSlideWithAllLocalesResponse<
+  Locales extends LocaleCode = LocaleCode,
+> = TypeComponentSlide<"WITH_ALL_LOCALES", Locales>;
+export type TypeComponentSlideWithAllLocalesAndWithoutLinkResolutionResponse<
+  Locales extends LocaleCode = LocaleCode,
+> = TypeComponentSlide<"WITHOUT_LINK_RESOLUTION" | "WITH_ALL_LOCALES", Locales>;
+export type TypeComponentSlideWithAllLocalesAndWithoutUnresolvableLinksResponse<
+  Locales extends LocaleCode = LocaleCode,
+> = TypeComponentSlide<
+  "WITHOUT_UNRESOLVABLE_LINKS" | "WITH_ALL_LOCALES",
+  Locales
+>;

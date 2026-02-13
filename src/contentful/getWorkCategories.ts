@@ -1,9 +1,10 @@
-import type { Entry } from "contentful";
 import { contentfulClient } from "src/contentful/client";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
-import type {
-  TypeWorkCategoryFields,
-  TypeWorkCategorySkeleton,
+import {
+  isTypeWorkCategory,
+  type TypeWorkCategoryFields,
+  type TypeWorkCategorySkeleton,
+  type TypeWorkCategoryWithoutUnresolvableLinksResponse,
 } from "src/contentful/types";
 
 export interface WorkCategory {
@@ -18,27 +19,19 @@ const _workCategoryTypeValidation: ContentfulTypeCheck<
   "updatedAt"
 > = true;
 
-type WorkCategoryEntry = Entry<
-  TypeWorkCategorySkeleton,
-  "WITHOUT_UNRESOLVABLE_LINKS",
-  string
->;
+type WorkCategoryEntry = TypeWorkCategoryWithoutUnresolvableLinksResponse;
 
 export function parseContentfulWorkCategory(
-  category: WorkCategoryEntry,
+  categoryEntry?: WorkCategoryEntry,
 ): WorkCategory | null {
-  if (!category) {
-    return null;
-  }
-
-  if (!("fields" in category)) {
+  if (!categoryEntry || !isTypeWorkCategory(categoryEntry)) {
     return null;
   }
 
   return {
-    categoryName: category.fields.categoryName,
-    slug: category.fields.slug,
-    updatedAt: category.sys.updatedAt,
+    categoryName: categoryEntry.fields.categoryName,
+    slug: categoryEntry.fields.slug,
+    updatedAt: categoryEntry.sys.updatedAt,
   };
 }
 
@@ -63,8 +56,8 @@ export async function fetchAllWorkCategories({
   const seenSlugs = new Set<string>();
 
   return categoryEntries.items
-    .map((category) => parseContentfulWorkCategory(category) as WorkCategory)
-    .filter((category) => {
+    .map((category) => parseContentfulWorkCategory(category))
+    .filter((category): category is WorkCategory => {
       if (!category || seenSlugs.has(category.slug)) {
         return false;
       }

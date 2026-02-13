@@ -1,12 +1,12 @@
 import type { Document } from "@contentful/rich-text-types";
-import type { Entry } from "contentful";
 import type {
   ContentfulTypeCheck,
   ExtractSymbolType,
 } from "src/contentful/helpers";
-import type {
-  TypeComponentCopyBlockFields,
-  TypeComponentCopyBlockSkeleton,
+import {
+  isTypeComponentCopyBlock,
+  type TypeComponentCopyBlockFields,
+  type TypeComponentCopyBlockWithoutUnresolvableLinksResponse,
 } from "src/contentful/types";
 
 type CopyBlockTextAlignType = ExtractSymbolType<
@@ -24,17 +24,13 @@ const _componentCopyBlockTypeValidation: ContentfulTypeCheck<
 > = true;
 
 export type ComponentCopyBlockEntry =
-  | Entry<TypeComponentCopyBlockSkeleton, "WITHOUT_UNRESOLVABLE_LINKS", string>
+  | TypeComponentCopyBlockWithoutUnresolvableLinksResponse
   | undefined;
 
 export function parseComponentCopyBlock(
-  entry: ComponentCopyBlockEntry,
+  entry?: ComponentCopyBlockEntry,
 ): ComponentCopyBlock | null {
-  if (!entry) {
-    return null;
-  }
-
-  if (!("fields" in entry)) {
+  if (!entry || !isTypeComponentCopyBlock(entry)) {
     return null;
   }
 
