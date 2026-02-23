@@ -38,5 +38,3 @@ export const StyledButtonLink = (props: StyledButtonLinkProps) => {
     </Link>
   );
 };
-
-export default StyledButtonLink;

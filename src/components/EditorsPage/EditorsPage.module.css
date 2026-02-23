@@ -37,7 +37,7 @@
 
 .editorLink {
   cursor: pointer;
-  font-family: "area", sans-serif;
+  font-family: var(--font-family-text);
   font-size: clamp(2rem, 10vw, 4rem);
   font-weight: 200;
   line-height: 1;

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import { JsonLd } from "src/components/JsonLd/JsonLd.component";
 import { WorkPage } from "src/components/WorkPage/WorkPage.component";
 import { fetchPage } from "src/contentful/getPages";
 import { fetchAllWork } from "src/contentful/getWork";
@@ -102,32 +103,23 @@ export async function generateMetadata({
 
 // The actual WorkCategoryEntry component.
 async function WorkCategoryEntry({ params }: WorkCategoryProps) {
-  const { slug } = await params;
-  const draft = await draftMode();
+  const [resolvedParams, draft] = await Promise.all([params, draftMode()]);
+  const { slug } = resolvedParams;
 
-  // Fetch a single work category entry by slug,
-  // using the content preview if draft mode is enabled:
   const workCategory = await fetchWorkCategoryBySlug({
     slug,
     preview: draft.isEnabled,
   });
 
   if (!workCategory) {
-    // If a work entry can't be found,
-    // tell Next.js to render a 404 page.
     return notFound();
   }
 
-  const allWorkCategories = await fetchAllWorkCategories({ preview: false });
-
-  const allWork = await fetchAllWork({
-    preview: draft.isEnabled,
-  });
-
-  const workPage = await fetchPage({
-    slug: "work",
-    preview: draft.isEnabled,
-  });
+  const [allWorkCategories, allWork, workPage] = await Promise.all([
+    fetchAllWorkCategories({ preview: false }),
+    fetchAllWork({ preview: draft.isEnabled }),
+    fetchPage({ slug: "work", preview: draft.isEnabled }),
+  ]);
 
   if (!workPage) {
     return notFound();
@@ -174,11 +166,7 @@ async function WorkCategoryEntry({ params }: WorkCategoryProps) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
-      />
+      <JsonLd data={schemaGraph} />
       <WorkPage
         pageFields={workPageWithCategory}
         allWork={allWorkByCategory}

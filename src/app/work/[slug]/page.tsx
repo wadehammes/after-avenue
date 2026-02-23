@@ -2,6 +2,7 @@ import { documentToPlainTextString } from "@contentful/rich-text-plain-text-rend
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import { JsonLd } from "src/components/JsonLd/JsonLd.component";
 import { WorkEntryPage } from "src/components/WorkEntryPage/WorkEntryPage.component";
 import type { Work } from "src/contentful/getWork";
 import {
@@ -34,6 +35,7 @@ interface WorkParams {
 
 interface WorkProps {
   params: Promise<WorkParams>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 // Tell Next.js about all our work entries so
@@ -120,8 +122,9 @@ export async function generateMetadata({
 }
 
 // The actual WorkEntry component.
-async function WorkEntry({ params }: WorkProps) {
-  const { slug } = await params;
+async function WorkEntry({ params, searchParams }: WorkProps) {
+  const [{ slug }, search] = await Promise.all([params, searchParams]);
+  const playVideo = search?.playVideo === "true";
 
   const draft = await draftMode();
 
@@ -205,12 +208,9 @@ async function WorkEntry({ params }: WorkProps) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
-      />
+      <JsonLd data={schemaGraph} />
       <WorkEntryPage
+        playVideo={playVideo}
         workEntry={workEntry}
         workSeries={workSeriesUnique}
         recentWork={randomRecentWorkUnique}

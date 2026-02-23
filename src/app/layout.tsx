@@ -1,11 +1,12 @@
 import { draftMode } from "next/headers";
+import { area, arida } from "src/app/fonts";
 import Providers from "src/app/providers";
 import { ExitDraftModeLink } from "src/components/ExitDraftModeLink/ExitDraftModeLink.component";
 import { Footer } from "src/components/Footer/Footer.component";
 import { Navigation } from "src/components/Navigation/Navigation";
-import "src/styles/fonts.css";
 import "src/styles/globals.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import classNames from "classnames";
 import type { Metadata } from "next";
 import { fetchGlobalVariables } from "src/contentful/getGlobalVariables";
 import { fetchNavigation } from "src/contentful/getNavigation";
@@ -37,17 +38,13 @@ export default async function RootLayout({
 }) {
   const draft = await draftMode();
 
-  const nav = await fetchNavigation({
-    id: NAVIGATION_ID,
-    preview: false,
-  });
-
-  const globalVariables = await fetchGlobalVariables({
-    preview: draft.isEnabled,
-  });
+  const [nav, globalVariables] = await Promise.all([
+    fetchNavigation({ id: NAVIGATION_ID, preview: false }),
+    fetchGlobalVariables({ preview: draft.isEnabled }),
+  ]);
 
   return (
-    <html lang="en">
+    <html lang="en" className={classNames(arida.variable, area.variable)}>
       <head>
         <link
           rel="apple-touch-icon"

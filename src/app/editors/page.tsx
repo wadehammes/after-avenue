@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { EditorsPage } from "src/components/EditorsPage/EditorsPage.component";
+import { JsonLd } from "src/components/JsonLd/JsonLd.component";
 import { fetchAllEditorsForMainPage } from "src/contentful/getEditors";
 import { fetchPage } from "src/contentful/getPages";
 import {
@@ -87,11 +88,7 @@ async function Editors() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
-      />
+      <JsonLd data={schemaGraph} />
       <h1 className="hidden-title">{title}</h1>
       <EditorsPage pageFields={editorsPage} editors={allEditors} />
     </>

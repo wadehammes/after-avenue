@@ -11,5 +11,3 @@ export const ExitDraftModeLink = (props: HTMLProps<HTMLAnchorElement>) => {
     </a>
   );
 };
-
-export default ExitDraftModeLink;

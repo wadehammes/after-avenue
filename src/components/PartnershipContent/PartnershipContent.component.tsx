@@ -1,6 +1,6 @@
 import parse from "html-react-parser";
 import styles from "src/components/PartnershipContent/PartnershipContent.module.css";
-import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
+import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
 import type { ComponentSlide } from "src/contentful/parseComponentSlide";
 
 interface PartnershipContentProps {

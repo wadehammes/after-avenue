@@ -4,6 +4,7 @@ import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import type { Thing } from "schema-dts";
 import { EditorsEntryPage } from "src/components/EditorsEntryPage/EditorsEntryPage.component";
+import { JsonLd } from "src/components/JsonLd/JsonLd.component";
 import type { EditorType } from "src/contentful/getEditors";
 import { fetchAllEditors, fetchEditorBySlug } from "src/contentful/getEditors";
 import { fetchWorkByEditor } from "src/contentful/getWork";
@@ -75,8 +76,8 @@ export async function generateStaticParams(): Promise<EditorParams[]> {
 export async function generateMetadata({
   params,
 }: EditorsProps): Promise<Metadata> {
-  const { slug } = await params;
-  const draft = await draftMode();
+  const [resolvedParams, draft] = await Promise.all([params, draftMode()]);
+  const { slug } = resolvedParams;
 
   const editorEntry = await fetchEditorBySlug({
     slug,
@@ -103,12 +104,9 @@ export async function generateMetadata({
 
 // The actual EditorEntry component.
 async function EditorEntry({ params }: EditorsProps) {
-  const { slug } = await params;
+  const [resolvedParams, draft] = await Promise.all([params, draftMode()]);
+  const { slug } = resolvedParams;
 
-  const draft = await draftMode();
-
-  // Fetch a single editor entry by slug,
-  // using the content preview if draft mode is enabled:
   const editorEntry = await fetchEditorBySlug({
     slug,
     preview: draft.isEnabled,
@@ -216,11 +214,7 @@ async function EditorEntry({ params }: EditorsProps) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
-      />
+      <JsonLd data={schemaGraph} />
       <EditorsEntryPage editorEntry={editorEntry} editorsWork={editorsWork} />
     </>
   );

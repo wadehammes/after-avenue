@@ -37,5 +37,3 @@ export const StyledButton = forwardRef(
     );
   },
 );
-
-export default StyledButton;

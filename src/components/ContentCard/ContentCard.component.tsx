@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import styles from "src/components/ContentCard/ContentCard.module.css";
 import { Media } from "src/components/Media/Media.component";
-import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
+import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
 import type { ContentCard as ContentCardType } from "src/contentful/parseContentCard";
 import { RichText } from "src/contentful/richText";
 import { alignmentToTextAlign } from "src/utils/styleHelpers";

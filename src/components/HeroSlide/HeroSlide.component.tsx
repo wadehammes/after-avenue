@@ -6,7 +6,7 @@ import type { MouseEvent, ReactNode } from "react";
 import { useEffect, useState } from "react";
 import styles from "src/components/HeroSlide/HeroSlide.module.css";
 import { Media } from "src/components/Media/Media.component";
-import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
+import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
 import type { ComponentSlide } from "src/contentful/parseComponentSlide";
 
 interface HeroSlideProps {

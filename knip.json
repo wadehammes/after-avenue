@@ -1,0 +1,14 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignoreFiles": [
+    "scripts/make_sitemap.js",
+    "test-utils.tsx",
+    "src/tests/**",
+    "src/components/EditorsCard/**",
+    "src/components/Loader/**",
+    "src/hooks/useWindowFocus.ts",
+    "src/lib/analytics.ts",
+    "src/ui/TextArea/**",
+    "src/ui/TextField/**"
+  ]
+}
