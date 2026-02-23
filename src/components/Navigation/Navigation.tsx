@@ -20,6 +20,11 @@ export const Navigation = (props: NavigationProps) => {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
+  const setOpen = useCallback((open: boolean) => {
+    setIsOpen(open);
+    document.body.style.overflow = open ? "hidden" : "auto";
+  }, []);
+
   const listenScrollEvent = useCallback(() => {
     if (window.scrollY < 50) {
       return setScrolled(false);
@@ -29,7 +34,7 @@ export const Navigation = (props: NavigationProps) => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("scroll", listenScrollEvent);
+    window.addEventListener("scroll", listenScrollEvent, { passive: true });
 
     listenScrollEvent();
 
@@ -37,22 +42,14 @@ export const Navigation = (props: NavigationProps) => {
   }, [listenScrollEvent]);
 
   useEffect(() => {
-    const closeMenu = () => setIsOpen(false);
+    const closeMenu = () => setOpen(false);
 
     window.addEventListener("resize", closeMenu);
 
     return () => {
       window.removeEventListener("resize", closeMenu);
     };
-  }, []);
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [isOpen]);
+  }, [setOpen]);
 
   return (
     <nav
@@ -95,7 +92,7 @@ export const Navigation = (props: NavigationProps) => {
             <button
               type="button"
               className={styles.mobileNavToggle}
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setOpen(!isOpen)}
               aria-label="Toggle mobile navigation"
             >
               <Menu className={styles.menu} />
@@ -106,7 +103,7 @@ export const Navigation = (props: NavigationProps) => {
       <MobileNavigationDrawer
         navigationItems={navigationItems}
         visible={isOpen}
-        closeMenu={() => setIsOpen(false)}
+        closeMenu={() => setOpen(false)}
       />
     </nav>
   );

@@ -4,7 +4,7 @@ import classNames from "classnames";
 import parse from "html-react-parser";
 import { useInView } from "react-intersection-observer";
 import styles from "src/components/ContactFooter/ContactFooter.module.css";
-import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
+import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
 import { useGlobalVariables } from "src/context/globalContext.context";
 
 interface ContactFooterProps {

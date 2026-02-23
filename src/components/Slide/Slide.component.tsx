@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { useInView } from "react-intersection-observer";
 import { Media } from "src/components/Media/Media.component";
 import styles from "src/components/Slide/Slide.module.css";
-import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
+import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
 import type { ComponentSlide } from "src/contentful/parseComponentSlide";
 
 interface SlideProps {

@@ -3,7 +3,7 @@
 import classNames from "classnames";
 import { useInView } from "react-intersection-observer";
 import styles from "src/components/FeaturedWork/FeaturedWork.module.css";
-import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
+import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import type { Work } from "src/contentful/getWork";

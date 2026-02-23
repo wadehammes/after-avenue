@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { AboutPage } from "src/components/AboutPage/AboutPage.component";
-import PageComponent from "src/components/Page/Page.component";
+import { JsonLd } from "src/components/JsonLd/JsonLd.component";
+import { PageComponent } from "src/components/Page/Page.component";
 import type { Page as PageType } from "src/contentful/getPages";
 import { fetchPage, fetchPages } from "src/contentful/getPages";
 import type { SitemapItem } from "src/lib/generateSitemap";
@@ -175,11 +176,7 @@ async function Page({ params }: PageProps) {
 
     return (
       <>
-        <script
-          type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
-        />
+        <JsonLd data={schemaGraph} />
         <AboutPage
           pageFields={page}
           isEditorsPagePublished={isEditorsPagePublished}
@@ -190,11 +187,7 @@ async function Page({ params }: PageProps) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
-      />
+      <JsonLd data={schemaGraph} />
       <PageComponent fields={page} />
     </>
   );

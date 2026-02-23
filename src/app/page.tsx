@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { HomePage } from "src/components/HomePage/HomePage";
+import { JsonLd } from "src/components/JsonLd/JsonLd.component";
 import { fetchPage } from "src/contentful/getPages";
 import { fetchAllFeaturedWork } from "src/contentful/getWork";
 import {
@@ -92,11 +93,7 @@ const Home = async () => {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
-      />
+      <JsonLd data={schemaGraph} />
       <HomePage featuredWork={featuredWork} pageFields={page} />
     </>
   );

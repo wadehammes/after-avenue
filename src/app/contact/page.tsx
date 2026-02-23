@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import { ContactPage } from "src/components/ContactPage/ContactPage.component";
+import { JsonLd } from "src/components/JsonLd/JsonLd.component";
 import { fetchPage } from "src/contentful/getPages";
 import {
   createBreadcrumbSchema,
@@ -73,11 +74,7 @@ const Contact = async () => {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
-      />
+      <JsonLd data={schemaGraph} />
       <ContactPage pageFields={page} />
     </>
   );

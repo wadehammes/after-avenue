@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
@@ -10,13 +9,14 @@ import type { Work } from "src/contentful/getWork";
 import { RichText } from "src/contentful/richText";
 
 interface WorkEntryPageProps {
+  playVideo?: boolean;
   workEntry: Work;
   workSeries: Work[];
   recentWork: Work[];
 }
 
 export const WorkEntryPage = (props: WorkEntryPageProps) => {
-  const { workEntry, workSeries, recentWork } = props;
+  const { playVideo = false, workEntry, workSeries, recentWork } = props;
   const {
     contactFooterButtonText,
     contactFooterTitle,
@@ -29,18 +29,15 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
     workCategories,
     hideFromWorkFeeds,
   } = workEntry;
-  const searchParams = useSearchParams();
-
-  const playVideo = searchParams.get("playVideo");
 
   return (
     <article className="container column">
       <div className={styles.videoContainer}>
         <VideoPlayer
           src={workVideoUrl}
-          playInView={playVideo === "true"}
+          playInView={playVideo}
           rounded
-          autoPlay={playVideo === "true"}
+          autoPlay={playVideo}
           controls
         />
       </div>

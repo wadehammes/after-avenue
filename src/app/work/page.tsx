@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
+import { JsonLd } from "src/components/JsonLd/JsonLd.component";
 import { WorkPage } from "src/components/WorkPage/WorkPage.component";
 import { fetchPage } from "src/contentful/getPages";
 import { fetchAllWork } from "src/contentful/getWork";
@@ -51,19 +52,11 @@ export async function generateMetadata(): Promise<Metadata> {
 async function Work() {
   const draft = await draftMode();
 
-  // Fetch the work page entry by slug,
-  // using the content preview if draft mode is enabled:
-  const workPage = await fetchPage({
-    slug: WORK_SLUG,
-    preview: draft.isEnabled,
-  });
-
-  const allWorkCategories = await fetchAllWorkCategories({
-    preview: draft.isEnabled,
-  });
-
-  // Fetch all work entries
-  const allWork = await fetchAllWork({ preview: draft.isEnabled });
+  const [workPage, allWorkCategories, allWork] = await Promise.all([
+    fetchPage({ slug: WORK_SLUG, preview: draft.isEnabled }),
+    fetchAllWorkCategories({ preview: draft.isEnabled }),
+    fetchAllWork({ preview: draft.isEnabled }),
+  ]);
 
   if (!workPage || !allWork) {
     // If a work entry can't be found,
@@ -94,11 +87,7 @@ async function Work() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: Next.js requires this
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
-      />
+      <JsonLd data={schemaGraph} />
       <WorkPage
         pageFields={workPage}
         allWork={allWork}

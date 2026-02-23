@@ -5,7 +5,7 @@ import parse from "html-react-parser";
 import { FeaturedBrands } from "src/components/FeaturedBrands/FeaturedBrands.component";
 import { FeaturedWork } from "src/components/FeaturedWork/FeaturedWork.component";
 import styles from "src/components/HomePage/HomePage.module.css";
-import StyledButtonLink from "src/components/StyledButton/StyledButtonLink.component";
+import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
 import type { Page } from "src/contentful/getPages";
 import type { Work } from "src/contentful/getWork";
 

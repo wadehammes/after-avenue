@@ -1,5 +1,5 @@
 import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
-import PageComponent from "src/components/Page/Page.component";
+import { PageComponent } from "src/components/Page/Page.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import styles from "src/components/WorkPage/WorkPage.module.css";
 import type { Page } from "src/contentful/getPages";
