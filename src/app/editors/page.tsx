@@ -36,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: "/",
     },
     title: `${editorsPage.pageTitle} - ${editorsPage.pageDisplayTitle} | After Avenue`,
-    keywords: editorsPage.metaKeywords.join(","),
+    keywords: (editorsPage.metaKeywords ?? []).join(","),
     robots:
       editorsPage.enableIndexing && process.env.ENVIRONMENT === "production"
         ? "index, follow"

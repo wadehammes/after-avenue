@@ -69,8 +69,8 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
             </div>
           ) : null}
           <ul className={styles.workCategoriesList}>
-            {workCategories.length > 0 &&
-              workCategories.map((category) =>
+            {(workCategories ?? []).length > 0 &&
+              (workCategories ?? []).map((category) =>
                 category ? (
                   <li key={category.slug}>
                     <Link
@@ -110,7 +110,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                   <WorkCard
                     work={work}
                     title={work.workTitle}
-                    subtitle={work.workClient}
+                    subtitle={work.workClient ?? ""}
                     autoPlay={false}
                   />
                 </li>
@@ -131,7 +131,7 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                 <li key={work.workSlug}>
                   <WorkCard
                     work={work}
-                    title={work.workClient}
+                    title={work.workClient ?? ""}
                     subtitle={work.workTitle}
                     autoPlay={false}
                   />

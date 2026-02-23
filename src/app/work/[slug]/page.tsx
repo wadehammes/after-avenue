@@ -99,7 +99,7 @@ export async function generateMetadata({
     },
     title,
     description,
-    keywords: workEntry.workCategories
+    keywords: (workEntry.workCategories ?? [])
       .map((category) => (category ? category.categoryName : ""))
       .join(","),
     robots:

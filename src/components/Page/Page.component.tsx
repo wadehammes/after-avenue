@@ -26,7 +26,7 @@ export const PageComponent = (props: PageComponentProps) => {
           <h1 className="hidden-title">{pageTitle}</h1>
         )}
         {children}
-        <SectionRenderer sections={sections} />
+        <SectionRenderer sections={sections ?? []} />
       </div>
     </div>
   );

@@ -20,10 +20,10 @@ export const WorkPage = (props: WorkPageProps) => {
     <PageComponent fields={pageFields}>
       <ul className={styles.workList}>
         {allWork.map((work) => (
-          <li key={work.id} aria-label={work.workClient}>
+          <li key={work.id} aria-label={work.workClient ?? ""}>
             <WorkCard
               work={work}
-              title={work.workClient}
+              title={work.workClient ?? ""}
               subtitle={work.workTitle}
               autoPlay={false}
               controls

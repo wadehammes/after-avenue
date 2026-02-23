@@ -8,6 +8,7 @@ import {
 } from "src/contentful/types";
 
 export interface GlobalVariables {
+  id: string;
   address?: string;
   addressLine2?: string;
   companyName?: string;
@@ -27,7 +28,8 @@ export interface GlobalVariables {
 
 const _globalVariablesTypeValidation: ContentfulTypeCheck<
   GlobalVariables,
-  TypeGlobalVariablesFields
+  TypeGlobalVariablesFields,
+  "id"
 > = true;
 
 type GlobalVariablesEntry = TypeGlobalVariablesWithoutUnresolvableLinksResponse;
@@ -40,6 +42,7 @@ export function parseContentfulGlobalVariables(
   }
 
   return {
+    id: globalVariablesEntry.sys.id,
     address: globalVariablesEntry.fields.address,
     addressLine2: globalVariablesEntry.fields.addressLine2,
     companyName: globalVariablesEntry.fields.companyName,

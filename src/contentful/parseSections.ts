@@ -35,12 +35,12 @@ export type Content =
 
 export interface SectionType {
   content: Content[];
-  contentLayout: ContentLayoutType | undefined;
+  contentLayout?: ContentLayoutType | undefined;
   id: string;
-  sectionHeader: Document | undefined;
-  sectionHeaderAlignment: Alignment;
-  sectionBackgroundColor: SectionBackgroundColorType;
-  sectionPadding: SectionPaddingType;
+  sectionHeader?: Document | undefined;
+  sectionHeaderAlignment?: Alignment;
+  sectionBackgroundColor?: SectionBackgroundColorType;
+  sectionPadding?: SectionPaddingType;
   slug: string;
 }
 

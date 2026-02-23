@@ -56,7 +56,7 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
   ) : (
     <WorkCard
       work={fields}
-      title={fields.workClient}
+      title={fields.workClient ?? ""}
       subtitle={fields.workTitle}
     />
   );

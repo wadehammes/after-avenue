@@ -15,18 +15,20 @@ type EditorEntry = TypeEditorsWithoutUnresolvableLinksResponse;
 
 export interface EditorType {
   id: string;
-  editorBio: Document | undefined | null;
+  editorBio?: Document | undefined | null;
   editorName: string;
   editorTitle?: string;
   editorSlug: string;
-  editorHeadshot: ContentfulAsset | null;
-  editorHeadshotHover: ContentfulAsset | null;
-  featuredWork: Partial<Work> | null;
+  editorHeadshot?: ContentfulAsset | null;
+  editorHeadshotHover?: ContentfulAsset | null;
+  featuredWork?: Partial<Work> | null;
   updatedAt: string;
   metaDescription: string;
-  priority: number;
+  priority?: number;
   publishDate: string;
-  showOnEditorsPage: boolean;
+  showOnEditorsPage?: boolean;
+  contactFooterButtonText?: string;
+  contactFooterTitle?: string;
 }
 
 const _editorTypeValidation: ContentfulTypeCheck<

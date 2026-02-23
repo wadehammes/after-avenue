@@ -19,16 +19,16 @@ export interface Page {
   id: string;
   contactFooterTitle?: string;
   contactFooterButtonText?: string;
-  enableIndexing: boolean;
+  enableIndexing?: boolean;
   metaDescription: string;
-  metaKeywords: string[];
+  metaKeywords?: string[];
   pageDescription?: string;
   pageDisplayTitle?: string;
   pageSlug: string;
   pageSubtitle?: string;
   pageTitle: string;
-  sections: (SectionType | null)[];
-  socialImage: ContentfulAsset | null;
+  sections?: (SectionType | null)[];
+  socialImage?: ContentfulAsset | null;
   updatedAt: string;
   publishDate: string;
 }
