@@ -8,7 +8,7 @@ import { mockedUseRouterReturnValue } from "src/tests/mocks/mockNextRouter";
 const TestProviders: FC<PropsWithChildrenOnly> = ({ children }) => {
   return (
     <RouterContext.Provider value={mockedUseRouterReturnValue}>
-      <Providers globalVariables={{}}>{children}</Providers>
+      <Providers globalVariables={{ id: "test" }}>{children}</Providers>
     </RouterContext.Provider>
   );
 };

@@ -126,7 +126,7 @@ async function WorkCategoryEntry({ params }: WorkCategoryProps) {
   }
 
   const allWorkByCategory = allWork.filter((work) => {
-    return work.workCategories.some((category) => {
+    return (work.workCategories ?? []).some((category) => {
       return category
         ? category.categoryName === workCategory.categoryName
         : false;

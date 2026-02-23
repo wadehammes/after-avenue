@@ -37,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     title,
     description: page.metaDescription,
-    keywords: page.metaKeywords.join(","),
+    keywords: (page.metaKeywords ?? []).join(","),
     robots:
       page.enableIndexing && process.env.ENVIRONMENT === "production"
         ? "index, follow"

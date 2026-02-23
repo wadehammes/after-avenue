@@ -31,7 +31,7 @@ export const EditorsEntryPage = (props: EditorsEntryPageProps) => {
                     <WorkCard
                       work={work}
                       title={work.workTitle}
-                      subtitle={work.workClient}
+                      subtitle={work.workClient ?? ""}
                       autoPlay={false}
                     />
                   </li>

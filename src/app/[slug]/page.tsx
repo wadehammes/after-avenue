@@ -101,7 +101,7 @@ export async function generateMetadata({
     },
     title,
     description: page.pageDescription,
-    keywords: page.metaKeywords.join(","),
+    keywords: (page.metaKeywords ?? []).join(","),
     robots:
       page.enableIndexing && process.env.ENVIRONMENT === "production"
         ? "index, follow"
