@@ -186,7 +186,7 @@ const nextConfig: NextConfig = {
 };
 
 // Redirect test and home slug pages on Production
-const sources = ["/:slug(test-page.*)", "/refresh-content"];
+const sources = ["/:slug(test-page.*)"];
 
 const productionRedirects = sources.map((source) => ({
   source,
