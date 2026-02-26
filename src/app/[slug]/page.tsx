@@ -22,7 +22,7 @@ import {
 } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
-export const revalidate = 3600;
+export const revalidate = 604800;
 export const dynamicParams = false;
 
 interface PageParams {
