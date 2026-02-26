@@ -15,7 +15,7 @@ import {
 import { WORK_SLUG } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
-export const revalidate = 3600;
+export const revalidate = 604800;
 
 // Fetch the work page, tell Next.js which metadata
 // (e.g. page title) to display.
