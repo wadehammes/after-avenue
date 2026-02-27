@@ -19,13 +19,16 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
   const { fields } = props;
   const { workVideoUrl } = fields;
 
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 768px)", {
+    initializeWithValue: false,
+  });
 
   const { featuredWorkButtonText } = useGlobalVariables();
 
   const { inView, ref } = useInView({
-    threshold: 0.5,
-    fallbackInView: true,
+    rootMargin: "400px",
+    threshold: 0,
+    triggerOnce: true,
   });
 
   return !isMobile ? (
@@ -49,7 +52,9 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
       </div>
       {workVideoUrl ? (
         <div className={styles.videoContainer}>
-          <VideoPlayer src={workVideoUrl} autoPlay playInView={inView} />
+          {inView ? (
+            <VideoPlayer src={workVideoUrl} autoPlay playInView />
+          ) : null}
         </div>
       ) : null}
     </div>
