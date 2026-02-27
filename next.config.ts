@@ -79,17 +79,17 @@ const nextConfig: NextConfig = {
   },
   // Experimental features for Next.js 16.1.1
   experimental: {
-    // Partial Prerendering (PPR) - enables static shell with dynamic streaming
-    // Set to true if you want to enable PPR for better performance
-    ppr: false,
+    inlineCss: true,
     // Optimize package imports for better tree-shaking
     optimizePackageImports: [
       "@contentful/rich-text-react-renderer",
+      "@tanstack/react-query",
+      "html-react-parser",
       "react-aria",
+      "react-google-recaptcha",
       "react-intersection-observer",
       "react-player",
-      "html-react-parser",
-      "react-google-recaptcha",
+      "sonner",
     ],
   },
   webpack(config, { dev, isServer }) {
@@ -230,7 +230,7 @@ const scriptSrc = [
 const ContentSecurityPolicy = `
   default-src 'self';
   script-src ${scriptSrc.join(" ")};
-  child-src *.youtube.com *.vimeo.com *.google.com *.twitter.com vercel.live;
+  child-src *.google.com *.twitter.com *.vimeo.com *.youtube.com vercel.live vimeo.com;
   style-src 'self' 'unsafe-inline' *.googleapis.com *.typekit.net vercel.live;
   img-src * blob: data: images.ctfassets.net placehold.co;
   media-src * 'self';

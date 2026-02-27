@@ -1,3 +1,11 @@
+.featuredBrandsSection {
+  min-height: 8.75rem;
+
+  @media screen and (min-width: 768px) {
+    min-height: 11.25rem;
+  }
+}
+
 .featuredWorkContainer {
   display: flex;
   align-items: center;
@@ -34,13 +42,13 @@
   text-align: center;
 
   span {
-    color: var(--color-bg);
+    color: var(--colors-street-lamp-yellow);
     text-shadow:
-      -1px -1px 0 var(--colors-street-lamp-yellow),
-      1px -1px 0 var(--colors-street-lamp-yellow),
-      -1px 1px 0 var(--colors-street-lamp-yellow),
-      1px 1px 0 var(--colors-street-lamp-yellow);
-    animation: titleAnimation 1s ease-in-out 500ms forwards;
+      -1px -1px 0 var(--color-bg),
+      1px -1px 0 var(--color-bg),
+      -1px 1px 0 var(--color-bg),
+      1px 1px 0 var(--color-bg);
+    animation: titleAnimation 0.4s ease-out 50ms both;
   }
 
   &.animated span {
@@ -54,12 +62,11 @@
 }
 
 @keyframes titleAnimation {
+  from {
+    opacity: 0;
+  }
+
   to {
-    color: var(--colors-street-lamp-yellow);
-    text-shadow:
-      -1px -1px 0 var(--color-bg),
-      1px -1px 0 var(--color-bg),
-      -1px 1px 0 var(--color-bg),
-      1px 1px 0 var(--color-bg);
+    opacity: 1;
   }
 }

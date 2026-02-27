@@ -21,7 +21,8 @@ export const WorkCard = (props: WorkCardProps) => {
   const { autoPlay = false, controls = true, work, title, subtitle } = props;
 
   const { inView, ref } = useInView({
-    threshold: 0.5,
+    rootMargin: "400px",
+    threshold: 0,
     triggerOnce: true,
   });
 
@@ -31,12 +32,14 @@ export const WorkCard = (props: WorkCardProps) => {
       className={classNames(styles.workCard, { [styles.animate]: inView })}
     >
       <div className={styles.workCardVideoContainer}>
-        <VideoPlayer
-          autoPlay={autoPlay}
-          controls={controls}
-          rounded
-          src={work.workVideoUrl}
-        />
+        {inView && work.workVideoUrl ? (
+          <VideoPlayer
+            autoPlay={autoPlay}
+            controls={controls}
+            rounded
+            src={work.workVideoUrl}
+          />
+        ) : null}
       </div>
 
       <Link

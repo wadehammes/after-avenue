@@ -2,10 +2,20 @@
 
 import classNames from "classnames";
 import parse from "html-react-parser";
-import { FeaturedBrands } from "src/components/FeaturedBrands/FeaturedBrands.component";
+import dynamic from "next/dynamic";
+import { useInView } from "react-intersection-observer";
 import { FeaturedWork } from "src/components/FeaturedWork/FeaturedWork.component";
 import styles from "src/components/HomePage/HomePage.module.css";
 import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
+
+const FeaturedBrands = dynamic(
+  () =>
+    import("src/components/FeaturedBrands/FeaturedBrands.component").then(
+      (m) => m.FeaturedBrands,
+    ),
+  { ssr: false },
+);
+
 import type { Page } from "src/contentful/getPages";
 import type { Work } from "src/contentful/getWork";
 
@@ -22,6 +32,11 @@ export const HomePage = (props: HomePageProps) => {
     contactFooterTitle,
     contactFooterButtonText,
   } = pageFields;
+
+  const { inView, ref } = useInView({
+    rootMargin: "200px",
+    threshold: 0,
+  });
 
   const title = `After Avenue | ${pageTitle}`;
 
@@ -52,8 +67,8 @@ export const HomePage = (props: HomePageProps) => {
           </StyledButtonLink>
         </div>
       </section>
-      <section>
-        <FeaturedBrands />
+      <section ref={ref} className={styles.featuredBrandsSection}>
+        {inView ? <FeaturedBrands /> : null}
       </section>
       <section>
         <div className="container column">

@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { draftMode } from "next/headers";
 import { Toaster } from "sonner";
 import { area, arida } from "src/app/fonts";
@@ -6,7 +7,6 @@ import { ExitDraftModeLink } from "src/components/ExitDraftModeLink/ExitDraftMod
 import { Footer } from "src/components/Footer/Footer.component";
 import { Navigation } from "src/components/Navigation/Navigation";
 import "src/styles/globals.css";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import classNames from "classnames";
 import type { Metadata } from "next";
 import { fetchGlobalVariables } from "src/contentful/getGlobalVariables";
@@ -17,16 +17,23 @@ import { envUrl } from "src/utils/helpers";
 export function generateMetadata(): Metadata {
   return {
     metadataBase: new URL(`${envUrl()}/`),
-    keywords: ["videography", "post production"],
-    creator: "After Avenue",
-    publisher: "After Avenue",
     applicationName: "After Avenue",
-    referrer: "origin-when-cross-origin",
+    creator: "After Avenue",
     formatDetection: {
-      email: false,
       address: false,
+      email: false,
       telephone: false,
     },
+    icons: {
+      apple: "/images/apple-touch-icon.png",
+      icon: [
+        { sizes: "16x16", type: "image/png", url: "/images/favicon-16x16.png" },
+        { sizes: "32x32", type: "image/png", url: "/images/favicon-32x32.png" },
+      ],
+    },
+    keywords: ["videography", "post production"],
+    publisher: "After Avenue",
+    referrer: "origin-when-cross-origin",
   };
 }
 
@@ -47,23 +54,8 @@ export default async function RootLayout({
   return (
     <html lang="en" className={classNames(arida.variable, area.variable)}>
       <head>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/images/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/images/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/images/favicon-16x16.png"
-        />
+        <link rel="preconnect" href="https://f.vimeocdn.com" />
+        <link rel="preconnect" href="https://player.vimeo.com" />
         <link
           rel="sitemap"
           type="application/xml"
@@ -87,7 +79,9 @@ export default async function RootLayout({
           </div>
         </Providers>
       </body>
-      <GoogleAnalytics gaId={process.env.GA_MEASUREMENT_ID as string} />
+      {process.env.GA_MEASUREMENT_ID ? (
+        <GoogleAnalytics gaId={process.env.GA_MEASUREMENT_ID} />
+      ) : null}
     </html>
   );
 }

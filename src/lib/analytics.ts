@@ -22,5 +22,11 @@ interface TrackEventProps {
   properties: SegmentEventProps;
 }
 
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+  }
+}
+
 export const trackEvent = ({ event, properties }: TrackEventProps) =>
   window.dataLayer?.push({ event, ...properties });
