@@ -1,5 +1,10 @@
-import { unstable_cache } from "next/cache";
-import { CONTENTFUL_CACHE_REVALIDATE_SECONDS } from "src/contentful/cacheConfig";
+import { cached } from "src/contentful/cache";
+import {
+  CACHE_TAG_CONTENTFUL_PAGE,
+  CACHE_TAG_CONTENTFUL_PAGES,
+  contentfulPageKey,
+  contentfulPagesKey,
+} from "src/contentful/cacheKeys";
 import { contentfulClient } from "src/contentful/client";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
 import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
@@ -113,11 +118,11 @@ export async function fetchPagesUncached({
 export async function fetchPages({
   preview,
 }: FetchPagesOptions): Promise<Page[]> {
-  return unstable_cache(
-    () => fetchPagesUncached({ preview }),
-    ["contentful", "pages", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulPagesKey(preview),
+    fn: () => fetchPagesUncached({ preview }),
+    tags: [CACHE_TAG_CONTENTFUL_PAGES],
+  });
 }
 
 interface FetchPageOptions {
@@ -145,9 +150,9 @@ export async function fetchPage({
   slug,
   preview,
 }: FetchPageOptions): Promise<Page | null> {
-  return unstable_cache(
-    () => fetchPageUncached({ slug, preview }),
-    ["contentful", "page", slug, String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulPageKey(slug, preview),
+    fn: () => fetchPageUncached({ slug, preview }),
+    tags: [CACHE_TAG_CONTENTFUL_PAGE],
+  });
 }

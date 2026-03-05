@@ -1,5 +1,10 @@
-import { unstable_cache } from "next/cache";
-import { CONTENTFUL_CACHE_REVALIDATE_SECONDS } from "src/contentful/cacheConfig";
+import { cached } from "src/contentful/cache";
+import {
+  CACHE_TAG_CONTENTFUL_WORK_CATEGORIES,
+  CACHE_TAG_CONTENTFUL_WORK_CATEGORY_SLUG,
+  contentfulWorkCategoriesKey,
+  contentfulWorkCategorySlugKey,
+} from "src/contentful/cacheKeys";
 import { contentfulClient } from "src/contentful/client";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
 import {
@@ -71,11 +76,11 @@ export async function fetchAllWorkCategoriesUncached({
 export async function fetchAllWorkCategories({
   preview,
 }: FetchAllWorkOptions): Promise<WorkCategory[]> {
-  return unstable_cache(
-    () => fetchAllWorkCategoriesUncached({ preview }),
-    ["contentful", "workCategories", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulWorkCategoriesKey(preview),
+    fn: () => fetchAllWorkCategoriesUncached({ preview }),
+    tags: [CACHE_TAG_CONTENTFUL_WORK_CATEGORIES],
+  });
 }
 
 interface FetchCategoryBySlugProps {
@@ -106,9 +111,9 @@ export async function fetchWorkCategoryBySlug({
   preview,
   slug,
 }: FetchCategoryBySlugProps): Promise<WorkCategory | null> {
-  return unstable_cache(
-    () => fetchWorkCategoryBySlugUncached({ preview, slug }),
-    ["contentful", "workCategory", slug, String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulWorkCategorySlugKey(slug, preview),
+    fn: () => fetchWorkCategoryBySlugUncached({ preview, slug }),
+    tags: [CACHE_TAG_CONTENTFUL_WORK_CATEGORY_SLUG],
+  });
 }

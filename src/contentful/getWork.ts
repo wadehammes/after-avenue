@@ -1,6 +1,19 @@
 import type { Document } from "@contentful/rich-text-types";
-import { unstable_cache } from "next/cache";
-import { CONTENTFUL_CACHE_REVALIDATE_SECONDS } from "src/contentful/cacheConfig";
+import { cached } from "src/contentful/cache";
+import {
+  CACHE_TAG_CONTENTFUL_WORK_ALL,
+  CACHE_TAG_CONTENTFUL_WORK_CATEGORY,
+  CACHE_TAG_CONTENTFUL_WORK_EDITOR,
+  CACHE_TAG_CONTENTFUL_WORK_FEATURED,
+  CACHE_TAG_CONTENTFUL_WORK_RANDOM,
+  CACHE_TAG_CONTENTFUL_WORK_SLUG,
+  contentfulWorkAllKey,
+  contentfulWorkCategoryKey,
+  contentfulWorkEditorKey,
+  contentfulWorkFeaturedKey,
+  contentfulWorkRandomKey,
+  contentfulWorkSlugKey,
+} from "src/contentful/cacheKeys";
 import { contentfulClient } from "src/contentful/client";
 import {
   type EditorType,
@@ -139,11 +152,11 @@ export async function fetchAllWorkUncached({
 export async function fetchAllWork({
   preview,
 }: FetchAllWorkOptions): Promise<Work[]> {
-  return unstable_cache(
-    () => fetchAllWorkUncached({ preview }),
-    ["contentful", "work", "all", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulWorkAllKey(preview),
+    fn: () => fetchAllWorkUncached({ preview }),
+    tags: [CACHE_TAG_CONTENTFUL_WORK_ALL],
+  });
 }
 
 interface FetchWorkByCategoryOptions {
@@ -187,11 +200,11 @@ export async function fetchWorkByCategory({
     return [];
   }
 
-  return unstable_cache(
-    () => fetchWorkByCategoryUncached({ preview, category }),
-    ["contentful", "work", "category", category, String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulWorkCategoryKey(category, preview),
+    fn: () => fetchWorkByCategoryUncached({ preview, category }),
+    tags: [CACHE_TAG_CONTENTFUL_WORK_CATEGORY],
+  });
 }
 
 interface FetchWorkByEditorOptions {
@@ -244,11 +257,11 @@ export async function fetchWorkByEditor({
     return [];
   }
 
-  return unstable_cache(
-    () => fetchWorkByEditorUncached({ preview, editorSlug }),
-    ["contentful", "work", "editor", editorSlug, String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulWorkEditorKey(editorSlug, preview),
+    fn: () => fetchWorkByEditorUncached({ preview, editorSlug }),
+    tags: [CACHE_TAG_CONTENTFUL_WORK_EDITOR],
+  });
 }
 
 export async function fetchAllFeaturedWorkUncached({
@@ -281,11 +294,11 @@ export async function fetchAllFeaturedWorkUncached({
 export async function fetchAllFeaturedWork({
   preview,
 }: FetchAllWorkOptions): Promise<Work[]> {
-  return unstable_cache(
-    () => fetchAllFeaturedWorkUncached({ preview }),
-    ["contentful", "work", "featured", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulWorkFeaturedKey(preview),
+    fn: () => fetchAllFeaturedWorkUncached({ preview }),
+    tags: [CACHE_TAG_CONTENTFUL_WORK_FEATURED],
+  });
 }
 
 export async function fetchRandomWorkUncached({
@@ -321,11 +334,11 @@ export async function fetchRandomWorkUncached({
 export async function fetchRandomWork({
   preview,
 }: FetchAllWorkOptions): Promise<Work[]> {
-  return unstable_cache(
-    () => fetchRandomWorkUncached({ preview }),
-    ["contentful", "work", "random", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulWorkRandomKey(preview),
+    fn: () => fetchRandomWorkUncached({ preview }),
+    tags: [CACHE_TAG_CONTENTFUL_WORK_RANDOM],
+  });
 }
 
 interface FetchSingleWorkOptions {
@@ -353,9 +366,9 @@ export async function fetchWorkBySlug({
   slug,
   preview,
 }: FetchSingleWorkOptions): Promise<Work | null> {
-  return unstable_cache(
-    () => fetchWorkBySlugUncached({ slug, preview }),
-    ["contentful", "work", "slug", slug, String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulWorkSlugKey(slug, preview),
+    fn: () => fetchWorkBySlugUncached({ slug, preview }),
+    tags: [CACHE_TAG_CONTENTFUL_WORK_SLUG],
+  });
 }

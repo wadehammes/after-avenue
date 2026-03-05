@@ -1,5 +1,8 @@
-import { unstable_cache } from "next/cache";
-import { CONTENTFUL_CACHE_REVALIDATE_SECONDS } from "src/contentful/cacheConfig";
+import { cached } from "src/contentful/cache";
+import {
+  CACHE_TAG_CONTENTFUL_NAVIGATION,
+  contentfulNavigationKey,
+} from "src/contentful/cacheKeys";
 import { contentfulClient } from "src/contentful/client";
 import {
   type Page,
@@ -69,9 +72,9 @@ export async function fetchNavigation({
   id,
   preview,
 }: FetchNavigationOptions): Promise<NavigationType | null> {
-  return unstable_cache(
-    () => fetchNavigationUncached({ id, preview }),
-    ["contentful", "navigation", id, String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulNavigationKey(id, preview),
+    fn: () => fetchNavigationUncached({ id, preview }),
+    tags: [CACHE_TAG_CONTENTFUL_NAVIGATION],
+  });
 }

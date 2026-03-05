@@ -1,5 +1,7 @@
 export const NAVIGATION_ID = "navigation-global";
 
+export const REVALIDATE_SECONDS = 60 * 60 * 24 * 30;
+
 export const HOME_PAGE_SLUG = "home";
 export const WORK_SLUG = "work";
 export const ABOUT_PAGE_SLUG = "about";

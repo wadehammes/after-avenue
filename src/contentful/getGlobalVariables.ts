@@ -1,5 +1,8 @@
-import { unstable_cache } from "next/cache";
-import { CONTENTFUL_CACHE_REVALIDATE_SECONDS } from "src/contentful/cacheConfig";
+import { cached } from "src/contentful/cache";
+import {
+  CACHE_TAG_CONTENTFUL_GLOBAL_VARIABLES,
+  contentfulGlobalVariablesKey,
+} from "src/contentful/cacheKeys";
 import { contentfulClient } from "src/contentful/client";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
 import {
@@ -91,9 +94,9 @@ export async function fetchGlobalVariablesUncached({
 export async function fetchGlobalVariables({
   preview,
 }: FetchGlobalVariables): Promise<GlobalVariables | null> {
-  return unstable_cache(
-    () => fetchGlobalVariablesUncached({ preview }),
-    ["contentful", "globalVariables", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulGlobalVariablesKey(preview),
+    fn: () => fetchGlobalVariablesUncached({ preview }),
+    tags: [CACHE_TAG_CONTENTFUL_GLOBAL_VARIABLES],
+  });
 }

@@ -1,6 +1,13 @@
 import type { Document } from "@contentful/rich-text-types";
-import { unstable_cache } from "next/cache";
-import { CONTENTFUL_CACHE_REVALIDATE_SECONDS } from "src/contentful/cacheConfig";
+import { cached } from "src/contentful/cache";
+import {
+  CACHE_TAG_CONTENTFUL_EDITOR_SLUG,
+  CACHE_TAG_CONTENTFUL_EDITORS_ALL,
+  CACHE_TAG_CONTENTFUL_EDITORS_MAIN_PAGE,
+  contentfulEditorSlugKey,
+  contentfulEditorsAllKey,
+  contentfulEditorsMainPageKey,
+} from "src/contentful/cacheKeys";
 import { contentfulClient } from "src/contentful/client";
 import { parseContentfulFeaturedWork, type Work } from "src/contentful/getWork";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
@@ -90,11 +97,11 @@ export async function fetchAllEditorsUncached({
 export async function fetchAllEditors({
   preview,
 }: FetchAllWorkOptions): Promise<EditorType[]> {
-  return unstable_cache(
-    () => fetchAllEditorsUncached({ preview }),
-    ["contentful", "editors", "all", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulEditorsAllKey(preview),
+    fn: () => fetchAllEditorsUncached({ preview }),
+    tags: [CACHE_TAG_CONTENTFUL_EDITORS_ALL],
+  });
 }
 
 interface FetchEditorBySlugOptions {
@@ -122,11 +129,11 @@ export async function fetchEditorBySlug({
   slug,
   preview,
 }: FetchEditorBySlugOptions): Promise<EditorType | null> {
-  return unstable_cache(
-    () => fetchEditorBySlugUncached({ slug, preview }),
-    ["contentful", "editor", slug, String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulEditorSlugKey(slug, preview),
+    fn: () => fetchEditorBySlugUncached({ slug, preview }),
+    tags: [CACHE_TAG_CONTENTFUL_EDITOR_SLUG],
+  });
 }
 
 export async function fetchAllEditorsForMainPageUncached({
@@ -151,11 +158,11 @@ export async function fetchAllEditorsForMainPageUncached({
 export async function fetchAllEditorsForMainPage({
   preview,
 }: FetchAllWorkOptions): Promise<EditorType[]> {
-  return unstable_cache(
-    () => fetchAllEditorsForMainPageUncached({ preview }),
-    ["contentful", "editors", "mainPage", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
-  )();
+  return cached({
+    key: contentfulEditorsMainPageKey(preview),
+    fn: () => fetchAllEditorsForMainPageUncached({ preview }),
+    tags: [CACHE_TAG_CONTENTFUL_EDITORS_MAIN_PAGE],
+  });
 }
 
 export const parseContentfulEditorForCta = (
