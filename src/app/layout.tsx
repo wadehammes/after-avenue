@@ -31,15 +31,13 @@ export function generateMetadata(): Metadata {
         { sizes: "32x32", type: "image/png", url: "/images/favicon-32x32.png" },
       ],
     },
-    keywords: ["videography", "post production"],
+    keywords: ["videography", "post production", "video editing"],
     publisher: "After Avenue",
     referrer: "origin-when-cross-origin",
   };
 }
 
 export default async function RootLayout({
-  // Layouts must accept a children prop.
-  // This will be populated with nested layouts or pages
   children,
 }: {
   children: React.ReactNode;
@@ -56,6 +54,8 @@ export default async function RootLayout({
       <head>
         <link rel="preconnect" href="https://f.vimeocdn.com" />
         <link rel="preconnect" href="https://player.vimeo.com" />
+        <link rel="preconnect" href="https://images.ctfassets.net" />
+        <link rel="preconnect" href="https://assets.ctfassets.net" />
         <link
           rel="sitemap"
           type="application/xml"

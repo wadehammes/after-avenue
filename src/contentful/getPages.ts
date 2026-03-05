@@ -1,3 +1,5 @@
+import { unstable_cache } from "next/cache";
+import { CONTENTFUL_CACHE_REVALIDATE_SECONDS } from "src/contentful/cacheConfig";
 import { contentfulClient } from "src/contentful/client";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
 import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
@@ -83,7 +85,7 @@ interface FetchPagesOptions {
   preview: boolean;
 }
 
-export async function fetchPages({
+export async function fetchPagesUncached({
   preview,
 }: FetchPagesOptions): Promise<Page[]> {
   const contentful = contentfulClient({ preview });
@@ -108,12 +110,22 @@ export async function fetchPages({
     });
 }
 
+export async function fetchPages({
+  preview,
+}: FetchPagesOptions): Promise<Page[]> {
+  return unstable_cache(
+    () => fetchPagesUncached({ preview }),
+    ["contentful", "pages", String(preview)],
+    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
+  )();
+}
+
 interface FetchPageOptions {
   slug: string;
   preview: boolean;
 }
 
-export async function fetchPage({
+export async function fetchPageUncached({
   slug,
   preview,
 }: FetchPageOptions): Promise<Page | null> {
@@ -127,4 +139,15 @@ export async function fetchPage({
     });
 
   return parseContentfulPage(pagesResult.items[0]);
+}
+
+export async function fetchPage({
+  slug,
+  preview,
+}: FetchPageOptions): Promise<Page | null> {
+  return unstable_cache(
+    () => fetchPageUncached({ slug, preview }),
+    ["contentful", "page", slug, String(preview)],
+    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
+  )();
 }

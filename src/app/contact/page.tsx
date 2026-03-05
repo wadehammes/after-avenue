@@ -12,7 +12,7 @@ import {
 } from "src/lib/schema";
 import { envUrl } from "src/utils/helpers";
 
-export const revalidate = 604800;
+export const revalidate = 2592000;
 
 export async function generateMetadata(): Promise<Metadata> {
   const draft = await draftMode();

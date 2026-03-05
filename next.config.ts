@@ -140,25 +140,27 @@ const nextConfig: NextConfig = {
     return sharedRedirects;
   },
   async headers() {
+    const thirtyDays = 60 * 60 * 24 * 30;
+    const oneYear = 31536000;
+    const htmlCacheControl = `public, max-age=${thirtyDays}, s-maxage=${thirtyDays}, stale-while-revalidate=${oneYear}`;
+
     return [
       {
-        source: "/",
+        source: "/api/:path*",
         headers: [
           {
             key: "Cache-Control",
-            value:
-              "public, max-age=3600, s-maxage=86400, stale-while-revalidate=31536000",
+            value: "private, no-store, must-revalidate",
           },
           ...securityHeaders,
         ],
       },
       {
-        source: "/:path*",
+        source: "/refresh-content",
         headers: [
           {
             key: "Cache-Control",
-            value:
-              "public, max-age=3600, s-maxage=86400, stale-while-revalidate=31536000",
+            value: "private, no-store, must-revalidate",
           },
           ...securityHeaders,
         ],
@@ -179,6 +181,26 @@ const nextConfig: NextConfig = {
             key: "Cache-Control",
             value: "public, max-age=31536000, immutable",
           },
+        ],
+      },
+      {
+        source: "/",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: htmlCacheControl,
+          },
+          ...securityHeaders,
+        ],
+      },
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: htmlCacheControl,
+          },
+          ...securityHeaders,
         ],
       },
     ];
