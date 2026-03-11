@@ -1,5 +1,8 @@
 import { unstable_cache } from "next/cache";
-import { CONTENTFUL_CACHE_REVALIDATE_SECONDS } from "src/contentful/cacheConfig";
+import {
+  CONTENTFUL_CACHE_REVALIDATE_SECONDS,
+  sanitizeForCache,
+} from "src/contentful/cacheConfig";
 import { contentfulClient } from "src/contentful/client";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
 import type { ContentfulAsset } from "src/contentful/parseContentfulAsset";
@@ -114,7 +117,7 @@ export async function fetchPages({
   preview,
 }: FetchPagesOptions): Promise<Page[]> {
   return unstable_cache(
-    () => fetchPagesUncached({ preview }),
+    async () => sanitizeForCache(await fetchPagesUncached({ preview })),
     ["contentful", "pages", String(preview)],
     { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
   )();
@@ -146,7 +149,7 @@ export async function fetchPage({
   preview,
 }: FetchPageOptions): Promise<Page | null> {
   return unstable_cache(
-    () => fetchPageUncached({ slug, preview }),
+    async () => sanitizeForCache(await fetchPageUncached({ slug, preview })),
     ["contentful", "page", slug, String(preview)],
     { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
   )();

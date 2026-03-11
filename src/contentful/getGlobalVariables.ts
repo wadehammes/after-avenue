@@ -1,5 +1,8 @@
 import { unstable_cache } from "next/cache";
-import { CONTENTFUL_CACHE_REVALIDATE_SECONDS } from "src/contentful/cacheConfig";
+import {
+  CONTENTFUL_CACHE_REVALIDATE_SECONDS,
+  sanitizeForCache,
+} from "src/contentful/cacheConfig";
 import { contentfulClient } from "src/contentful/client";
 import type { ContentfulTypeCheck } from "src/contentful/helpers";
 import {
@@ -92,7 +95,8 @@ export async function fetchGlobalVariables({
   preview,
 }: FetchGlobalVariables): Promise<GlobalVariables | null> {
   return unstable_cache(
-    () => fetchGlobalVariablesUncached({ preview }),
+    async () =>
+      sanitizeForCache(await fetchGlobalVariablesUncached({ preview })),
     ["contentful", "globalVariables", String(preview)],
     { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
   )();
