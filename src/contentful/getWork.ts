@@ -1,6 +1,9 @@
 import type { Document } from "@contentful/rich-text-types";
 import { unstable_cache } from "next/cache";
-import { CONTENTFUL_CACHE_REVALIDATE_SECONDS } from "src/contentful/cacheConfig";
+import {
+  CONTENTFUL_CACHE_REVALIDATE_SECONDS,
+  sanitizeForCache,
+} from "src/contentful/cacheConfig";
 import { contentfulClient } from "src/contentful/client";
 import {
   type EditorType,
@@ -140,7 +143,7 @@ export async function fetchAllWork({
   preview,
 }: FetchAllWorkOptions): Promise<Work[]> {
   return unstable_cache(
-    () => fetchAllWorkUncached({ preview }),
+    async () => sanitizeForCache(await fetchAllWorkUncached({ preview })),
     ["contentful", "work", "all", String(preview)],
     { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
   )();
@@ -188,7 +191,10 @@ export async function fetchWorkByCategory({
   }
 
   return unstable_cache(
-    () => fetchWorkByCategoryUncached({ preview, category }),
+    async () =>
+      sanitizeForCache(
+        await fetchWorkByCategoryUncached({ preview, category }),
+      ),
     ["contentful", "work", "category", category, String(preview)],
     { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
   )();
@@ -245,7 +251,10 @@ export async function fetchWorkByEditor({
   }
 
   return unstable_cache(
-    () => fetchWorkByEditorUncached({ preview, editorSlug }),
+    async () =>
+      sanitizeForCache(
+        await fetchWorkByEditorUncached({ preview, editorSlug }),
+      ),
     ["contentful", "work", "editor", editorSlug, String(preview)],
     { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
   )();
@@ -282,7 +291,8 @@ export async function fetchAllFeaturedWork({
   preview,
 }: FetchAllWorkOptions): Promise<Work[]> {
   return unstable_cache(
-    () => fetchAllFeaturedWorkUncached({ preview }),
+    async () =>
+      sanitizeForCache(await fetchAllFeaturedWorkUncached({ preview })),
     ["contentful", "work", "featured", String(preview)],
     { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
   )();
@@ -322,7 +332,7 @@ export async function fetchRandomWork({
   preview,
 }: FetchAllWorkOptions): Promise<Work[]> {
   return unstable_cache(
-    () => fetchRandomWorkUncached({ preview }),
+    async () => sanitizeForCache(await fetchRandomWorkUncached({ preview })),
     ["contentful", "work", "random", String(preview)],
     { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
   )();
@@ -354,7 +364,8 @@ export async function fetchWorkBySlug({
   preview,
 }: FetchSingleWorkOptions): Promise<Work | null> {
   return unstable_cache(
-    () => fetchWorkBySlugUncached({ slug, preview }),
+    async () =>
+      sanitizeForCache(await fetchWorkBySlugUncached({ slug, preview })),
     ["contentful", "work", "slug", slug, String(preview)],
     { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
   )();
