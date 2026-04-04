@@ -8,6 +8,10 @@ import type { ComponentModulesEntry } from "src/contentful/parseComponentModules
 import type { ComponentSlideEntry } from "src/contentful/parseComponentSlide";
 import type { ContentCardEntry } from "src/contentful/parseContentCard";
 import {
+  isTypeComponentContentCard,
+  isTypeComponentCopyBlock,
+  isTypeComponentModules,
+  isTypeComponentSlide,
   isTypeSection,
   type TypeSectionFields,
   type TypeSectionWithoutUnresolvableLinksResponse,
@@ -54,6 +58,34 @@ export type SectionEntry =
   | TypeSectionWithoutUnresolvableLinksResponse
   | undefined;
 
+function narrowSectionContentItem(
+  entry:
+    | TypeSectionWithoutUnresolvableLinksResponse["fields"]["content"][number]
+    | undefined,
+): Content {
+  if (entry == null) {
+    return undefined;
+  }
+
+  if (isTypeComponentContentCard(entry)) {
+    return entry as Content;
+  }
+
+  if (isTypeComponentCopyBlock(entry)) {
+    return entry as Content;
+  }
+
+  if (isTypeComponentSlide(entry)) {
+    return entry as Content;
+  }
+
+  if (isTypeComponentModules(entry)) {
+    return entry as Content;
+  }
+
+  return undefined;
+}
+
 export function parseContentfulSection(
   sectionEntry?: SectionEntry,
 ): SectionType | null {
@@ -62,7 +94,7 @@ export function parseContentfulSection(
   }
 
   return {
-    content: sectionEntry.fields.content.map((entry) => entry as Content),
+    content: sectionEntry.fields.content.map(narrowSectionContentItem),
     contentLayout:
       (sectionEntry.fields.contentLayout as ContentLayoutType) ||
       "Single Column",

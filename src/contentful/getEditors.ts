@@ -51,6 +51,8 @@ export function parseContentfulEditor(
 
   return {
     id: editorEntry.sys.id,
+    contactFooterButtonText: editorEntry.fields.contactFooterButtonText,
+    contactFooterTitle: editorEntry.fields.contactFooterTitle,
     editorBio: editorEntry.fields.editorBio,
     editorHeadshot: parseContentfulAsset(editorEntry.fields.editorHeadshot),
     editorHeadshotHover: parseContentfulAsset(

@@ -8,6 +8,7 @@
 export function setupIntersectionObserverMock({
   root = null,
   rootMargin = "",
+  scrollMargin = "",
   thresholds = [],
   disconnect = () => null,
   observe = () => null,
@@ -17,6 +18,7 @@ export function setupIntersectionObserverMock({
   class MockIntersectionObserver implements IntersectionObserver {
     readonly root: Element | null = root;
     readonly rootMargin: string = rootMargin;
+    readonly scrollMargin: string = scrollMargin;
     readonly thresholds: ReadonlyArray<number> = thresholds;
     disconnect: () => void = disconnect;
     observe: (target: Element) => void = observe;

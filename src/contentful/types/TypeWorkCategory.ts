@@ -24,10 +24,11 @@ export type TypeWorkCategory<
 export function isTypeWorkCategory<
   Modifiers extends ChainModifiers,
   Locales extends LocaleCode,
->(
-  entry: Entry<EntrySkeletonType, Modifiers, Locales>,
-): entry is TypeWorkCategory<Modifiers, Locales> {
-  return entry.sys.contentType.sys.id === "workCategory";
+>(entry: unknown): entry is TypeWorkCategory<Modifiers, Locales> {
+  const candidate = entry as {
+    sys?: { contentType?: { sys?: { id?: string } } };
+  };
+  return candidate.sys?.contentType?.sys?.id === "workCategory";
 }
 
 export type TypeWorkCategoryWithoutLinkResolutionResponse =

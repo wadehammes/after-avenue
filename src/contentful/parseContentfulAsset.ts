@@ -8,9 +8,11 @@ export interface ContentfulAsset {
   height: number;
 }
 
-export function parseContentfulAsset(
-  asset?: Asset<undefined, string> | { sys: AssetLink },
-): ContentfulAsset | null {
+type LinkedAsset = Asset<"WITHOUT_UNRESOLVABLE_LINKS">;
+
+export const parseContentfulAsset = (
+  asset?: LinkedAsset | { sys: AssetLink },
+): ContentfulAsset | null => {
   if (!asset) {
     return null;
   }
@@ -19,11 +21,13 @@ export function parseContentfulAsset(
     return null;
   }
 
+  const file = asset.fields.file;
+
   return {
     id: asset.sys.id,
-    src: asset.fields.file?.url || "",
-    alt: asset.fields.description || "",
-    width: asset.fields.file?.details.image?.width || 0,
-    height: asset.fields.file?.details.image?.height || 0,
+    src: file?.url ?? "",
+    alt: asset.fields.description ?? "",
+    width: file?.details?.image?.width ?? 0,
+    height: file?.details?.image?.height ?? 0,
   };
-}
+};

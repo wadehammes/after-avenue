@@ -24,10 +24,11 @@ export type TypeComponentCopyBlock<
 export function isTypeComponentCopyBlock<
   Modifiers extends ChainModifiers,
   Locales extends LocaleCode,
->(
-  entry: Entry<EntrySkeletonType, Modifiers, Locales>,
-): entry is TypeComponentCopyBlock<Modifiers, Locales> {
-  return entry.sys.contentType.sys.id === "componentCopyBlock";
+>(entry: unknown): entry is TypeComponentCopyBlock<Modifiers, Locales> {
+  const candidate = entry as {
+    sys?: { contentType?: { sys?: { id?: string } } };
+  };
+  return candidate.sys?.contentType?.sys?.id === "componentCopyBlock";
 }
 
 export type TypeComponentCopyBlockWithoutLinkResolutionResponse =

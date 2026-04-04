@@ -30,10 +30,11 @@ export type TypeComponentContentCard<
 export function isTypeComponentContentCard<
   Modifiers extends ChainModifiers,
   Locales extends LocaleCode,
->(
-  entry: Entry<EntrySkeletonType, Modifiers, Locales>,
-): entry is TypeComponentContentCard<Modifiers, Locales> {
-  return entry.sys.contentType.sys.id === "componentContentCard";
+>(entry: unknown): entry is TypeComponentContentCard<Modifiers, Locales> {
+  const candidate = entry as {
+    sys?: { contentType?: { sys?: { id?: string } } };
+  };
+  return candidate.sys?.contentType?.sys?.id === "componentContentCard";
 }
 
 export type TypeComponentContentCardWithoutLinkResolutionResponse =

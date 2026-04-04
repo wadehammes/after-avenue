@@ -35,10 +35,11 @@ export type TypeEditors<
 export function isTypeEditors<
   Modifiers extends ChainModifiers,
   Locales extends LocaleCode,
->(
-  entry: Entry<EntrySkeletonType, Modifiers, Locales>,
-): entry is TypeEditors<Modifiers, Locales> {
-  return entry.sys.contentType.sys.id === "editors";
+>(entry: unknown): entry is TypeEditors<Modifiers, Locales> {
+  const candidate = entry as {
+    sys?: { contentType?: { sys?: { id?: string } } };
+  };
+  return candidate.sys?.contentType?.sys?.id === "editors";
 }
 
 export type TypeEditorsWithoutLinkResolutionResponse =
