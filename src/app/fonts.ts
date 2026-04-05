@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 
 const arida = localFont({
+  adjustFontFallback: "Times New Roman",
   display: "swap",
   fallback: ["Georgia", "Times New Roman", "serif"],
   src: [
@@ -26,7 +27,7 @@ const arida = localFont({
     },
     {
       path: "./fonts/Arida/Arida-RegularIt.otf",
-      weight: "900",
+      weight: "400",
       style: "italic",
     },
   ],
@@ -34,6 +35,7 @@ const arida = localFont({
 });
 
 const area = localFont({
+  adjustFontFallback: "Arial",
   display: "swap",
   fallback: ["system-ui", "arial", "sans-serif"],
   src: [
