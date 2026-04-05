@@ -50,7 +50,10 @@ export default async function RootLayout({
   ]);
 
   return (
-    <html lang="en" className={classNames(arida.variable, area.variable)}>
+    <html
+      className={classNames(arida.variable, area.variable, area.className)}
+      lang="en"
+    >
       <head>
         <link rel="preconnect" href="https://f.vimeocdn.com" />
         <link rel="preconnect" href="https://player.vimeo.com" />
