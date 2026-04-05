@@ -232,7 +232,7 @@ export async function fetchWorkByEditorUncached({
     });
 
   return parseWorkResults.filter((work) => {
-    if (!work || !work.workEditors) {
+    if (!work?.workEditors) {
       return false;
     }
 

@@ -6,17 +6,17 @@ import { HeroSlide } from "src/components/HeroSlide/HeroSlide.component";
 import { PartnershipContent } from "src/components/PartnershipContent/PartnershipContent.component";
 import { ServicesMarqueeSection } from "src/components/ServicesMarqueeSection/ServicesMarqueeSection.component";
 import { Slide } from "src/components/Slide/Slide.component";
-import type { ComponentCopyBlock } from "src/contentful/parseComponentCopyBlock";
-import type { ComponentModules } from "src/contentful/parseComponentModules";
-import {
-  type ComponentSlideEntry,
-  parseContentfulComponentSlide,
-} from "src/contentful/parseComponentSlide";
-import {
-  type ContentCardEntry,
-  parseContentfulContentCard,
-} from "src/contentful/parseContentCard";
+import { parseComponentCopyBlock } from "src/contentful/parseComponentCopyBlock";
+import { parseContentfulComponentModules } from "src/contentful/parseComponentModules";
+import { parseContentfulComponentSlide } from "src/contentful/parseComponentSlide";
+import { parseContentfulContentCard } from "src/contentful/parseContentCard";
 import type { Content } from "src/contentful/parseSections";
+import {
+  isTypeComponentContentCard,
+  isTypeComponentCopyBlock,
+  isTypeComponentModules,
+  isTypeComponentSlide,
+} from "src/contentful/types";
 
 interface ContentRendererProps {
   content: Content;
@@ -33,76 +33,81 @@ export const ContentRenderer = ({
     return null;
   }
 
-  const contentType = content.sys.contentType.sys.id;
+  if (isTypeComponentContentCard(content)) {
+    const parsedCard = parseContentfulContentCard(content);
 
-  switch (contentType) {
-    case "componentContentCard": {
-      const entry = content as ContentCardEntry;
-      const parsedCard = parseContentfulContentCard(entry);
-
-      if (!parsedCard) {
-        return null;
-      }
-
-      return <ContentCard card={parsedCard} />;
-    }
-    case "componentCopyBlock": {
-      const fields = content.fields as ComponentCopyBlock;
-
-      return <CopyBlock copy={fields.copy} textAlign={fields.textAlign} />;
-    }
-    case "componentModules": {
-      const fields = content.fields as ComponentModules;
-
-      if (fields.module === "Featured Brands Marquee") {
-        return <FeaturedBrands />;
-      }
-
-      if (fields.module === "Services Marquee") {
-        return <ServicesMarqueeSection />;
-      }
-
+    if (!parsedCard) {
       return null;
     }
-    case "componentSlide": {
-      const entry = content as ComponentSlideEntry;
-      const parsedEntry = parseContentfulComponentSlide(entry);
 
-      if (!parsedEntry) {
-        return null;
-      }
-
-      if (parsedEntry.slideType === "Hero") {
-        return <HeroSlide fields={parsedEntry} index={index} />;
-      }
-
-      if (parsedEntry.slideType === "Conversation Bubble") {
-        return (
-          <Slide fields={parsedEntry} index={index}>
-            <ConversationBubbleContent slideFields={parsedEntry} />
-          </Slide>
-        );
-      }
-
-      if (
-        parsedEntry.slideType === "Regular" &&
-        parsedEntry.slideCopy &&
-        !parsedEntry.headline &&
-        !parsedEntry.backgroundMedia
-      ) {
-        return (
-          <Slide fields={parsedEntry} index={index}>
-            <PartnershipContent
-              slideFields={parsedEntry}
-              isEditorsPagePublished={isEditorsPagePublished}
-            />
-          </Slide>
-        );
-      }
-
-      return <Slide fields={parsedEntry} index={index} />;
-    }
-    default:
-      return null;
+    return <ContentCard card={parsedCard} />;
   }
+
+  if (isTypeComponentCopyBlock(content)) {
+    const parsed = parseComponentCopyBlock(content);
+
+    if (!parsed) {
+      return null;
+    }
+
+    return <CopyBlock copy={parsed.copy} textAlign={parsed.textAlign} />;
+  }
+
+  if (isTypeComponentModules(content)) {
+    const parsed = parseContentfulComponentModules(content);
+
+    if (!parsed) {
+      return null;
+    }
+
+    if (parsed.module === "Featured Brands Marquee") {
+      return <FeaturedBrands />;
+    }
+
+    if (parsed.module === "Services Marquee") {
+      return <ServicesMarqueeSection />;
+    }
+
+    return null;
+  }
+
+  if (isTypeComponentSlide(content)) {
+    const parsedEntry = parseContentfulComponentSlide(content);
+
+    if (!parsedEntry) {
+      return null;
+    }
+
+    if (parsedEntry.slideType === "Hero") {
+      return <HeroSlide fields={parsedEntry} index={index} />;
+    }
+
+    if (parsedEntry.slideType === "Conversation Bubble") {
+      return (
+        <Slide fields={parsedEntry} index={index}>
+          <ConversationBubbleContent slideFields={parsedEntry} />
+        </Slide>
+      );
+    }
+
+    if (
+      parsedEntry.slideType === "Regular" &&
+      parsedEntry.slideCopy &&
+      !parsedEntry.headline &&
+      !parsedEntry.backgroundMedia
+    ) {
+      return (
+        <Slide fields={parsedEntry} index={index}>
+          <PartnershipContent
+            slideFields={parsedEntry}
+            isEditorsPagePublished={isEditorsPagePublished}
+          />
+        </Slide>
+      );
+    }
+
+    return <Slide fields={parsedEntry} index={index} />;
+  }
+
+  return null;
 };

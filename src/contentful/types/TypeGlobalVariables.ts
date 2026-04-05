@@ -38,10 +38,11 @@ export type TypeGlobalVariables<
 export function isTypeGlobalVariables<
   Modifiers extends ChainModifiers,
   Locales extends LocaleCode,
->(
-  entry: Entry<EntrySkeletonType, Modifiers, Locales>,
-): entry is TypeGlobalVariables<Modifiers, Locales> {
-  return entry.sys.contentType.sys.id === "globalVariables";
+>(entry: unknown): entry is TypeGlobalVariables<Modifiers, Locales> {
+  const candidate = entry as {
+    sys?: { contentType?: { sys?: { id?: string } } };
+  };
+  return candidate.sys?.contentType?.sys?.id === "globalVariables";
 }
 
 export type TypeGlobalVariablesWithoutLinkResolutionResponse =

@@ -91,4 +91,4 @@ const area = localFont({
   variable: "--font-area",
 });
 
-export { arida, area };
+export { area, arida };
