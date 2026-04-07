@@ -14,8 +14,6 @@ import {
 import { EDITORS_PAGE_SLUG } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
-export const revalidate = 2592000;
-
 // Fetch the editors page, tell Next.js which metadata
 // (e.g. page title) to display.
 export async function generateMetadata(): Promise<Metadata> {

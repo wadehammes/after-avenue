@@ -26,7 +26,6 @@ import {
 } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
-export const revalidate = 2592000;
 export const dynamicParams = false;
 
 interface WorkParams {

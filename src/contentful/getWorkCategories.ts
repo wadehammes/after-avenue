@@ -1,6 +1,6 @@
 import { unstable_cache } from "next/cache";
 import {
-  CONTENTFUL_CACHE_REVALIDATE_SECONDS,
+  CONTENTFUL_CACHE_REVALIDATE,
   sanitizeForCache,
 } from "src/contentful/cacheConfig";
 import { contentfulClient } from "src/contentful/client";
@@ -78,7 +78,7 @@ export async function fetchAllWorkCategories({
     async () =>
       sanitizeForCache(await fetchAllWorkCategoriesUncached({ preview })),
     ["contentful", "workCategories", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
+    { revalidate: CONTENTFUL_CACHE_REVALIDATE },
   )();
 }
 
@@ -116,6 +116,6 @@ export async function fetchWorkCategoryBySlug({
         await fetchWorkCategoryBySlugUncached({ preview, slug }),
       ),
     ["contentful", "workCategory", slug, String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
+    { revalidate: CONTENTFUL_CACHE_REVALIDATE },
   )();
 }

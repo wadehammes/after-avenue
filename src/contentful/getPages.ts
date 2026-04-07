@@ -1,6 +1,6 @@
 import { unstable_cache } from "next/cache";
 import {
-  CONTENTFUL_CACHE_REVALIDATE_SECONDS,
+  CONTENTFUL_CACHE_REVALIDATE,
   sanitizeForCache,
 } from "src/contentful/cacheConfig";
 import { contentfulClient } from "src/contentful/client";
@@ -119,7 +119,7 @@ export async function fetchPages({
   return unstable_cache(
     async () => sanitizeForCache(await fetchPagesUncached({ preview })),
     ["contentful", "pages", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
+    { revalidate: CONTENTFUL_CACHE_REVALIDATE },
   )();
 }
 
@@ -151,6 +151,6 @@ export async function fetchPage({
   return unstable_cache(
     async () => sanitizeForCache(await fetchPageUncached({ slug, preview })),
     ["contentful", "page", slug, String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
+    { revalidate: CONTENTFUL_CACHE_REVALIDATE },
   )();
 }

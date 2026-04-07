@@ -1,7 +1,7 @@
 import type { Document } from "@contentful/rich-text-types";
 import { unstable_cache } from "next/cache";
 import {
-  CONTENTFUL_CACHE_REVALIDATE_SECONDS,
+  CONTENTFUL_CACHE_REVALIDATE,
   sanitizeForCache,
 } from "src/contentful/cacheConfig";
 import { contentfulClient } from "src/contentful/client";
@@ -98,7 +98,7 @@ export async function fetchAllEditors({
   return unstable_cache(
     async () => sanitizeForCache(await fetchAllEditorsUncached({ preview })),
     ["contentful", "editors", "all", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
+    { revalidate: CONTENTFUL_CACHE_REVALIDATE },
   )();
 }
 
@@ -131,7 +131,7 @@ export async function fetchEditorBySlug({
     async () =>
       sanitizeForCache(await fetchEditorBySlugUncached({ slug, preview })),
     ["contentful", "editor", slug, String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
+    { revalidate: CONTENTFUL_CACHE_REVALIDATE },
   )();
 }
 
@@ -161,7 +161,7 @@ export async function fetchAllEditorsForMainPage({
     async () =>
       sanitizeForCache(await fetchAllEditorsForMainPageUncached({ preview })),
     ["contentful", "editors", "mainPage", String(preview)],
-    { revalidate: CONTENTFUL_CACHE_REVALIDATE_SECONDS },
+    { revalidate: CONTENTFUL_CACHE_REVALIDATE },
   )();
 }
 

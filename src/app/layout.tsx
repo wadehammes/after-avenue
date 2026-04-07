@@ -14,6 +14,12 @@ import { fetchNavigation } from "src/contentful/getNavigation";
 import { NAVIGATION_ID } from "src/utils/constants";
 import { envUrl } from "src/utils/helpers";
 
+// Must stay inline: Next.js cannot statically analyze imported identifiers for
+// segment config (see https://nextjs.org/docs/messages/invalid-page-config).
+// Keep logic aligned with `CONTENTFUL_CACHE_REVALIDATE` in `src/contentful/cacheConfig.ts`.
+export const revalidate =
+  process.env.ENVIRONMENT === "production" ? false : 60 * 60 * 24;
+
 export function generateMetadata(): Metadata {
   return {
     metadataBase: new URL(`${envUrl()}/`),

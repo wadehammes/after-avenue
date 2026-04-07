@@ -57,3 +57,4 @@ Rich Text is rendered with `@contentful/rich-text-react-renderer` where the desi
 
 - **Client**: [src/contentful/client.ts](../../src/contentful/client.ts) is the one place we construct Contentful clients for delivery and preview.
 - Do **not** create ad-hoc clients in random files—reuse this module and the getters/parsers so tokens and behavior stay aligned.
+- **Caching**: [cacheConfig.ts](../../src/contentful/cacheConfig.ts) exports `CONTENTFUL_CACHE_REVALIDATE` for `unstable_cache`. Route-level ISR uses the same rules via an **inline** `export const revalidate` in [layout.tsx](../../src/app/layout.tsx) (Next.js cannot use imported constants for segment config). Production uses `false`; other environments use one day. [refresh-content](../../src/app/refresh-content/page.tsx) overrides with `0`. Work list pagination uses a page size of 500 entries per Contentful request when walking all work.
