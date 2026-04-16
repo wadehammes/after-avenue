@@ -57,3 +57,4 @@ Rich Text is rendered with `@contentful/rich-text-react-renderer` where the desi
 
 - **Client**: [src/contentful/client.ts](../../src/contentful/client.ts) is the one place we construct Contentful clients for delivery and preview.
 - Do **not** create ad-hoc clients in random files—reuse this module and the getters/parsers so tokens and behavior stay aligned.
+- **List pagination**: [getPages.ts](../../src/contentful/getPages.ts) (`fetchPagesUncached`) and work’s “fetch all” path request Contentful in batches of **500** entries per page (`skip`/`limit`), with a stable `order` on pages so pagination is deterministic.

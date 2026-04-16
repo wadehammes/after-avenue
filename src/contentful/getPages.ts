@@ -88,29 +88,46 @@ interface FetchPagesOptions {
   preview: boolean;
 }
 
+/** Page size for Contentful pagination when walking all page entries. */
+const PAGE_BATCH_SIZE = 500;
+
 export async function fetchPagesUncached({
   preview,
 }: FetchPagesOptions): Promise<Page[]> {
   const contentful = contentfulClient({ preview });
-
-  const pageResult =
-    await contentful.withoutUnresolvableLinks.getEntries<TypePageSkeleton>({
-      content_type: "page",
-      include: 10,
-      limit: 1000,
-    });
-
+  const limit = PAGE_BATCH_SIZE;
+  let total = 0;
+  let skip = 0;
+  const allPages: Page[] = [];
   const seenSlugs = new Set<string>();
 
-  return pageResult.items
-    .map((pageEntry) => parseContentfulPage(pageEntry))
-    .filter((page): page is Page => {
-      if (!page || seenSlugs.has(page.pageSlug)) {
-        return false;
-      }
-      seenSlugs.add(page.pageSlug);
-      return true;
-    });
+  do {
+    const pageResult =
+      await contentful.withoutUnresolvableLinks.getEntries<TypePageSkeleton>({
+        content_type: "page",
+        include: 10,
+        limit,
+        skip,
+        order: ["sys.id"],
+      });
+
+    total = pageResult.total;
+
+    const batch = pageResult.items
+      .map((pageEntry) => parseContentfulPage(pageEntry))
+      .filter((page): page is Page => {
+        if (!page || seenSlugs.has(page.pageSlug)) {
+          return false;
+        }
+        seenSlugs.add(page.pageSlug);
+        return true;
+      });
+
+    allPages.push(...batch);
+    skip += limit;
+  } while (skip < total);
+
+  return allPages;
 }
 
 export async function fetchPages({
