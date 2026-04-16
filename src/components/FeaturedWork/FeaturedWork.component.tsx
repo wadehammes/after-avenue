@@ -22,13 +22,14 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)", {
     initializeWithValue: false,
   });
-
   const { featuredWorkButtonText } = useGlobalVariables();
 
+  // Tight root so stacked cards below the fold are not all "in view" on load.
+  // A large rootMargin (e.g. 400px) made every block intersect immediately.
   const { inView, ref } = useInView({
-    rootMargin: "400px",
-    threshold: 0,
-    triggerOnce: true,
+    rootMargin: "0px",
+    threshold: 0.5,
+    triggerOnce: false,
   });
 
   return !isMobile ? (
@@ -52,9 +53,7 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
       </div>
       {workVideoUrl ? (
         <div className={styles.videoContainer}>
-          {inView ? (
-            <VideoPlayer src={workVideoUrl} autoPlay playInView />
-          ) : null}
+          <VideoPlayer src={workVideoUrl} autoPlay playInView={inView} />
         </div>
       ) : null}
     </div>
