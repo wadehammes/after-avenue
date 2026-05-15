@@ -3,7 +3,7 @@
 import { type RenderOptions, render } from "@testing-library/react";
 import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
 import type { NextRouter } from "next/router";
-import type { FC, ReactElement } from "react";
+import type { ReactElement } from "react";
 import type { PropsWithChildrenOnly } from "src/@types/react";
 
 const mockRouter: NextRouter = {
@@ -31,7 +31,7 @@ const mockRouter: NextRouter = {
   forward: jest.fn(() => Promise.resolve(true)),
 };
 
-const Providers: FC<PropsWithChildrenOnly> = ({ children }) => (
+const Providers = ({ children }: PropsWithChildrenOnly) => (
   <RouterContext.Provider value={mockRouter}>{children}</RouterContext.Provider>
 );
 

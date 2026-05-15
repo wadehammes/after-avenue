@@ -4,7 +4,7 @@
   padding-top: var(--default-padding);
   max-height: 7.5rem;
 
-  @media (min-width: 768px) {
+  @media (width >= 768px) {
     max-height: 10rem;
   }
 }

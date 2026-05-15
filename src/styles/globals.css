@@ -1,3 +1,5 @@
+@import url("./variables.css");
+
 *,
 *::before,
 *::after {
@@ -107,7 +109,7 @@ body {
   min-height: 100vh;
   position: relative;
 
-  @media (min-width: 600px) {
+  @media (width >= 600px) {
     font-size: 16px;
   }
 }
@@ -168,7 +170,7 @@ video {
 }
 
 a {
-  color: currentColor;
+  color: currentcolor;
   font-family: inherit;
   text-decoration: underline;
   font-weight: normal;
@@ -193,7 +195,7 @@ b {
 .text-button {
   appearance: none;
   background: none;
-  color: currentColor;
+  color: currentcolor;
   font-size: inherit;
   text-decoration: underline;
 
@@ -240,7 +242,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: currentColor;
+  color: currentcolor;
   font-family: var(--font-family-heading);
   font-weight: 900;
   position: relative;
@@ -277,7 +279,7 @@ h3 {
 }
 
 p {
-  color: currentColor;
+  color: currentcolor;
 }
 
 i {
@@ -301,7 +303,7 @@ i {
   gap: var(--default-padding);
   width: 100%;
   max-width: 140ch;
-  color: var(--colors-text);
+  color: var(--color-text);
   padding-bottom: var(--default-padding);
 
   h1 {
@@ -309,7 +311,7 @@ i {
     line-height: 1.1;
   }
 
-  @media (min-width: 768px) {
+  @media (width >= 768px) {
     padding-bottom: 4rem;
   }
 }
@@ -349,7 +351,7 @@ i {
     font-size: clamp(1.25rem, 3vw, 1.5rem);
   }
 
-  @media screen and (min-width: 768px) {
+  @media screen and (width >= 768px) {
     margin-bottom: 4rem;
   }
 }
@@ -359,7 +361,7 @@ i {
   max-width: 80ch;
   margin: 0 auto;
   line-height: 1.25;
-  color: currentColor;
+  color: currentcolor;
 }
 
 .skeleton {
@@ -411,7 +413,7 @@ p:empty {
   width: 100%;
   border: 2px solid var(--colors-street-lamp-yellow);
 
-  &:before {
+  &::before {
     content: "";
     position: absolute;
     bottom: -2px;
@@ -422,7 +424,7 @@ p:empty {
     z-index: 1;
   }
 
-  &:after {
+  &::after {
     content: "";
     position: absolute;
     bottom: -70px;
@@ -458,7 +460,7 @@ input[type="checkbox"] {
 .loading-spinner {
   animation: spin 1s linear infinite;
   border: 2px solid transparent;
-  border-top-color: currentColor;
+  border-top-color: currentcolor;
   border-radius: 50%;
   height: 40px;
   width: 40px;
@@ -467,33 +469,5 @@ input[type="checkbox"] {
 @keyframes spin {
   to {
     transform: rotate(360deg);
-  }
-}
-
-[data-theme="light"] {
-  --color-text: var(--colors-black);
-  --color-bg: var(--colors-white);
-}
-
-:root {
-  --colors-black: #171818;
-  --colors-white: #e5e2da;
-  --colors-street-lamp-yellow: #d78d2d;
-  --colors-sunset-yellow: #ffbf71;
-  --colors-red-wine: #60140a;
-
-  --color-text: var(--colors-white);
-  --color-bg: var(--colors-black);
-
-  --default-padding: 1.25rem;
-
-  --font-family-heading: var(--font-arida), serif;
-  --font-family-text: var(--font-area), sans-serif;
-
-  --gap: 2rem;
-
-  @media screen and (min-width: 600px) {
-    --default-padding: 2rem;
-    --gap: 4rem;
   }
 }

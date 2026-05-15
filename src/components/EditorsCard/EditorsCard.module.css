@@ -5,7 +5,7 @@
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
-  container: editorsCard / inline-size;
+  container: editors-card / inline-size;
   text-decoration: none;
 }
 
@@ -25,7 +25,7 @@
   width: 100%;
   flex: 1;
 
-  @container editorsCard (width < 500px) {
+  @container editors-card (width < 500px) {
     flex-direction: column;
     justify-content: stretch;
   }

@@ -3,10 +3,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid currentColor;
+  border: 1px solid currentcolor;
   padding: clamp(1.5rem, 5vw, 2.75rem) clamp(3rem, 5vw, 5rem);
   width: 100%;
-  color: currentColor;
+  color: currentcolor;
   font-size: clamp(2rem, 5vw, 3.5rem);
   line-height: 1;
 }

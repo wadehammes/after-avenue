@@ -5,7 +5,7 @@
   gap: var(--default-padding);
   width: 100%;
 
-  @media screen and (min-width: 768px) {
+  @media screen and (width >= 768px) {
     flex-flow: row nowrap;
   }
 }
@@ -20,7 +20,7 @@
   flex: 1;
   line-height: 1.5;
 
-  @media screen and (min-width: 768px) {
+  @media screen and (width >= 768px) {
     background-image: url("/images/dot-bg.png");
     padding: var(--default-padding);
   }
@@ -53,7 +53,7 @@
   &:hover {
     border-color: var(--colors-street-lamp-yellow);
     background-color: var(--colors-street-lamp-yellow);
-    color: var(--colors-bg);
+    color: var(--color-bg);
   }
 }
 
@@ -92,7 +92,7 @@
   align-content: stretch;
   width: 100%;
 
-  @media screen and (min-width: 600px) {
+  @media screen and (width >= 600px) {
     grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
   }
 }
