@@ -28,7 +28,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     src,
   } = props;
   const isBrowser = useIsBrowser();
-  const [debouncedPlayInView, setDebouncedPlayInView] = useState(playInView);
+  const [debouncedPlayInView, setDebouncedPlayInView] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
@@ -38,9 +38,13 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
       clearTimeout(timeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout(() => {
-      setDebouncedPlayInView(playInView);
-    }, 200); // 200ms delay to prevent rapid play/pause
+    if (!playInView) {
+      setDebouncedPlayInView(false);
+    } else {
+      timeoutRef.current = setTimeout(() => {
+        setDebouncedPlayInView(true);
+      }, 300);
+    }
 
     return () => {
       if (timeoutRef.current) {

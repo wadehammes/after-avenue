@@ -73,7 +73,8 @@ Place the CSS module next to the component, e.g. `MyComponent.component.tsx` and
 ### Modern CSS
 
 - **Nesting**: Use nesting for scoped styles and for nested media queries. Examples: [src/components/HeroSlide/HeroSlide.module.css](../../src/components/HeroSlide/HeroSlide.module.css), [src/components/Section/Section.module.css](../../src/components/Section/Section.module.css).
-- **Custom properties**: Prefer variables from the global design system defined on `:root` in [src/styles/globals.css](../../src/styles/globals.css) (e.g. color and spacing tokens). Prefer these over hard-coded colors and sizes where tokens exist.
+- **Custom properties**: Prefer variables from the global design system. All design tokens (colours, spacing, typography, theme overrides) live in [src/styles/variables.css](../../src/styles/variables.css), which is imported by `globals.css`. Prefer these over hard-coded colors and sizes where tokens exist.
+- **Runtime font variables**: Next.js `localFont` injects `--font-arida` and `--font-area` via a class on `<html>` at runtime. Do not declare them in CSS. They are registered as known properties for Stylelint in [`src/styles/runtime-variables.json`](../../src/styles/runtime-variables.json), which is listed in the `importFrom` array in `stylelint.config.ts`.
 - **Modern features**: Use `color-mix()`, `clamp()` for responsive typography and spacing where they simplify code. Keep styles DRY by reusing variables and, when needed, component-level custom properties.
 
 ### Mobile-first

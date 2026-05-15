@@ -21,7 +21,7 @@
   z-index: 1;
   width: 100%;
 
-  @media screen and (min-width: 600px) {
+  @media screen and (width >= 600px) {
     background-image: url("/images/dot-bg.png");
     border-radius: 20px;
     flex-flow: row nowrap;
@@ -38,7 +38,7 @@
 }
 
 .item {
-  color: var(--colors-text);
+  color: var(--color-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,7 +54,7 @@
 .logo {
   order: 0;
 
-  @media screen and (min-width: 600px) {
+  @media screen and (width >= 600px) {
     order: 3;
   }
 }
@@ -67,7 +67,7 @@
   width: 100%;
   flex: 1;
 
-  @media screen and (min-width: 600px) {
+  @media screen and (width >= 600px) {
     justify-content: flex-end;
   }
 }

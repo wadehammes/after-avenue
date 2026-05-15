@@ -9,7 +9,7 @@
   border-style: solid;
   border-color: transparent;
   background-color: transparent;
-  color: var(--colors-text);
+  color: var(--color-text);
   border-radius: 1000px;
   transition:
     color 0.1s linear,
@@ -19,7 +19,7 @@
   text-decoration: none;
   z-index: 1;
 
-  @media (min-width: 768px) {
+  @media (width >= 768px) {
     padding: 1.25rem 3rem;
   }
 

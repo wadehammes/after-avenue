@@ -1,0 +1,26 @@
+[data-theme="light"] {
+  --color-text: var(--colors-black);
+  --color-bg: var(--colors-white);
+}
+
+:root {
+  --font-family-heading: var(--font-arida), serif;
+  --font-family-text: var(--font-area), sans-serif;
+  --colors-black: #171818;
+  --colors-white: #e5e2da;
+  --colors-street-lamp-yellow: #d78d2d;
+  --colors-sunset-yellow: #ffbf71;
+  --colors-red-wine: #60140a;
+  --color-text: var(--colors-white);
+  --color-bg: var(--colors-black);
+  --colors-text: var(--color-text);
+  --colors-bg: var(--color-bg);
+  --colors-habanero: #c0392b;
+  --default-padding: 1.25rem;
+  --gap: 2rem;
+
+  @media screen and (width >= 600px) {
+    --default-padding: 2rem;
+    --gap: 4rem;
+  }
+}

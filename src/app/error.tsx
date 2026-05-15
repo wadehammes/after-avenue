@@ -6,7 +6,6 @@ export default function ErrorBoundary({
   error: _error,
   reset,
 }: {
-  // biome-ignore lint/suspicious/noShadowRestrictedNames: Next.js requires Error type
   error: Error & { digest?: string };
   reset: () => void;
 }) {

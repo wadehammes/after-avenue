@@ -1,7 +1,7 @@
 .featuredBrandsSection {
   min-height: 8.75rem;
 
-  @media screen and (min-width: 768px) {
+  @media screen and (width >= 768px) {
     min-height: 11.25rem;
   }
 }
@@ -31,7 +31,7 @@
 .homeTitleSection {
   padding: 2rem 0 4rem;
 
-  @media screen and (min-width: 768px) {
+  @media screen and (width >= 768px) {
     padding: 6rem 0 12rem;
   }
 }
