@@ -1,3 +1,7 @@
+allowBuilds:
+  '@parcel/watcher': false
+  sharp: false
+  unrs-resolver: false
 overrides:
   '@babel/helpers@<7.26.10': '>=7.26.10'
   '@babel/runtime@<7.26.10': '>=7.26.10'
