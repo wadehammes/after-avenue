@@ -44,7 +44,7 @@ interface FetchAllWorkOptions {
   preview: boolean;
 }
 
-export async function fetchAllWorkCategoriesUncached({
+async function fetchAllWorkCategoriesUncached({
   preview,
 }: FetchAllWorkOptions): Promise<WorkCategory[]> {
   const contentful = contentfulClient({ preview });
@@ -87,7 +87,7 @@ interface FetchCategoryBySlugProps {
   slug: string;
 }
 
-export async function fetchWorkCategoryBySlugUncached({
+async function fetchWorkCategoryBySlugUncached({
   preview,
   slug,
 }: FetchCategoryBySlugProps): Promise<WorkCategory | null> {

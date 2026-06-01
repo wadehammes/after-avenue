@@ -1,14 +1,14 @@
 {
-  "$schema": "https://unpkg.com/knip@5/schema.json",
-  "ignoreFiles": [
-    "scripts/make_sitemap.js",
-    "test-utils.tsx",
-    "src/tests/**",
-    "src/components/EditorsCard/**",
-    "src/components/Loader/**",
-    "src/hooks/useWindowFocus.ts",
-    "src/lib/analytics.ts",
-    "src/ui/TextArea/**",
-    "src/ui/TextField/**"
-  ]
+  "$schema": "./node_modules/knip/schema.json",
+  "tags": ["-lintignore"],
+  "entry": ["jest.config.ts", ".jest/**/*.ts"],
+  "ignore": ["src/contentful/types/**", "scripts/**", "src/utils/factory.helpers.ts"],
+  "ignoreDependencies": ["@svgr/webpack"],
+  "rules": {
+    "duplicates": "off"
+  },
+  "ignoreBinaries": ["make"],
+  "workspaces": {
+    ".": {}
+  }
 }

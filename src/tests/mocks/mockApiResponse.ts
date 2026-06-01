@@ -1,14 +1,16 @@
-import type { MockedFunction } from "jest-mock";
+interface MockableEndpoint<TResolved, TRejected> {
+  mockResolvedValue(value: TResolved): unknown;
+  mockResolvedValueOnce(value: TResolved): unknown;
+  mockRejectedValue(value: TRejected): unknown;
+  mockRejectedValueOnce(value: TRejected): unknown;
+}
 
-// biome-ignore lint/suspicious/noExplicitAny: false positive
-export function mockApiResponse<T extends (...args: any[]) => any>(
+export const mockApiResponse = <TResolved, TRejected = unknown>(
   responseResult: boolean | boolean[],
-  mockApiEndpoint: MockedFunction<T>,
-  // biome-ignore lint/suspicious/noExplicitAny: false positive
-  resolvedResponse: Awaited<any>,
-  // biome-ignore lint/suspicious/noExplicitAny: false positive
-  rejectedResponse: Awaited<any>,
-) {
+  mockApiEndpoint: MockableEndpoint<TResolved, TRejected>,
+  resolvedResponse: TResolved,
+  rejectedResponse: TRejected,
+) => {
   const responseResults =
     typeof responseResult === "boolean" ? [responseResult] : responseResult;
 
@@ -27,4 +29,4 @@ export function mockApiResponse<T extends (...args: any[]) => any>(
       mockApiEndpoint.mockRejectedValueOnce(rejectedResponse);
     }
   });
-}
+};

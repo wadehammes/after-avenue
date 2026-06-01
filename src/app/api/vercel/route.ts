@@ -1,3 +1,9 @@
+import { fetchResponse } from "src/api/helpers";
+
+interface VercelDeploymentsResponse {
+  deployments?: unknown[];
+}
+
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get("secret");
@@ -21,7 +27,9 @@ export async function POST(request: Request) {
     });
 
     if (fetchDeployments.ok) {
-      const deploymentsJson = await fetchDeployments.json();
+      const deploymentsJson = await fetchResponse<VercelDeploymentsResponse>(
+        Promise.resolve(fetchDeployments),
+      );
 
       if (deploymentsJson) {
         return Response.json(deploymentsJson.deployments);

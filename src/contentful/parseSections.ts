@@ -18,7 +18,7 @@ import {
 } from "src/contentful/types";
 import type { Alignment } from "src/interfaces/common.interfaces";
 
-export type SectionPaddingType = ExtractSymbolType<
+type SectionPaddingType = ExtractSymbolType<
   NonNullable<TypeSectionFields["sectionPadding"]>
 >;
 
@@ -26,7 +26,7 @@ export type SectionBackgroundColorType = ExtractSymbolType<
   NonNullable<TypeSectionFields["sectionBackgroundColor"]>
 >;
 
-export type ContentLayoutType = ExtractSymbolType<
+type ContentLayoutType = ExtractSymbolType<
   NonNullable<TypeSectionFields["contentLayout"]>
 >;
 

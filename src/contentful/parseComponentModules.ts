@@ -5,7 +5,7 @@ import {
   type TypeComponentModulesWithoutUnresolvableLinksResponse,
 } from "src/contentful/types";
 
-export type ModuleType = ExtractSymbolType<
+type ModuleType = ExtractSymbolType<
   NonNullable<TypeComponentModulesFields["module"]>
 >;
 

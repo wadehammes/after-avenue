@@ -41,16 +41,16 @@ See [contentful.md](contentful.md).
 
 ### `src/hooks/`
 
-Custom hooks; **mutations** under `src/hooks/mutations/` use React Query and `src/api/urls.ts`. Add **`src/hooks/queries/`** when you introduce client-side queries (see [conventions.md](conventions.md)).
+Custom hooks; **mutations** under `src/hooks/mutations/` use React Query and `src/api/urls.ts`. Current examples: [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts) (contact form), [useDeployHookMutation.ts](../../src/hooks/mutations/useDeployHookMutation.ts) (deploy button). Add **`src/hooks/queries/`** when you introduce client-side queries (see [conventions.md](conventions.md)).
 
 ### `src/api/`
 
 - **[urls.ts](../../src/api/urls.ts)** — `api` object for client-side calls to same-origin Route Handlers.
-- **[helpers.ts](../../src/api/helpers.ts)** — `fetchOptions`, `FetchMethods`.
+- **[helpers.ts](../../src/api/helpers.ts)** — `postJson`, `fetchResponse`, `FetchMethods`.
 
 ### `src/lib/`
 
-Server-oriented helpers such as [generateSitemap.ts](../../src/lib/generateSitemap.ts), [schema.ts](../../src/lib/schema.ts), and [analytics.ts](../../src/lib/analytics.ts) (client event helpers). See [distribution.md](distribution.md) and [integrations.md](integrations.md).
+Server-oriented helpers such as [generateSitemap.ts](../../src/lib/generateSitemap.ts) and [schema.ts](../../src/lib/schema.ts). See [distribution.md](distribution.md) and [integrations.md](integrations.md).
 
 ### `src/utils/`
 
@@ -63,8 +63,9 @@ Feature-scoped TypeScript interfaces shared across components.
 ### `src/tests/`
 
 - [basePageObject.po.ts](../../src/tests/basePageObject.po.ts) — base class for page objects.
-- [testUtils.tsx](../../src/tests/testUtils.tsx) — custom `render` with app providers.
-- `mocks/` — Jest doubles.
+- [test-utils.tsx](../../src/tests/test-utils.tsx) — custom `render` with app providers; re-exports `userEvent`.
+- [factories/BaseFactory.ts](../../src/tests/factories/BaseFactory.ts) — base class for Faker test factories.
+- `mocks/` — Jest doubles from [.jest/setupTests.ts](../../.jest/setupTests.ts), [`mockApiResponse`](../../src/tests/mocks/mockApiResponse.ts), [`mockGoogleRecaptcha`](../../src/tests/mocks/mockGoogleRecaptcha.tsx), and related helpers for page objects.
 
 ### `public/` and `scripts/`
 

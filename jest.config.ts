@@ -10,9 +10,10 @@ const customJestConfig: Config.InitialOptions = {
   setupFilesAfterEnv: ["<rootDir>/.jest/setupTests.ts"],
   moduleDirectories: ["node_modules", "<rootDir>"],
   testEnvironment: "jest-environment-jsdom",
-  transformIgnorePatterns: ["<rootDir>/node_modules/(?!isbot|jest-dom)"],
   preset: "ts-jest",
 };
+
+const esmPackages = ["isbot", "jest-dom", "@faker-js[+/]"].join("|");
 
 // Providing the path to your Next.js app which will enable loading next.config.js and .env files
 const createJestConfig = nextJest({ dir: "./" })(customJestConfig);
@@ -27,5 +28,12 @@ export default async () => {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   };
 
-  return { ...jestConfig, moduleNameMapper, testTimeout: 20000 };
+  return {
+    ...jestConfig,
+    moduleNameMapper,
+    testTimeout: 20000,
+    transformIgnorePatterns: [
+      `<rootDir>/node_modules/(?!(?:\\.pnpm/)?(?:${esmPackages}))`,
+    ],
+  };
 };

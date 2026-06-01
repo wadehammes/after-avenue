@@ -11,16 +11,16 @@ One directory per component under `src/components/<ComponentName>/`. Use **Pasca
 | File | Purpose |
 |------|--------|
 | **`<Name>.component.tsx`** | Main React component. Keep it focused on composition and minimal logic. Use CSS Modules (import `styles` from `./<Name>.module.css`) and apply class names. |
-| **`<Name>.po.tsx`** | Page object for tests (when you add them). Extends `BasePageObject`, sets `testId = "rh<Name>"`, implements `render<Name>(...)` with `render()` from [testUtils.tsx](../../src/tests/testUtils.tsx), and holds **setup and test data** only—queries belong in the spec via `screen` (see [conventions.md](conventions.md)). |
-| **`<Name>.spec.tsx`** | Jest tests: page object in `beforeEach`, then **`screen` and `userEvent`** for assertions and interactions. |
+| **`<Name>.po.tsx`** | Page object for tests. Extends `BasePageObject`, implements `render<Name>(...)` with `render()` from [test-utils.tsx](../../src/tests/test-utils.tsx). When the component calls the API layer, add `jest.mock("src/api/urls")` here and use [`mockApiResponse`](../../src/tests/mocks/mockApiResponse.ts) for setup helpers. See [ContactForm.po.tsx](../../src/components/ContactForm/ContactForm.po.tsx). |
+| **`<Name>.spec.tsx`** | Jest tests: page object in `beforeEach`, **`screen`** for assertions, **`userEvent`** for interactions. |
 | **`<Name>.interfaces.ts`** | Use when the component has **public** props or data types not already defined by a Contentful parser. CMS-driven components often use parsed types from `src/contentful/parse*.ts` directly. |
-| **`<Name>.factory.ts`** | Optional. Rosie / Faker factory for test data when props are complex (see [conventions.md](conventions.md)). |
+| **`<Name>.factory.ts`** | Optional. Subclass of [`BaseFactory`](../../src/tests/factories/BaseFactory.ts) for test data when tests need complex or repeated props. Define the factory for the same type the component expects. **Lives in [`src/tests/factories/<Name>.factory.ts`](../../src/tests/factories/), not in the component folder**—factories are test infrastructure shared across specs and POs. See the factory shape rules in [conventions.md → Test data](conventions.md#test-data). |
 | **`<Name>.module.css`** | Layout, spacing, typography, responsive rules. Use nesting and design tokens from [globals.css](../../src/styles/globals.css). |
 | **`use<Something>.ts`** | Optional. Colocate a hook used only by this component in the same folder. |
 
 ## Scaffold
 
-Run **`pnpm scaffold <ComponentName>`** when you want a head start—it creates the usual filenames and stubs (component, CSS module, interfaces, factory, page object, spec) under `src/components/<ComponentName>/`.
+Run **`pnpm scaffold <ComponentName>`** when you want a head start—it creates the usual filenames and stubs (component, CSS module, interfaces, page object, spec) under `src/components/<ComponentName>/`, plus a factory at `src/tests/factories/<ComponentName>.factory.ts`.
 
 **Heads-up:** For Contentful-backed components, treat the scaffold as a starting point only—the default **interfaces** / **factory** are generic stubs, not CMS parsers:
 
@@ -42,5 +42,4 @@ Use **`next/dynamic`** when a component is heavy or client-only (`ssr: false` wh
 
 ## Links
 
-- **Internal navigation**: Use `next/link`’s `Link` with stable `href` values.
-- **External links**: Use `<a>` with `target="_blank"` and `rel="noopener noreferrer"` when opening in a new tab.
+- Use **`next/link`**'s **`Link`** for all links—same-site routes, external URLs, **`mailto:`**, **`tel:`**, and so on. Pass **`href`**. For links that open in a new tab, set **`target`** and **`rel="noopener noreferrer"`** (or equivalent) on **`Link`** as needed.

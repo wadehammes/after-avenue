@@ -11,9 +11,11 @@ PRs that target **`staging`** run [`.github/workflows/ci.yml`](../../.github/wor
 3. **`pnpm install`**
 4. **`pnpm tsc:ci`** — TypeScript strict
 5. **`pnpm lint:ci`** — Biome in CI reporter mode
-6. **`pnpm test:ci`** — Jest
+6. **`pnpm lint:css`** — Stylelint on CSS Modules
+7. **`pnpm test:ci`** — Jest
+8. **`pnpm knip:ci`** — unused files, exports, and dependencies
 
-Run **`pnpm tsc:ci`**, **`pnpm lint:ci`**, and **`pnpm test:ci`** locally before pushing when you touch types, lint, or tests.
+Run **`pnpm tsc:ci`**, **`pnpm lint:ci`**, **`pnpm lint:css`**, **`pnpm test:ci`**, and **`pnpm knip`** locally before pushing when you touch types, lint, tests, or dependencies.
 
 ## Package scripts (local workflow)
 
@@ -23,7 +25,9 @@ Run **`pnpm tsc:ci`**, **`pnpm lint:ci`**, and **`pnpm test:ci`** locally before
 | `pnpm build` / `pnpm start` | Production build and serve (`build` runs `make sitemap`). |
 | `pnpm build:analyze` | Bundle analysis (see package.json). |
 | `pnpm lint` / `pnpm lint:fix` / `pnpm format` | Biome (same family as `lint:ci`). |
+| `pnpm lint:css` / `pnpm lint:css:fix` | Stylelint on `**/*.css`. |
 | `pnpm test:ci` | Jest (CI-style). |
+| `pnpm knip` / `pnpm knip:ci` | Find unused files, exports, and dependencies ([`knip.json`](../../knip.json)). |
 | `pnpm scaffold` | New component folder under `src/components/` (see [components.md](components.md)). |
 | `pnpm types:contentful` | Regenerate `src/contentful/types` (needs CMA env vars). |
 

@@ -107,9 +107,14 @@ Instead of cherry-picking each Dependabot PR when you want a broad upgrade:
 
 ### Testing
 
-We use Jest and the **page object** pattern described in **`docs/handbook/conventions.md`**. Utility modules often have colocated `*.spec.ts` files (e.g. under `src/utils/`).
+We use Jest and the **page object** pattern in **`docs/handbook/conventions.md`**.
 
-The custom `render` wrapper lives in [`src/tests/testUtils.tsx`](./src/tests/testUtils.tsx).
+- Import **`screen`** and **`userEvent`** from [`src/tests/test-utils.tsx`](./src/tests/test-utils.tsx) (includes React Query providers). Use **`userEvent`**, not `fireEvent`.
+- **Do not** add spec files under `src/hooks/queries/` or `src/hooks/mutations/`—test **component call sites** instead.
+- Mock the API layer in **page objects** with [`mockApiResponse`](./src/tests/mocks/mockApiResponse.ts) and `jest.mock("src/api/urls")`.
+- Unit-test [`src/api/helpers.spec.ts`](./src/api/helpers.spec.ts) and [`src/api/urls.spec.ts`](./src/api/urls.spec.ts) directly.
+
+Examples: [`ContactForm.spec.tsx`](./src/components/ContactForm/ContactForm.spec.tsx), [`DeployButton.spec.tsx`](./src/components/DeployButton/DeployButton.spec.tsx), [`StyledButton.spec.tsx`](./src/components/StyledButton/StyledButton.spec.tsx).
 
 ## Linting and formatting
 
@@ -146,21 +151,21 @@ The handbook is **markdown only** and is meant for humans and tooling alike. It 
 - **CI, env, draft preview, or `proxy.ts`:** [platform.md](./docs/handbook/platform.md).
 - **Google Analytics and the data layer:** [integrations.md](./docs/handbook/integrations.md).
 - **Sitemaps and public XML output:** [distribution.md](./docs/handbook/distribution.md).
-- **Interfaces and navigating `src/utils` / `src/lib`:** [source-layout.md](./docs/handbook/source-layout.md).
+- **Interfaces, API layer, tests, and navigating `src/utils` / `src/lib`:** [source-layout.md](./docs/handbook/source-layout.md).
 
 ### What each document covers
 
 | Document | Purpose |
 |----------|---------|
 | [**architecture.md**](./docs/handbook/architecture.md) | Tech stack, **directory map**, **App Router** (`src/app`), data flow (Contentful → parsers → SectionRenderer / ContentRenderer), **Next.js / Biome / branching**. |
-| [**conventions.md**](./docs/handbook/conventions.md) | **TypeScript**, **React**, **Biome**, **CSS** (CSS Modules, tokens, mobile-first), **testing**, **test IDs**, **accessibility**, **comments**, **editorconfig**, **React Query** hook rules. |
+| [**conventions.md**](./docs/handbook/conventions.md) | **TypeScript**, **React**, **Biome**, **CSS**, **testing** (page objects, `userEvent`, `mockApiResponse`, API specs), **test IDs**, **accessibility**, **React Query** hook rules. |
 | [**contentful.md**](./docs/handbook/contentful.md) | **Generated types** (`pnpm types:contentful`), **getters** vs **parsers**, **sections vs content blocks**, **ContentRenderer**, **Rich Text**, **Contentful client**. |
-| [**components.md**](./docs/handbook/components.md) | Component folders, **`pnpm scaffold`**, **test IDs**, exports, **dynamic imports**, links. |
-| [**patterns.md**](./docs/handbook/patterns.md) | **Server Components**, **React Query** (mutations / queries), **`src/api`**, **forms**, **metadata / JSON-LD**, **`next/dynamic`**. |
-| [**platform.md**](./docs/handbook/platform.md) | **GitHub CI** (`tsc`, Biome, Jest), **`pnpm` scripts**, **`next.config` env** and redirects, **draft / disable-draft APIs**, **`src/proxy.ts`**. |
-| [**integrations.md**](./docs/handbook/integrations.md) | **Google Analytics** (`@next/third-parties`), **`dataLayer`** helpers in `src/lib/analytics.ts`. |
+| [**components.md**](./docs/handbook/components.md) | Component folders, **`pnpm scaffold`**, page objects, **test IDs**, exports, **dynamic imports**, links. |
+| [**patterns.md**](./docs/handbook/patterns.md) | **Server Components**, **React Query**, **`src/api`** (`postJson`, `fetchResponse`), **forms**, **metadata / JSON-LD**, **`next/dynamic`**. |
+| [**platform.md**](./docs/handbook/platform.md) | **GitHub CI** (`tsc`, Biome, Stylelint, Jest, Knip), **`pnpm` scripts**, **`next.config` env** and redirects, **draft / disable-draft APIs**, **`src/proxy.ts`**. |
+| [**integrations.md**](./docs/handbook/integrations.md) | **Google Analytics** (`@next/third-parties`), **`dataLayer`** conventions. |
 | [**distribution.md**](./docs/handbook/distribution.md) | **Sitemap** generation (`make sitemap`, `public/sitemap.xml`), **robots** and related App Router metadata. |
-| [**source-layout.md**](./docs/handbook/source-layout.md) | **`src/interfaces`**, **`src/utils`** module map, **`src/lib`**. |
+| [**source-layout.md**](./docs/handbook/source-layout.md) | **`src/interfaces`**, **`src/utils`**, **`src/api`**, **`src/hooks`**, **`src/tests`**, **`src/lib`**. |
 | [**llms.md**](./docs/handbook/llms.md) | **Task → chapter** map and copy-paste blurb for custom GPTs and other tools. |
 
 ### Relationship to this README

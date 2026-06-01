@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { toast } from "sonner";
 import { StyledButton } from "src/components/StyledButton/StyledButton.component";
+import { useDeployHookMutation } from "src/hooks/mutations/useDeployHookMutation";
 
 interface DeployButtonProps {
   deployHook: string;
@@ -11,28 +11,30 @@ interface DeployButtonProps {
 
 export const DeployButton = (props: DeployButtonProps) => {
   const { deployHook, label } = props;
-  const [clicked, setClicked] = useState(false);
+  const deployHookMutation = useDeployHookMutation();
 
-  const handleDeploy = async () => {
-    try {
-      const response = await fetch(deployHook);
-      if (response.ok) {
-        setClicked(true);
+  const handleDeploy = () => {
+    deployHookMutation.mutate(deployHook, {
+      onSuccess: () => {
         toast.success("Refresh successfully triggered");
-      }
-    } catch {
-      toast.error("Failed to refresh");
-    }
+      },
+      onError: () => {
+        toast.error("Failed to refresh");
+      },
+    });
   };
+
+  const isRefreshing =
+    deployHookMutation.isPending || deployHookMutation.isSuccess;
 
   return (
     <StyledButton
-      isDisabled={clicked}
+      isDisabled={isRefreshing}
       onPress={handleDeploy}
-      variant={clicked ? "contained" : "outlined"}
+      variant={isRefreshing ? "contained" : "outlined"}
       color="dark"
     >
-      {clicked ? "Refreshing (wait ~2min)" : label}
+      {isRefreshing ? "Refreshing (wait ~2min)" : label}
     </StyledButton>
   );
 };

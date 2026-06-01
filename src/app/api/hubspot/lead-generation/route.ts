@@ -1,4 +1,4 @@
-import { FetchMethods } from "src/api/helpers";
+import { FetchMethods, fetchResponse } from "src/api/helpers";
 import type { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
 
 export const dynamic = "force-dynamic";
@@ -78,7 +78,9 @@ export async function POST(request: Request) {
     });
 
     if (submitLeadForm.ok) {
-      const leadFormResponse = await submitLeadForm.json();
+      const leadFormResponse = await fetchResponse<Record<string, unknown>>(
+        Promise.resolve(submitLeadForm),
+      );
 
       if (leadFormResponse) {
         return Response.json(leadFormResponse, { status: 200 });
