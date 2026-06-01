@@ -1,6 +1,13 @@
 /**
  * Verify reCAPTCHA token with Google's API
  */
+import { fetchResponse } from "src/api/helpers";
+
+interface RecaptchaVerifyResponse {
+  score?: number;
+  success: boolean;
+}
+
 export async function verifyRecaptchaToken(token: string): Promise<boolean> {
   const secretKey = process.env.RECAPTCHA_SECRET_KEY;
 
@@ -21,18 +28,15 @@ export async function verifyRecaptchaToken(token: string): Promise<boolean> {
       response: token,
     });
 
-    const response = await fetch(
-      "https://www.google.com/recaptcha/api/siteverify",
-      {
+    const data = await fetchResponse<RecaptchaVerifyResponse>(
+      fetch("https://www.google.com/recaptcha/api/siteverify", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: params.toString(),
-      },
+      }),
     );
-
-    const data = await response.json();
 
     // Check if verification was successful and score is acceptable (for v3)
     // For v2, success: true is sufficient

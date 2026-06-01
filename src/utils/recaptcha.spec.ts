@@ -1,7 +1,8 @@
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { verifyRecaptchaToken } from "src/utils/recaptcha";
 
 // Mock fetch globally
-global.fetch = jest.fn();
+global.fetch = jest.fn<typeof fetch>();
 
 describe("recaptcha", () => {
   const originalEnv = process.env;
@@ -20,7 +21,9 @@ describe("recaptcha", () => {
   describe("verifyRecaptchaToken", () => {
     it("should return false when RECAPTCHA_SECRET_KEY is not configured", async () => {
       delete process.env.RECAPTCHA_SECRET_KEY;
-      const consoleSpy = jest.spyOn(console, "error").mockImplementation();
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       const result = await verifyRecaptchaToken("test-token");
 
@@ -138,7 +141,9 @@ describe("recaptcha", () => {
     it("should handle fetch errors gracefully", async () => {
       process.env.RECAPTCHA_SECRET_KEY = "test-secret-key";
       const token = "test-token";
-      const consoleSpy = jest.spyOn(console, "error").mockImplementation();
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       mockFetch.mockRejectedValueOnce(new Error("Network error"));
 

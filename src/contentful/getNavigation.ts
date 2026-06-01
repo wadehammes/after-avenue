@@ -29,7 +29,7 @@ const _navigationTypeValidation: ContentfulTypeCheck<
   "id"
 > = true;
 
-export function parseContentfulNavigation(
+function parseContentfulNavigation(
   navigationEntry?: NavigationEntry,
 ): NavigationType | null {
   if (!navigationEntry || !isTypeNavigation(navigationEntry)) {
@@ -50,7 +50,7 @@ interface FetchNavigationOptions {
   preview: boolean;
 }
 
-export async function fetchNavigationUncached({
+async function fetchNavigationUncached({
   id,
   preview,
 }: FetchNavigationOptions): Promise<NavigationType | null> {

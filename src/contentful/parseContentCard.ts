@@ -18,10 +18,10 @@ import {
 } from "src/contentful/types";
 import type { Alignment } from "src/interfaces/common.interfaces";
 
-export type ContentCardStyleType = ExtractSymbolType<
+type ContentCardStyleType = ExtractSymbolType<
   NonNullable<TypeComponentContentCardFields["style"]>
 >;
-export type ContentCardImageStyleType = ExtractSymbolType<
+type ContentCardImageStyleType = ExtractSymbolType<
   NonNullable<TypeComponentContentCardFields["imageStyle"]>
 >;
 

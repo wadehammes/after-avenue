@@ -1,13 +1,21 @@
-import React from "react";
+import { forwardRef, useImperativeHandle } from "react";
+import type ReCAPTCHA from "react-google-recaptcha";
 
-const executeAsyncMock = jest.fn();
+export const mockRecaptchaToken = "recaptcha-token";
 
-const ReCAPTCHA = React.forwardRef((_props, ref) => {
-  React.useImperativeHandle(ref, () => ({
-    executeAsync: executeAsyncMock,
-  }));
-  return <div data-testid="recaptcha-mock">ReCAPTCHA Mock</div>;
+const MockGoogleRecaptcha = forwardRef((_props, ref) => {
+  useImperativeHandle(
+    ref,
+    () =>
+      ({
+        executeAsync: jest.fn(() => Promise.resolve(mockRecaptchaToken)),
+        reset: jest.fn(),
+      }) as unknown as ReCAPTCHA,
+  );
+
+  return null;
 });
 
-export { executeAsyncMock };
-export default ReCAPTCHA;
+MockGoogleRecaptcha.displayName = "MockGoogleRecaptcha";
+
+export default MockGoogleRecaptcha;

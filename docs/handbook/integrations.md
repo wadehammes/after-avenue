@@ -11,8 +11,7 @@ Prefer the existing layout pattern when adding or changing measurement IDs so th
 
 ## Data layer
 
-- **[src/lib/analytics.ts](../../src/lib/analytics.ts)** — `trackEvent` and related enums push structured payloads to **`window.dataLayer`** when present.
-- Reach for these helpers instead of ad-hoc `window.dataLayer.push` so event names stay consistent.
+When adding custom events, push structured payloads to **`window.dataLayer`** in client components. Keep event names consistent and colocate helpers with the feature that emits them.
 
 ## Other third parties
 

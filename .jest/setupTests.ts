@@ -1,4 +1,4 @@
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/jest-globals";
 import type ReCAPTCHA from "react-google-recaptcha";
 import { setupIntersectionObserverMock } from "src/tests/mocks/mockIntersectionObserver";
 import { setupMockMatchMedia } from "src/tests/mocks/mockMatchMedia";
@@ -16,6 +16,11 @@ globalThis.grecaptcha = mockRecaptcha;
 
 jest.mock("next/router", () => ({
   useRouter: () => mockedUseRouterReturnValue,
+}));
+
+jest.mock("next/dynamic", () => ({
+  __esModule: true,
+  default: require("src/tests/mocks/mockNextDynamic").default,
 }));
 
 global.beforeAll(() => {

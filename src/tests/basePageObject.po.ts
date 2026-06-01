@@ -1,5 +1,3 @@
-// eslint-disable testing-library/no-node-access
-
 export interface BasePageObjectProps {
   debug?: boolean;
   raiseOnFind?: boolean;

@@ -53,11 +53,11 @@ create_spec_file() {
   {
     echo "import { beforeEach, describe, expect, it } from \"@jest/globals\";"
     echo "import { ${component_name}PageObject } from \"src/components/${component_name}/${component_name}.po\";"
-    echo "import { screen } from \"src/tests/testUtils\";"
-    echo
-    echo "let po: ${component_name}PageObject;"
+    echo "import { screen } from \"src/tests/test-utils\";"
     echo
     echo "describe(\"${component_name}\", () => {"
+    echo "  let po: ${component_name}PageObject;"
+    echo
     echo "  beforeEach(() => {"
     echo "    po = new ${component_name}PageObject();"
     echo "  });"
@@ -71,20 +71,46 @@ create_spec_file() {
 }
 
 create_factory_file() {
-  local factory_name
+  local factory_name factory_path
   factory_name=$(factory_export_name "$component_name")
-  touch "${component_name}.factory.ts"
+  factory_path="$repo_root/src/tests/factories/${component_name}.factory.ts"
+  touch "$factory_path"
   {
     echo "import { faker } from \"@faker-js/faker\";"
-    echo "import { Factory } from \"rosie\";"
     echo "import type { ${component_name}Type } from \"src/components/${component_name}/${component_name}.interfaces\";"
+    echo "import { BaseFactory } from \"src/tests/factories/BaseFactory\";"
+    echo "import type { KeysMatch } from \"src/types/KeysMatch\";"
     echo
-    echo "export const ${factory_name} = Factory.define<${component_name}Type>("
-    echo "  \"${component_name}Type\","
-    echo ").attrs({"
-    echo "  id: () => faker.string.uuid(),"
-    echo "});"
-  } >> "${component_name}.factory.ts"
+    echo "type ${component_name}FactoryOptions = Record<string, never>;"
+    echo
+    echo "class ${component_name}Factory extends BaseFactory<"
+    echo "  ${component_name}Type,"
+    echo "  ${component_name}FactoryOptions"
+    echo "> {"
+    echo "  build("
+    echo "    attributes?: Partial<${component_name}Type>,"
+    echo "    _options?: ${component_name}FactoryOptions,"
+    echo "  ) {"
+    echo "    const instance = {"
+    echo "      id: faker.string.uuid(),"
+    echo "    } satisfies ${component_name}Type;"
+    echo
+    echo "    const factoryBuilt: ${component_name}Type = {"
+    echo "      ...instance,"
+    echo "      ...(attributes ?? {}),"
+    echo "    };"
+    echo
+    echo "    const _allKeysMustBeInTheInstance: KeysMatch<"
+    echo "      ${component_name}Type,"
+    echo "      typeof instance"
+    echo "    > = undefined;"
+    echo
+    echo "    return factoryBuilt;"
+    echo "  }"
+    echo "}"
+    echo
+    echo "export const ${factory_name} = new ${component_name}Factory();"
+  } >> "$factory_path"
 }
 
 create_page_object_file() {
@@ -95,7 +121,7 @@ create_page_object_file() {
     echo "  BasePageObject,"
     echo "  type BasePageObjectProps,"
     echo "} from \"src/tests/basePageObject.po\";"
-    echo "import { render } from \"src/tests/testUtils\";"
+    echo "import { render } from \"src/tests/test-utils\";"
     echo
     echo "export class ${component_name}PageObject extends BasePageObject {"
     echo "  public testId = \"rh${component_name}\";"
@@ -112,7 +138,7 @@ create_page_object_file() {
     echo "  }"
     echo
     echo "  render${component_name}() {"
-    echo "    render(<${component_name} myProperty=\"hello\" />);"
+    echo "    render(<${component_name} data-testid={this.testId} myProperty=\"hello\" />);"
     echo "  }"
     echo "}"
   } >> "${component_name}.po.tsx"
@@ -139,9 +165,10 @@ if [ ! -d "$dir" ]; then
   create_factory_file
   create_page_object_file
   popd > /dev/null
-  (cd "$repo_root" && pnpm exec biome format --write "$dir") || true
+  (cd "$repo_root" && pnpm exec biome format --write "$dir" "src/tests/factories/${component_name}.factory.ts") || true
   echo "✨ Successfully scaffolded ${component_name} ✨"
-  echo "Head over to src/components/${component_name} to start building."
+  echo "Component: src/components/${component_name}"
+  echo "Factory:   src/tests/factories/${component_name}.factory.ts"
   exit 0
 fi
 

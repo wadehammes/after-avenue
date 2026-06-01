@@ -1,39 +1,28 @@
-/* eslint-disable eslint-comments/disable-enable-pair */
-/* eslint-disable import/export -- not needed for this file */
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type RenderOptions, render } from "@testing-library/react";
 import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
-import type { NextRouter } from "next/router";
 import type { ReactElement } from "react";
+import { useState } from "react";
 import type { PropsWithChildrenOnly } from "src/@types/react";
+import { mockedUseRouterReturnValue } from "src/tests/mocks/mockNextRouter";
 
-const mockRouter: NextRouter = {
-  basePath: "/",
-  pathname: "/",
-  route: "/",
-  query: {},
-  asPath: "/",
-  locale: "",
-  push: jest.fn(() => Promise.resolve(true)),
-  replace: jest.fn(() => Promise.resolve(true)),
-  reload: jest.fn(() => Promise.resolve(true)),
-  prefetch: jest.fn(() => Promise.resolve()),
-  back: jest.fn(() => Promise.resolve(true)),
-  beforePopState: jest.fn(() => Promise.resolve(true)),
-  isFallback: false,
-  isLocaleDomain: false,
-  isPreview: false,
-  isReady: false,
-  events: {
-    on: jest.fn(),
-    off: jest.fn(),
-    emit: jest.fn(),
-  },
-  forward: jest.fn(() => Promise.resolve(true)),
+const createTestQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: { refetchOnWindowFocus: false, retry: false },
+      mutations: { retry: false },
+    },
+  });
+
+const Providers = ({ children }: PropsWithChildrenOnly) => {
+  const [queryClient] = useState(() => createTestQueryClient());
+
+  return (
+    <RouterContext.Provider value={mockedUseRouterReturnValue}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </RouterContext.Provider>
+  );
 };
-
-const Providers = ({ children }: PropsWithChildrenOnly) => (
-  <RouterContext.Provider value={mockRouter}>{children}</RouterContext.Provider>
-);
 
 const customRender = (
   ui: ReactElement,
@@ -41,5 +30,6 @@ const customRender = (
 ) => render(ui, { wrapper: Providers, ...options });
 
 export * from "@testing-library/react";
+export { default as userEvent } from "@testing-library/user-event";
 
 export { customRender as render };

@@ -16,7 +16,7 @@ import {
   type TypeComponentSlideWithoutUnresolvableLinksResponse,
 } from "src/contentful/types";
 
-export type SlideType = ExtractSymbolType<
+type SlideType = ExtractSymbolType<
   NonNullable<TypeComponentSlideFields["slideType"]>
 >;
 

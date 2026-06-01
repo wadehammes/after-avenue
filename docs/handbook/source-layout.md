@@ -20,13 +20,44 @@ Helpers are **split by topic**—there is no barrel `utils/index.ts`. Import the
 
 Specs: `*.spec.ts` next to modules (e.g. [rateLimit.spec.ts](../../src/utils/rateLimit.spec.ts)).
 
+## `src/api/`
+
+Client-side HTTP entry points for components and React Query hooks:
+
+| File | Purpose |
+|------|---------|
+| [urls.ts](../../src/api/urls.ts) | `api` object — contact email, HubSpot, deploy hooks, etc. |
+| [helpers.ts](../../src/api/helpers.ts) | `postJson`, `fetchResponse`, `FetchMethods` |
+| [helpers.spec.ts](../../src/api/helpers.spec.ts) / [urls.spec.ts](../../src/api/urls.spec.ts) | Unit tests (mock `global.fetch`) |
+
+See [patterns.md](patterns.md#api-layer-and-route-handlers).
+
+## `src/hooks/`
+
+| Folder | Purpose |
+|--------|---------|
+| **`mutations/`** | React Query mutation hooks (e.g. [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts), [useDeployHookMutation.ts](../../src/hooks/mutations/useDeployHookMutation.ts)). **No spec files here**—test component call sites instead. |
+| **`queries/`** | Add when you introduce client-side `useQuery` hooks. |
+
+## `src/tests/`
+
+Shared test infrastructure (see [conventions.md](conventions.md#testing)):
+
+| Path | Purpose |
+|------|---------|
+| [test-utils.tsx](../../src/tests/test-utils.tsx) | Custom `render` with React Query + router; re-exports `userEvent` |
+| [basePageObject.po.ts](../../src/tests/basePageObject.po.ts) | Base class for page objects |
+| [factories/BaseFactory.ts](../../src/tests/factories/BaseFactory.ts) | Faker test factories (e.g. [StyledButton.factory.ts](../../src/tests/factories/StyledButton.factory.ts)) |
+| [mocks/mockApiResponse.ts](../../src/tests/mocks/mockApiResponse.ts) | Success/failure helpers for mocked `api` endpoints |
+| [mocks/mockGoogleRecaptcha.tsx](../../src/tests/mocks/mockGoogleRecaptcha.tsx) | Invisible reCAPTCHA ref mock for component tests |
+| `mocks/` | Jest doubles for router, `matchMedia`, `IntersectionObserver`, etc. |
+
 ## `src/lib/`
 
 Server- and shared-oriented modules:
 
 - [generateSitemap.ts](../../src/lib/generateSitemap.ts) — sitemap XML generation
 - [schema.ts](../../src/lib/schema.ts) — JSON-LD / schema.org helpers
-- [analytics.ts](../../src/lib/analytics.ts) — client analytics helpers ([integrations.md](integrations.md))
 
 ## `src/contentful/`
 

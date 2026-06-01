@@ -48,7 +48,7 @@ const _workTypeValidation: ContentfulTypeCheck<
   "id" | "publishDate" | "updatedAt"
 > = true;
 
-export function parseContentfulWork(workEntry?: WorkEntry): Work | null {
+function parseContentfulWork(workEntry?: WorkEntry): Work | null {
   if (!workEntry || !isTypeWork(workEntry)) {
     return null;
   }
@@ -99,7 +99,7 @@ interface FetchAllWorkOptions {
   preview: boolean;
 }
 
-export async function fetchAllWorkUncached({
+async function fetchAllWorkUncached({
   preview,
 }: FetchAllWorkOptions): Promise<Work[]> {
   const contentful = contentfulClient({ preview });
@@ -154,7 +154,7 @@ interface FetchWorkByCategoryOptions {
   preview: boolean;
 }
 
-export async function fetchWorkByCategoryUncached({
+async function fetchWorkByCategoryUncached({
   preview,
   category,
 }: FetchWorkByCategoryOptions): Promise<Work[]> {
@@ -205,7 +205,7 @@ interface FetchWorkByEditorOptions {
   preview: boolean;
 }
 
-export async function fetchWorkByEditorUncached({
+async function fetchWorkByEditorUncached({
   preview,
   editorSlug,
 }: FetchWorkByEditorOptions): Promise<Work[]> {
@@ -260,7 +260,7 @@ export async function fetchWorkByEditor({
   )();
 }
 
-export async function fetchAllFeaturedWorkUncached({
+async function fetchAllFeaturedWorkUncached({
   preview,
 }: FetchAllWorkOptions): Promise<Work[]> {
   const contentful = contentfulClient({ preview });
@@ -298,7 +298,7 @@ export async function fetchAllFeaturedWork({
   )();
 }
 
-export async function fetchRandomWorkUncached({
+async function fetchRandomWorkUncached({
   preview,
 }: FetchAllWorkOptions): Promise<Work[]> {
   const contentful = contentfulClient({ preview });
@@ -343,7 +343,7 @@ interface FetchSingleWorkOptions {
   preview: boolean;
 }
 
-export async function fetchWorkBySlugUncached({
+async function fetchWorkBySlugUncached({
   slug,
   preview,
 }: FetchSingleWorkOptions): Promise<Work | null> {

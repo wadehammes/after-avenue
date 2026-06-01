@@ -27,14 +27,14 @@ Quick lookup—one line per file:
 | File | What it covers |
 |------|----------------|
 | [architecture.md](architecture.md) | Tech stack, directory map, `src/app`, data flow, key config. Start here. |
-| [conventions.md](conventions.md) | TypeScript, Biome, CSS Modules, testing, test IDs, accessibility, comments, editor, React Query hook rules. |
+| [conventions.md](conventions.md) | TypeScript, Biome, Stylelint, CSS Modules, testing (page objects, `@jest/globals`, `userEvent`, factories, mocking), test IDs, accessibility, React Query hook rules. |
 | [contentful.md](contentful.md) | Generated types, getters, parsers, sections vs modules, Rich Text, client. |
-| [components.md](components.md) | Component folder layout, `pnpm scaffold`, test IDs, exports, dynamic imports, links. |
-| [patterns.md](patterns.md) | Server components, serialization, React Query, `src/api`, forms, layout, metadata, JSON-LD. |
-| [platform.md](platform.md) | GitHub CI, common `pnpm` scripts, `next.config` (env, redirects), draft mode APIs, `src/proxy.ts`. |
+| [components.md](components.md) | Component folder layout, `pnpm scaffold`, page objects, test IDs, exports, dynamic imports, links. |
+| [patterns.md](patterns.md) | Server components, React Query, `src/api` (`postJson`, `fetchResponse`), forms, layout, metadata, JSON-LD. |
+| [platform.md](platform.md) | GitHub CI (tsc, Biome, Stylelint, Jest, Knip), `pnpm` scripts, `next.config`, draft mode APIs, `src/proxy.ts`. |
 | [integrations.md](integrations.md) | Google Analytics, data layer, related env. |
 | [distribution.md](distribution.md) | Sitemap generation and `public/` output. |
-| [source-layout.md](source-layout.md) | `src/interfaces`, `src/utils` map, `src/lib`. |
+| [source-layout.md](source-layout.md) | `src/interfaces`, `src/utils`, `src/api`, `src/hooks`, `src/tests`, `src/lib`. |
 | [llms.md](llms.md) | Task-to-chapter routing for tools; copy-paste blurb for non-Cursor agents. |
 
 ## Development setup

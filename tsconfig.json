@@ -27,6 +27,7 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2015",
+    "types": ["jest", "node"],
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -41,7 +42,6 @@
     ]
   },
   "include": [
-    "cssprops.d.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",

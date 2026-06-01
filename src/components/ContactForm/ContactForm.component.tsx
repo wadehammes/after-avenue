@@ -14,8 +14,7 @@ import { StyledButton } from "src/components/StyledButton/StyledButton.component
 import { StyledInput } from "src/components/StyledInput/StyledInput.component";
 import { StyledTextArea } from "src/components/StyledInput/StyledTextArea.component";
 import { useGlobalVariables } from "src/context/globalContext.context";
-import { useHubspotLeadGenerationFormApiMutation } from "src/hooks/mutations/useHubspotLeadGenerationFormApi.mutation";
-import { useSendContactEmailApiMutation } from "src/hooks/mutations/useSendContactEmailApi.mutation";
+import { useSubmitContactFormMutation } from "src/hooks/mutations/useSubmitContactFormMutation";
 import {
   EMAIL_VALIDATION_REGEX,
   PHONE_NUMBER_VALIDATION_REGEX,
@@ -64,9 +63,7 @@ export const ContactForm = () => {
   const marketingConsentId = useId();
   const websiteId = useId();
 
-  const useSendContactEmailApi = useSendContactEmailApiMutation();
-  const useHubspotLeadGenerationFormApi =
-    useHubspotLeadGenerationFormApiMutation();
+  const submitContactForm = useSubmitContactFormMutation();
 
   const onSubmitForm: SubmitHandler<ContactFormInputs> = async (data) => {
     clearErrors("email");
@@ -96,7 +93,7 @@ export const ContactForm = () => {
       const emailToLowerCase = email.toLowerCase();
 
       try {
-        await useSendContactEmailApi.mutateAsync({
+        await submitContactForm.mutateAsync({
           briefDescription,
           companyName,
           email: emailToLowerCase,
@@ -104,13 +101,6 @@ export const ContactForm = () => {
           name,
           phone,
           recaptchaToken: captcha,
-        });
-
-        await useHubspotLeadGenerationFormApi.mutateAsync({
-          companyName,
-          email: emailToLowerCase,
-          name,
-          phone,
         });
       } catch (error) {
         // Reset reCAPTCHA on error
@@ -133,9 +123,6 @@ export const ContactForm = () => {
           type: "manual",
           message: errorMessage,
         });
-
-        // Re-throw to stop form submission
-        throw error;
       }
     } else {
       throw new Error("reCAPTCHA not loaded. Please refresh the page.");
@@ -276,8 +263,13 @@ export const ContactForm = () => {
           ) : null}
         </div>
         <div>
-          <StyledButton type="submit" isDisabled={isSubmitting}>
-            {isSubmitting ? "Submitting..." : "Submit"}
+          <StyledButton
+            type="submit"
+            isDisabled={isSubmitting || submitContactForm.isPending}
+          >
+            {isSubmitting || submitContactForm.isPending
+              ? "Submitting..."
+              : "Submit"}
           </StyledButton>
         </div>
       </div>

@@ -15,8 +15,9 @@ This chapter collects **cross-cutting patterns**: how App Router pages load data
 Mutation hooks live in **`src/hooks/mutations/`**.
 
 - Each hook uses `useMutation` with a `mutationFn` that calls **api** methods from [src/api/urls.ts](../../src/api/urls.ts).
-- Do not scatter raw `fetch` in components for app APIs; use the `api` object so URLs and request shape stay consistent.
-- **Examples**: [useSendContactEmailApi.mutation.ts](../../src/hooks/mutations/useSendContactEmailApi.mutation.ts), [useHubspotLeadGenerationFormApi.mutation.ts](../../src/hooks/mutations/useHubspotLeadGenerationFormApi.mutation.ts).
+- Do not scatter raw `fetch` in components; use a mutation (or query) hook that delegates to the `api` object so URLs and request shape stay consistent.
+- **Examples**: [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts), [useDeployHookMutation.ts](../../src/hooks/mutations/useDeployHookMutation.ts).
+- **Testing**: Do not add spec files for hooks in `src/hooks/queries/` or `src/hooks/mutations/`. Test the components that call them and the [API layer](../../src/api/urls.spec.ts) instead.
 
 ## React Query — queries
 
@@ -24,13 +25,15 @@ When you add client-side queries, place them under **`src/hooks/queries/`**, use
 
 ## API layer and Route Handlers
 
-- **Client**: [src/api/urls.ts](../../src/api/urls.ts) is the front door for browser-initiated calls to same-origin APIs.
+- **Client**: [src/api/urls.ts](../../src/api/urls.ts) is the front door for browser-initiated HTTP calls (same-origin Route Handlers and approved external hooks such as Vercel deploy URLs). All JSON POSTs go through [postJson](../../src/api/helpers.ts); use [fetchResponse](../../src/api/helpers.ts) when parsing a `Response` body.
 - **Server**: Implement behavior in **`src/app/api/<name>/route.ts`** (POST/GET as needed), validate input, and return `Response` JSON with appropriate status codes.
+- **Do not call `fetch` in components.** Use a React Query hook whose `mutationFn` (or `queryFn`) delegates to the `api` object.
+- **Tests**: [helpers.spec.ts](../../src/api/helpers.spec.ts) and [urls.spec.ts](../../src/api/urls.spec.ts) unit-test the API layer with mocked `fetch`. Components that use the API are tested via page objects (see [conventions.md](conventions.md#what-to-mock-and-what-not-to)).
 
 ## Forms
 
-- **Library**: react-hook-form is used where complex forms exist (e.g. contact).
-- **Submit**: On submit, call the appropriate mutation hook, which uses the api layer and Route Handlers.
+- **Library**: react-hook-form is used where complex forms exist (e.g. [ContactForm](../../src/components/ContactForm/ContactForm.component.tsx)).
+- **Submit**: Call a mutation hook (e.g. [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts)), which chains `api` methods. Handle errors at the call site with `setError` or toasts—not by re-throwing after a failed `mutateAsync`.
 
 ## Layout and page structure
 

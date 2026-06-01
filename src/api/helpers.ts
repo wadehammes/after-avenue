@@ -1,17 +1,15 @@
 export enum FetchMethods {
-  Get = "GET",
   Post = "POST",
-  Patch = "PATCH",
 }
 
-export interface FetchOptions {
+interface FetchOptions {
   body?: string;
   method?: FetchMethods;
   headers?: Record<string, unknown>;
   authKey?: string;
 }
 
-export const fetchOptions = ({
+const fetchOptions = ({
   body,
   headers,
   method = FetchMethods.Post,
@@ -42,4 +40,28 @@ export const fetchResponse = async <T>(
   const res = await endpoint;
 
   return res.json();
+};
+
+const parseApiError = async (response: Response): Promise<string> => {
+  const errorData = (await response.json().catch(() => ({}))) as {
+    error?: string;
+  };
+
+  return errorData.error || `Request failed with status ${response.status}`;
+};
+
+export const postJson = async <T>(url: string, body: unknown): Promise<T> => {
+  const response = await fetch(
+    url,
+    fetchOptions({
+      method: FetchMethods.Post,
+      body: JSON.stringify(body),
+    }),
+  );
+
+  if (!response.ok) {
+    throw new Error(await parseApiError(response));
+  }
+
+  return fetchResponse<T>(Promise.resolve(response));
 };

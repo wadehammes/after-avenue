@@ -74,7 +74,7 @@ interface FetchAllWorkOptions {
   preview: boolean;
 }
 
-export async function fetchAllEditorsUncached({
+async function fetchAllEditorsUncached({
   preview,
 }: FetchAllWorkOptions): Promise<EditorType[]> {
   const contentful = contentfulClient({ preview });
@@ -107,7 +107,7 @@ interface FetchEditorBySlugOptions {
   preview: boolean;
 }
 
-export async function fetchEditorBySlugUncached({
+async function fetchEditorBySlugUncached({
   slug,
   preview,
 }: FetchEditorBySlugOptions): Promise<EditorType | null> {
@@ -135,7 +135,7 @@ export async function fetchEditorBySlug({
   )();
 }
 
-export async function fetchAllEditorsForMainPageUncached({
+async function fetchAllEditorsForMainPageUncached({
   preview,
 }: FetchAllWorkOptions): Promise<EditorType[]> {
   const contentful = contentfulClient({ preview });

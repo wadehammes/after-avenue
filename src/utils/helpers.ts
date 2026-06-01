@@ -1,7 +1,3 @@
-export const isBrowser = () => {
-  return Boolean(typeof window !== "undefined");
-};
-
 export const envUrl = () => {
   if (process.env.ENVIRONMENT === "local") {
     return "http://localhost:7777";
@@ -33,20 +29,6 @@ export const isVideo = (url: string | undefined): boolean => {
 
   return url.includes("videos.ctfassets.net");
 };
-
-export const convertBooleanToNumber = (value: boolean | number) => {
-  if (typeof value === "boolean") {
-    return value ? 1 : 0;
-  }
-
-  return value;
-};
-
-export function getRandomItem<T>(items: T[]): T {
-  const randomIndex = Math.floor(Math.random() * items.length);
-
-  return items[randomIndex];
-}
 
 export const isNonNullable = <T>(value: T): value is NonNullable<T> => {
   return value !== null && value !== undefined;

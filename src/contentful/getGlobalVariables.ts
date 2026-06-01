@@ -39,7 +39,7 @@ const _globalVariablesTypeValidation: ContentfulTypeCheck<
 
 type GlobalVariablesEntry = TypeGlobalVariablesWithoutUnresolvableLinksResponse;
 
-export function parseContentfulGlobalVariables(
+function parseContentfulGlobalVariables(
   globalVariablesEntry?: GlobalVariablesEntry,
 ): GlobalVariables | null {
   if (!globalVariablesEntry || !isTypeGlobalVariables(globalVariablesEntry)) {
@@ -73,7 +73,7 @@ interface FetchGlobalVariables {
   preview: boolean;
 }
 
-export async function fetchGlobalVariablesUncached({
+async function fetchGlobalVariablesUncached({
   preview,
 }: FetchGlobalVariables): Promise<GlobalVariables | null> {
   const contentful = contentfulClient({ preview });

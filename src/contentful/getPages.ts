@@ -44,7 +44,7 @@ const _pageTypeValidation: ContentfulTypeCheck<
   "id" | "publishDate" | "updatedAt"
 > = true;
 
-export function parseContentfulPage(pageEntry?: PageEntry): Page | null {
+function parseContentfulPage(pageEntry?: PageEntry): Page | null {
   if (!pageEntry || !isTypePage(pageEntry)) {
     return null;
   }
@@ -91,7 +91,7 @@ interface FetchPagesOptions {
 /** Page size for Contentful pagination when walking all page entries. */
 const PAGE_BATCH_SIZE = 500;
 
-export async function fetchPagesUncached({
+async function fetchPagesUncached({
   preview,
 }: FetchPagesOptions): Promise<Page[]> {
   const contentful = contentfulClient({ preview });
@@ -145,7 +145,7 @@ interface FetchPageOptions {
   preview: boolean;
 }
 
-export async function fetchPageUncached({
+async function fetchPageUncached({
   slug,
   preview,
 }: FetchPageOptions): Promise<Page | null> {
