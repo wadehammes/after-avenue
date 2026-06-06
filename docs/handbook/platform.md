@@ -29,6 +29,7 @@ Run **`pnpm tsc:ci`**, **`pnpm lint:ci`**, **`pnpm lint:css`**, **`pnpm test:ci`
 | `pnpm test:ci` | Jest (CI-style). |
 | `pnpm knip` / `pnpm knip:ci` | Find unused files, exports, and dependencies ([`knip.json`](../../knip.json)). |
 | `pnpm scaffold` | New component folder under `src/components/` (see [components.md](components.md)). |
+| `pnpm email:dev` | React Email preview server for `src/emails/` on port **3006** (see [patterns.md → Transactional email](patterns.md#transactional-email-react-email)). |
 | `pnpm types:contentful` | Regenerate `src/contentful/types` (needs CMA env vars). |
 
 The full list lives in **[`package.json`](../../package.json)**.
@@ -43,7 +44,7 @@ Notable groups:
 
 - **Contentful** — space, delivery/preview tokens, preview secret, CMA token for codegen.
 - **ENVIRONMENT** — drives URLs in helpers such as [envUrl()](../../src/utils/helpers.ts).
-- **HubSpot, Resend, reCAPTCHA** — used by Route Handlers and forms.
+- **HubSpot, Resend, reCAPTCHA** — used by Route Handlers and forms. **`RESEND_API_KEY`** powers contact-form delivery via [send-email/contact/route.ts](../../src/app/api/send-email/contact/route.ts).
 
 ## Preview and draft mode
 

@@ -13,7 +13,13 @@ const customJestConfig: Config.InitialOptions = {
   preset: "ts-jest",
 };
 
-const esmPackages = ["isbot", "jest-dom", "@faker-js[+/]"].join("|");
+const esmPackages = [
+  "isbot",
+  "jest-dom",
+  "@faker-js[+/]",
+  "@react-email[+/]",
+  "react-email",
+].join("|");
 
 // Providing the path to your Next.js app which will enable loading next.config.js and .env files
 const createJestConfig = nextJest({ dir: "./" })(customJestConfig);
