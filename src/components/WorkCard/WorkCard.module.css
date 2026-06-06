@@ -65,6 +65,8 @@
 }
 
 .workCardVideoContainer {
+  background-color: var(--color-bg, #000);
+  background-image: url("/images/dot-bg.png");
   padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;

@@ -14,6 +14,9 @@
 /.next/
 /out/
 
+# TS
+tsconfig.tsbuildinfo
+
 # production
 /build
 
@@ -35,3 +38,4 @@ yarn-error.log*
 .env*.local
 
 public/generated-sitemap-*.xml
+.env*

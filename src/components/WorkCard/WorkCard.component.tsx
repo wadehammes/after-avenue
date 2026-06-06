@@ -3,6 +3,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import type { HTMLAttributes } from "react";
+import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import styles from "src/components/WorkCard/WorkCard.module.css";
@@ -19,23 +20,30 @@ interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {
 
 export const WorkCard = (props: WorkCardProps) => {
   const { autoPlay = false, controls = true, work, title, subtitle } = props;
+  const [hasAnimated, setHasAnimated] = useState(false);
 
-  const { inView, ref } = useInView({
-    rootMargin: "400px",
+  const { inView: shouldMountVideo, ref } = useInView({
+    rootMargin: "150px 0px",
     threshold: 0,
-    triggerOnce: true,
+    triggerOnce: false,
+    onChange: (visible) => {
+      if (visible) {
+        setHasAnimated(true);
+      }
+    },
   });
 
   return (
     <div
       ref={ref}
-      className={classNames(styles.workCard, { [styles.animate]: inView })}
+      className={classNames(styles.workCard, { [styles.animate]: hasAnimated })}
     >
       <div className={styles.workCardVideoContainer}>
-        {inView && work.workVideoUrl ? (
+        {shouldMountVideo && work.workVideoUrl ? (
           <VideoPlayer
             autoPlay={autoPlay}
             controls={controls}
+            light={!autoPlay}
             rounded
             src={work.workVideoUrl}
           />

@@ -63,6 +63,17 @@ Server- and shared-oriented modules:
 
 Client, getters, parsers, generated types — see [contentful.md](contentful.md).
 
+## `src/components/` (video)
+
+| Path | Purpose |
+|------|---------|
+| [VideoPlayer/](../../src/components/VideoPlayer/) | Shared `react-player` wrapper — loading overlay, `light` preview, `playInView` debounce. |
+| [WorkCard/](../../src/components/WorkCard/) | Work grid card; lazy-mount video near viewport. |
+| [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block (desktop video). |
+| [EditorsBackgroundVideo/](../../src/components/EditorsBackgroundVideo/) | `/editors` hover background; two-player pool. |
+
+Patterns and performance rules: [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube).
+
 ## `src/app/`
 
 App Router routes, layouts, and Route Handlers — see [architecture.md](architecture.md).

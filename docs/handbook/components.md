@@ -40,6 +40,17 @@ Export the component as both a **named export** (e.g. `export const MyComponent`
 
 Use **`next/dynamic`** when a component is heavy or client-only (`ssr: false` when it depends on `window` or browser-only APIs). CMS-driven pieces are imported directly in **ContentRenderer** today; if a block becomes large enough to defer, wrap it with `dynamic` there or in the parent.
 
+**Embedded video**: Do not import **`react-player`** directly in feature components unless you have a one-off reason (e.g. the editors background stack). Use **[`VideoPlayer`](../../src/components/VideoPlayer/VideoPlayer.component.tsx)** or **[`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx)**. See [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube).
+
+## Video-related components
+
+| Component | Role |
+|-----------|------|
+| [`VideoPlayer`](../../src/components/VideoPlayer/VideoPlayer.component.tsx) | Shared Vimeo/YouTube wrapper (dynamic `react-player`, loading overlay, optional `light` preview). |
+| [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | Work grid card — lazy mount, thumbnail-first when `autoPlay` is false. |
+| [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop); defers mount until near viewport. |
+| [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | Fixed full-viewport background for `/editors`; static MP4 on hover while the next embed preloads. |
+
 ## Links
 
 - Use **`next/link`**'s **`Link`** for all links—same-site routes, external URLs, **`mailto:`**, **`tel:`**, and so on. Pass **`href`**. For links that open in a new tab, set **`target`** and **`rel="noopener noreferrer"`** (or equivalent) on **`Link`** as needed.

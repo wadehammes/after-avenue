@@ -24,12 +24,10 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
   });
   const { featuredWorkButtonText } = useGlobalVariables();
 
-  // Tight root so stacked cards below the fold are not all "in view" on load.
-  // A large rootMargin (e.g. 400px) made every block intersect immediately.
   const { inView, ref } = useInView({
-    rootMargin: "0px",
-    threshold: 0.5,
-    triggerOnce: false,
+    rootMargin: "150px 0px",
+    threshold: 0,
+    triggerOnce: true,
   });
 
   return !isMobile ? (
@@ -53,7 +51,9 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
       </div>
       {workVideoUrl ? (
         <div className={styles.videoContainer}>
-          <VideoPlayer src={workVideoUrl} autoPlay playInView={inView} />
+          {inView ? (
+            <VideoPlayer src={workVideoUrl} autoPlay playInView />
+          ) : null}
         </div>
       ) : null}
     </div>

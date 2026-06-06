@@ -30,7 +30,7 @@ Quick lookup—one line per file:
 | [conventions.md](conventions.md) | TypeScript, Biome, Stylelint, CSS Modules, testing (page objects, `@jest/globals`, `userEvent`, factories, mocking), test IDs, accessibility, React Query hook rules. |
 | [contentful.md](contentful.md) | Generated types, getters, parsers, sections vs modules, Rich Text, client. |
 | [components.md](components.md) | Component folder layout, `pnpm scaffold`, page objects, test IDs, exports, dynamic imports, links. |
-| [patterns.md](patterns.md) | Server components, React Query, `src/api` (`postJson`, `fetchResponse`), forms, layout, metadata, JSON-LD. |
+| [patterns.md](patterns.md) | Server components, React Query, `src/api` (`postJson`, `fetchResponse`), forms, layout, metadata, JSON-LD, embedded video performance (`VideoPlayer`, lazy mount, editors background). |
 | [platform.md](platform.md) | GitHub CI (tsc, Biome, Stylelint, Jest, Knip), `pnpm` scripts, `next.config`, draft mode APIs, `src/proxy.ts`. |
 | [integrations.md](integrations.md) | Google Analytics, data layer, related env. |
 | [distribution.md](distribution.md) | Sitemap generation and `public/` output. |
