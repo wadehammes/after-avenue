@@ -74,6 +74,29 @@ Client, getters, parsers, generated types — see [contentful.md](contentful.md)
 
 Patterns and performance rules: [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube).
 
+## `src/emails/`
+
+React Email templates for transactional mail (contact form today). Full flow and design rules: [patterns.md → Transactional email](patterns.md#transactional-email-react-email).
+
+| File | Purpose |
+|------|---------|
+| [EmailLayout.tsx](../../src/emails/EmailLayout.tsx) | Shared HTML shell (panel, logo, footer). |
+| [emailStyles.ts](../../src/emails/emailStyles.ts) | Shared colors and inline `CSSProperties`. |
+| [emailLogo.ts](../../src/emails/emailLogo.ts) / [emailBrandmark.ts](../../src/emails/emailBrandmark.ts) | Base64 image constants. |
+| [ContactFormEmail.interfaces.ts](../../src/emails/ContactFormEmail.interfaces.ts) | Props shared by both contact templates. |
+| [previewProps.ts](../../src/emails/previewProps.ts) | Sample data for preview. |
+| [renderContactEmails.tsx](../../src/emails/renderContactEmails.tsx) | `render()` wrappers for the Route Handler. |
+| `ContactForm*Email.tsx` | Individual templates (`export default` + `PreviewProps` for preview UI). |
+| `*.spec.tsx` | Template RTL tests and mocked render-helper tests. |
+
+Preview locally:
+
+```bash
+pnpm email:dev
+```
+
+Opens `http://localhost:3006` (separate from `pnpm dev` on port 3005).
+
 ## `src/app/`
 
 App Router routes, layouts, and Route Handlers — see [architecture.md](architecture.md).

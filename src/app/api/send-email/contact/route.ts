@@ -1,5 +1,9 @@
 import { Resend } from "resend";
 import type { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
+import {
+  renderContactFormConfirmationEmail,
+  renderContactFormSubmissionEmail,
+} from "src/emails/renderContactEmails";
 import { isNonNullable } from "src/utils/helpers";
 import { checkRateLimit } from "src/utils/rateLimit";
 import { verifyRecaptchaToken } from "src/utils/recaptcha";
@@ -81,12 +85,21 @@ export async function POST(request: Request) {
       reasons: spamCheck.reasons,
       ip: clientIp,
     });
-    // Silently reject spam - don't let spammers know they were caught
+    // Silently reject spam - don't let bots know they were caught
     return Response.json({ success: true }, { status: 200 });
   }
 
   const firstName = name.split(" ")[0] || "";
   const lastName = name.split(" ")[1] || "";
+
+  const emailProps = {
+    companyName,
+    email,
+    hubspotPortalId: process.env.HUBSPOT_PORTAL_ID,
+    message,
+    name,
+    phone,
+  };
 
   try {
     await resend.contacts.create({
@@ -97,22 +110,27 @@ export async function POST(request: Request) {
       audienceId: process.env.RESEND_GENERAL_AUDIENCE_ID as string,
     });
 
+    const submissionEmail = await renderContactFormSubmissionEmail(emailProps);
+
     const data = await resend.emails.send({
       from: "After Avenue Contact Form <forms@afteravenue.com>",
       replyTo: `${name} <${email}>`,
       to: "After Avenue <hello@afteravenue.com>",
       subject: `Contact Form Submission - ${companyName}`,
-      text: `You have a new message from ${name} at ${companyName}. ${message} Their contact info is: ${email} ${phone}. They have been added to Hubspot and Resend if they are a new contact lead.`,
-      html: `<div>You have a new message from ${name} at ${companyName}!<br /><br />Message:<br />${message}<br /><br />Their contact info is:<br />${name}<br />${email}<br />${phone}<br /><br />They have been added to Hubspot and Resend if they are a new contact lead.<br /><br />View this lead in Hubspot: https://app.hubspot.com/contacts/${process.env.HUBSPOT_PORTAL_ID}/lists/2/filters?query=${email}</div>`,
+      text: submissionEmail.text,
+      html: submissionEmail.html,
     });
 
     const delayConfirmationEmail = setTimeout(async () => {
+      const confirmationEmail =
+        await renderContactFormConfirmationEmail(emailProps);
+
       await resend.emails.send({
         to: `${name} <${email}>`,
         from: "After Avenue <hello@afteravenue.com>",
         subject: "We received your contact info.",
-        text: `Hi, ${name}! We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email. Thanks, After Avenue - hello@afteravenue.com | https://afteravenue.com`,
-        html: `<div>Hi, ${name}!<br /><br />We've received your contact for ${companyName} and will respond to you shortly. Feel free to reply back to this email.<br /><br />Thanks, After Avenue<br />hello@afteravenue.com<br />https://www.afteravenue.com</div>`,
+        text: confirmationEmail.text,
+        html: confirmationEmail.html,
       });
     }, 500);
 

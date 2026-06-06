@@ -149,6 +149,10 @@ jest.mock("next/script", () => ({
 
 Other third-party mocks follow the same pattern—e.g. [`mockGoogleRecaptcha.tsx`](../../src/tests/mocks/mockGoogleRecaptcha.tsx) for `react-google-recaptcha`. [`mockNextDynamic.ts`](../../src/tests/mocks/mockNextDynamic.ts) is wired globally in [`.jest/setupTests.ts`](../../.jest/setupTests.ts) as a passthrough for `next/dynamic`.
 
+### React Email templates
+
+Email templates under [`src/emails/`](../../src/emails/) are **not** page objects. Test them with Testing Library in `*.spec.tsx` beside the template (see [ContactFormEmails.spec.tsx](../../src/emails/ContactFormEmails.spec.tsx)). For [renderContactEmails.tsx](../../src/emails/renderContactEmails.tsx), **mock** `react-email`’s `render` in the spec—do not invoke the real `@react-email/render` in Jest. See [patterns.md → Transactional email](patterns.md#transactional-email-react-email).
+
 ## Test IDs
 
 - Every component that is tested (or likely to be) should have a **root element** with `data-testid="rh<ComponentName>"` (e.g. `rhAddressLookup`, `rhContentCard`). Use PascalCase to match the component name.

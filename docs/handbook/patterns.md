@@ -35,6 +35,43 @@ When you add client-side queries, place them under **`src/hooks/queries/`**, use
 - **Library**: react-hook-form is used where complex forms exist (e.g. [ContactForm](../../src/components/ContactForm/ContactForm.component.tsx)).
 - **Submit**: Call a mutation hook (e.g. [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts)), which chains `api` methods. Handle errors at the call site with `setError` or toasts—not by re-throwing after a failed `mutateAsync`.
 
+## Transactional email (React Email)
+
+Contact form mail is built with **[React Email](https://react.email/)** and sent via **Resend** from [src/app/api/send-email/contact/route.ts](../../src/app/api/send-email/contact/route.ts).
+
+### End-to-end flow
+
+1. **Client** — [ContactForm](../../src/components/ContactForm/ContactForm.component.tsx) submits through [useSubmitContactFormMutation](../../src/hooks/mutations/useSubmitContactFormMutation.ts) → `api.sendContactEmail` in [urls.ts](../../src/api/urls.ts).
+2. **Route Handler** — validates reCAPTCHA, rate limits, and spam; maps form fields to [ContactFormEmailProps](../../src/emails/ContactFormEmail.interfaces.ts).
+3. **Render** — [renderContactEmails.tsx](../../src/emails/renderContactEmails.tsx) calls `render()` from `react-email` for HTML and plain-text bodies.
+4. **Send** — Resend delivers an internal notification (`ContactFormSubmissionEmail`) and a user confirmation (`ContactFormConfirmationEmail`).
+
+### Template layout (`src/emails/`)
+
+| File | Role |
+|------|------|
+| [EmailLayout.tsx](../../src/emails/EmailLayout.tsx) | Shared shell — logo, soft panel, brandmark footer. |
+| [emailStyles.ts](../../src/emails/emailStyles.ts) | Brand colors, typography, shared inline styles (`emailParagraph`, `emailDivider`, etc.). |
+| [emailLogo.ts](../../src/emails/emailLogo.ts) / [emailBrandmark.ts](../../src/emails/emailBrandmark.ts) | Wordmark and brandmark as **base64 data URIs** (email clients do not reliably load SVG or relative URLs). |
+| [previewProps.ts](../../src/emails/previewProps.ts) | Sample props for the React Email preview UI. |
+| [ContactFormSubmissionEmail.tsx](../../src/emails/ContactFormSubmissionEmail.tsx) | Internal notification template. |
+| [ContactFormConfirmationEmail.tsx](../../src/emails/ContactFormConfirmationEmail.tsx) | User-facing confirmation. |
+| [renderContactEmails.tsx](../../src/emails/renderContactEmails.tsx) | Server-side `render()` helpers used by the Route Handler. |
+
+### Design conventions
+
+- **One panel** — logo, greeting, and body live inside a single rounded panel in `EmailLayout`; no bordered “form box” around the salutation.
+- **Typography** — serif for greetings/sign-off, sans-serif for body copy; accent `#d78d2d` on links and field labels only.
+- **Images** — keep logos inline (base64). Regenerate `emailLogo.ts` / `emailBrandmark.ts` from `src/icons/` when brand assets change (PNG via `resvg` or similar).
+- **Dividers** — subtle `Hr` rules only (`appearance: none`, low-opacity top border). Type shared dividers as `CSSProperties` in `emailStyles.ts`.
+- **Preview** — `pnpm email:dev` (port **3006**). Only files with a **`export default`** appear in the sidebar; attach sample data with `Component.PreviewProps` (see [previewProps.ts](../../src/emails/previewProps.ts)). Helpers like `renderContactEmails.tsx`, `EmailLayout.tsx`, and `*.interfaces.ts` are excluded automatically (no default export).
+
+### Testing
+
+- **Template content** — [ContactFormEmails.spec.tsx](../../src/emails/ContactFormEmails.spec.tsx) renders templates with Testing Library (`screen`, `getByText`, `getByAltText`). React Email’s `<Html>` nesting warnings in JSDOM are expected noise.
+- **Render helpers** — [renderContactEmails.spec.tsx](../../src/emails/renderContactEmails.spec.tsx) **mocks** `react-email`’s `render`. Do not call the real `@react-email/render` in Jest — it requires ESM VM modules the test runner does not provide.
+- **Route Handler** — test spam/rate-limit/recaptcha behavior in a dedicated route spec if you add one; keep template assertions in `src/emails/`.
+
 ## Layout and page structure
 
 - **Root layout**: [src/app/layout.tsx](../../src/app/layout.tsx) loads global styles, providers, navigation, and footer data.
