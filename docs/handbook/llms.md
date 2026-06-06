@@ -13,6 +13,8 @@ Use this page to choose **which markdown file to read first**. It mirrors the fu
 | Contentful types/codegen, getters, parsers, sections vs content blocks, ContentRenderer, Rich Text | [contentful.md](contentful.md) |
 | Component folder layout, `pnpm scaffold`, exports, dynamic imports, internal/external links | [components.md](components.md) |
 | Server components, caching, React Query, `src/api`, forms, metadata / JSON-LD | [patterns.md](patterns.md) |
+| Embedded video, `VideoPlayer`, `WorkCard` / `FeaturedWork` lazy load, editors background hover | [patterns.md](patterns.md#embedded-video-vimeo--youtube) and [components.md](components.md#video-related-components) |
+| Scroll performance, `useInView`, `react-intersection-observer` on list pages | [patterns.md](patterns.md#embedded-video-vimeo--youtube) |
 | CI, `pnpm` scripts, Knip, `next.config` (env, redirects), draft APIs, `src/proxy.ts` | [platform.md](platform.md) |
 | Google Analytics, `dataLayer`, client analytics | [integrations.md](integrations.md) |
 | Sitemaps, `public/` XML output | [distribution.md](distribution.md) |

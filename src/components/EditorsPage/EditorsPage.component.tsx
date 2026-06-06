@@ -1,51 +1,68 @@
 "use client";
 
 import classNames from "classnames";
-import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import {
+  type EditorBackgroundVideo,
+  EditorsBackgroundVideo,
+} from "src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component";
 import styles from "src/components/EditorsPage/EditorsPage.module.css";
 import type { EditorType } from "src/contentful/getEditors";
 import type { Page } from "src/contentful/getPages";
-import { useIsBrowser } from "src/hooks/useIsBrowser";
-
-const ReactPlayer = dynamic(() => import("react-player"), {
-  ssr: false,
-});
 
 interface EditorsPageProps {
   pageFields: Page;
   editors: EditorType[];
 }
 
+const toBackgroundVideo = (
+  editor: EditorType,
+): EditorBackgroundVideo | null => {
+  const { featuredWork } = editor;
+
+  if (!featuredWork?.id || !featuredWork.workVideoUrl) {
+    return null;
+  }
+
+  return {
+    editorId: featuredWork.id,
+    videoSrc: featuredWork.workVideoUrl,
+  };
+};
+
 export const EditorsPage = (props: EditorsPageProps) => {
   const { editors, pageFields } = props;
   const { pageTitle } = pageFields;
-  const isBrowser = useIsBrowser();
-  const [currentVideoId, setCurrentVideoId] = useState<string>(
-    editors[0].featuredWork?.id ?? "",
+
+  const editorVideos = useMemo(
+    () =>
+      editors
+        .map(toBackgroundVideo)
+        .filter((video): video is EditorBackgroundVideo => video !== null),
+    [editors],
   );
+
+  const initialVideo = editorVideos[0] ?? null;
+
+  const [requestedVideo, setRequestedVideo] =
+    useState<EditorBackgroundVideo | null>(initialVideo);
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
 
-  const handleMouseEnter = useCallback(
-    (videoId: string) => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+  const handleMouseEnter = useCallback((video: EditorBackgroundVideo) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
 
-      timeoutRef.current = setTimeout(() => {
-        if (videoId !== currentVideoId) {
-          setCurrentVideoId(videoId);
-        }
-      }, 100); // 100ms delay to prevent rapid changes
-    },
-    [currentVideoId],
-  );
+    timeoutRef.current = setTimeout(() => {
+      setRequestedVideo(video);
+    }, 150);
+  }, []);
 
-  if (!editors) {
+  if (!editors.length || !initialVideo || !requestedVideo) {
     return null;
   }
 
@@ -54,75 +71,34 @@ export const EditorsPage = (props: EditorsPageProps) => {
       <h1 className="hidden-title">{pageTitle}</h1>
       <div className={styles.editorsPageContent}>
         <div className={styles.editorsList}>
-          {editors.map((editor) => (
-            <Link
-              key={editor.editorSlug}
-              href={`/editors/${editor.editorSlug}`}
-              className={classNames(styles.editorLink, {
-                [styles.activeEditor]:
-                  currentVideoId === editor.featuredWork?.id,
-              })}
-              onMouseEnter={() =>
-                handleMouseEnter(editor.featuredWork?.id ?? "")
-              }
-            >
-              {editor.editorName}
-            </Link>
-          ))}
+          {editors.map((editor) => {
+            const video = toBackgroundVideo(editor);
+
+            return (
+              <Link
+                key={editor.editorSlug}
+                href={`/editors/${editor.editorSlug}`}
+                className={classNames(styles.editorLink, {
+                  [styles.activeEditor]:
+                    requestedVideo.editorId === editor.featuredWork?.id,
+                })}
+                onMouseEnter={() => {
+                  if (video) {
+                    handleMouseEnter(video);
+                  }
+                }}
+              >
+                {editor.editorName}
+              </Link>
+            );
+          })}
         </div>
       </div>
 
-      {isBrowser ? (
-        <div className={styles.videoBackground}>
-          <div className={styles.overlay} />
-          {editors.map((editor) => {
-            if (!editor.featuredWork) {
-              return null;
-            }
-
-            return (
-              <ReactPlayer
-                key={editor.editorSlug}
-                style={{
-                  opacity: currentVideoId === editor.featuredWork?.id ? 1 : 0,
-                  transition: "opacity 1s ease-in-out",
-                  zIndex: currentVideoId === editor.featuredWork?.id ? 1 : 0,
-                  position: "absolute",
-                  inset: 0,
-                  width: "200%",
-                  height: "200%",
-                  transform: "translate(-25%, -25%)",
-                }}
-                controls={false}
-                playing={currentVideoId === editor.featuredWork?.id}
-                loop
-                muted
-                src={editor.featuredWork.workVideoUrl}
-                config={{
-                  youtube: {
-                    end: 60,
-                    start: 30,
-                  },
-                  vimeo: {
-                    end_time: 60,
-                    start_time: 30,
-                  },
-                }}
-              />
-            );
-          })}
-          <video
-            className={styles.staticVideo}
-            playsInline
-            loop
-            preload="auto"
-            autoPlay
-            muted
-          >
-            <source src="/video/static.mp4" type="video/mp4" />
-          </video>
-        </div>
-      ) : null}
+      <EditorsBackgroundVideo
+        initialVideo={initialVideo}
+        requestedVideo={requestedVideo}
+      />
     </>
   );
 };
