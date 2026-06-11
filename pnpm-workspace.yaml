@@ -13,3 +13,4 @@ overrides:
   js-yaml@>=4.0.0 <4.1.1: ">=4.1.1"
   jws@<3.2.3: ">=3.2.3"
   nanoid@<3.3.8: ">=3.3.8"
+minimumReleaseAge: 8640 # 6 days
