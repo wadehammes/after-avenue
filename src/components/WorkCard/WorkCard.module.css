@@ -8,13 +8,6 @@
   overflow: hidden;
   container: workcard / inline-size;
   text-decoration: none;
-  opacity: 0.2;
-  transform: translateY(30px);
-  transition: opacity 0.25s ease-in-out;
-
-  &.animate {
-    animation: fadeInUp 0.5s ease-out forwards;
-  }
 }
 
 .workCardPlayIconContainer {
@@ -71,16 +64,4 @@
   height: 0;
   overflow: hidden;
   width: 100%;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0.5;
-    transform: translateY(30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

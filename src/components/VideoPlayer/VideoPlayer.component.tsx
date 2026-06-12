@@ -15,6 +15,8 @@ interface VideoPlayerProps {
   controls?: boolean;
   light?: boolean;
   playInView?: boolean;
+  /** Delay before starting playback when `playInView` becomes true (default 300ms). */
+  playInViewDelayMs?: number;
   rounded?: boolean;
   src: string;
 }
@@ -25,6 +27,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     controls = false,
     light = false,
     playInView = false,
+    playInViewDelayMs = 300,
     rounded = false,
     src,
   } = props;
@@ -54,7 +57,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     } else {
       timeoutRef.current = setTimeout(() => {
         setDebouncedPlayInView(true);
-      }, 300);
+      }, playInViewDelayMs);
     }
 
     return () => {
@@ -62,7 +65,10 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [playInView]);
+  }, [playInView, playInViewDelayMs]);
+
+  const shouldPlay =
+    autoPlay && (playInViewDelayMs === 0 ? playInView : debouncedPlayInView);
 
   return (
     <div
@@ -81,11 +87,18 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
             setIsReady(false);
           }}
           onReady={() => {
-            setIsReady(true);
+            if (!autoPlay) {
+              setIsReady(true);
+            }
+          }}
+          onStart={() => {
+            if (autoPlay) {
+              setIsReady(true);
+            }
           }}
           playsInline
           src={src}
-          playing={autoPlay && debouncedPlayInView}
+          playing={shouldPlay}
           width="100%"
           height="100%"
           config={{
@@ -98,7 +111,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
             vimeo: {
               controls: controls,
               autopause: !autoPlay,
-              background: false,
+              background: autoPlay && !controls,
               dnt: true,
               responsive: true,
               title: false,
@@ -111,6 +124,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
           aria-hidden="true"
           className={classNames(styles.loadingOverlay, {
             [styles.hidden]: isReady,
+            [styles.instantHide]: autoPlay && isReady,
           })}
         />
       )}

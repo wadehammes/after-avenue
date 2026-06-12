@@ -22,7 +22,7 @@ Run **`pnpm tsc:ci`**, **`pnpm lint:ci`**, **`pnpm lint:css`**, **`pnpm test:ci`
 | Script | Purpose |
 |--------|---------|
 | `pnpm dev` | Next dev server on port 3005 (see root README). |
-| `pnpm build` / `pnpm start` | Production build and serve (`build` runs `make sitemap`). |
+| `pnpm build` / `pnpm start` | Production build and serve (`next build --webpack`, then `make sitemap`). Use **`pnpm build`** — not bare `next build` — so production matches local dev (webpack). Vercel is configured via [`vercel.json`](../../vercel.json) to run `pnpm build`. |
 | `pnpm build:analyze` | Bundle analysis (see package.json). |
 | `pnpm lint` / `pnpm lint:fix` / `pnpm format` | Biome (same family as `lint:ci`). |
 | `pnpm lint:css` / `pnpm lint:css:fix` | Stylelint on `**/*.css`. |
@@ -40,7 +40,9 @@ The full list lives in **[`package.json`](../../package.json)**.
 
 Configure values in **Vercel** (or your host) and mirror locally via `npx vercel env pull` as described in the root README.
 
-Notable groups:
+**Cache-Control** in [`headers()`](../../next.config.ts): HTML pages get long-lived cache in **production** only. In **development**, pages use `no-store` and `_next` is excluded from page rules so HMR/RSC are not cached (avoids refresh loops in `next dev`).
+
+Notable env groups:
 
 - **Contentful** — space, delivery/preview tokens, preview secret, CMA token for codegen.
 - **ENVIRONMENT** — drives URLs in helpers such as [envUrl()](../../src/utils/helpers.ts).

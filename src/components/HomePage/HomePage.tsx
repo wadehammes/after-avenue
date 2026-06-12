@@ -2,19 +2,12 @@
 
 import classNames from "classnames";
 import parse from "html-react-parser";
-import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
+import { FeaturedBrands } from "src/components/FeaturedBrands/FeaturedBrands.component";
 import { FeaturedWork } from "src/components/FeaturedWork/FeaturedWork.component";
 import styles from "src/components/HomePage/HomePage.module.css";
 import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
-
-const FeaturedBrands = dynamic(
-  () =>
-    import("src/components/FeaturedBrands/FeaturedBrands.component").then(
-      (m) => m.FeaturedBrands,
-    ),
-  { ssr: false },
-);
 
 import type { Page } from "src/contentful/getPages";
 import type { Work } from "src/contentful/getWork";
@@ -39,6 +32,12 @@ export const HomePage = (props: HomePageProps) => {
   });
 
   const title = `After Avenue | ${pageTitle}`;
+
+  useEffect(() => {
+    if (featuredWork.some((work) => work.workVideoUrl)) {
+      void import("react-player");
+    }
+  }, [featuredWork]);
 
   return (
     <>

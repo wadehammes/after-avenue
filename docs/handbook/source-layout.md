@@ -12,8 +12,9 @@ Helpers are **split by topic**—there is no barrel `utils/index.ts`. Import the
 
 | Area | Files (examples) |
 |------|------------------|
-| **Constants** | [constants.ts](../../src/utils/constants.ts) — slugs, navigation IDs, build exclusions |
+| **Constants** | [constants.ts](../../src/utils/constants.ts) — slugs, navigation IDs, build exclusions, `VIDEO_IN_VIEW_ROOT_MARGIN` |
 | **General helpers** | [helpers.ts](../../src/utils/helpers.ts) — `envUrl`, `createImageUrl`, guards |
+| **Intersection / scroll entrance** | [intersection.helpers.ts](../../src/utils/intersection.helpers.ts) — `isNearViewport`, `supportsScrollTimeline` |
 | **Style** | [styleHelpers.ts](../../src/utils/styleHelpers.ts) |
 | **Spam / rate limits** | [spamDetection.ts](../../src/utils/spamDetection.ts), [rateLimit.ts](../../src/utils/rateLimit.ts) |
 | **reCAPTCHA** | [recaptcha.ts](../../src/utils/recaptcha.ts) |
@@ -34,10 +35,11 @@ See [patterns.md](patterns.md#api-layer-and-route-handlers).
 
 ## `src/hooks/`
 
-| Folder | Purpose |
-|--------|---------|
+| Folder / file | Purpose |
+|---------------|---------|
 | **`mutations/`** | React Query mutation hooks (e.g. [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts), [useDeployHookMutation.ts](../../src/hooks/mutations/useDeployHookMutation.ts)). **No spec files here**—test component call sites instead. |
 | **`queries/`** | Add when you introduce client-side `useQuery` hooks. |
+| [useVideoInView.ts](../../src/hooks/useVideoInView.ts) | `useInView` + scroll-entrance fallback for `FeaturedWork` / `WorkCard` video deferral. |
 
 ## `src/tests/`
 
@@ -72,7 +74,7 @@ Client, getters, parsers, generated types — see [contentful.md](contentful.md)
 | [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block (desktop video). |
 | [EditorsBackgroundVideo/](../../src/components/EditorsBackgroundVideo/) | `/editors` hover background; two-player pool. |
 
-Patterns and performance rules: [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube).
+Patterns and performance rules: [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube). Shared scroll entrance styles: [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css) (import `.enter` / `.animate` on card roots).
 
 ## `src/emails/`
 

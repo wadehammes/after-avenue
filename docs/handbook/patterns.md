@@ -90,11 +90,15 @@ Use **`next/dynamic`** for code-splitting when a component is heavy or must be c
 
 Work entries store a **`workVideoUrl`** (Vimeo or YouTube). The site plays them through **[`react-player`](https://github.com/cookpete/react-player)** behind our shared **[`VideoPlayer`](../../src/components/VideoPlayer/VideoPlayer.component.tsx)** wrapper. Treat every embed as expensive: one iframe per mount, heavy on scroll and memory if you mount many at once.
 
+### Scroll entrance (featured work and work cards)
+
+Card scale + opacity on scroll uses **scroll-driven CSS** in [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css). Import **`scrollEntrance.enter`** on the card root; when **`animation-timeline: view()`** is unsupported, add **`scrollEntrance.animate`** via [`useVideoInView`](../../src/hooks/useVideoInView.ts) (`hasAnimated`). Constants: **`VIDEO_IN_VIEW_ROOT_MARGIN`** in [constants.ts](../../src/utils/constants.ts). Helpers: [intersection.helpers.ts](../../src/utils/intersection.helpers.ts). Layout must use **`overflow-x: clip`** on **`body`**, **`.page`**, and **`.page-content`** (not **`overflow: hidden`**) so view timelines track the document scrollport—see [globals.css](../../src/styles/globals.css).
+
 ### `VideoPlayer` (shared wrapper)
 
 - **Client-only**: `"use client"`; **`react-player`** is loaded with **`next/dynamic`** and **`ssr: false`**.
 - **Props**:
-  - **`autoPlay`** + **`playInView`** — when both are true, playback starts (with a short debounce when `playInView` toggles). Pause is immediate when `playInView` becomes false.
+  - **`autoPlay`** + **`playInView`** — when both are true, playback starts (with optional **`playInViewDelayMs`**, default 300ms). Pause is immediate when `playInView` becomes false. Autoplay hides the loading overlay on **`onStart`** (first frame), not **`onReady`**.
   - **`controls`** — user-facing players (work detail, cards with controls).
   - **`light`** — ReactPlayer preview/thumbnail mode; **no full embed until the user clicks**. Use for non-autoplay lists.
   - **`rounded`** — 20px radius on the shell (cards).
@@ -105,8 +109,8 @@ Work entries store a **`workVideoUrl`** (Vimeo or YouTube). The site plays them 
 
 | Surface | Component | Strategy |
 |---------|-----------|----------|
-| Home featured reels (desktop) | [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | **`useInView`** with **`triggerOnce: true`**, **`rootMargin: "150px 0px"`** — mount **`VideoPlayer`** once when near the viewport; **`autoPlay`** + **`playInView`**. Mobile uses **`WorkCard`**. |
-| Work index / category / related cards | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | **`useInView`** with **`triggerOnce: false`** — mount near viewport (**`150px`** margin), **unmount when scrolled away**. **`light={!autoPlay}`** so grids show thumbnails until play. Entrance animation runs once via **`onChange`**. |
+| Home featured reels (desktop) | [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | [`useVideoInView`](../../src/hooks/useVideoInView.ts) (`triggerOnce: true`); mount **`VideoPlayer`** on render; **`isNearView`** gates playback. Scroll entrance: [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). **`playInViewDelayMs={0}`**, **`rounded`**. Home prefetches **`react-player`**. Mobile uses **`WorkCard`**. |
+| Work index / category / related cards | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | [`useVideoInView`](../../src/hooks/useVideoInView.ts) (`triggerOnce: false`) — lazy-mount near **`VIDEO_IN_VIEW_ROOT_MARGIN`**, unmount off-screen. **`light={!autoPlay}`** for thumbnails. Same **`scrollEntrance`** styles as **`FeaturedWork`**. |
 | Work detail hero | [`WorkEntryPage`](../../src/components/WorkEntryPage/WorkEntryPage.component.tsx) | Single **`VideoPlayer`** with **`controls`**; may use **`playInView`** from the `?playVideo=true` query. |
 | Editors index hover background | [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | **Single active player.** On hover (150ms debounce in [`EditorsPage`](../../src/components/EditorsPage/EditorsPage.component.tsx)), show the **static MP4** prominently while a **hidden preload** `ReactPlayer` loads the next embed; swap to the embed on **`onReady`**. Only one visible player at a time. |
 
@@ -115,7 +119,7 @@ Work entries store a **`workVideoUrl`** (Vimeo or YouTube). The site plays them 
 1. **Never mount one `ReactPlayer` per list item** on a long page. Lazy-mount, use **`light`** for click-to-play grids, or use a **fixed-size player pool** (editors background).
 2. **Keep `rootMargin` modest** (~**150px**) on multi-column grids. Large margins (e.g. **400px**) intersect many cards at once and defeat lazy loading.
 3. **Prefer `triggerOnce: true`** when a card should load once and stay mounted (home featured). Use **`triggerOnce: false`** only when you intentionally **unmount** off-screen players to free memory (work grid).
-4. **Do not toggle scale/opacity on scroll** in sync with play/pause — it causes scroll jank. Run entrance animation **once** (CSS **`animation`**, not a class that flips on every intersection).
+4. **Do not toggle video opacity on scroll** in sync with play/pause — it causes flicker and can block autoplay. **`FeaturedWork`** and **`WorkCard`** use shared **`scrollEntrance`** card-level entrance; **`useVideoInView`** is for playback / lazy mount only. **`prefers-reduced-motion`** disables the entrance animation in **`scrollEntrance.module.css`**.
 5. **Reserve space** — video containers use **16∶9** padding (or **`aspect-ratio`**) and the dot-pattern placeholder so layout does not shift while the chunk loads.
 
 ### Intersection observers
