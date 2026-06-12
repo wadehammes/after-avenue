@@ -16,6 +16,12 @@
     }
   }
 
+  &.readyToPlay {
+    animation: none;
+    opacity: 1;
+    transform: scale(1);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     animation: none;
     opacity: 1;

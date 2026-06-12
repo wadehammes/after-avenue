@@ -32,12 +32,15 @@ export const HomePage = (props: HomePageProps) => {
   });
 
   const title = `After Avenue | ${pageTitle}`;
+  const priorityVideoSlug = featuredWork.find(
+    (work) => work.workVideoUrl,
+  )?.workSlug;
 
   useEffect(() => {
-    if (featuredWork.some((work) => work.workVideoUrl)) {
+    if (priorityVideoSlug) {
       void import("react-player");
     }
-  }, [featuredWork]);
+  }, [priorityVideoSlug]);
 
   return (
     <>
@@ -56,7 +59,11 @@ export const HomePage = (props: HomePageProps) => {
       <section className={styles.featuredWorkContainer}>
         <div className="container column">
           {featuredWork.map((work) => (
-            <FeaturedWork fields={work} key={work.workSlug} />
+            <FeaturedWork
+              fields={work}
+              key={work.workSlug}
+              priority={work.workSlug === priorityVideoSlug}
+            />
           ))}
         </div>
 

@@ -52,6 +52,7 @@ export default async function RootLayout({
   return (
     <html
       className={classNames(arida.variable, area.variable, area.className)}
+      data-scroll-behavior="smooth"
       lang="en"
     >
       <head>
