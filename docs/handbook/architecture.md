@@ -42,7 +42,7 @@ See [contentful.md](contentful.md).
 
 ### `src/hooks/`
 
-Custom hooks; **mutations** under `src/hooks/mutations/` use React Query and `src/api/urls.ts`. Current examples: [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts) (contact form), [useDeployHookMutation.ts](../../src/hooks/mutations/useDeployHookMutation.ts) (deploy button). UI hooks at `src/hooks/` root include [useVideoInView.ts](../../src/hooks/useVideoInView.ts) (intersection observer + scroll-entrance fallback for video cards). Add **`src/hooks/queries/`** when you introduce client-side queries (see [conventions.md](conventions.md)).
+Custom hooks; **mutations** under `src/hooks/mutations/` use React Query and `src/api/urls.ts`. Current examples: [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts) (contact form), [useDeployHookMutation.ts](../../src/hooks/mutations/useDeployHookMutation.ts) (deploy button). Add **`src/hooks/queries/`** when you introduce client-side queries (see [conventions.md](conventions.md)).
 
 ### `src/api/`
 

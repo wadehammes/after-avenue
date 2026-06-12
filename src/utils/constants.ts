@@ -13,8 +13,8 @@ export const EXCLUDED_PAGE_SLUGS_FROM_BUILD = [
   WORK_SLUG,
 ];
 
-/** `useInView` margin for lazy video mount and scroll-entrance fallbacks. */
+/** `useInView` margin for lazy video mount and scroll entrance near the viewport. */
 export const VIDEO_IN_VIEW_ROOT_MARGIN = "150px 0px";
 
-/** Pixel equivalent of {@link VIDEO_IN_VIEW_ROOT_MARGIN} for synchronous viewport checks. */
-export const VIDEO_IN_VIEW_ROOT_MARGIN_PX = 150;
+/** Mount embeds ~one viewport ahead so Vimeo can load before scroll-in. */
+export const VIDEO_MOUNT_ROOT_MARGIN = "80% 0px";

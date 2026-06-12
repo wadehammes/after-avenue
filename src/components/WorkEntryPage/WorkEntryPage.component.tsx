@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
@@ -16,7 +17,16 @@ interface WorkEntryPageProps {
 }
 
 export const WorkEntryPage = (props: WorkEntryPageProps) => {
-  const { playVideo = false, workEntry, workSeries, recentWork } = props;
+  const {
+    playVideo: playVideoFromServer = false,
+    workEntry,
+    workSeries,
+    recentWork,
+  } = props;
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const playVideo =
+    playVideoFromServer || searchParams.get("playVideo") === "true";
   const {
     contactFooterButtonText,
     contactFooterTitle,
@@ -34,10 +44,12 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
     <article className="container column">
       <div className={styles.videoContainer}>
         <VideoPlayer
+          key={pathname}
           src={workVideoUrl}
-          playInView={playVideo}
-          rounded
           autoPlay={playVideo}
+          playInView
+          playInViewDelayMs={0}
+          rounded
           controls
         />
       </div>

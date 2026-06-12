@@ -116,6 +116,9 @@ body {
 
 html {
   height: stretch;
+}
+
+html[data-scroll-behavior="smooth"] {
   scroll-behavior: smooth;
 }
 

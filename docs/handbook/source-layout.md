@@ -14,7 +14,7 @@ Helpers are **split by topic**—there is no barrel `utils/index.ts`. Import the
 |------|------------------|
 | **Constants** | [constants.ts](../../src/utils/constants.ts) — slugs, navigation IDs, build exclusions, `VIDEO_IN_VIEW_ROOT_MARGIN` |
 | **General helpers** | [helpers.ts](../../src/utils/helpers.ts) — `envUrl`, `createImageUrl`, guards |
-| **Intersection / scroll entrance** | [intersection.helpers.ts](../../src/utils/intersection.helpers.ts) — `isNearViewport`, `supportsScrollTimeline` |
+| **Scroll entrance** | [supportsScrollTimeline.ts](../../src/utils/supportsScrollTimeline.ts) — feature detect for CSS scroll-driven fallback |
 | **Style** | [styleHelpers.ts](../../src/utils/styleHelpers.ts) |
 | **Spam / rate limits** | [spamDetection.ts](../../src/utils/spamDetection.ts), [rateLimit.ts](../../src/utils/rateLimit.ts) |
 | **reCAPTCHA** | [recaptcha.ts](../../src/utils/recaptcha.ts) |
@@ -35,11 +35,10 @@ See [patterns.md](patterns.md#api-layer-and-route-handlers).
 
 ## `src/hooks/`
 
-| Folder / file | Purpose |
-|---------------|---------|
+| Folder | Purpose |
+|--------|---------|
 | **`mutations/`** | React Query mutation hooks (e.g. [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts), [useDeployHookMutation.ts](../../src/hooks/mutations/useDeployHookMutation.ts)). **No spec files here**—test component call sites instead. |
 | **`queries/`** | Add when you introduce client-side `useQuery` hooks. |
-| [useVideoInView.ts](../../src/hooks/useVideoInView.ts) | `useInView` + scroll-entrance fallback for `FeaturedWork` / `WorkCard` video deferral. |
 
 ## `src/tests/`
 

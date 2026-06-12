@@ -1,14 +1,14 @@
 "use client";
 
-import classNames from "classnames";
 import Link from "next/link";
 import type { HTMLAttributes } from "react";
+import { useState } from "react";
+import { useInView } from "react-intersection-observer";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import styles from "src/components/WorkCard/WorkCard.module.css";
 import type { Work } from "src/contentful/getWork";
-import { useVideoInView } from "src/hooks/useVideoInView";
 import ArrowDownIcon from "src/icons/ArrowDown.svg";
-import scrollEntrance from "src/styles/scrollEntrance.module.css";
+import { VIDEO_MOUNT_ROOT_MARGIN } from "src/utils/constants";
 
 interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {
   autoPlay?: boolean;
@@ -20,23 +20,27 @@ interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {
 
 export const WorkCard = (props: WorkCardProps) => {
   const { autoPlay = false, controls = true, work, title, subtitle } = props;
-  const { hasAnimated, inView, setRef } = useVideoInView({
-    triggerOnce: false,
+  const [hasMounted, setHasMounted] = useState(false);
+
+  const { inView, ref } = useInView({
+    rootMargin: VIDEO_MOUNT_ROOT_MARGIN,
+    threshold: 0,
+    triggerOnce: true,
+    onChange: (visible) => {
+      if (visible) {
+        setHasMounted(true);
+      }
+    },
   });
 
   return (
-    <div
-      ref={setRef}
-      className={classNames(styles.workCard, scrollEntrance.enter, {
-        [scrollEntrance.animate]: hasAnimated,
-      })}
-    >
+    <div ref={ref} className={styles.workCard}>
       <div className={styles.workCardVideoContainer}>
-        {inView && work.workVideoUrl ? (
+        {hasMounted && work.workVideoUrl ? (
           <VideoPlayer
             autoPlay={autoPlay}
             controls={controls}
-            light={!autoPlay}
+            playInView={inView}
             rounded
             src={work.workVideoUrl}
           />
