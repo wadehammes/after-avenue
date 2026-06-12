@@ -8,7 +8,7 @@
   opacity: 0;
   position: absolute;
   transition: opacity 0.25s ease-in-out;
-  z-index: 1;
+  z-index: 2;
   padding: var(--default-padding);
   text-align: center;
 
@@ -39,14 +39,7 @@
   border-radius: 20px;
   overflow: hidden;
   position: relative;
-  opacity: 0.5;
-  transform: scale(0.9);
-  transform-origin: center;
   width: 100%;
-
-  &.inView {
-    animation: featuredWorkEnter 0.5s ease-out forwards;
-  }
 
   &:hover {
     .workOverlay {
@@ -57,32 +50,13 @@
 }
 
 @media (width <= 800px) or (width >= 1920px) {
-  .featuredWork.inView {
+  .featuredWork {
     border-radius: 20px;
   }
 }
 
-@keyframes featuredWorkEnter {
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 .videoContainer {
-  background-color: var(--color-bg, #000);
-  background-image: url("/images/dot-bg.png");
   position: relative;
-  padding-bottom: 56.25%;
-  height: 0;
-  overflow: hidden;
   width: 100%;
-
-  video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: auto;
-    border: 0;
-  }
+  z-index: 1;
 }

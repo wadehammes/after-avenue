@@ -16,6 +16,7 @@ Use this page to choose **which markdown file to read first**. It mirrors the fu
 | Transactional email, React Email templates, contact-form mail, `pnpm email:dev` | [patterns.md](patterns.md#transactional-email-react-email) and [source-layout.md](source-layout.md) |
 | Embedded video, `VideoPlayer`, `WorkCard` / `FeaturedWork` lazy load, editors background hover | [patterns.md](patterns.md#embedded-video-vimeo--youtube) and [components.md](components.md#video-related-components) |
 | Scroll performance, `useInView`, `react-intersection-observer` on list pages | [patterns.md](patterns.md#embedded-video-vimeo--youtube) |
+| Scroll-driven card entrance (`animation-timeline: view()`), `scrollEntrance.module.css`, `useVideoInView` | [patterns.md](patterns.md#embedded-video-vimeo--youtube), [source-layout.md](source-layout.md) |
 | CI, `pnpm` scripts, Knip, `next.config` (env, redirects), draft APIs, `src/proxy.ts` | [platform.md](platform.md) |
 | Google Analytics, `dataLayer`, client analytics | [integrations.md](integrations.md) |
 | Sitemaps, `public/` XML output | [distribution.md](distribution.md) |

@@ -8,7 +8,7 @@ If you are new here, this page is your map. It explains how the site is structur
 - **UI**: React 19, TypeScript.
 - **CMS**: Contentful. Content types are generated into `src/contentful/types/`; getters and parsers live in `src/contentful/`.
 - **Data fetching**: Server Components and Contentful getters at request/build time; **React Query** (TanStack) for client-side mutations and any future client queries. Mutation hooks live in `src/hooks/mutations/` and call the API surface in [src/api/urls.ts](../../src/api/urls.ts).
-- **Styling**: **CSS Modules** (`.module.css`) with modern CSS (nesting, custom properties). Global tokens and reset live in [src/styles/globals.css](../../src/styles/globals.css).
+- **Styling**: **CSS Modules** (`.module.css`) with modern CSS (nesting, custom properties). Global tokens and reset live in [src/styles/globals.css](../../src/styles/globals.css). Shared module styles (e.g. [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css)) live under `src/styles/`.
 - **Email**: React Email templates in `src/emails/`; Resend from Route Handlers (contact form).
 - **Tooling**: pnpm, Biome for lint and format, Jest for tests (page-object pattern when component tests are added).
 
@@ -42,7 +42,7 @@ See [contentful.md](contentful.md).
 
 ### `src/hooks/`
 
-Custom hooks; **mutations** under `src/hooks/mutations/` use React Query and `src/api/urls.ts`. Current examples: [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts) (contact form), [useDeployHookMutation.ts](../../src/hooks/mutations/useDeployHookMutation.ts) (deploy button). Add **`src/hooks/queries/`** when you introduce client-side queries (see [conventions.md](conventions.md)).
+Custom hooks; **mutations** under `src/hooks/mutations/` use React Query and `src/api/urls.ts`. Current examples: [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts) (contact form), [useDeployHookMutation.ts](../../src/hooks/mutations/useDeployHookMutation.ts) (deploy button). UI hooks at `src/hooks/` root include [useVideoInView.ts](../../src/hooks/useVideoInView.ts) (intersection observer + scroll-entrance fallback for video cards). Add **`src/hooks/queries/`** when you introduce client-side queries (see [conventions.md](conventions.md)).
 
 ### `src/api/`
 

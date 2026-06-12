@@ -1,14 +1,15 @@
 "use client";
 
 import classNames from "classnames";
-import { useInView } from "react-intersection-observer";
 import styles from "src/components/FeaturedWork/FeaturedWork.module.css";
 import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
 import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import type { Work } from "src/contentful/getWork";
 import { useGlobalVariables } from "src/context/globalContext.context";
+import { useVideoInView } from "src/hooks/useVideoInView";
 import PlayIcon from "src/icons/Play.icon.svg";
+import scrollEntrance from "src/styles/scrollEntrance.module.css";
 import { useMediaQuery } from "usehooks-ts";
 
 interface FeaturedWorkProps {
@@ -23,17 +24,16 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
     initializeWithValue: false,
   });
   const { featuredWorkButtonText } = useGlobalVariables();
-
-  const { inView, ref } = useInView({
-    rootMargin: "150px 0px",
-    threshold: 0,
+  const { hasAnimated, isNearView, setRef } = useVideoInView({
     triggerOnce: true,
   });
 
   return !isMobile ? (
     <div
-      ref={ref}
-      className={classNames(styles.featuredWork, { [styles.inView]: inView })}
+      ref={setRef}
+      className={classNames(styles.featuredWork, scrollEntrance.enter, {
+        [scrollEntrance.animate]: hasAnimated,
+      })}
     >
       <div className={styles.workOverlay}>
         <div className={styles.workOverlayText}>
@@ -51,9 +51,13 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
       </div>
       {workVideoUrl ? (
         <div className={styles.videoContainer}>
-          {inView ? (
-            <VideoPlayer src={workVideoUrl} autoPlay playInView />
-          ) : null}
+          <VideoPlayer
+            autoPlay
+            playInView={isNearView}
+            playInViewDelayMs={0}
+            rounded
+            src={workVideoUrl}
+          />
         </div>
       ) : null}
     </div>

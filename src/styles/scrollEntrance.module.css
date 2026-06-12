@@ -1,0 +1,36 @@
+.enter {
+  opacity: 0.5;
+  transform: scale(0.9);
+  transform-origin: center;
+
+  @supports (animation-timeline: view()) {
+    animation: scroll-entrance-enter linear both;
+    animation-duration: 1ms;
+    animation-timeline: view(block);
+    animation-range: entry 0% entry 100%;
+  }
+
+  @supports not (animation-timeline: view()) {
+    &.animate {
+      animation: scroll-entrance-enter 0.5s ease-out forwards;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scroll-entrance-enter {
+  from {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

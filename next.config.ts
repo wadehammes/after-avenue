@@ -84,7 +84,6 @@ const nextConfig: NextConfig = {
     optimizePackageImports: [
       "@contentful/rich-text-react-renderer",
       "@tanstack/react-query",
-      "html-react-parser",
       "react-aria",
       "react-google-recaptcha",
       "react-intersection-observer",
@@ -143,6 +142,11 @@ const nextConfig: NextConfig = {
     const thirtyDays = 60 * 60 * 24 * 30;
     const oneYear = 31536000;
     const htmlCacheControl = `public, max-age=${thirtyDays}, s-maxage=${thirtyDays}, stale-while-revalidate=${oneYear}`;
+    const devPageCacheControl = "private, no-store, must-revalidate";
+    const pageCacheControl =
+      process.env.NODE_ENV === "production"
+        ? htmlCacheControl
+        : devPageCacheControl;
 
     return [
       {
@@ -166,15 +170,6 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/_next/static/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
         source: "/images/:path*",
         headers: [
           {
@@ -183,22 +178,14 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Exclude _next (dev HMR/RSC), api, images, and refresh-content from page
+      // cache rules — applying long-lived cache to /:path* was breaking local dev.
       {
-        source: "/",
+        source: "/((?!_next|api|images|refresh-content).*)",
         headers: [
           {
             key: "Cache-Control",
-            value: htmlCacheControl,
-          },
-          ...securityHeaders,
-        ],
-      },
-      {
-        source: "/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: htmlCacheControl,
+            value: pageCacheControl,
           },
           ...securityHeaders,
         ],

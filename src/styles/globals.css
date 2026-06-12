@@ -122,7 +122,7 @@ html {
 body {
   line-height: 1;
   min-height: 100svh;
-  overflow-x: hidden;
+  overflow-x: clip;
   padding: 0;
   position: relative;
 }
@@ -150,14 +150,14 @@ body {
   gap: var(--default-padding);
   margin: 0 auto;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .page-content {
   background: var(--color-bg);
   position: relative;
   z-index: 1;
-  overflow: hidden;
+  overflow-x: clip;
   flex: 1;
   padding-top: 100px;
 }

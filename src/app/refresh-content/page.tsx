@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Refresh Content | After Avenue",
 };
 
-export const RefreshContent = async ({
+const RefreshContentPage = async ({
   searchParams,
 }: {
   searchParams?: Promise<{ token?: string }>;
@@ -28,4 +28,4 @@ export const RefreshContent = async ({
   return <DeployPage />;
 };
 
-export default RefreshContent;
+export default RefreshContentPage;

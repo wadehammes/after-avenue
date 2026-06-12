@@ -47,8 +47,8 @@ Use **`next/dynamic`** when a component is heavy or client-only (`ssr: false` wh
 | Component | Role |
 |-----------|------|
 | [`VideoPlayer`](../../src/components/VideoPlayer/VideoPlayer.component.tsx) | Shared Vimeo/YouTube wrapper (dynamic `react-player`, loading overlay, optional `light` preview). |
-| [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | Work grid card — lazy mount, thumbnail-first when `autoPlay` is false. |
-| [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop); defers mount until near viewport. |
+| [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | Work grid card — lazy-mount video near viewport; scroll-driven card entrance via shared [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css); thumbnail-first when `autoPlay` is false. |
+| [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop) — mounts `VideoPlayer` on render; `playInView` via [`useVideoInView`](../../src/hooks/useVideoInView.ts); same scroll entrance as `WorkCard`. |
 | [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | Fixed full-viewport background for `/editors`; static MP4 on hover while the next embed preloads. |
 
 ## Links
