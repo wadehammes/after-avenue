@@ -1,28 +1,31 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import type { HTMLAttributes } from "react";
 import { useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import styles from "src/components/WorkCard/WorkCard.module.css";
 import type { Work } from "src/contentful/getWork";
 import ArrowDownIcon from "src/icons/ArrowDown.svg";
 import { VIDEO_MOUNT_ROOT_MARGIN } from "src/utils/constants";
+import { controlsPlayerConfig } from "src/utils/videoPlayerConfig";
+
+const ReactPlayer = dynamic(() => import("react-player"), {
+  ssr: false,
+});
 
 interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {
-  autoPlay?: boolean;
-  controls?: boolean;
   subtitle: string;
   title: string;
   work: Work;
 }
 
 export const WorkCard = (props: WorkCardProps) => {
-  const { autoPlay = false, controls = true, work, title, subtitle } = props;
+  const { work, title, subtitle } = props;
   const [hasMounted, setHasMounted] = useState(false);
 
-  const { inView, ref } = useInView({
+  const { ref } = useInView({
     rootMargin: VIDEO_MOUNT_ROOT_MARGIN,
     threshold: 0,
     triggerOnce: true,
@@ -37,13 +40,18 @@ export const WorkCard = (props: WorkCardProps) => {
     <div ref={ref} className={styles.workCard}>
       <div className={styles.workCardVideoContainer}>
         {hasMounted && work.workVideoUrl ? (
-          <VideoPlayer
-            autoPlay={autoPlay}
-            controls={controls}
-            playInView={inView}
-            rounded
-            src={work.workVideoUrl}
-          />
+          <div className={styles.workCardVideoEmbed}>
+            <ReactPlayer
+              config={controlsPlayerConfig}
+              controls
+              loop
+              muted
+              playsInline
+              src={work.workVideoUrl}
+              width="100%"
+              height="100%"
+            />
+          </div>
         ) : null}
       </div>
 

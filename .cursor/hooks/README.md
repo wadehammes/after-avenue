@@ -44,7 +44,7 @@ Shared team files under `.cursor/` are tracked in git (`hooks.json`, `hooks/`, `
 
 ## Adding or changing a hook
 
-1. Add or edit a script under `.cursor/hooks/` (read JSON from **stdin**; use `_lib.sh` helpers).
+1. Add or edit a script under `.cursor/hooks/` (read JSON from **stdin**; use `_lib.sh` helpers). `tool_added_text` reads `new_string`, `content`, `contents` (Cursor `Write`), `string`, and batch `edits[].new_string`.
 2. Wire it in `.cursor/hooks.json` with the right event and matcher.
 3. `chmod +x` the script and document it in the table above.
 4. Blocking hooks return `{ "permission": "deny", ... }` on `preToolUse`; advisory hooks return `{ "additional_context": "..." }` on `postToolUse`; `stop` uses `{ "followup_message": "..." }`.

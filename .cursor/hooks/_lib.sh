@@ -24,6 +24,7 @@ tool_added_text() {
     [
       .tool_input.new_string?,
       .tool_input.content?,
+      .tool_input.contents?,
       .tool_input.string?,
       (.tool_input.edits[]?.new_string)
     ]
