@@ -88,31 +88,36 @@ Use **`next/dynamic`** for code-splitting when a component is heavy or must be c
 
 ## Embedded video (Vimeo / YouTube)
 
-Work entries store a **`workVideoUrl`** (Vimeo or YouTube). The site plays them through **[`react-player`](https://github.com/cookpete/react-player)** behind our shared **[`VideoPlayer`](../../src/components/VideoPlayer/VideoPlayer.component.tsx)** wrapper. Treat every embed as expensive: one iframe per mount, heavy on scroll and memory if you mount many at once.
+Work entries store a **`workVideoUrl`** (Vimeo or YouTube). The site plays them through **[`react-player`](https://github.com/cookpete/react-player)**. Shared embed config lives in [`videoPlayerConfig.ts`](../../src/utils/videoPlayerConfig.ts). Treat every embed as expensive: one iframe per mount, heavy on scroll and memory if you mount many at once.
 
 ### Scroll entrance (home featured reels)
 
-Home **featured reels** use **scroll-driven CSS** in [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css). Import **`scrollEntrance.enter`** on the reel root; **`scrollEntrance.readyToPlay`** on the first reel with video (**`priority`**) so cold-load autoplay is not dimmed. When **`animation-timeline: view()`** is unsupported, add **`scrollEntrance.animate`** once from **`useInView`** **`onChange`**. **`VIDEO_IN_VIEW_ROOT_MARGIN`** lives in [constants.ts](../../src/utils/constants.ts). Layout must use **`overflow-x: clip`** on **`body`**, **`.page`**, and **`.page-content`** (not **`overflow: hidden`**) so view timelines track the document scrollport—see [globals.css](../../src/styles/globals.css). **Work grid cards** do not use scroll entrance (avoids flicker with lazy embeds).
+Home **featured reels** use scroll-driven entrance in [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css). Each embed mounts once via **`next/dynamic`** (`ssr: false`). **`playing`** toggles from **`useInView`**; the **priority** reel also sets **`autoPlay`** (static, never toggled on scroll) and re-asserts **`playing`** in **`onReady`** so the async chunk load does not miss autoplay.
 
-### `VideoPlayer` (shared wrapper)
+### Embed config
 
-- **Client-only**: `"use client"`; **`react-player`** is loaded with **`next/dynamic`** and **`ssr: false`**.
-- **Props**:
-  - **`autoPlay`** + **`playInView`** — when both are true, playback starts (with optional **`playInViewDelayMs`**, default 300ms). Pause is immediate when `playInView` becomes false. Autoplay hides the loading overlay on **`onStart`** (first frame), not **`onReady`**.
-  - **`controls`** — user-facing players (work detail, cards with controls).
-  - **`light`** — ReactPlayer preview/thumbnail mode; **no full embed until the user clicks**. Use for non-autoplay lists.
-  - **`rounded`** — 20px radius on the shell (cards).
-- **Loading UX**: **Reels** (`autoPlay`, no `controls`) and **work grid cards** (`controls`, no `autoPlay`) skip the dot-pattern overlay so Vimeo can paint as soon as it loads. **Work detail** autoplay (`controls` + `autoPlay`) keeps the overlay until **`onReady`**.
-- **Light mode**: Skip the overlay while the thumbnail is showing; show the overlay only after **`onClickPreview`** while the full player loads.
+[`videoPlayerConfig.ts`](../../src/utils/videoPlayerConfig.ts) exports:
+
+- **`reelPlayerConfig`** — muted autoplay reels (Vimeo `background: true`, `autopause: false`, `unmute_button: false`)
+- **`editorsBackgroundPlayerConfig`** — editors index full-viewport background
+- **`mutedAutoplayPlayerProps`** — `{ muted: true, volume: 0 }` spread on background/reel `ReactPlayer`s
+- **`ensurePlayerMuted` / `createMutedPlayerHandlers`** — set the **`muted`** DOM attribute (react-player v3 only passes a property), plus **`muted: 1`** / **`mute: 1`** in Vimeo/YouTube embed config for the iframe URL
+- **`controlsPlayerConfig`** — user-facing players with controls (work grids, work detail hero)
+
+### `WorkHeroVideo` (work detail hero)
+
+- **`playing`** — drives ReactPlayer **`playing`** (e.g. from **`?playVideo=true`**)
+- **`rounded`** — 20px radius on the shell
+- Dot-pattern **loading overlay** until **`onReady`**
 
 ### Where each pattern is used
 
 | Surface | Component | Strategy |
 |---------|-----------|----------|
-| Home featured reels (desktop) | [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Embed always mounted; **`playInView={inView}`** with **`threshold: 0`**, **`triggerOnce: false`** pauses off-screen without remounting. **`priority`** sets **`initialInView`** so the first reel autoplays on cold load. Reels: **`autoPlay`**, **`playInViewDelayMs={0}`**, **`muted`**, **`volume={0}`** (react-player 3.x), Vimeo **`background: false`**. Prefetch **`react-player`** in [`HomePage`](../../src/components/HomePage/HomePage.tsx). Scroll entrance: [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). Mobile uses **`WorkCard`**; **`useMediaQuery`** uses **`initializeWithValue: false`**. |
-| Work index / category / related cards | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | Vimeo **poster** via [`getVimeoPosterUrl`](../../src/utils/getVimeoPosterUrl.ts) on the container (instant); embed mounts at **`VIDEO_MOUNT_ROOT_MARGIN`** (~**80%** ahead) and fades in on **`onEmbedReady`**. **`controls`**, no scroll-entrance on the card. |
-| Work detail hero | [`WorkEntryPage`](../../src/components/WorkEntryPage/WorkEntryPage.component.tsx) | Single **`VideoPlayer`** with **`controls`**; **`autoPlay`** from server prop or client **`?playVideo=true`**. |
-| Editors index hover background | [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | **Single active player.** On hover (150ms debounce in [`EditorsPage`](../../src/components/EditorsPage/EditorsPage.component.tsx)), show the **static MP4** prominently while a **hidden preload** `ReactPlayer` loads the next embed; swap to the embed on **`onReady`**. Only one visible player at a time. |
+| Home featured reels (desktop) | [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) + [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) | **`ReactPlayer`** via **`next/dynamic`** (`ssr: false`); **`playing={inView}`** only. First reel: **`initialInView`**. Scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). Mobile uses **`WorkCard`**. |
+| Work index / category / related cards | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | **`ReactPlayer`** directly. Lazy-mount at **`VIDEO_MOUNT_ROOT_MARGIN`** (~**80%** ahead). **`controlsPlayerConfig`**, user clicks to play. |
+| Work detail hero | [`WorkEntryPage`](../../src/components/WorkEntryPage/WorkEntryPage.component.tsx) | [`WorkHeroVideo`](../../src/components/WorkHeroVideo/WorkHeroVideo.component.tsx) — **`playing`** from server prop or **`?playVideo=true`**, loading overlay until ready. |
+| Editors index hover background | [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | **Single active player** on load (`autoPlay` + **`onReady`**). On hover (150ms debounce in [`EditorsPage`](../../src/components/EditorsPage/EditorsPage.component.tsx)), show the **static MP4** while a **hidden preload** `ReactPlayer` loads the next embed; swap on **`onReady`**. |
 
 ### Performance rules
 

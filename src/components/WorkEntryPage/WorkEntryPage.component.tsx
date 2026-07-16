@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ContactFooter } from "src/components/ContactFooter/ContactFooter.component";
-import { VideoPlayer } from "src/components/VideoPlayer/VideoPlayer.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import styles from "src/components/WorkEntryPage/WorkEntryPage.module.css";
+import { WorkHeroVideo } from "src/components/WorkHeroVideo/WorkHeroVideo.component";
 import type { Work } from "src/contentful/getWork";
 import { RichText } from "src/contentful/richText";
 
@@ -43,14 +43,11 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
   return (
     <article className="container column">
       <div className={styles.videoContainer}>
-        <VideoPlayer
-          key={pathname}
-          src={workVideoUrl}
-          autoPlay={playVideo}
-          playInView
-          playInViewDelayMs={0}
+        <WorkHeroVideo
+          key={`${pathname}-${playVideo}`}
+          playing={playVideo}
           rounded
-          controls
+          src={workVideoUrl}
         />
       </div>
       <div className={styles.workContentContainer}>
@@ -123,7 +120,6 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                     work={work}
                     title={work.workTitle}
                     subtitle={work.workClient ?? ""}
-                    autoPlay={false}
                   />
                 </li>
               );
@@ -145,7 +141,6 @@ export const WorkEntryPage = (props: WorkEntryPageProps) => {
                     work={work}
                     title={work.workClient ?? ""}
                     subtitle={work.workTitle}
-                    autoPlay={false}
                   />
                 </li>
               );

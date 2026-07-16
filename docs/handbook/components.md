@@ -40,15 +40,15 @@ Export the component as both a **named export** (e.g. `export const MyComponent`
 
 Use **`next/dynamic`** when a component is heavy or client-only (`ssr: false` when it depends on `window` or browser-only APIs). CMS-driven pieces are imported directly in **ContentRenderer** today; if a block becomes large enough to defer, wrap it with `dynamic` there or in the parent.
 
-**Embedded video**: Do not import **`react-player`** directly in feature components unless you have a one-off reason (e.g. the editors background stack). Use **[`VideoPlayer`](../../src/components/VideoPlayer/VideoPlayer.component.tsx)** or **[`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx)**. See [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube).
+**Embedded video**: Import **`react-player`** through **`next/dynamic`** with **`ssr: false`**. Toggle playback with **`playing`** on scroll; use **`autoPlay`** only as a **static** mount-time hint (e.g. priority home reel, editors background) — never flip **`autoPlay`** when **`playing`** changes. See [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube).
 
 ## Video-related components
 
 | Component | Role |
 |-----------|------|
-| [`VideoPlayer`](../../src/components/VideoPlayer/VideoPlayer.component.tsx) | Shared Vimeo/YouTube wrapper (dynamic `react-player`, loading overlay, optional `light` preview). |
-| [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | Work grid card — lazy-mount embed via `useInView` (`VIDEO_MOUNT_ROOT_MARGIN`); full player with controls when `autoPlay` is false. |
-| [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop) — `priority` mounts immediately; others lazy-mount; scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). |
+| [`WorkHeroVideo`](../../src/components/WorkHeroVideo/WorkHeroVideo.component.tsx) | Work detail hero — `ReactPlayer` with controls, loading overlay, `playing` prop. |
+| [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | Work grid card — lazy-mount `ReactPlayer` via `useInView` (`VIDEO_MOUNT_ROOT_MARGIN`). |
+| [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop) — `ReactPlayer` with `playing={playInView}` from [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts); scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). |
 | [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | Fixed full-viewport background for `/editors`; static MP4 on hover while the next embed preloads. |
 
 ## Links

@@ -2,8 +2,14 @@
 
 import classNames from "classnames";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.module.css";
+import {
+  createMutedPlayerHandlers,
+  editorsBackgroundPlayerConfig,
+  ensureContainerMuted,
+  mutedAutoplayPlayerProps,
+} from "src/utils/videoPlayerConfig";
 
 const ReactPlayer = dynamic(() => import("react-player"), {
   ssr: false,
@@ -19,29 +25,22 @@ interface EditorsBackgroundVideoProps {
   requestedVideo: EditorBackgroundVideo;
 }
 
-const playerConfig = {
-  youtube: {
-    end: 60,
-    start: 30,
-  },
-  vimeo: {
-    end_time: 60,
-    start_time: 30,
-  },
-};
-
 export const EditorsBackgroundVideo = (props: EditorsBackgroundVideoProps) => {
   const { initialVideo, requestedVideo } = props;
   const [activeVideo, setActiveVideo] = useState(initialVideo);
   const [pendingVideo, setPendingVideo] =
     useState<EditorBackgroundVideo | null>(null);
+  const [playing, setPlaying] = useState(true);
   const requestedVideoRef = useRef(requestedVideo);
+  const activeEmbedRef = useRef<HTMLDivElement>(null);
+  const preloadEmbedRef = useRef<HTMLDivElement>(null);
+  const pendingVideoRef = useRef(pendingVideo);
 
   requestedVideoRef.current = requestedVideo;
+  pendingVideoRef.current = pendingVideo;
 
   useEffect(() => {
     if (requestedVideo.editorId === activeVideo.editorId) {
-      setPendingVideo(null);
       return;
     }
 
@@ -52,14 +51,44 @@ export const EditorsBackgroundVideo = (props: EditorsBackgroundVideoProps) => {
     setPendingVideo(requestedVideo);
   }, [requestedVideo, activeVideo.editorId, pendingVideo?.editorId]);
 
-  const resolvePendingVideo = (video: EditorBackgroundVideo) => {
+  const resolvePendingVideo = useCallback((video: EditorBackgroundVideo) => {
     if (requestedVideoRef.current.editorId !== video.editorId) {
       return;
     }
 
     setActiveVideo(video);
     setPendingVideo(null);
-  };
+    setPlaying(true);
+  }, []);
+
+  const activeMuteHandlers = useMemo(
+    () =>
+      createMutedPlayerHandlers(activeEmbedRef, () => {
+        setPlaying(true);
+      }),
+    [],
+  );
+
+  const preloadMuteHandlers = useMemo(
+    () =>
+      createMutedPlayerHandlers(preloadEmbedRef, () => {
+        const video = pendingVideoRef.current;
+
+        if (video) {
+          resolvePendingVideo(video);
+        }
+      }),
+    [resolvePendingVideo],
+  );
+
+  useEffect(() => {
+    if (!playing) {
+      return;
+    }
+
+    ensureContainerMuted(activeEmbedRef.current);
+    ensureContainerMuted(preloadEmbedRef.current);
+  }, [playing]);
 
   const isLoading = pendingVideo !== null;
 
@@ -79,41 +108,38 @@ export const EditorsBackgroundVideo = (props: EditorsBackgroundVideoProps) => {
         <source src="/video/static.mp4" type="video/mp4" />
       </video>
       {isLoading ? (
-        <div className={styles.preloadPlayer}>
+        <div ref={preloadEmbedRef} className={styles.preloadPlayer}>
           <ReactPlayer
             key={pendingVideo.editorId}
             className={styles.player}
-            config={playerConfig}
+            config={editorsBackgroundPlayerConfig}
             controls={false}
             loop
-            muted
-            onReady={() => {
-              resolvePendingVideo(pendingVideo);
-            }}
-            onStart={() => {
-              resolvePendingVideo(pendingVideo);
-            }}
             playsInline
             playing
             src={pendingVideo.videoSrc}
             width="100%"
             height="100%"
+            {...mutedAutoplayPlayerProps}
+            {...preloadMuteHandlers}
           />
         </div>
       ) : (
-        <div className={styles.playerLayer}>
+        <div ref={activeEmbedRef} className={styles.playerLayer}>
           <ReactPlayer
             key={activeVideo.editorId}
+            autoPlay
             className={styles.player}
-            config={playerConfig}
+            config={editorsBackgroundPlayerConfig}
             controls={false}
             loop
-            muted
             playsInline
-            playing
+            playing={playing}
             src={activeVideo.videoSrc}
             width="100%"
             height="100%"
+            {...mutedAutoplayPlayerProps}
+            {...activeMuteHandlers}
           />
         </div>
       )}

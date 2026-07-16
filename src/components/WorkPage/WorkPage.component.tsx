@@ -25,8 +25,6 @@ export const WorkPage = (props: WorkPageProps) => {
               work={work}
               title={work.workClient ?? ""}
               subtitle={work.workTitle}
-              autoPlay={false}
-              controls
             />
           </li>
         ))}

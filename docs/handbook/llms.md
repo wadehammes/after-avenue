@@ -14,7 +14,7 @@ Use this page to choose **which markdown file to read first**. It mirrors the fu
 | Component folder layout, `pnpm scaffold`, exports, dynamic imports, internal/external links | [components.md](components.md) |
 | Server components, caching, React Query, `src/api`, forms, metadata / JSON-LD | [patterns.md](patterns.md) |
 | Transactional email, React Email templates, contact-form mail, `pnpm email:dev` | [patterns.md](patterns.md#transactional-email-react-email) and [source-layout.md](source-layout.md) |
-| Embedded video, `VideoPlayer`, `WorkCard` / `FeaturedWork` lazy load, editors background hover | [patterns.md](patterns.md#embedded-video-vimeo--youtube) and [components.md](components.md#video-related-components) |
+| Embedded video, `ReactPlayer`, `WorkCard` / `FeaturedWork` lazy load, editors background hover | [patterns.md](patterns.md#embedded-video-vimeo--youtube) and [components.md](components.md#video-related-components) |
 | Scroll performance, `useInView`, `react-intersection-observer` on list pages | [patterns.md](patterns.md#embedded-video-vimeo--youtube) |
 | Scroll-driven card entrance (`animation-timeline: view()`), `scrollEntrance.module.css` | [patterns.md](patterns.md#embedded-video-vimeo--youtube) |
 | CI, `pnpm` scripts, Knip, `next.config` (env, redirects), draft APIs, `src/proxy.ts` | [platform.md](platform.md) |

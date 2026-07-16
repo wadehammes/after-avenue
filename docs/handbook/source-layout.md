@@ -12,7 +12,7 @@ Helpers are **split by topic**—there is no barrel `utils/index.ts`. Import the
 
 | Area | Files (examples) |
 |------|------------------|
-| **Constants** | [constants.ts](../../src/utils/constants.ts) — slugs, navigation IDs, build exclusions, `VIDEO_IN_VIEW_ROOT_MARGIN` |
+| **Constants** | [constants.ts](../../src/utils/constants.ts) — slugs, navigation IDs, build exclusions, `VIDEO_MOUNT_ROOT_MARGIN` |
 | **General helpers** | [helpers.ts](../../src/utils/helpers.ts) — `envUrl`, `createImageUrl`, guards |
 | **Scroll entrance** | [supportsScrollTimeline.ts](../../src/utils/supportsScrollTimeline.ts) — feature detect for CSS scroll-driven fallback |
 | **Style** | [styleHelpers.ts](../../src/utils/styleHelpers.ts) |
@@ -68,9 +68,9 @@ Client, getters, parsers, generated types — see [contentful.md](contentful.md)
 
 | Path | Purpose |
 |------|---------|
-| [VideoPlayer/](../../src/components/VideoPlayer/) | Shared `react-player` wrapper — loading overlay, `light` preview, `playInView` debounce. |
+| [WorkHeroVideo/](../../src/components/WorkHeroVideo/) | Work detail hero — `ReactPlayer`, loading overlay. |
 | [WorkCard/](../../src/components/WorkCard/) | Work grid card; lazy-mount video near viewport. |
-| [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block (desktop video). |
+| [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block (desktop video). Playback/scroll state in colocated [`useFeaturedReelInView.ts`](../../src/components/FeaturedWork/useFeaturedReelInView.ts). |
 | [EditorsBackgroundVideo/](../../src/components/EditorsBackgroundVideo/) | `/editors` hover background; two-player pool. |
 
 Patterns and performance rules: [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube). Shared scroll entrance styles: [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css) (import `.enter` / `.animate` on card roots).
