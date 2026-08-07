@@ -61,7 +61,7 @@ We standardize on **Biome** for both lint and format of TS/JS/JSON/CSS, plus **S
   - `pnpm lint:css` – Stylelint check only (matches `**/*.css`)
   - `pnpm lint:css:fix` – Stylelint with `--fix`
   - `pnpm lint:all` – `pnpm lint:changed` then `pnpm lint:css:fix`
-- **Config**: [biome.json](../../biome.json) for Biome (CSS formatter and linter included); [stylelint.config.ts](../../stylelint.config.ts) for Stylelint.
+- **Config**: [biome.json](../../biome.json) for Biome (CSS formatter and linter included); [stylelint.config.mjs](../../stylelint.config.mjs) for Stylelint.
 - **Notable Biome rules**: no unused imports/variables, no inferrable types (annotate where Biome requires), use `as const` where appropriate, `noDangerouslySetInnerHtml` is a warning.
 - **Stylelint** extends `stylelint-config-standard` + `stylelint-config-css-modules` and runs the `csstools/value-no-unknown-custom-properties` plugin, which validates every `var(--…)` against [`src/styles/variables.css`](../../src/styles/variables.css) and [`src/styles/runtime-variables.json`](../../src/styles/runtime-variables.json). Properties injected at render time (inline style, `<style>` tags, Next.js font classes on `<html>`, or set on a parent rule) must be registered so Stylelint recognizes them—either as `--name: initial;` in CSS or in `runtime-variables.json`.
 - Run lint/format before committing so CI (e.g. `pnpm lint:ci`) passes.

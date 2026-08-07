@@ -21,9 +21,9 @@ Run **`pnpm tsc:ci`**, **`pnpm lint:ci`**, **`pnpm lint:css`**, **`pnpm test:ci`
 
 | Script | Purpose |
 |--------|---------|
-| `pnpm dev` | Next dev server on port 3005 (see root README). |
-| `pnpm build` / `pnpm start` | Production build and serve (`next build --webpack`, then `make sitemap`). Use **`pnpm build`** — not bare `next build` — so production matches local dev (webpack). Vercel is configured via [`vercel.json`](../../vercel.json) to run `pnpm build`. |
-| `pnpm build:analyze` | Bundle analysis (see package.json). |
+| `pnpm dev` | Next dev server on port 3005 with **Turbopack** (see root README). Use `pnpm dev:webpack` only if you need the legacy webpack dev server. |
+| `pnpm build` / `pnpm start` | Production build and serve (`next build` with Turbopack, then `make sitemap`). Use **`pnpm build`** — not bare `next build` — so the sitemap step runs. Vercel is configured via [`vercel.json`](../../vercel.json) to run `pnpm build`. Use `pnpm build:webpack` for the legacy webpack production build. |
+| `pnpm build:analyze` | Turbopack bundle analysis via `next experimental-analyze` (see package.json). |
 | `pnpm lint` / `pnpm lint:fix` / `pnpm format` | Biome (same family as `lint:ci`). |
 | `pnpm lint:css` / `pnpm lint:css:fix` | Stylelint on `**/*.css`. |
 | `pnpm test:ci` | Jest (CI-style). |
@@ -41,6 +41,8 @@ Project agent hooks live in [`.cursor/hooks.json`](../../.cursor/hooks.json) and
 ## Environment variables and `next.config`
 
 **[`next.config.ts`](../../next.config.ts)** lists env vars exposed to the app under `env: { ... }`. If a name is not listed, the client bundle will not see it. Keep secrets off `NEXT_PUBLIC_*`.
+
+**Bundler (16.3):** Dev and production use **Turbopack** by default. SVG imports use the `turbopack.rules` SVGR config; the legacy `webpack()` block remains for `pnpm dev:webpack`, `pnpm build:webpack`, and `pnpm build:analyze:legacy`. Turbopack filesystem cache, dev memory eviction, prefetch inlining, and immutable static assets are enabled by default in 16.3. **`experimental.useTypeScriptCli`** is on (TypeScript 7 for build-time checks). **Instant Navigations** (`cacheComponents`, `partialPrefetching`) is opt-in and needs a separate migration from segment `revalidate` exports — not enabled here yet.
 
 Configure values in **Vercel** (or your host) and mirror locally via `npx vercel env pull` as described in the root README.
 
