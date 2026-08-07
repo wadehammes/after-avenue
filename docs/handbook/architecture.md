@@ -4,7 +4,7 @@ If you are new here, this page is your map. It explains how the site is structur
 
 ## Tech stack
 
-- **Framework**: Next.js 16 with the **App Router**. Routes live under `src/app/` (`page.tsx`, `layout.tsx`, Route Handlers under `src/app/api/`).
+- **Framework**: Next.js 16.3 with the **App Router** and **Turbopack** (default dev and production bundler). Routes live under `src/app/` (`page.tsx`, `layout.tsx`, Route Handlers under `src/app/api/`).
 - **UI**: React 19, TypeScript.
 - **CMS**: Contentful. Content types are generated into `src/contentful/types/`; getters and parsers live in `src/contentful/`.
 - **Data fetching**: Server Components and Contentful getters at request/build time; **React Query** (TanStack) for client-side mutations and any future client queries. Mutation hooks live in `src/hooks/mutations/` and call the API surface in [src/api/urls.ts](../../src/api/urls.ts).

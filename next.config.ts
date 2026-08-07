@@ -29,7 +29,6 @@ const nextConfig: NextConfig = {
     formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    // Next.js 16 default is 4 hours (14400 seconds)
     minimumCacheTTL: 14400,
     remotePatterns: [
       {
@@ -52,7 +51,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Turbopack is now the default bundler in Next.js 16.1
   turbopack: {
     rules: {
       "*.svg": {
@@ -77,10 +75,9 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  // Experimental features for Next.js 16.1.1
   experimental: {
     inlineCss: true,
-    // Optimize package imports for better tree-shaking
+    useTypeScriptCli: true,
     optimizePackageImports: [
       "@contentful/rich-text-react-renderer",
       "@tanstack/react-query",
@@ -114,11 +111,8 @@ const nextConfig: NextConfig = {
       },
     });
 
-    // Modify the file loader rule to ignore *.svg, since we have it handled now.
     fileLoaderRule.exclude = /\.svg$/i;
 
-    // Bundle analyzer for production builds (legacy webpack mode)
-    // Note: Use `next experimental-analyze` for Next.js 16.1+ instead
     if (!dev && !isServer && process.env.ANALYZE === "true") {
       const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
       config.plugins.push(
@@ -178,8 +172,6 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // Exclude _next (dev HMR/RSC), api, images, and refresh-content from page
-      // cache rules — applying long-lived cache to /:path* was breaking local dev.
       {
         source: "/((?!_next|api|images|refresh-content).*)",
         headers: [
@@ -194,7 +186,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-// Redirect test and home slug pages on Production
 const sources = ["/:slug(test-page.*)"];
 
 const productionRedirects = sources.map((source) => ({
@@ -221,7 +212,6 @@ const sharedRedirects = [
   },
 ];
 
-// https://securityheaders.com
 const scriptSrc = [
   "'self'",
   "'unsafe-eval'",
@@ -249,37 +239,30 @@ const ContentSecurityPolicy = `
   manifest-src 'self' *.vercel.app;
 `;
 const securityHeaders = [
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
   {
     key: "Content-Security-Policy",
     value: ContentSecurityPolicy.replace(/\n/g, ""),
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
   {
     key: "Referrer-Policy",
     value: "strict-origin-when-cross-origin",
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
   {
     key: "X-Frame-Options",
     value: "DENY",
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
   {
     key: "X-Content-Type-Options",
     value: "nosniff",
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-DNS-Prefetch-Control
   {
     key: "X-DNS-Prefetch-Control",
     value: "on",
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
   {
     key: "Strict-Transport-Security",
     value: "max-age=31536000; includeSubDomains; preload",
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
   {
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
