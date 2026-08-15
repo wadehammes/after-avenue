@@ -1,0 +1,34 @@
+---
+description: React Email templates and contact-form mail conventions
+globs: src/emails/**,src/app/api/send-email/**
+alwaysApply: false
+---
+
+# React Email (`src/emails/`)
+
+Read **`docs/handbook/patterns.md`** → **Transactional email (React Email)** before editing templates or the send route.
+
+## Structure
+
+- **`EmailLayout.tsx`** — shared shell (logo, panel, brandmark footer). Keep salutation and body in one flow inside the panel.
+- **`emailStyles.ts`** — brand colors and shared inline styles. Type style objects as `CSSProperties` when using properties like `appearance`.
+- **`emailLogo.ts` / `emailBrandmark.ts`** — base64 data URIs only (no hosted SVG URLs in templates).
+- **`renderContactEmails.tsx`** — server `render()` helpers; used by [send-email/contact/route.ts](src/app/api/send-email/contact/route.ts).
+- **Templates** — named export + `export default` + `Component.PreviewProps` for `pnpm email:dev` sidebar.
+
+## Preview
+
+```bash
+pnpm email:dev
+```
+
+Port **3006**. Files without `export default` (interfaces, layout, render helpers) do not appear in the sidebar.
+
+## Testing
+
+- Template content: RTL in `ContactFormEmails.spec.tsx` (or per-template spec).
+- `renderContactEmails.spec.tsx`: **mock** `react-email` `render` — never call real `@react-email/render` in Jest.
+
+## Regenerating images
+
+When brand SVGs change, export PNG and regenerate base64 constants in `emailLogo.ts` / `emailBrandmark.ts` from `src/icons/`.
