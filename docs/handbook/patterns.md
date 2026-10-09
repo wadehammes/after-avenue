@@ -133,7 +133,7 @@ Home **featured reels** use scroll-driven entrance in [scrollEntrance.module.css
 2. **Work grids** and **home featured reels** use **`VIDEO_MOUNT_ROOT_MARGIN`** (`80% 0px` in [constants.ts](../../src/utils/constants.ts)) so embeds can load before scroll-in without mounting the whole page at once.
 3. **Featured reels** sticky-mount in the preload margin, then **`playing={playInView}`** only—paused iframes off-screen, playing in view, no reload on scroll-back. Use **`featuredReelPlayerConfig`** so Vimeo respects pause (not **`background: true`**). Up to eight mounted embeds is the tradeoff vs a single-player pool.
 4. **Do not combine scroll-driven opacity on the same node as a lazy Vimeo iframe** — use **`scrollEntrance`** on home reels only; work cards stay static to avoid flicker.
-5. **Reserve space** — video containers use **16∶9** padding (or **`aspect-ratio`**) and the dot-pattern placeholder so layout does not shift while the chunk loads.
+5. **Reserve space** — video containers use **16∶9** padding (or **`aspect-ratio`**) and a solid background (or **`light`** poster) so layout does not shift while the chunk loads.
 
 ### Intersection observers
 

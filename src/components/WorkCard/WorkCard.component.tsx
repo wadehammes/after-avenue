@@ -71,7 +71,6 @@ export const WorkCard = (props: WorkCardProps) => {
                 aria-hidden="true"
                 className={styles.workCardVideoPreviewChrome}
               >
-                <div className={styles.workCardVideoDotOverlay} />
                 <div className={styles.workCardVideoPlayAffordance}>
                   <span className={styles.workCardVideoPlayTriangle} />
                 </div>
