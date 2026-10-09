@@ -49,3 +49,5 @@ yarn-error.log*
 
 public/generated-sitemap-*.xml
 .env*
+
+next-env.d.ts

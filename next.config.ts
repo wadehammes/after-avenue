@@ -84,7 +84,6 @@ const nextConfig: NextConfig = {
       "react-aria",
       "react-google-recaptcha",
       "react-intersection-observer",
-      "react-player",
       "@base-ui/react",
     ],
   },
