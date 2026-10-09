@@ -26,7 +26,8 @@
     "test:ci": "jest --passWithNoTests",
     "types:contentful": "export $(cat .env.local | sed '/^#/d; s/[$\"]//g'); cf-content-types-generator -s $CONTENTFUL_SPACE_ID -t $CONTENTFUL_CMA_TOKEN -o src/contentful/types -r -g && biome format --write src/contentful/types",
     "knip": "knip",
-    "knip:ci": "knip --no-progress"
+    "knip:ci": "knip --no-progress",
+    "handbook:check": "bash scripts/handbook-sync-check.sh"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

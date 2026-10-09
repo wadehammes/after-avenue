@@ -68,6 +68,7 @@ run_pnpm() {
   fi
 }
 
+# Map a changed repo-relative path to handbook chapter filenames (space-separated, unique).
 handbook_chapters_for_path() {
   local file="$1"
   local chapters=()
@@ -75,6 +76,12 @@ handbook_chapters_for_path() {
   case "$file" in
     docs/handbook/*)
       return 0
+      ;;
+    .cursor/hooks/* | .cursor/hooks.json | AGENTS.md)
+      chapters+=("platform.md" "README.md")
+      ;;
+    vercel.json)
+      chapters+=("platform.md")
       ;;
     .jest/*)
       chapters+=("conventions.md" "platform.md")
@@ -88,32 +95,59 @@ handbook_chapters_for_path() {
     src/tests/factories/*)
       chapters+=("conventions.md")
       ;;
+    src/tests/utils/handbookTestRules.ts)
+      chapters+=("conventions.md" "platform.md")
+      ;;
     *.spec.ts | *.spec.tsx | *.test.ts | *.test.tsx)
       chapters+=("conventions.md")
       ;;
     *.module.css)
       chapters+=("conventions.md")
       ;;
+    src/@types/*)
+      chapters+=("conventions.md" "platform.md")
+      ;;
     src/contentful/*)
       chapters+=("contentful.md")
       ;;
     src/app/api/*)
-      chapters+=("platform.md" "integrations.md")
+      chapters+=("patterns.md" "platform.md" "integrations.md")
       ;;
     src/app/*)
       chapters+=("patterns.md")
       ;;
+    src/components/LazyReactPlayer/* | src/components/FeaturedWork/* | src/components/WorkCard/* | src/components/WorkHeroVideo/* | src/components/EditorsBackgroundVideo/* | src/components/WorkPage/*)
+      chapters+=("patterns.md" "components.md")
+      ;;
+    src/components/ContactForm/* | src/components/forms/* | src/components/Input/* | src/components/TextArea/* | src/components/Checkbox/*)
+      chapters+=("components.md" "patterns.md")
+      ;;
     src/components/*)
       chapters+=("components.md")
       ;;
-    src/hooks/*)
+    src/hooks/* | src/context/*)
+      chapters+=("patterns.md" "source-layout.md")
+      ;;
+    src/emails/*)
+      chapters+=("patterns.md" "source-layout.md")
+      ;;
+    src/api/*)
+      chapters+=("patterns.md" "source-layout.md")
+      ;;
+    src/utils/videoPlayerConfig.ts | src/utils/emailHelpers.ts | src/utils/helpers.ts | src/utils/recaptcha.ts | src/utils/spamDetection.ts | src/utils/rateLimit.ts)
+      chapters+=("patterns.md" "platform.md" "source-layout.md")
+      ;;
+    src/utils/*)
+      chapters+=("source-layout.md" "conventions.md")
+      ;;
+    src/lib/forms/*)
       chapters+=("patterns.md" "source-layout.md")
       ;;
     src/lib/*)
-      chapters+=("integrations.md" "distribution.md" "platform.md")
+      chapters+=("source-layout.md" "integrations.md" "distribution.md")
       ;;
-    src/emails/*)
-      chapters+=("patterns.md")
+    src/ui/*)
+      chapters+=("source-layout.md" "components.md")
       ;;
   esac
 

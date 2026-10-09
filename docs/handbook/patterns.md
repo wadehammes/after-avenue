@@ -53,6 +53,7 @@ Contact form mail is built with **[React Email](https://react.email/)** and sent
 2. **Route Handler** — [send-email/contact/route.ts](../../src/app/api/send-email/contact/route.ts) checks the honeypot, validates the JSON body with [contactFormApiSchema](../../src/lib/forms/contactForm.schema.ts), then verifies reCAPTCHA, rate limits, and spam; maps form fields to [ContactFormEmailProps](../../src/emails/ContactFormEmail.interfaces.ts). Route behavior is covered by [route.spec.ts](../../src/app/api/send-email/contact/route.spec.ts).
 3. **Render** — [renderContactEmails.tsx](../../src/emails/renderContactEmails.tsx) calls `render()` from `react-email` for HTML and plain-text bodies.
 4. **Send** — Resend delivers an internal notification (`ContactFormSubmissionEmail`) and a user confirmation (`ContactFormConfirmationEmail`). Recipients come from [emailHelpers.ts](../../src/utils/emailHelpers.ts): **production** uses **`hello@afteravenue.com`** and the submitter’s address; **staging** and **local** / **`pnpm dev`** route both messages to **`RESEND_TEST_RECIPIENTS`** or **`RESEND_DEV_TO_EMAIL`** only (never production or the submitter; audience sync skipped). See [platform.md → Environment variables](platform.md#environment-variables-and-nextconfig).
+5. **HubSpot (production only)** — After mail succeeds, [useSubmitContactFormMutation](../../src/hooks/mutations/useSubmitContactFormMutation.ts) calls **`api.hubspot.leadGeneration`** unless **`isNonProductionContactEnvironment()`** is true (same rules as mail). The HubSpot Route Handler also no-ops outside production. Specs: [route.spec.ts](../../src/app/api/hubspot/lead-generation/route.spec.ts), [ContactForm.spec.tsx](../../src/components/ContactForm/ContactForm.spec.tsx).
 
 ### Template layout (`src/emails/`)
 
@@ -92,7 +93,7 @@ Contact form mail is built with **[React Email](https://react.email/)** and sent
 
 ## Dynamic imports
 
-Use **`next/dynamic`** for code-splitting when a component is heavy but SSR-safe. For **client-only** modules, use **`browser()`** + **`use()`** + **`Suspense`** (see [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs)). See [components.md](components.md).
+Use **`next/dynamic`** for code-splitting when a component is heavy but SSR-safe. For most **client-only** widgets, use **`browser()`** + **`use()`** + **`Suspense`** via [`createBrowserLazyDefault`](../../src/ui/browserLazyDefault.tsx) (see [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs)). **[`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx)** is an exception: it uses **`next/dynamic`** (`ssr: false`) because **`react-player`** v3 lazy-loads Vimeo/YouTube chunks and that combination breaks **Turbopack** production builds with **`createBrowserLazyDefault`**. See [components.md](components.md).
 
 ## Embedded video (Vimeo / YouTube)
 
@@ -116,22 +117,22 @@ Home **featured reels** use scroll-driven entrance in [scrollEntrance.module.css
 
 - **`playing`** — drives ReactPlayer **`playing`** (e.g. from **`?playVideo=true`**)
 - **`rounded`** — 20px radius on the shell
-- Dot-pattern **loading overlay** until **`onReady`**
+- Solid **loading overlay** until **`onReady`**
 
 ### Where each pattern is used
 
 | Surface | Component | Strategy |
 |---------|-----------|----------|
 | Home featured reels (desktop) | [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) + [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) | Mount embed when in view (priority reel on load); **`playing={playInView}`** pauses off-screen. First reel: **`priority`**. Scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). Mobile uses **`WorkCard`**. |
-| Work index / category / related cards | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | **`LazyReactPlayer`** with **`light`** (oEmbed poster until click—no iframe on initial load). Lazy-mount at **`VIDEO_MOUNT_ROOT_MARGIN`**. Click the preview to load **`controlsPlayerConfig`** inline; title row links to work detail. [`WorkPagePrefetch`](../../src/components/WorkPage/WorkPagePrefetch.component.tsx) preloads the player chunk on `/work`. |
+| Work index / category / related cards | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | **`LazyReactPlayer`** with **`light`** (poster until click—no iframe on first paint). Lazy-mount at **`VIDEO_MOUNT_ROOT_MARGIN`**. Custom play chrome over the poster until **`onPlaying`** / **`onStart`**. Click preview → **`playing={true}`** + **`controlsPlayerConfig`**. Title row links to work detail. [`WorkPagePrefetch`](../../src/components/WorkPage/WorkPagePrefetch.component.tsx) preloads the player chunk on `/work`. |
 | Work detail hero | [`WorkEntryPage`](../../src/components/WorkEntryPage/WorkEntryPage.component.tsx) | [`WorkHeroVideo`](../../src/components/WorkHeroVideo/WorkHeroVideo.component.tsx) — **`playing`** from server prop or **`?playVideo=true`**, loading overlay until ready. |
 | Editors index hover background | [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | **Two-player pool:** active embed stays mounted (hidden while preloading). On hover (150ms debounce in [`EditorsPage`](../../src/components/EditorsPage/EditorsPage.component.tsx)), show the **static MP4** while a **hidden preload** `ReactPlayer` loads the next embed; swap on **`onReady`**. |
 
 ### Performance rules
 
 1. **Never mount one `ReactPlayer` per list item** on a long page. Lazy-mount, use **`light`** for click-to-play grids, or use a **fixed-size player pool** (editors background).
-2. **Work grids** and **home featured reels** use **`VIDEO_MOUNT_ROOT_MARGIN`** (`80% 0px` in [constants.ts](../../src/utils/constants.ts)) so embeds can load before scroll-in without mounting the whole page at once.
-3. **Featured reels** mount when in view (plus the priority reel on load), then **`playing={playInView}`** only—paused iframes off-screen, playing in view, no reload on scroll-back. Use **`featuredReelPlayerConfig`** so Vimeo respects pause (not **`background: true`**). **`WorkCard`** grids still use **`VIDEO_MOUNT_ROOT_MARGIN`** for click-to-play cards.
+2. **Work grids** (and home **mobile** reels via **`WorkCard`**) lazy-mount at **`VIDEO_MOUNT_ROOT_MARGIN`** (`80% 0px` in [constants.ts](../../src/utils/constants.ts)) so cards can warm up before scroll-in.
+3. **Featured reels (desktop home)** mount **`LazyReactPlayer`** when the reel is **in view**, or immediately for the **priority** reel only—**not** via the preload margin (avoids many simultaneous Vimeo embeds). Then **`playing={playInView}`** pauses off-screen; use **`featuredReelPlayerConfig`** so Vimeo respects pause (not **`background: true`**).
 4. **Do not combine scroll-driven opacity on the same node as a lazy Vimeo iframe** — use **`scrollEntrance`** on home reels only; work cards stay static to avoid flicker.
 5. **Reserve space** — video containers use **16∶9** padding (or **`aspect-ratio`**) and a solid background (or **`light`** poster) so layout does not shift while the chunk loads.
 
@@ -141,4 +142,4 @@ List and card deferral uses **`react-intersection-observer`** (**`useInView`**).
 
 ### Network hints
 
-Root layout preconnects Vimeo CDN hosts — see [layout.tsx](../../src/app/layout.tsx). CSP allowlists for YouTube/Vimeo are in [next.config.ts](../../next.config.ts).
+Root layout preconnects Vimeo CDN hosts — see [layout.tsx](../../src/app/layout.tsx). CSP allowlists for YouTube/Vimeo (including **`*.vimeocdn.com`** on **`script-src`**) are in [next.config.ts](../../next.config.ts) **`headers()`**.

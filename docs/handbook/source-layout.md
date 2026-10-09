@@ -2,6 +2,15 @@
 
 Use this page when you know what you want to do (“add a constant”, “find the sitemap helper”) but not which folder it lives in.
 
+## `src/@types/`
+
+Ambient TypeScript declarations not tied to a runtime module:
+
+| File | Purpose |
+|------|---------|
+| [react.d.ts](../../src/@types/react.d.ts) | Shared React prop aliases |
+| [svg.d.ts](../../src/@types/svg.d.ts) | SVGR **`src/icons/*.svg`** imports for **`pnpm tsc:ci`** / CI (gitignored **`next-env.d.ts`** alone is not enough) |
+
 ## `src/interfaces/`
 
 Feature-scoped TypeScript contracts (e.g. [common.interfaces.ts](../../src/interfaces/common.interfaces.ts)). Prefer **colocating** types with a single feature when they are not shared across the app.
@@ -19,6 +28,7 @@ Helpers are **split by topic**—there is no barrel `utils/index.ts`. Import the
 | **Spam / rate limits** | [spamDetection.ts](../../src/utils/spamDetection.ts), [rateLimit.ts](../../src/utils/rateLimit.ts) |
 | **reCAPTCHA** | [recaptcha.ts](../../src/utils/recaptcha.ts) |
 | **Email routing** | [emailHelpers.ts](../../src/utils/emailHelpers.ts) — non-production Resend-only contact recipients via [helpers.ts](../../src/utils/helpers.ts) **`isNonProductionContactEnvironment()`**; covered by [emailHelpers.spec.ts](../../src/utils/emailHelpers.spec.ts) |
+| **Video embed config** | [videoPlayerConfig.ts](../../src/utils/videoPlayerConfig.ts) — Vimeo/YouTube configs, muted autoplay helpers (`reelPlayerConfig`, `featuredReelPlayerConfig`, `editorsBackgroundPlayerConfig`, `controlsPlayerConfig`) |
 | **Public env (client)** | [publicEnv.ts](../../src/utils/publicEnv.ts) — e.g. `getRecaptchaSiteKey()` for form components |
 
 Specs: `*.spec.ts` next to modules (e.g. [rateLimit.spec.ts](../../src/utils/rateLimit.spec.ts)).
@@ -51,7 +61,7 @@ Small, cross-feature UI pieces that are not full `src/components/` features:
 |------|---------|
 | [Field/FieldErrorMessage.component.tsx](../../src/ui/Field/FieldErrorMessage.component.tsx) | Inline validation error under form controls. |
 | [Field/FormFieldLayout.component.tsx](../../src/ui/Field/FormFieldLayout.component.tsx) | Shared label + control slot + error wrapper for Input/TextArea. |
-| [browserLazyDefault.tsx](../../src/ui/browserLazyDefault.tsx) | **`createBrowserLazyDefault`** — `browser()` + dynamic `import()` + `Suspense` for client-only packages. |
+| [browserLazyDefault.tsx](../../src/ui/browserLazyDefault.tsx) | **`createBrowserLazyDefault`** — `browser()` + dynamic `import()` + `Suspense` for client-only packages (e.g. reCAPTCHA). **`react-player`** uses [`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx) instead. |
 
 ## `src/tests/`
 

@@ -1,6 +1,6 @@
 # Cursor hooks
 
-Project hooks that keep agent work aligned with `docs/handbook/`. Adapted from [filtermydiscogs `.cursor/`](https://github.com/rhythmengineering/filtermydiscogs/tree/main/.cursor) for Cursor's hook format.
+Project hooks that keep agent work aligned with `docs/handbook/`. **Rhythm-marketing** [`.claude/`](https://github.com/rhythmengineering/rhythm-marketing/tree/main/.claude) patterns ported for Cursor: handbook routing on every edit, generated-type guard, and **`handbook-drift-check.mjs`** at end-of-turn (broken links, stale `pnpm` script refs, code-without-docs, renames). App Router path map lives in `_lib.sh`.
 
 Config: [`.cursor/hooks.json`](../hooks.json). Scripts: [`.cursor/hooks/`](./).
 
@@ -11,16 +11,17 @@ Shared team files under `.cursor/` are tracked in git (`hooks.json`, `hooks/`, `
 | Event | Role in this repo |
 |-------|-------------------|
 | `sessionStart` | One-line handbook pointer (`session-handbook-routing.sh`) |
-| `preToolUse` | Blocking guardrails (CSS, factories, query-hook mocks, …) |
-| `postToolUse` | Advisory checks (e.g. CSS nesting depth) |
+| `preToolUse` | Handbook reminder before edits + blocking guardrails (CSS, factories, query-hook mocks, generated Contentful types, …) |
+| `postToolUse` | Advisory checks (CSS nesting, **handbook-sync-nudge** on mapped paths) |
 | `beforeShellExecution` | Git safety (destructive git, raw `git commit`) |
-| `stop` | Drift checks, handbook test rules Jest, `pnpm lint:all` follow-ups |
+| `stop` | **`handbook-drift-check.mjs`**, handbook test rules Jest, `pnpm lint:all` follow-ups |
 
 ## Hooks
 
 | Script | Event | What it does |
 |--------|-------|--------------|
 | `session-handbook-routing.sh` | `sessionStart` | One-line pointer to `docs/handbook/` and `llms.md` (does not inject the full routing table). |
+| `handbook-pre-edit-reminder.sh` | `preToolUse` (`Write\|StrReplace`) | Injects full task→chapter routing before every code edit (rhythm Claude PreToolUse pattern). |
 | `block-co-authored-by-commit.sh` | `beforeShellExecution` (`git commit`) | Denies raw `git commit` (agents must use `scripts/git-commit.sh` or `git -c core.hooksPath=.githooks commit`) and blocks `Co-authored-by` in the command string. |
 | `block-destructive-git.sh` | `beforeShellExecution` (`git push`, `git reset`, `git clean`) | Denies force push to **`main`** / **`staging`**, **`git reset --hard`**, and **`git clean -f…`**. |
 | `block-added-comments.sh` | `preToolUse` | Denies edits that add code comments. |
@@ -30,11 +31,12 @@ Shared team files under `.cursor/` are tracked in git (`hooks.json`, `hooks/`, `
 | `block-placeholder-names.sh` | `preToolUse` | Denies generic placeholder names (`raw`, `tmp`, `val`, `foo`, etc.) in TS/TSX bindings and params. |
 | `enforce-scaffold.sh` | `preToolUse` (`Write`) | Steers new components through `pnpm scaffold <Name>`. |
 | `block-barrel-files.sh` | `preToolUse` (`Write`) | Denies new `index.ts`/`index.tsx` barrels under `src/` (except generated Contentful types). |
+| `block-generated-types.sh` | `preToolUse` (`Write\|StrReplace`) | Denies hand-edits under `src/contentful/types/` (regenerate with `pnpm types:contentful`). |
 | `enforce-factory-location.sh` | `preToolUse` (`Write`) | Denies `*.factory.ts` outside `src/tests/factories/`. |
 | `block-query-hook-mocks.sh` | `preToolUse` | Denies specs under `src/hooks/queries/` or `src/hooks/mutations/`, and feature-test edits that mock those hooks instead of `src/api/urls` (including `.po.tsx`). |
-| `handbook-sync-nudge.sh` | *(off)* | Per-edit docs reminder — **not wired** in `hooks.json` (too noisy during coding). Script kept for optional re-enable. |
+| `handbook-sync-nudge.sh` | `postToolUse` (`Write\|StrReplace`) | Lightweight handbook/README pointer after edits to mapped paths (uses `_lib.sh` chapter map; silent for unmapped files). |
 | `check-css-nesting.sh` | `postToolUse` | Advisory when CSS nests selectors 4+ levels deep. |
-| `handbook-drift-check.sh` | `stop` | One follow-up if **`src/`** or test infra changed without a handbook update, and/or setup surfaces changed without **README.md**. |
+| `handbook-drift-check.mjs` | `stop` | Follow-up when code/config changed without handbook/README updates, broken doc links, stale `pnpm` refs in docs, high-churn paths touched, or renames/deletes. CI mirror: **`pnpm handbook:check`**. |
 | `handbook-test-drift-check.sh` | `stop` | Runs handbook testing rule Jest tests (`handbookTestRules.spec.ts`) when feature test files changed. |
 | `lint-all-check.sh` | `stop` | Runs **`pnpm lint:all`** when the session changed meaningful source and follow up once on failure. |
 
@@ -44,8 +46,8 @@ Use **`scripts/git-commit.sh`** or **`git -c core.hooksPath=.githooks commit`** 
 
 ## Requirements
 
-- `bash`, `jq`, `git` on `PATH`
-- Hook scripts must be executable (`chmod +x .cursor/hooks/*.sh`)
+- `bash`, `jq`, `git`, `node` on `PATH`
+- Hook scripts must be executable (`chmod +x .cursor/hooks/*.sh .cursor/hooks/*.mjs`)
 
 ## Adding or changing a hook
 
