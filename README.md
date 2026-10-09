@@ -1,6 +1,21 @@
 # After Avenue
 
-Site powered by Next.js / TypeScript / CSS Modules using Contentful CMS.
+Marketing site: **Next.js App Router**, **React**, **TypeScript**, **CSS Modules**, **Contentful**.
+
+### Tech stack (pin in repo)
+
+| Layer | Version / note |
+|-------|----------------|
+| **Node.js** | **24.x** ([`.tool-versions`](./.tool-versions) — run **`asdf install`**) |
+| **pnpm** | **12.4.x** (`packageManager` in [`package.json`](./package.json)) |
+| **Next.js** | **16.4.x** (Turbopack default for **`pnpm dev`** / **`pnpm build`**; **`pnpm dev:webpack`** / **`pnpm build:webpack`** optional) |
+| **React** | **19.3.x** |
+| **TypeScript** | **7.x** (`pnpm tsc:ci`; Next **`experimental.useTypeScriptCli`**) |
+| **Lint / format** | **Biome** + **Stylelint** (CSS Modules) |
+| **Tests** | **Jest** 30 + Testing Library |
+| **CMS** | **Contentful** (generated types under `src/contentful/types/`) |
+
+After a dependency bump, refresh this table if major versions change. Detail lives in [`docs/handbook/architecture.md`](./docs/handbook/architecture.md) and [`docs/handbook/platform.md`](./docs/handbook/platform.md).
 
 ## Prerequisites / recommendations
 
@@ -121,7 +136,7 @@ Examples: [`ContactForm.spec.tsx`](./src/components/ContactForm/ContactForm.spec
 
 ### Git commits (Cursor agents)
 
-Cursor hooks block raw **`git commit`** in agent sessions. Use [`scripts/git-commit.sh`](./scripts/git-commit.sh) or **`git -c core.hooksPath=.githooks commit`** so [`.githooks/commit-msg`](./.githooks/commit-msg) can reject `Co-authored-by` trailers. Details: [`.cursor/hooks/README.md`](./.cursor/hooks/README.md).
+Cursor hooks (rhythm **`.claude/`** patterns) remind agents to read the handbook **before every edit**, block raw **`git commit`** and hand-edits to generated Contentful types, nudge handbook updates on mapped paths, and follow up at end-of-turn via **`handbook-drift-check.mjs`** when **`src/`** changed without **`docs/handbook/`** updates. Use [`scripts/git-commit.sh`](./scripts/git-commit.sh) or **`git -c core.hooksPath=.githooks commit`** so [`.githooks/commit-msg`](./.githooks/commit-msg) can reject `Co-authored-by` trailers. Details: [`.cursor/hooks/README.md`](./.cursor/hooks/README.md).
 
 ## Linting and formatting
 
@@ -134,16 +149,22 @@ pnpm lint:all
 pnpm test:ci
 ```
 
-**`lint:all`** runs Biome on files changed since **`origin/staging`**, Stylelint with **`--fix`**, **`tsc --strict`**, and Knip.
+**`lint:all`** runs Biome on files changed since **`origin/staging`**, Stylelint with **`--fix`**, **`tsc --strict`**, and Knip. Optional before a handbook-heavy PR: **`pnpm handbook:check`** (fails if substantive code changed vs **`origin/staging`** without any **`docs/handbook/*.md`** in the diff — see [`scripts/handbook-sync-check.sh`](./scripts/handbook-sync-check.sh)).
 
-Other useful commands:
+Other useful commands (full table in [`docs/handbook/platform.md`](./docs/handbook/platform.md)):
 
 ```sh
-pnpm lint          # Biome check (full repo)
-pnpm lint:fix      # Biome with safe fixes
-pnpm lint:css      # Stylelint only
-pnpm format        # Biome format
+pnpm lint              # Biome check (full repo)
+pnpm lint:fix          # Biome with safe fixes
+pnpm lint:css          # Stylelint only
+pnpm format            # Biome format
+pnpm build             # next build + make sitemap (prefer over bare next build)
+pnpm email:dev         # React Email preview on port 3006
+pnpm types:contentful  # Regenerate src/contentful/types (needs CMA env in .env.local)
+pnpm handbook:check    # Fail if code changed vs origin/staging without handbook *.md
 ```
+
+**CI note:** `pnpm tsc:ci` does not depend on gitignored `next-env.d.ts`; SVGR types are in [`src/@types/svg.d.ts`](./src/@types/svg.d.ts) (see handbook **platform** / **conventions**).
 
 ## After Avenue handbook
 
@@ -175,7 +196,7 @@ The handbook is **markdown only** and is meant for humans and tooling alike. It 
 | [**contentful.md**](./docs/handbook/contentful.md) | **Generated types** (`pnpm types:contentful`), **getters** vs **parsers**, **sections vs content blocks**, **ContentRenderer**, **Rich Text**, **Contentful client**. |
 | [**components.md**](./docs/handbook/components.md) | Component folders, **`pnpm scaffold`**, page objects, **test IDs**, exports, **dynamic imports**, links. |
 | [**patterns.md**](./docs/handbook/patterns.md) | **Server Components**, **React Query**, **`src/api`** (`postJson`, `fetchResponse`), **forms**, **metadata / JSON-LD**, **`next/dynamic`**. |
-| [**platform.md**](./docs/handbook/platform.md) | **GitHub CI** (`tsc`, Biome, Stylelint, Jest, Knip), **`pnpm` scripts**, **`next.config` env** and redirects, **draft / disable-draft APIs**, **`src/proxy.ts`**. |
+| [**platform.md**](./docs/handbook/platform.md) | **GitHub CI** (`tsc`, Biome, Stylelint, Jest, Knip), **`pnpm` scripts** (including **`handbook:check`**), **Cursor agent hooks**, **`next.config` env** and redirects, **draft / disable-draft APIs**, **`src/proxy.ts`**. |
 | [**integrations.md**](./docs/handbook/integrations.md) | **Google Analytics** (`@next/third-parties`), **`dataLayer`** conventions. |
 | [**distribution.md**](./docs/handbook/distribution.md) | **Sitemap** generation (`make sitemap`, `public/sitemap.xml`), **robots** and related App Router metadata. |
 | [**source-layout.md**](./docs/handbook/source-layout.md) | **`src/interfaces`**, **`src/utils`**, **`src/api`**, **`src/hooks`**, **`src/tests`**, **`src/lib`**. |
@@ -187,7 +208,7 @@ This README stays focused on **machine setup**, **deploy / release**, env keys, 
 
 ## Other resources / documentation
 
-- Next.js — https://nextjs.org/docs/getting-started
+- Next.js (App Router) — https://nextjs.org/docs/app
 - Contentful — https://www.contentful.com/developers/docs/javascript/tutorials/using-js-cda-sdk/
 - pnpm — https://pnpm.io/
 - Vercel — https://vercel.com/docs

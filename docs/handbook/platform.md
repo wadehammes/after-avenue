@@ -9,7 +9,7 @@ PRs that target **`staging`** run [`.github/workflows/ci.yml`](../../.github/wor
 1. Checkout
 2. **pnpm** + **Node** from [`.tool-versions`](../../.tool-versions)
 3. **`pnpm install`**
-4. **`pnpm tsc:ci`** — TypeScript strict
+4. **`pnpm tsc:ci`** — TypeScript strict (does **not** require gitignored **`next-env.d.ts`**; SVGR icon types live in [`src/@types/svg.d.ts`](../../src/@types/svg.d.ts)—see [conventions.md](conventions.md))
 5. **`pnpm lint:ci`** — Biome in CI reporter mode
 6. **`pnpm lint:css`** — Stylelint on CSS Modules
 7. **`pnpm test:ci`** — Jest
@@ -30,6 +30,7 @@ Run **`pnpm lint:all`** (Biome on changes since **`origin/staging`**, Stylelint 
 | `pnpm lint:css` / `pnpm lint:css:fix` | Stylelint on `**/*.css`. |
 | `pnpm test:ci` | Jest (CI-style). |
 | `pnpm knip` / `pnpm knip:ci` | Find unused files, exports, and dependencies ([`knip.json`](../../knip.json)). Jest-only mock exports loaded via **`jest.mock`** in [`.jest/setupTests.ts`](../../.jest/setupTests.ts) are listed under **`ignoreIssues`** there so Knip does not treat them as dead code. |
+| `pnpm handbook:check` | Fail if **`src/`** (or test infra / **`next.config`**) changed vs **`origin/staging`** without any **`docs/handbook/*.md`** in the same diff — uses [`.cursor/hooks/_lib.sh`](../../.cursor/hooks/_lib.sh) chapter suggestions. |
 | `pnpm scaffold` | New component folder under `src/components/` (see [components.md](components.md)). |
 | `pnpm email:dev` | React Email preview server for `src/emails/` on port **3006** (see [patterns.md → Transactional email](patterns.md#transactional-email-react-email)). |
 | `pnpm types:contentful` | Regenerate `src/contentful/types` (needs CMA env vars). |
@@ -42,13 +43,15 @@ The full list lives in **[`package.json`](../../package.json)**.
 
 ## Cursor agent hooks
 
-Project agent hooks live in [`.cursor/hooks.json`](../../.cursor/hooks.json) and [`.cursor/hooks/`](../../.cursor/hooks/README.md). They enforce handbook conventions (CSS rules, scaffold/factory placement, no comments/barrels) and nudge handbook updates after edits. Requires `jq` and executable hook scripts.
+Project agent hooks live in [`.cursor/hooks.json`](../../.cursor/hooks.json) and [`.cursor/hooks/`](../../.cursor/hooks/README.md) (patterns aligned with rhythm-marketing **`.claude/`**). **`preToolUse`** injects handbook routing before edits and blocks hand-edits to **`src/contentful/types/`**; **`postToolUse`** handbook-sync nudges on mapped paths; **`stop`** runs [`.cursor/hooks/handbook-drift-check.mjs`](../../.cursor/hooks/handbook-drift-check.mjs) (broken doc links, stale **`pnpm`** refs, code-without-docs, renames). Optional CI gate: **`pnpm handbook:check`** ([`scripts/handbook-sync-check.sh`](../../scripts/handbook-sync-check.sh) vs **`origin/staging`**). Requires `bash`, `jq`, `node`, `git`, and executable hook scripts.
 
 ## Environment variables and `next.config`
 
 **[`next.config.ts`](../../next.config.ts)** lists env vars exposed to the app under `env: { ... }`. If a name is not listed, the client bundle will not see it. Keep secrets off `NEXT_PUBLIC_*`.
 
-**Bundler (16.3+):** Dev and production use **Turbopack** by default. SVG imports use the `turbopack.rules` SVGR config; the legacy `webpack()` block remains for `pnpm dev:webpack`, `pnpm build:webpack`, and `pnpm build:analyze:legacy`. Turbopack filesystem cache, dev memory eviction, prefetch inlining, and immutable static assets are enabled by default in 16.3. **`experimental.useTypeScriptCli`** is on (TypeScript 7 for build-time checks). **`experimental.optimizePackageImports`** includes **`@base-ui/react`** (form fields and toasts) alongside existing packages. **Instant Navigations** (`cacheComponents`, `partialPrefetching`) is opt-in and needs a separate migration from segment `revalidate` exports — not enabled here yet.
+**Bundler (Next 16.4):** Dev and production use **Turbopack** by default (`next` **^16.4.0** in [`package.json`](../../package.json)). SVG imports use the `turbopack.rules` SVGR config; the legacy `webpack()` block remains for `pnpm dev:webpack`, `pnpm build:webpack`, and `pnpm build:analyze:legacy`. **`experimental.useTypeScriptCli`** is on (TypeScript 7 for build-type checks). **`experimental.optimizePackageImports`** lists packages such as **`@base-ui/react`**, **`@tanstack/react-query`**, and **`react-intersection-observer`**—**not** **`react-player`** (nested lazy player chunks + Turbopack). If production video fails with “module factory is not available”, confirm **`LazyReactPlayer`** still uses **`next/dynamic`** or temporarily **`pnpm build:webpack`**. **Instant Navigations** (`cacheComponents`, `partialPrefetching`) is opt-in and needs a separate migration from segment `revalidate` exports — not enabled here yet.
+
+**Security headers:** [`headers()`](../../next.config.ts) sets CSP (Vimeo/YouTube on **`script-src`**, **`child-src`**, **`connect-src`**, including **`*.vimeocdn.com`**), HSTS, and related policies on all routes.
 
 **Jest:** Configuration lives in **[jest.config.ts](../../jest.config.ts)** with setup in **[`.jest/setupTests.ts`](../../.jest/setupTests.ts)** — see [conventions.md → Jest configuration](conventions.md#jest-configuration).
 

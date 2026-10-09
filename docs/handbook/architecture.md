@@ -4,8 +4,9 @@ If you are new here, this page is your map. It explains how the site is structur
 
 ## Tech stack
 
-- **Framework**: Next.js 16.3 with the **App Router** and **Turbopack** (default dev and production bundler). Routes live under `src/app/` (`page.tsx`, `layout.tsx`, Route Handlers under `src/app/api/`).
-- **UI**: React 19, TypeScript.
+- **Framework**: Next.js **16.4** (see root [`package.json`](../../package.json)) with the **App Router** and **Turbopack** (default dev and production bundler). Routes live under `src/app/` (`page.tsx`, `layout.tsx`, Route Handlers under `src/app/api/`). Legacy webpack: **`pnpm dev:webpack`** / **`pnpm build:webpack`**.
+- **UI**: React **19.3**, TypeScript **7** (`pnpm tsc:ci`).
+- **Runtime**: Node **24.x** from [`.tool-versions`](../../.tool-versions); **pnpm** **12.4.x**.
 - **CMS**: Contentful. Content types are generated into `src/contentful/types/`; getters and parsers live in `src/contentful/`.
 - **Data fetching**: Server Components and Contentful getters at request/build time; **React Query** (TanStack) for client-side mutations and any future client queries. Mutation hooks live in `src/hooks/mutations/` and call the API surface in [src/api/urls.ts](../../src/api/urls.ts).
 - **Styling**: **CSS Modules** (`.module.css`) with modern CSS (nesting, custom properties). Global tokens and reset live in [src/styles/globals.css](../../src/styles/globals.css). Shared module styles (e.g. [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css)) live under `src/styles/`.

@@ -4,6 +4,8 @@ This is the **After Avenue handbook**: how the site is put together, how we writ
 
 You do not have to read everything in one sitting. Skim the index, bookmark what you need, and come back when you touch that area. **Do keep these docs honest**—when behavior in the repo changes, update the matching page here so the next person (or tool) is not led astray.
 
+**High-churn areas** (check these chapters first when something feels “out of date”): embedded video ([patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube), [components.md → Video-related components](components.md#video-related-components)), contact form mail + HubSpot ([patterns.md → Forms](patterns.md#forms), [patterns.md → Transactional email](patterns.md#transactional-email-react-email), [platform.md → Environment variables](platform.md#environment-variables-and-nextconfig)), and TypeScript/CI ([conventions.md](conventions.md), [platform.md → Continuous integration](platform.md#continuous-integration)).
+
 **For tools and LLMs** (custom GPTs, other agents): **[llms.md](llms.md)** is a compact **task → chapter** map and a short copy-paste instruction blurb.
 
 ## How to read this handbook

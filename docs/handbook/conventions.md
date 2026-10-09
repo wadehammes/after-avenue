@@ -108,6 +108,16 @@ Write base styles for mobile; then override or add rules for larger viewports.
 
 ## Testing
 
+### Non-negotiables (substantive work and agents)
+
+Before you touch production code for a new behavior, a regression fix, or an extracted hook, confirm all five:
+
+1. **TDD** — write or extend a **failing** spec first, run it, see red for the right reason, then implement the smallest change to green. Do not implement first and backfill specs at the end of the PR.
+2. **Factories** — domain data in specs and page objects comes from [`src/tests/factories/`](../../src/tests/factories/), not hand-rolled literals. Override with `.build({ … })` only for the fields the assertion names. See [Test data](#test-data).
+3. **Flat specs** — one top-level `describe` per spec, no nesting, with the "when X" context folded into each `it` name.
+4. **Backfill coverage for whatever you touch** — a component you edit that has no `.po.tsx` / `.spec.tsx` gets them in the same change. Hooks get a spec and no page object. Survey this **before** you start, because the backfill is often larger than the edit.
+5. **Handbook in the same change** — when the session changes `src/` behavior, config, or test conventions, update the matching `docs/handbook/*.md` chapter (route via [llms.md](llms.md)). If no doc edit is needed, say which sections you checked. Cursor **`stop`** hook [`.cursor/hooks/handbook-drift-check.mjs`](../../.cursor/hooks/handbook-drift-check.mjs) follows up when git shows code changes with no handbook edit.
+
 Tests use Jest, **page objects** for **render setup, mocks, and shared test data only**. **Do not call `screen` / `queryBy*`** from page objects—put all DOM queries in **`<Name>.spec.tsx`** via **`screen`**, **`userEvent`**, and **`within`** as needed. The PO may still expose **`testId`**, fixed strings used in renders (e.g. accordion body copy), or small helpers that return **non-DOM** values (e.g. expected modal title text).
 
 ### Page object pattern

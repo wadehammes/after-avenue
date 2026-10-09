@@ -38,20 +38,22 @@ Export the component as both a **named export** (e.g. `export const MyComponent`
 
 ## Dynamic imports
 
-Use **`next/dynamic`** when a component is heavy but still safe to SSR. For **browser-only** dependencies (`window`, third-party widgets), use **`browser()`** + **`use()`** + **`Suspense`** per [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs). CMS-driven pieces are imported directly in **ContentRenderer** today; if a block becomes large enough to defer, wrap it with `dynamic` there or in the parent.
+Use **`next/dynamic`** when a component is heavy but still safe to SSR. For most **browser-only** dependencies (`window`, third-party widgets), use **`createBrowserLazyDefault`](../../src/ui/browserLazyDefault.tsx) (**`browser()`** + **`use()`** + **`Suspense`**) per [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs). CMS-driven pieces are imported directly in **ContentRenderer** today; if a block becomes large enough to defer, wrap it with `dynamic` there or in the parent.
 
-**Embedded video**: Render **`react-player`** via [`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx) (client-only import). Toggle playback with **`playing`** on scroll; use **`autoPlay`** only as a **static** mount-time hint (e.g. priority home reel, editors background) — never flip **`autoPlay`** when **`playing`** changes. See [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube).
+**Embedded video**: Always render **`react-player`** through [`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx) (**`next/dynamic`**, `ssr: false`—see [conventions.md](conventions.md)). Toggle playback with **`playing`**; use **`autoPlay`** only as a **static** mount-time hint (e.g. priority home reel, editors background) — never flip **`autoPlay`** when **`playing`** changes. Optional **`loadingFallback`** wraps the player in **`Suspense`**. See [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube).
 
-**Contact reCAPTCHA**: [`ContactFormReCaptcha`](../../src/components/ContactForm/ContactFormReCaptcha.component.tsx) loads **`react-google-recaptcha`** with the same **`browser()`** pattern.
+**Contact reCAPTCHA**: [`ContactFormReCaptcha`](../../src/components/ContactForm/ContactFormReCaptcha.component.tsx) loads **`react-google-recaptcha`** via **`createBrowserLazyDefault`** (not **`next/dynamic`**).
 
 ## Video-related components
 
 | Component | Role |
 |-----------|------|
-| [`WorkHeroVideo`](../../src/components/WorkHeroVideo/WorkHeroVideo.component.tsx) | Work detail hero — `ReactPlayer` with controls, loading overlay, `playing` prop. |
-| [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | Work grid card — lazy-mount `ReactPlayer` via `useInView` (`VIDEO_MOUNT_ROOT_MARGIN`). |
-| [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop) — `ReactPlayer` with `playing={playInView}` from [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts); scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). |
-| [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | Fixed full-viewport background for `/editors`; static MP4 on hover while the next embed preloads. |
+| [`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx) | Client-only **`react-player`** wrapper (`next/dynamic`). Use everywhere instead of a direct import. |
+| [`WorkHeroVideo`](../../src/components/WorkHeroVideo/WorkHeroVideo.component.tsx) | Work detail hero — controls, solid loading overlay until ready, `playing` prop. |
+| [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | Work grid / home mobile — **`light`** poster, lazy-mount via `useInView` (`VIDEO_MOUNT_ROOT_MARGIN`), custom play chrome until playback starts. |
+| [`WorkPagePrefetch`](../../src/components/WorkPage/WorkPagePrefetch.component.tsx) | Client helper on `/work` — `import("react-player")` warmup for the grid. |
+| [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop) — mount when in view (priority on load); `playing={playInView}` from [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts); scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). |
+| [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | Fixed full-viewport background for `/editors` (desktop); **two-player pool** — active embed stays mounted; static MP4 + hidden preload on hover; swap on **`onReady`**. |
 
 ## Shared form and feedback UI
 

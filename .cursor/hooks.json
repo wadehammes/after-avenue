@@ -23,6 +23,11 @@
     ],
     "preToolUse": [
       {
+        "command": ".cursor/hooks/handbook-pre-edit-reminder.sh",
+        "matcher": "Write|StrReplace",
+        "timeout": 10
+      },
+      {
         "command": ".cursor/hooks/block-added-comments.sh",
         "matcher": "Write|StrReplace",
         "timeout": 10
@@ -58,6 +63,11 @@
         "timeout": 10
       },
       {
+        "command": ".cursor/hooks/block-generated-types.sh",
+        "matcher": "Write|StrReplace",
+        "timeout": 10
+      },
+      {
         "command": ".cursor/hooks/enforce-factory-location.sh",
         "matcher": "Write",
         "timeout": 10
@@ -73,11 +83,16 @@
         "command": ".cursor/hooks/check-css-nesting.sh",
         "matcher": "Write|StrReplace",
         "timeout": 10
+      },
+      {
+        "command": ".cursor/hooks/handbook-sync-nudge.sh",
+        "matcher": "Write|StrReplace",
+        "timeout": 10
       }
     ],
     "stop": [
       {
-        "command": ".cursor/hooks/handbook-drift-check.sh",
+        "command": ".cursor/hooks/handbook-drift-check.mjs",
         "timeout": 15,
         "loop_limit": 1
       },

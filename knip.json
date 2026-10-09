@@ -2,7 +2,12 @@
   "$schema": "./node_modules/knip/schema.json",
   "tags": ["-lintignore"],
   "entry": ["jest.config.ts", ".jest/**/*.ts"],
-  "ignore": ["src/contentful/types/**", "scripts/**", "src/utils/factory.helpers.ts"],
+  "ignore": [
+    "src/contentful/types/**",
+    "scripts/**",
+    ".cursor/hooks/**",
+    "src/utils/factory.helpers.ts"
+  ],
   "rules": {
     "duplicates": "off"
   },
