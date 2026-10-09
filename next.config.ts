@@ -217,6 +217,7 @@ const scriptSrc = [
   "'unsafe-inline'",
   "*.youtube.com",
   "*.vimeo.com",
+  "*.vimeocdn.com",
   "*.google.com",
   "*.google-analytics.com",
   "*.gstatic.com",

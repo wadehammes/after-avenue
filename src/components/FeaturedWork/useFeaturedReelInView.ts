@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { VIDEO_MOUNT_ROOT_MARGIN } from "src/utils/constants";
 import { supportsScrollTimeline } from "src/utils/supportsScrollTimeline";
 
 const scrollTimelineSupported = supportsScrollTimeline();
@@ -16,7 +15,7 @@ export const useFeaturedReelInView = (
   const [hasAnimated, setHasAnimated] = useState(false);
   const [hasMountedPlayer, setHasMountedPlayer] = useState(priority);
 
-  const { inView: playInView, ref: playRef } = useInView({
+  const { inView: playInView, ref } = useInView({
     initialInView: priority,
     threshold: 0,
     triggerOnce: false,
@@ -27,26 +26,11 @@ export const useFeaturedReelInView = (
     },
   });
 
-  const { inView: preloadInView, ref: preloadRef } = useInView({
-    initialInView: priority,
-    rootMargin: VIDEO_MOUNT_ROOT_MARGIN,
-    threshold: 0,
-    triggerOnce: false,
-  });
-
   useEffect(() => {
-    if (priority || preloadInView) {
+    if (priority || playInView) {
       setHasMountedPlayer(true);
     }
-  }, [preloadInView, priority]);
-
-  const ref = useCallback(
-    (node: HTMLDivElement | null) => {
-      playRef(node);
-      preloadRef(node);
-    },
-    [preloadRef, playRef],
-  );
+  }, [playInView, priority]);
 
   return {
     hasAnimated,
