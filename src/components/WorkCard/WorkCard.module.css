@@ -67,6 +67,48 @@
   width: 100%;
 }
 
+.workCardVideoLightPreview {
+  background-color: var(--color-bg, #000);
+  background-image: url("/images/dot-bg.png");
+  height: 100%;
+  width: 100%;
+}
+
+.workCardVideoDotOverlay {
+  background-image: url("/images/dot-bg.png");
+  inset: 0;
+  position: absolute;
+}
+
+.workCardVideoPlayAffordance {
+  align-items: center;
+  background: radial-gradient(rgb(0 0 0 / 30%), rgb(0 0 0 / 0%) 60%);
+  border-radius: 4rem;
+  display: flex;
+  height: 4rem;
+  justify-content: center;
+  position: relative;
+  width: 4rem;
+  z-index: 1;
+}
+
+.workCardVideoPlayTriangle {
+  border-color: transparent transparent transparent var(--colors-white);
+  border-style: solid;
+  border-width: 1rem 0 1rem 1.625rem;
+  margin-left: 0.35rem;
+}
+
+.workCardVideoPreviewChrome {
+  align-items: center;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
+
 .workCardVideoEmbed {
   position: absolute;
   inset: 0;

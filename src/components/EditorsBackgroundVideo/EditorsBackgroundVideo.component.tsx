@@ -1,19 +1,22 @@
 "use client";
 
 import classNames from "classnames";
-import dynamic from "next/dynamic";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styles from "src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.module.css";
+import { LazyReactPlayer } from "src/components/LazyReactPlayer/LazyReactPlayer.component";
 import {
   createMutedPlayerHandlers,
   editorsBackgroundPlayerConfig,
   ensureContainerMuted,
   mutedAutoplayPlayerProps,
 } from "src/utils/videoPlayerConfig";
-
-const ReactPlayer = dynamic(() => import("react-player"), {
-  ssr: false,
-});
 
 export interface EditorBackgroundVideo {
   editorId: string;
@@ -81,13 +84,17 @@ export const EditorsBackgroundVideo = (props: EditorsBackgroundVideoProps) => {
     [resolvePendingVideo],
   );
 
+  const syncPlayersMuted = useEffectEvent(() => {
+    ensureContainerMuted(activeEmbedRef.current);
+    ensureContainerMuted(preloadEmbedRef.current);
+  });
+
   useEffect(() => {
     if (!playing) {
       return;
     }
 
-    ensureContainerMuted(activeEmbedRef.current);
-    ensureContainerMuted(preloadEmbedRef.current);
+    syncPlayersMuted();
   }, [playing]);
 
   const isLoading = pendingVideo !== null;
@@ -109,7 +116,7 @@ export const EditorsBackgroundVideo = (props: EditorsBackgroundVideoProps) => {
       </video>
       {isLoading ? (
         <div ref={preloadEmbedRef} className={styles.preloadPlayer}>
-          <ReactPlayer
+          <LazyReactPlayer
             key={pendingVideo.editorId}
             className={styles.player}
             config={editorsBackgroundPlayerConfig}
@@ -126,7 +133,7 @@ export const EditorsBackgroundVideo = (props: EditorsBackgroundVideoProps) => {
         </div>
       ) : (
         <div ref={activeEmbedRef} className={styles.playerLayer}>
-          <ReactPlayer
+          <LazyReactPlayer
             key={activeVideo.editorId}
             autoPlay
             className={styles.player}

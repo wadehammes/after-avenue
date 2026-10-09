@@ -1,36 +1,27 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useId, useRef } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRef, useState } from "react";
 import type ReCAPTCHAComponent from "react-google-recaptcha";
 import { Controller, type SubmitHandler, useForm } from "react-hook-form";
-
-const ReCAPTCHA = dynamic(() => import("react-google-recaptcha"), {
-  ssr: false,
-}) as typeof ReCAPTCHAComponent;
-
+import { Checkbox } from "src/components/Checkbox/Checkbox.component";
 import styles from "src/components/ContactForm/ContactForm.module.css";
+import { ContactFormReCaptcha } from "src/components/ContactForm/ContactFormReCaptcha.component";
+import { FormWebsiteHoneypot } from "src/components/forms/FormWebsiteHoneypot.component";
+import { Input } from "src/components/Input/Input.component";
 import { StyledButton } from "src/components/StyledButton/StyledButton.component";
-import { StyledInput } from "src/components/StyledInput/StyledInput.component";
-import { StyledTextArea } from "src/components/StyledInput/StyledTextArea.component";
+import { TextArea } from "src/components/TextArea/TextArea.component";
 import { useGlobalVariables } from "src/context/globalContext.context";
 import { useSubmitContactFormMutation } from "src/hooks/mutations/useSubmitContactFormMutation";
 import {
-  EMAIL_VALIDATION_REGEX,
-  PHONE_NUMBER_VALIDATION_REGEX,
-} from "src/utils/regex";
+  type ContactFormValues,
+  contactFormClientSchema,
+} from "src/lib/forms/contactForm.schema";
+import { appToast } from "src/lib/toast/appToast";
+import layoutStyles from "src/styles/formLayoutShared.module.css";
+import { getRecaptchaSiteKey } from "src/utils/publicEnv";
 
-export interface ContactFormInputs {
-  briefDescription: string;
-  companyName: string;
-  email: string;
-  marketingConsent: boolean;
-  name: string;
-  phone: string;
-  website?: string; // Honeypot field - should always be empty
-}
-
-const defaultValues: ContactFormInputs = {
+const defaultValues: ContactFormValues = {
   briefDescription: "",
   companyName: "",
   email: "",
@@ -43,95 +34,69 @@ const defaultValues: ContactFormInputs = {
 export const ContactForm = () => {
   const globalVariables = useGlobalVariables();
   const reCaptcha = useRef<ReCAPTCHAComponent>(null);
+
   const {
-    handleSubmit,
     control,
-    clearErrors,
-    setError,
-    formState: { isSubmitting, errors, isSubmitSuccessful },
-    register,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+    reset,
   } = useForm({
     defaultValues,
     mode: "onBlur",
+    resolver: zodResolver(contactFormClientSchema),
     reValidateMode: "onBlur",
   });
-  const nameId = useId();
-  const emailId = useId();
-  const phoneId = useId();
-  const companyNameId = useId();
-  const briefDescriptionId = useId();
-  const marketingConsentId = useId();
-  const websiteId = useId();
+  const [submitted, setSubmitted] = useState(false);
 
   const submitContactForm = useSubmitContactFormMutation();
+  const isBusy = isSubmitting || submitContactForm.isPending;
 
-  const onSubmitForm: SubmitHandler<ContactFormInputs> = async (data) => {
-    clearErrors("email");
-
-    // Honeypot check - if website field is filled, it's a bot
+  const onSubmitForm: SubmitHandler<ContactFormValues> = async (data) => {
     if (data.website) {
-      // Silently fail - don't let bots know they were caught
       return;
     }
 
-    if (reCaptcha?.current) {
-      const captcha = await reCaptcha.current.executeAsync();
+    if (!reCaptcha.current) {
+      appToast.error("reCAPTCHA not loaded. Please refresh the page.");
+      return;
+    }
 
-      if (!captcha) {
-        throw new Error("reCAPTCHA verification failed. Please try again.");
-      }
+    const captcha = await reCaptcha.current.executeAsync();
+    if (!captcha) {
+      appToast.error("reCAPTCHA verification failed. Please try again.");
+      return;
+    }
 
-      const {
-        briefDescription,
-        companyName,
-        email,
-        marketingConsent,
-        name,
-        phone,
-      } = data;
+    const emailToLowerCase = data.email.toLowerCase();
 
-      const emailToLowerCase = email.toLowerCase();
+    try {
+      await submitContactForm.mutateAsync({
+        briefDescription: data.briefDescription,
+        companyName: data.companyName,
+        email: emailToLowerCase,
+        marketingConsent: data.marketingConsent,
+        name: data.name,
+        phone: data.phone,
+        recaptchaToken: captcha,
+      });
+      setSubmitted(true);
+      reset(defaultValues);
+      reCaptcha.current.reset();
+    } catch (error) {
+      reCaptcha.current.reset();
 
-      try {
-        await submitContactForm.mutateAsync({
-          briefDescription,
-          companyName,
-          email: emailToLowerCase,
-          marketingConsent,
-          name,
-          phone,
-          recaptchaToken: captcha,
-        });
-      } catch (error) {
-        // Reset reCAPTCHA on error
-        reCaptcha.current?.reset();
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to submit contact. Please try again.";
 
-        // Extract error message from API response
-        let errorMessage = "Failed to submit contact. Please try again.";
-        if (error instanceof Error) {
-          errorMessage = error.message;
-        } else if (
-          typeof error === "object" &&
-          error !== null &&
-          "message" in error
-        ) {
-          errorMessage = String(error.message);
-        }
-
-        // Set form error so user can see it
-        setError("root", {
-          type: "manual",
-          message: errorMessage,
-        });
-      }
-    } else {
-      throw new Error("reCAPTCHA not loaded. Please refresh the page.");
+      appToast.error(errorMessage);
     }
   };
 
-  const hasMissingFields = errors.phone || errors.companyName;
+  const hasMissingRequiredFields = errors.name || errors.email;
 
-  if (isSubmitSuccessful) {
+  if (submitted) {
     return (
       <div className={styles.formSubmitSuccess}>
         <p>{globalVariables.contactFormSuccessMessage}</p>
@@ -140,58 +105,53 @@ export const ContactForm = () => {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(onSubmitForm)}>
+    <form
+      className={layoutStyles.form}
+      noValidate
+      onSubmit={handleSubmit(onSubmitForm)}
+    >
       <Controller
         control={control}
         name="name"
-        rules={{ required: true }}
         render={({ field: { onChange, value, name, ref } }) => (
-          <StyledInput
-            placeholder="Your name"
-            ref={ref}
-            name={name}
-            onChange={onChange}
-            value={value}
+          <Input
             hasError={errors.name}
             label="Your full name *"
-            id={nameId}
+            name={name}
+            onChange={onChange}
+            placeholder="Your name"
+            ref={ref}
+            value={value}
           />
         )}
       />
       <Controller
         control={control}
         name="email"
-        rules={{ required: true, pattern: EMAIL_VALIDATION_REGEX }}
         render={({ field: { onChange, value, name, ref } }) => (
-          <StyledInput
-            placeholder="your@email.com"
-            ref={ref}
-            name={name}
-            onChange={(e) => {
-              clearErrors("email");
-              onChange(e);
-            }}
-            value={value}
+          <Input
             hasError={errors.email}
             label="Your email *"
-            id={emailId}
+            name={name}
+            onChange={onChange}
+            placeholder="your@email.com"
+            ref={ref}
+            value={value}
           />
         )}
       />
       <Controller
         control={control}
         name="phone"
-        rules={{ pattern: PHONE_NUMBER_VALIDATION_REGEX }}
         render={({ field: { onChange, value, name, ref } }) => (
-          <StyledInput
-            placeholder="555-555-5555"
-            ref={ref}
-            name={name}
-            onChange={onChange}
-            value={value}
+          <Input
             hasError={errors.phone}
             label="Your phone number"
-            id={phoneId}
+            name={name}
+            onChange={onChange}
+            placeholder="555-555-5555"
+            ref={ref}
+            value={value}
           />
         )}
       />
@@ -199,15 +159,14 @@ export const ContactForm = () => {
         control={control}
         name="companyName"
         render={({ field: { onChange, value, name, ref } }) => (
-          <StyledInput
-            placeholder="Your company's name"
-            ref={ref}
-            name={name}
-            onChange={onChange}
-            value={value}
+          <Input
             hasError={errors.companyName}
             label="Your company name"
-            id={companyNameId}
+            name={name}
+            onChange={onChange}
+            placeholder="Your company's name"
+            ref={ref}
+            value={value}
           />
         )}
       />
@@ -215,70 +174,54 @@ export const ContactForm = () => {
         control={control}
         name="briefDescription"
         render={({ field: { onChange, value, name, ref } }) => (
-          <StyledTextArea
-            placeholder="Your message"
-            ref={ref}
-            name={name}
-            onChange={onChange}
-            value={value}
+          <TextArea
             hasError={errors.briefDescription}
             label="What can we help you with?"
-            id={briefDescriptionId}
+            name={name}
+            onChange={onChange}
+            placeholder="Your message"
+            ref={ref}
+            value={value}
           />
         )}
       />
       {globalVariables.contactFormMarketingConsentText ? (
-        <div className={styles.marketingConsentContainer}>
-          <label htmlFor="marketingConsent" className={styles.marketingConsent}>
-            <input
-              {...register("marketingConsent")}
-              type="checkbox"
-              id={marketingConsentId}
+        <Controller
+          control={control}
+          name="marketingConsent"
+          render={({ field: { onBlur, onChange, value, name, ref } }) => (
+            <Checkbox
+              checked={value}
+              label={globalVariables.contactFormMarketingConsentText}
+              name={name}
+              onBlur={onBlur}
+              onChange={onChange}
+              ref={ref}
             />
-            {globalVariables.contactFormMarketingConsentText}
-          </label>
-        </div>
+          )}
+        />
       ) : null}
-      {/* Honeypot field - hidden from users but visible to bots */}
-      <div className={styles.honeypot}>
-        <label htmlFor={websiteId}>
-          <input
-            {...register("website")}
-            type="text"
-            id={websiteId}
-            name="website"
-            tabIndex={-1}
-            autoComplete="off"
-            aria-hidden="true"
-          />
-        </label>
-      </div>
-      <div className={styles.formSubmitContainer}>
+      <div className={layoutStyles.formSubmitContainer}>
         <div>
-          {hasMissingFields ? (
+          {hasMissingRequiredFields ? (
             <p>You are missing some required fields!</p>
           ) : null}
-          {errors.root ? (
-            <p className={styles.errorMessage}>{errors.root.message}</p>
-          ) : null}
         </div>
         <div>
-          <StyledButton
-            type="submit"
-            isDisabled={isSubmitting || submitContactForm.isPending}
-          >
-            {isSubmitting || submitContactForm.isPending
-              ? "Submitting..."
-              : "Submit"}
+          <StyledButton type="submit" isDisabled={isBusy}>
+            {isBusy ? "Submitting..." : "Submit"}
           </StyledButton>
         </div>
       </div>
-      <ReCAPTCHA
-        ref={reCaptcha}
-        size="invisible" // v3
-        sitekey={process.env.RECAPTCHA_SITE_KEY as string}
+      <FormWebsiteHoneypot
+        className={layoutStyles.honeypot}
+        control={control}
       />
-      <input type="submit" hidden />
+      <ContactFormReCaptcha
+        ref={reCaptcha}
+        size="invisible"
+        sitekey={getRecaptchaSiteKey()}
+      />
     </form>
   );
 };

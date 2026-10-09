@@ -3,7 +3,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { MobileNavigationDrawer } from "src/components/Navigation/MobileNavigationDrawer.component";
 import styles from "src/components/Navigation/Navigation.module.css";
 import type { Page } from "src/contentful/getPages";
@@ -20,36 +20,34 @@ export const Navigation = (props: NavigationProps) => {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
-  const setOpen = useCallback((open: boolean) => {
+  const setOpen = useEffectEvent((open: boolean) => {
     setIsOpen(open);
     document.body.style.overflow = open ? "hidden" : "auto";
-  }, []);
+  });
 
-  const listenScrollEvent = useCallback(() => {
-    if (window.scrollY < 50) {
-      return setScrolled(false);
-    }
-
-    return setScrolled(true);
-  }, []);
+  const onScroll = useEffectEvent(() => {
+    setScrolled(window.scrollY >= 50);
+  });
 
   useEffect(() => {
-    window.addEventListener("scroll", listenScrollEvent, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
 
-    listenScrollEvent();
+    onScroll();
 
-    return () => window.removeEventListener("scroll", listenScrollEvent);
-  }, [listenScrollEvent]);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const closeMenu = useEffectEvent(() => {
+    setOpen(false);
+  });
 
   useEffect(() => {
-    const closeMenu = () => setOpen(false);
-
     window.addEventListener("resize", closeMenu);
 
     return () => {
       window.removeEventListener("resize", closeMenu);
     };
-  }, [setOpen]);
+  }, []);
 
   return (
     <nav
@@ -103,7 +101,7 @@ export const Navigation = (props: NavigationProps) => {
       <MobileNavigationDrawer
         navigationItems={navigationItems}
         visible={isOpen}
-        closeMenu={() => setOpen(false)}
+        closeMenu={closeMenu}
       />
     </nav>
   );

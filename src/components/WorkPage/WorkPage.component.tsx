@@ -2,6 +2,7 @@ import { ContactFooter } from "src/components/ContactFooter/ContactFooter.compon
 import { PageComponent } from "src/components/Page/Page.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import styles from "src/components/WorkPage/WorkPage.module.css";
+import { WorkPagePrefetch } from "src/components/WorkPage/WorkPagePrefetch.component";
 import type { Page } from "src/contentful/getPages";
 import type { Work } from "src/contentful/getWork";
 import type { WorkCategory } from "src/contentful/getWorkCategories";
@@ -18,6 +19,7 @@ export const WorkPage = (props: WorkPageProps) => {
 
   return (
     <PageComponent fields={pageFields}>
+      <WorkPagePrefetch />
       <ul className={styles.workList}>
         {allWork.map((work) => (
           <li key={work.id} aria-label={work.workClient ?? ""}>

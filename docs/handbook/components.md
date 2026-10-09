@@ -38,9 +38,11 @@ Export the component as both a **named export** (e.g. `export const MyComponent`
 
 ## Dynamic imports
 
-Use **`next/dynamic`** when a component is heavy or client-only (`ssr: false` when it depends on `window` or browser-only APIs). CMS-driven pieces are imported directly in **ContentRenderer** today; if a block becomes large enough to defer, wrap it with `dynamic` there or in the parent.
+Use **`next/dynamic`** when a component is heavy but still safe to SSR. For **browser-only** dependencies (`window`, third-party widgets), use **`browser()`** + **`use()`** + **`Suspense`** per [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs). CMS-driven pieces are imported directly in **ContentRenderer** today; if a block becomes large enough to defer, wrap it with `dynamic` there or in the parent.
 
-**Embedded video**: Import **`react-player`** through **`next/dynamic`** with **`ssr: false`**. Toggle playback with **`playing`** on scroll; use **`autoPlay`** only as a **static** mount-time hint (e.g. priority home reel, editors background) — never flip **`autoPlay`** when **`playing`** changes. See [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube).
+**Embedded video**: Render **`react-player`** via [`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx) (client-only import). Toggle playback with **`playing`** on scroll; use **`autoPlay`** only as a **static** mount-time hint (e.g. priority home reel, editors background) — never flip **`autoPlay`** when **`playing`** changes. See [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube).
+
+**Contact reCAPTCHA**: [`ContactFormReCaptcha`](../../src/components/ContactForm/ContactFormReCaptcha.component.tsx) loads **`react-google-recaptcha`** with the same **`browser()`** pattern.
 
 ## Video-related components
 
@@ -50,6 +52,27 @@ Use **`next/dynamic`** when a component is heavy or client-only (`ssr: false` wh
 | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | Work grid card — lazy-mount `ReactPlayer` via `useInView` (`VIDEO_MOUNT_ROOT_MARGIN`). |
 | [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop) — `ReactPlayer` with `playing={playInView}` from [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts); scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). |
 | [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | Fixed full-viewport background for `/editors`; static MP4 on hover while the next embed preloads. |
+
+## Shared form and feedback UI
+
+Reusable pieces live **outside** a single feature folder when more than one form needs them:
+
+| Location | Role |
+|----------|------|
+| [Input/](../../src/components/Input/), [TextArea/](../../src/components/TextArea/), [Checkbox/](../../src/components/Checkbox/) | Base UI + react-hook-form field wrappers for labels, errors, and refs (React 19 `ref` prop). |
+| [forms/FormWebsiteHoneypot.component.tsx](../../src/components/forms/FormWebsiteHoneypot.component.tsx) | Honeypot `website` field for bot traps. |
+| [Toast/ToastHost.component.tsx](../../src/components/Toast/ToastHost.component.tsx) | App-wide toast viewport; mounted from [providers.tsx](../../src/app/providers.tsx). |
+| [ui/Field/FieldErrorMessage.component.tsx](../../src/ui/Field/FieldErrorMessage.component.tsx) | Shared error line under controls. |
+
+### ContactForm (reference feature folder)
+
+[ContactForm/](../../src/components/ContactForm/) shows how a CMS-backed form composes the shared pieces above:
+
+- **Types** — [contactForm.schema.ts](../../src/lib/forms/contactForm.schema.ts) exports **`ContactFormValues`**, **`contactFormApiSchema`**, and **`hubspotLeadApiSchema`**. Route Handlers, [urls.ts](../../src/api/urls.ts), and mutation hooks import types from that module (not the component file).
+- **Validation** — `createContactFormSchema` + `zodResolver`; field messages are colocated in the component (`FORM_MESSAGES`). react-hook-form **`mode: "onBlur"`**; aggregate “missing required fields” copy stays in the feature CSS module.
+- **Layout CSS** — Shared shell classes from [formLayoutShared.module.css](../../src/styles/formLayoutShared.module.css) (`form`, submit row, honeypot placement). Feature-only styles (success panel, etc.) stay in [ContactForm.module.css](../../src/components/ContactForm/ContactForm.module.css).
+- **Fields** — `Controller` + [Input](../../src/components/Input/Input.component.tsx) / [TextArea](../../src/components/TextArea/TextArea.component.tsx); optional [Checkbox](../../src/components/Checkbox/Checkbox.component.tsx) when **`globalVariables.contactFormMarketingConsentText`** is set. [FormWebsiteHoneypot](../../src/components/forms/FormWebsiteHoneypot.component.tsx) + invisible reCAPTCHA (`getRecaptchaSiteKey()` from [publicEnv.ts](../../src/utils/publicEnv.ts)).
+- **Submit** — [useSubmitContactFormMutation](../../src/hooks/mutations/useSubmitContactFormMutation.ts); API/reCAPTCHA failures → **`appToast.error`**. On success, set local **`submitted`** state and **`reset()`** the form, then render **`globalVariables.contactFormSuccessMessage`** (do not rely on `isSubmitSuccessful` after reset). Deeper flow: [patterns.md → Forms](patterns.md#forms).
 
 ## Links
 

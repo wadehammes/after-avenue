@@ -1,9 +1,20 @@
+export const isLocalEnvironment = (): boolean =>
+  process.env.ENVIRONMENT === "local";
+
+export const isStagingEnvironment = (): boolean =>
+  process.env.ENVIRONMENT === "staging";
+
+export const isNonProductionContactEnvironment = (): boolean =>
+  isLocalEnvironment() ||
+  isStagingEnvironment() ||
+  process.env.NODE_ENV === "development";
+
 export const envUrl = () => {
-  if (process.env.ENVIRONMENT === "local") {
+  if (isLocalEnvironment()) {
     return "http://localhost:7777";
   }
 
-  if (process.env.ENVIRONMENT === "staging") {
+  if (isStagingEnvironment()) {
     return "https://staging.afteravenue.com";
   }
 

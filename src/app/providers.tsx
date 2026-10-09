@@ -2,6 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type ReactNode, useState } from "react";
+import { ToastHost } from "src/components/Toast/ToastHost.component";
 import type { GlobalVariables } from "src/contentful/getGlobalVariables";
 import { GlobalVariablesProvider } from "src/context/globalContext.context";
 
@@ -18,7 +19,7 @@ export default function Providers(props: ProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalVariablesProvider value={globalVariables}>
-        {children}
+        <ToastHost>{children}</ToastHost>
       </GlobalVariablesProvider>
     </QueryClientProvider>
   );

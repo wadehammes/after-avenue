@@ -16,6 +16,34 @@
   --colors-text: var(--color-text);
   --colors-bg: var(--color-bg);
   --colors-habanero: #c0392b;
+  --colors-red: var(--colors-habanero);
+  --colors-orange: var(--colors-street-lamp-yellow);
+  --colors-gray: #9a968e;
+  --color-surface-text: var(--colors-black);
+  --color-surface-bg: #fff;
+  --color-input-focus-accent-bg: color-mix(
+    in srgb,
+    var(--colors-street-lamp-yellow) 25%,
+    white
+  );
+  --color-input-error-bg: color-mix(in srgb, var(--colors-habanero) 12%, white);
+  --color-input-checkbox-hover-bg: color-mix(
+    in srgb,
+    var(--colors-street-lamp-yellow) 12%,
+    white
+  );
+  --shadow-inset: inset 0 2px 4px rgb(0 0 0 / 6%);
+  --color-toast-success-bg: #1b4332;
+  --color-toast-success-text: var(--colors-white);
+  --color-toast-error-bg: #4a1218;
+  --color-toast-error-text: var(--colors-white);
+  --color-toast-warning-bg: #4a2f0a;
+  --color-toast-warning-text: var(--colors-white);
+  --color-toast-default-bg: #2a2828;
+  --color-toast-default-text: var(--colors-white);
+  --color-toast-shadow: rgb(0 0 0 / 35%);
+  --toast-width: min(28rem, calc(100vw - 2rem));
+  --toast-offset: 1rem;
   --default-padding: 1.25rem;
   --gap: 2rem;
 

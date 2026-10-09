@@ -67,46 +67,6 @@
     color: var(--color-bg);
   }
 
-  &.light {
-    &.contained {
-      background-color: var(--colors-text);
-      color: var(--color-bg);
-
-      &:hover {
-        background-color: var(--color-bg);
-        color: var(--colors-text);
-      }
-    }
-
-    &.outlined {
-      border-color: var(--colors-text);
-      background-color: var(--colors-text);
-      color: var(--color-bg);
-
-      &:hover {
-        border-color: var(--color-bg);
-        background-color: var(--color-bg);
-        color: var(--colors-text);
-      }
-    }
-
-    &:focus {
-      outline: 0;
-      box-shadow:
-        0 0 0 1px var(--color-bg),
-        0 0 0 3px var(--colors-text);
-      background-color: var(--colors-text);
-      color: var(--color-bg);
-    }
-
-    &:hover {
-      cursor: pointer;
-      border-color: var(--color-bg);
-      background-color: var(--colors-text);
-      color: var(--color-bg);
-    }
-  }
-
   &.dark {
     border-color: var(--colors-street-lamp-yellow);
     color: var(--colors-street-lamp-yellow);
@@ -120,19 +80,13 @@
       color: var(--color-bg);
     }
 
-    &:hover {
-      cursor: pointer;
-      border-color: var(--colors-street-lamp-yellow);
-      background-color: var(--colors-street-lamp-yellow);
-      color: var(--color-bg);
-    }
-
     &.outlined {
       border-color: var(--colors-street-lamp-yellow);
       background-color: transparent;
       color: var(--colors-street-lamp-yellow);
 
       &:hover {
+        cursor: pointer;
         background-color: var(--colors-street-lamp-yellow);
         color: var(--color-bg);
       }
@@ -143,9 +97,45 @@
       color: var(--colors-black);
 
       &:hover {
+        cursor: pointer;
         background-color: var(--colors-street-lamp-yellow);
         color: var(--color-bg);
       }
+    }
+  }
+
+  &.light {
+    &.contained {
+      background-color: var(--colors-text);
+      color: var(--color-bg);
+
+      &:hover {
+        cursor: pointer;
+        background-color: var(--color-bg);
+        color: var(--colors-text);
+      }
+    }
+
+    &.outlined {
+      border-color: var(--colors-text);
+      background-color: var(--colors-text);
+      color: var(--color-bg);
+
+      &:hover {
+        cursor: pointer;
+        border-color: var(--color-bg);
+        background-color: var(--color-bg);
+        color: var(--colors-text);
+      }
+    }
+
+    &:focus {
+      outline: 0;
+      box-shadow:
+        0 0 0 1px var(--color-bg),
+        0 0 0 3px var(--colors-text);
+      background-color: var(--colors-text);
+      color: var(--color-bg);
     }
   }
 }

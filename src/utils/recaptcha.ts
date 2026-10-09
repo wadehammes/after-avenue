@@ -1,12 +1,57 @@
-/**
- * Verify reCAPTCHA token with Google's API
- */
 import { fetchResponse } from "src/api/helpers";
 
 interface RecaptchaVerifyResponse {
+  hostname?: string;
   score?: number;
   success: boolean;
 }
+
+const DEFAULT_ALLOWED_HOSTNAMES = [
+  "afteravenue.com",
+  "localhost",
+  "staging.afteravenue.com",
+  "www.afteravenue.com",
+];
+
+let cachedAllowedHostnames: string[] | undefined;
+
+const getAllowedHostnames = (): string[] => {
+  if (cachedAllowedHostnames) {
+    return cachedAllowedHostnames;
+  }
+
+  const fromEnv = process.env.RECAPTCHA_ALLOWED_HOSTNAMES;
+
+  if (!fromEnv) {
+    cachedAllowedHostnames = DEFAULT_ALLOWED_HOSTNAMES;
+    return cachedAllowedHostnames;
+  }
+
+  cachedAllowedHostnames = fromEnv
+    .split(",")
+    .map((hostname) => hostname.trim().toLowerCase())
+    .filter(Boolean);
+
+  return cachedAllowedHostnames;
+};
+
+const isAllowedHostname = (hostname: string | undefined): boolean => {
+  if (!hostname) {
+    return true;
+  }
+
+  const normalizedHostname = hostname.toLowerCase();
+
+  if (getAllowedHostnames().includes(normalizedHostname)) {
+    return true;
+  }
+
+  if (normalizedHostname.endsWith(".vercel.app")) {
+    return true;
+  }
+
+  return false;
+};
 
 export async function verifyRecaptchaToken(token: string): Promise<boolean> {
   const secretKey = process.env.RECAPTCHA_SECRET_KEY;
@@ -21,8 +66,6 @@ export async function verifyRecaptchaToken(token: string): Promise<boolean> {
   }
 
   try {
-    // Google's reCAPTCHA API requires form-encoded data, not JSON
-    // URLSearchParams creates: "secret=xxx&response=yyy" format
     const params = new URLSearchParams({
       secret: secretKey,
       response: token,
@@ -30,17 +73,24 @@ export async function verifyRecaptchaToken(token: string): Promise<boolean> {
 
     const data = await fetchResponse<RecaptchaVerifyResponse>(
       fetch("https://www.google.com/recaptcha/api/siteverify", {
-        method: "POST",
+        body: params.toString(),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: params.toString(),
+        method: "POST",
       }),
     );
 
-    // Check if verification was successful and score is acceptable (for v3)
-    // For v2, success: true is sufficient
-    return data.success === true && (data.score ?? 0.5) >= 0.5;
+    if (!data.success) {
+      return false;
+    }
+
+    if (!isAllowedHostname(data.hostname)) {
+      console.warn("reCAPTCHA hostname not allowed:", data.hostname);
+      return false;
+    }
+
+    return (data.score ?? 0.5) >= 0.5;
   } catch (error) {
     console.error("reCAPTCHA verification error:", error);
     return false;

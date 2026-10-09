@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# preToolUse (Write): deny barrel files under src/.
+# preToolUse (Write): deny barrel files under src/ (except generated Contentful types).
 
 source "$(dirname "$0")/_lib.sh"
 hook_input
@@ -14,7 +14,11 @@ if [[ ! "$file" =~ (^|/)src/(.*/)?index\.tsx?$ ]]; then
   exit 0
 fi
 
-reason="Blocked: no barrel files. Do not add index.ts/index.tsx that re-exports from other modules — import directly from the defining module (e.g. \`from \"src/components/PlanCard/PlanCard.component\"\`). App Router route files use page.tsx/layout.tsx, not index barrels. See docs/handbook/conventions.md."
+case "$file" in
+  */src/contentful/types/* | src/contentful/types/*) exit 0 ;;
+esac
+
+reason="Blocked: no barrel files. Do not add index.ts/index.tsx that re-exports from other modules — import directly from the defining module (e.g. \`from \"src/components/PlanCard/PlanCard.component\"\`). App Router route files use page.tsx/layout.tsx, not index barrels. Exception: generated src/contentful/types/ (do not hand-edit). See docs/handbook/conventions.md."
 
 deny_tool "$reason"
 exit 0

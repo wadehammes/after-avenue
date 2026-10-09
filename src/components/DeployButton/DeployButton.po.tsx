@@ -15,18 +15,8 @@ jest.mock("src/api/urls", () => ({
   },
 }));
 
-jest.mock("sonner", () => ({
-  toast: {
-    success: jest.fn(),
-    error: jest.fn(),
-  },
-}));
-
 export const mockApi = jest.mocked(api);
-export const mockToast = jest.requireMock("sonner").toast as {
-  success: jest.Mock;
-  error: jest.Mock;
-};
+export { appToast as mockToast } from "src/tests/mocks/appToast.mock";
 
 export class DeployButtonPageObject extends BasePageObject {
   public deployHook = "https://example.com/deploy-hook";

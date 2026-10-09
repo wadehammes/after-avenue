@@ -13,11 +13,13 @@ Helpers are **split by topic**—there is no barrel `utils/index.ts`. Import the
 | Area | Files (examples) |
 |------|------------------|
 | **Constants** | [constants.ts](../../src/utils/constants.ts) — slugs, navigation IDs, build exclusions, `VIDEO_MOUNT_ROOT_MARGIN` |
-| **General helpers** | [helpers.ts](../../src/utils/helpers.ts) — `envUrl`, `createImageUrl`, guards |
+| **General helpers** | [helpers.ts](../../src/utils/helpers.ts) — `envUrl`, `isLocalEnvironment`, `isStagingEnvironment`, `isNonProductionContactEnvironment`, `createImageUrl`, guards |
 | **Scroll entrance** | [supportsScrollTimeline.ts](../../src/utils/supportsScrollTimeline.ts) — feature detect for CSS scroll-driven fallback |
 | **Style** | [styleHelpers.ts](../../src/utils/styleHelpers.ts) |
 | **Spam / rate limits** | [spamDetection.ts](../../src/utils/spamDetection.ts), [rateLimit.ts](../../src/utils/rateLimit.ts) |
 | **reCAPTCHA** | [recaptcha.ts](../../src/utils/recaptcha.ts) |
+| **Email routing** | [emailHelpers.ts](../../src/utils/emailHelpers.ts) — non-production Resend-only contact recipients via [helpers.ts](../../src/utils/helpers.ts) **`isNonProductionContactEnvironment()`**; covered by [emailHelpers.spec.ts](../../src/utils/emailHelpers.spec.ts) |
+| **Public env (client)** | [publicEnv.ts](../../src/utils/publicEnv.ts) — e.g. `getRecaptchaSiteKey()` for form components |
 
 Specs: `*.spec.ts` next to modules (e.g. [rateLimit.spec.ts](../../src/utils/rateLimit.spec.ts)).
 
@@ -39,6 +41,17 @@ See [patterns.md](patterns.md#api-layer-and-route-handlers).
 |--------|---------|
 | **`mutations/`** | React Query mutation hooks (e.g. [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts), [useDeployHookMutation.ts](../../src/hooks/mutations/useDeployHookMutation.ts)). **No spec files here**—test component call sites instead. |
 | **`queries/`** | Add when you introduce client-side `useQuery` hooks. |
+| **Root-level hooks** | e.g. [useStableFieldId.ts](../../src/hooks/useStableFieldId.ts) — stable `id` / `htmlFor` wiring for form labels. |
+
+## `src/ui/`
+
+Small, cross-feature UI pieces that are not full `src/components/` features:
+
+| Path | Purpose |
+|------|---------|
+| [Field/FieldErrorMessage.component.tsx](../../src/ui/Field/FieldErrorMessage.component.tsx) | Inline validation error under form controls. |
+| [Field/FormFieldLayout.component.tsx](../../src/ui/Field/FormFieldLayout.component.tsx) | Shared label + control slot + error wrapper for Input/TextArea. |
+| [browserLazyDefault.tsx](../../src/ui/browserLazyDefault.tsx) | **`createBrowserLazyDefault`** — `browser()` + dynamic `import()` + `Suspense` for client-only packages. |
 
 ## `src/tests/`
 
@@ -51,6 +64,10 @@ Shared test infrastructure (see [conventions.md](conventions.md#testing)):
 | [factories/BaseFactory.ts](../../src/tests/factories/BaseFactory.ts) | Faker test factories (e.g. [StyledButton.factory.ts](../../src/tests/factories/StyledButton.factory.ts)) |
 | [mocks/mockApiResponse.ts](../../src/tests/mocks/mockApiResponse.ts) | Success/failure helpers for mocked `api` endpoints |
 | [mocks/mockGoogleRecaptcha.tsx](../../src/tests/mocks/mockGoogleRecaptcha.tsx) | Invisible reCAPTCHA ref mock for component tests |
+| [mocks/appToast.mock.ts](../../src/tests/mocks/appToast.mock.ts) | Shared `mockToast` fns for toast assertions (wired in setupTests) |
+| [mocks/svgMock.tsx](../../src/tests/mocks/svgMock.tsx) | SVG imports in Jest via `jest.config` `moduleNameMapper` |
+| [utils/setProcessEnv.ts](../../src/tests/utils/setProcessEnv.ts) | Assign read-only env keys (e.g. **`NODE_ENV`**) in strict TypeScript specs |
+| [utils/handbookTestRules.ts](../../src/tests/utils/handbookTestRules.ts) | Static checks for handbook testing conventions (see [conventions.md → Testing](conventions.md#testing)) |
 | `mocks/` | Jest doubles for router, `matchMedia`, `IntersectionObserver`, etc. |
 
 ## `src/lib/`
@@ -59,6 +76,8 @@ Server- and shared-oriented modules:
 
 - [generateSitemap.ts](../../src/lib/generateSitemap.ts) — sitemap XML generation
 - [schema.ts](../../src/lib/schema.ts) — JSON-LD / schema.org helpers
+- **`forms/`** — Zod field helpers ([formFieldSchemas.ts](../../src/lib/forms/formFieldSchemas.ts), including **`contactApiFieldsSchema`** for route validation) and per-form schemas (e.g. [contactForm.schema.ts](../../src/lib/forms/contactForm.schema.ts) with **`ContactFormApiBody`** / **`HubspotLeadApiBody`**; unit-test schemas beside them).
+- **`toast/`** — [appToast.ts](../../src/lib/toast/appToast.ts) facade used by components; mocked globally in Jest.
 
 ## `src/contentful/`
 

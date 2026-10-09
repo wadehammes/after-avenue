@@ -1,14 +1,10 @@
 "use client";
 
 import classNames from "classnames";
-import dynamic from "next/dynamic";
 import { useState } from "react";
+import { LazyReactPlayer } from "src/components/LazyReactPlayer/LazyReactPlayer.component";
 import styles from "src/components/WorkHeroVideo/WorkHeroVideo.module.css";
 import { controlsPlayerConfig } from "src/utils/videoPlayerConfig";
-
-const ReactPlayer = dynamic(() => import("react-player"), {
-  ssr: false,
-});
 
 interface WorkHeroVideoProps {
   playing?: boolean;
@@ -35,7 +31,7 @@ export const WorkHeroVideo = (props: WorkHeroVideoProps) => {
       })}
     >
       <div className={styles.heroVideoEmbed}>
-        <ReactPlayer
+        <LazyReactPlayer
           autoPlay={playing}
           config={controlsPlayerConfig}
           controls

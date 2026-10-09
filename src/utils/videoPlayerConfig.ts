@@ -95,6 +95,25 @@ export const reelPlayerConfig: Config = {
   }),
 };
 
+export const featuredReelPlayerConfig: Config = {
+  vimeo: vimeoConfig({
+    autopause: true,
+    background: false,
+    controls: false,
+    dnt: true,
+    muted: 1,
+    responsive: true,
+    title: false,
+  }),
+  youtube: youtubeConfig({
+    disablekb: 1,
+    fs: 0,
+    iv_load_policy: 3,
+    mute: 1,
+    rel: 0,
+  }),
+};
+
 export const editorsBackgroundPlayerConfig: Config = {
   vimeo: vimeoConfig({
     background: true,

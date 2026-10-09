@@ -1,45 +1,53 @@
-// jest.config.ts
 import type { Config } from "@jest/types";
 import nextJest from "next/jest.js";
 
-// Sync object
 const customJestConfig: Config.InitialOptions = {
-  verbose: true,
-  testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
+  moduleDirectories: ["node_modules", "<rootDir>"],
+  preset: "ts-jest",
   setupFiles: ["<rootDir>/.jest/setEnvVars.ts"],
   setupFilesAfterEnv: ["<rootDir>/.jest/setupTests.ts"],
-  moduleDirectories: ["node_modules", "<rootDir>"],
   testEnvironment: "jest-environment-jsdom",
-  preset: "ts-jest",
+  testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
+  transformIgnorePatterns: [
+    "<rootDir>/node_modules/(?!(isbot|jest-dom|@faker-js|@base-ui)/)",
+  ],
+  verbose: true,
 };
 
-const esmPackages = [
-  "isbot",
-  "jest-dom",
-  "@faker-js[+/]",
-  "@react-email[+/]",
-  "react-email",
-].join("|");
-
-// Providing the path to your Next.js app which will enable loading next.config.js and .env files
 const createJestConfig = nextJest({ dir: "./" })(customJestConfig);
 
+const allowEsmPackagesInTransformIgnorePatterns = (patterns: string[]) =>
+  patterns.map((pattern) => {
+    if (pattern.includes("next/src/shared/lib)/")) {
+      return pattern.replace(
+        "next/src/shared/lib)/",
+        "next/src/shared/lib|@faker-js|@base-ui)/",
+      );
+    }
+    if (pattern.includes("next[\\\\/]src[\\\\/]shared[\\\\/]lib)[\\\\/]")) {
+      return pattern.replace(
+        "next[\\\\/]src[\\\\/]shared[\\\\/]lib)[\\\\/]",
+        "next[\\\\/]src[\\\\/]shared[\\\\/]lib|@faker-js|@base-ui\\+)[\\\\/]",
+      );
+    }
+    return pattern;
+  });
+
 export default async () => {
-  // Create Next.js jest configuration presets
   const jestConfig = await createJestConfig();
 
-  // Custom `moduleNameMapper` configuration
   const moduleNameMapper = {
     ...jestConfig.moduleNameMapper,
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+    "^.+\\.(svg)$": "<rootDir>/src/tests/mocks/svgMock.tsx",
   };
 
   return {
     ...jestConfig,
     moduleNameMapper,
     testTimeout: 20000,
-    transformIgnorePatterns: [
-      `<rootDir>/node_modules/(?!(?:\\.pnpm/)?(?:${esmPackages}))`,
-    ],
+    transformIgnorePatterns: allowEsmPackagesInTransformIgnorePatterns(
+      jestConfig.transformIgnorePatterns ?? [],
+    ),
   };
 };

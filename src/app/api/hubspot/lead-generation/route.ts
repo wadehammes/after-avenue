@@ -1,31 +1,45 @@
 import { FetchMethods, fetchResponse } from "src/api/helpers";
-import type { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
+import {
+  type HubspotLeadApiBody,
+  hubspotLeadApiSchema,
+} from "src/lib/forms/contactForm.schema";
+import { isNonProductionContactEnvironment } from "src/utils/helpers";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
 export async function POST(request: Request) {
-  const res: ContactFormInputs = await request.json();
+  if (isNonProductionContactEnvironment()) {
+    return Response.json({
+      message: "HubSpot skipped outside production",
+      status: 200,
+    });
+  }
 
+  const body = (await request.json()) as Record<string, unknown>;
+  const parsed = hubspotLeadApiSchema.safeParse(body);
+
+  if (!parsed.success) {
+    return Response.json({ error: "Invalid request" }, { status: 400 });
+  }
+
+  const res: HubspotLeadApiBody = parsed.data;
   const email = res.email;
   const firstName = res.name.split(" ")[0] || "";
   const lastName = res.name.split(" ")[1] || "";
   const phone = res.phone;
   const companyName = res.companyName || "";
 
-  // API endpoint to check if email is already in Hubspot
   const checkEmailInHubspotApiUrl = `https://api.hubapi.com/contacts/v1/contact/email/${email}/profile`;
-
-  // API endpoint for the Hubspot lead generation form
   const leadGenFormApiUrl = `https://api.hsforms.com/submissions/v3/integration/secure/submit/${process.env.HUBSPOT_PORTAL_ID}/${process.env.HUBSPOT_LEAD_GENERATION_FORM_ID}`;
 
   try {
     const checkEmailInHubspot = await fetch(checkEmailInHubspotApiUrl, {
-      method: "GET",
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
       },
+      method: "GET",
     });
 
     if (checkEmailInHubspot.status === 200) {
@@ -36,45 +50,45 @@ export async function POST(request: Request) {
     }
 
     const submitLeadForm = await fetch(leadGenFormApiUrl, {
-      method: FetchMethods.Post,
-      headers: {
-        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         fields: [
           {
-            objectTypeId: "0-1",
             name: "email",
+            objectTypeId: "0-1",
             value: email,
           },
           {
-            objectTypeId: "0-1",
             name: "firstname",
+            objectTypeId: "0-1",
             value: firstName,
           },
           {
-            objectTypeId: "0-1",
             name: "lastname",
+            objectTypeId: "0-1",
             value: lastName,
           },
           {
-            objectTypeId: "0-1",
             name: "phone",
+            objectTypeId: "0-1",
             value: phone,
           },
           {
-            objectTypeId: "0-1",
             name: "company",
+            objectTypeId: "0-1",
             value: companyName,
           },
           {
-            objectTypeId: "0-2",
             name: "hs_lead_status",
+            objectTypeId: "0-2",
             value: "New",
           },
         ],
       }),
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      method: FetchMethods.Post,
     });
 
     if (submitLeadForm.ok) {
@@ -87,8 +101,15 @@ export async function POST(request: Request) {
       }
     }
 
-    return Response.json({ error: "Failed to submit lead form.", status: 500 });
+    return Response.json(
+      { error: "Failed to submit lead form." },
+      { status: 500 },
+    );
   } catch (error) {
-    return Response.json({ error, status: 500 });
+    console.error("HubSpot lead generation error:", error);
+    return Response.json(
+      { error: "Failed to submit lead form." },
+      { status: 500 },
+    );
   }
 }
