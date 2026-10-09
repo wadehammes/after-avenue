@@ -114,7 +114,29 @@ export const EditorsBackgroundVideo = (props: EditorsBackgroundVideoProps) => {
       >
         <source src="/video/static.mp4" type="video/mp4" />
       </video>
-      {isLoading ? (
+      <div
+        ref={activeEmbedRef}
+        className={classNames(styles.playerLayer, {
+          [styles.playerLayerHidden]: isLoading,
+        })}
+      >
+        <LazyReactPlayer
+          key={activeVideo.editorId}
+          autoPlay
+          className={styles.player}
+          config={editorsBackgroundPlayerConfig}
+          controls={false}
+          loop
+          playsInline
+          playing={playing && !isLoading}
+          src={activeVideo.videoSrc}
+          width="100%"
+          height="100%"
+          {...mutedAutoplayPlayerProps}
+          {...activeMuteHandlers}
+        />
+      </div>
+      {pendingVideo ? (
         <div ref={preloadEmbedRef} className={styles.preloadPlayer}>
           <LazyReactPlayer
             key={pendingVideo.editorId}
@@ -131,25 +153,7 @@ export const EditorsBackgroundVideo = (props: EditorsBackgroundVideoProps) => {
             {...preloadMuteHandlers}
           />
         </div>
-      ) : (
-        <div ref={activeEmbedRef} className={styles.playerLayer}>
-          <LazyReactPlayer
-            key={activeVideo.editorId}
-            autoPlay
-            className={styles.player}
-            config={editorsBackgroundPlayerConfig}
-            controls={false}
-            loop
-            playsInline
-            playing={playing}
-            src={activeVideo.videoSrc}
-            width="100%"
-            height="100%"
-            {...mutedAutoplayPlayerProps}
-            {...activeMuteHandlers}
-          />
-        </div>
-      )}
+      ) : null}
     </div>
   );
 };

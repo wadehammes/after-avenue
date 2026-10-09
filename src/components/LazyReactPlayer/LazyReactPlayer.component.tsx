@@ -1,10 +1,12 @@
 "use client";
 
-import type { ComponentProps, ReactNode } from "react";
+import dynamic from "next/dynamic";
+import { type ComponentProps, type ReactNode, Suspense } from "react";
 import type ReactPlayer from "react-player";
-import { createBrowserLazyDefault } from "src/ui/browserLazyDefault";
 
-const ReactPlayerLazy = createBrowserLazyDefault(() => import("react-player"));
+const ReactPlayerDynamic = dynamic(() => import("react-player"), {
+  ssr: false,
+});
 
 export type LazyReactPlayerProps = ComponentProps<typeof ReactPlayer> & {
   loadingFallback?: ReactNode;
@@ -13,7 +15,11 @@ export type LazyReactPlayerProps = ComponentProps<typeof ReactPlayer> & {
 export const LazyReactPlayer = (props: LazyReactPlayerProps) => {
   const { loadingFallback, ...playerProps } = props;
 
-  return (
-    <ReactPlayerLazy {...playerProps} suspenseFallback={loadingFallback} />
-  );
+  const player = <ReactPlayerDynamic {...playerProps} />;
+
+  if (loadingFallback) {
+    return <Suspense fallback={loadingFallback}>{player}</Suspense>;
+  }
+
+  return player;
 };
