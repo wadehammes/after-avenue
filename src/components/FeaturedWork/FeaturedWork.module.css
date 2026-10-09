@@ -41,17 +41,15 @@
   position: relative;
   width: 100%;
 
+  @media (width <= 800px) or (width >= 1920px) {
+    border-radius: 20px;
+  }
+
   &:hover {
     .workOverlay {
       backdrop-filter: blur(10px);
       opacity: 1;
     }
-  }
-}
-
-@media (width <= 800px) or (width >= 1920px) {
-  .featuredWork {
-    border-radius: 20px;
   }
 }
 

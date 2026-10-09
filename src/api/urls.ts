@@ -1,5 +1,5 @@
 import { postJson } from "src/api/helpers";
-import type { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
+import type { ContactFormValues } from "src/lib/forms/contactForm.schema";
 
 type ContactEmailApiResponse = Record<string, unknown> & {
   error?: string | { message?: string };
@@ -21,7 +21,7 @@ export const api = {
       briefDescription,
       marketingConsent,
       recaptchaToken,
-    }: ContactFormInputs & { recaptchaToken?: string }) =>
+    }: ContactFormValues & { recaptchaToken?: string }) =>
       postJson<ContactEmailApiResponse>("/api/send-email/contact", {
         companyName,
         email,
@@ -38,7 +38,7 @@ export const api = {
       email,
       name,
       phone,
-    }: Partial<ContactFormInputs>) =>
+    }: Partial<ContactFormValues>) =>
       postJson<HubspotLeadGenerationApiResponse>(
         "/api/hubspot/lead-generation",
         { companyName, email, name, phone },

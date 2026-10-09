@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import styles from "src/components/Navigation/Navigation.module.css";
 import type { Page } from "src/contentful/getPages";
@@ -6,9 +8,9 @@ import AfterAvenueBrandmark from "src/icons/AfterAvenueBrandmark.svg";
 import Close from "src/icons/Close.svg";
 
 interface MobileNavigationDrawerProps {
+  closeMenu?: () => void;
   navigationItems: Partial<Page | null>[];
   visible: boolean;
-  closeMenu?: () => void;
 }
 
 export const MobileNavigationDrawer = (props: MobileNavigationDrawerProps) => {
@@ -45,22 +47,22 @@ export const MobileNavigationDrawer = (props: MobileNavigationDrawerProps) => {
         })}
       </nav>
 
-      <a
+      <Link
         className={styles.navLink}
         href={`mailto:${email}`}
         title="Email"
         aria-label="Email"
       >
         {email}
-      </a>
-      <a
+      </Link>
+      <Link
         className={styles.navLink}
-        href="{`tel:${phoneNumber}`}"
+        href={`tel:${phoneNumber}`}
         title="Call Us"
         aria-label="Call Us"
       >
         {phoneNumber}
-      </a>
+      </Link>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import type { UserEvent } from "@testing-library/user-event";
 import { api } from "src/api/urls";
 import { ContactForm } from "src/components/ContactForm/ContactForm.component";
 import type { GlobalVariables } from "src/contentful/getGlobalVariables";
@@ -7,7 +8,7 @@ import {
   type BasePageObjectProps,
 } from "src/tests/basePageObject.po";
 import { mockApiResponse } from "src/tests/mocks/mockApiResponse";
-import { render } from "src/tests/test-utils";
+import { render, screen } from "src/tests/test-utils";
 
 jest.mock("src/api/urls", () => ({
   api: {
@@ -20,13 +21,15 @@ jest.mock("src/api/urls", () => ({
   },
 }));
 
-jest.mock("react-google-recaptcha", () =>
-  require("src/tests/mocks/mockGoogleRecaptcha"),
-);
+jest.mock("react-google-recaptcha", () => ({
+  __esModule: true,
+  default: require("src/tests/mocks/mockGoogleRecaptcha").default,
+}));
 
 export const mockApi = jest.mocked(api);
+export { appToast as mockToast } from "src/tests/mocks/appToast.mock";
 
-const globalVariables: GlobalVariables = {
+export const defaultContactFormGlobalVariables: GlobalVariables = {
   id: "global-variables",
   contactFormSuccessMessage: "Thanks for reaching out.",
 };
@@ -49,12 +52,39 @@ export class ContactFormPageObject extends BasePageObject {
     super({ debug, raiseOnFind });
   }
 
-  renderContactForm() {
+  renderContactForm(
+    globalVariables: GlobalVariables = defaultContactFormGlobalVariables,
+  ) {
     render(
       <GlobalVariablesProvider value={globalVariables}>
         <ContactForm />
       </GlobalVariablesProvider>,
     );
+  }
+
+  async fillContactFormFields(user: UserEvent) {
+    await user.type(
+      screen.getByLabelText("Your full name *"),
+      this.formData.name,
+    );
+    await user.type(screen.getByLabelText("Your email *"), this.formData.email);
+    await user.type(
+      screen.getByLabelText("Your phone number"),
+      this.formData.phone,
+    );
+    await user.type(
+      screen.getByLabelText("Your company name"),
+      this.formData.companyName,
+    );
+    await user.type(
+      screen.getByLabelText("What can we help you with?"),
+      this.formData.briefDescription,
+    );
+  }
+
+  async fillAndSubmitContactForm(user: UserEvent) {
+    await this.fillContactFormFields(user);
+    await user.click(screen.getByRole("button", { name: "Submit" }));
   }
 
   setupMockSuccess() {

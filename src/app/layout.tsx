@@ -1,6 +1,5 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { draftMode } from "next/headers";
-import { Toaster } from "sonner";
 import { area, arida } from "src/app/fonts";
 import Providers from "src/app/providers";
 import { ExitDraftModeLink } from "src/components/ExitDraftModeLink/ExitDraftModeLink.component";
@@ -75,7 +74,6 @@ export default async function RootLayout({
           </div>
         ) : null}
         <Providers globalVariables={globalVariables}>
-          <Toaster />
           <div className="page">
             <Navigation navigationItems={nav?.navigationItems ?? []} />
             <main className="page-content">{children}</main>

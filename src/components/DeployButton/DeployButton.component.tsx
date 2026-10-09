@@ -1,8 +1,8 @@
 "use client";
 
-import { toast } from "sonner";
 import { StyledButton } from "src/components/StyledButton/StyledButton.component";
 import { useDeployHookMutation } from "src/hooks/mutations/useDeployHookMutation";
+import { appToast } from "src/lib/toast/appToast";
 
 interface DeployButtonProps {
   deployHook: string;
@@ -16,10 +16,10 @@ export const DeployButton = (props: DeployButtonProps) => {
   const handleDeploy = () => {
     deployHookMutation.mutate(deployHook, {
       onSuccess: () => {
-        toast.success("Refresh successfully triggered");
+        appToast.success("Refresh successfully triggered");
       },
       onError: () => {
-        toast.error("Failed to refresh");
+        appToast.error("Failed to refresh");
       },
     });
   };

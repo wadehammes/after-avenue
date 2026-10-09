@@ -1,9 +1,17 @@
 import { Resend } from "resend";
-import type { ContactFormInputs } from "src/components/ContactForm/ContactForm.component";
 import {
   renderContactFormConfirmationEmail,
   renderContactFormSubmissionEmail,
 } from "src/emails/renderContactEmails";
+import {
+  type ContactFormApiBody,
+  contactFormApiSchema,
+} from "src/lib/forms/contactForm.schema";
+import {
+  getContactFormConfirmationTo,
+  getContactFormSubmissionTo,
+  shouldSkipResendAudienceSync,
+} from "src/utils/emailHelpers";
 import { isNonNullable } from "src/utils/helpers";
 import { checkRateLimit } from "src/utils/rateLimit";
 import { verifyRecaptchaToken } from "src/utils/recaptcha";
@@ -12,27 +20,29 @@ import { isSpam } from "src/utils/spamDetection";
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: Request) {
-  const res = (await request.json()) as ContactFormInputs & {
-    recaptchaToken?: string;
-    website?: string;
-  };
+  const body = (await request.json()) as Record<string, unknown>;
 
-  // Honeypot check - if website field is filled, it's a bot
-  if (res.website) {
-    // Silently reject - don't let bots know they were caught
+  if (body.website) {
     return Response.json({ success: true }, { status: 200 });
   }
 
-  // Verify reCAPTCHA token
-  if (!res.recaptchaToken) {
+  const parsed = contactFormApiSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json({ error: "Invalid request" }, { status: 400 });
+  }
+
+  const res: ContactFormApiBody = parsed.data;
+
+  const resendApiKey = process.env.RESEND_API_KEY?.trim();
+  if (!resendApiKey) {
     return Response.json(
-      { error: "reCAPTCHA verification required" },
-      { status: 400 },
+      { error: "Email delivery is not configured" },
+      { status: 503 },
     );
   }
+
+  const resend = new Resend(resendApiKey);
 
   const isRecaptchaValid = await verifyRecaptchaToken(res.recaptchaToken);
   if (!isRecaptchaValid) {
@@ -51,11 +61,6 @@ export async function POST(request: Request) {
     ? res.marketingConsent
     : true;
 
-  if (!email) {
-    return Response.json({ error: "Email is required" }, { status: 400 });
-  }
-
-  // Rate limiting - limit by email and IP
   const clientIp =
     request.headers.get("x-forwarded-for")?.split(",")[0] ||
     request.headers.get("x-real-ip") ||
@@ -63,14 +68,12 @@ export async function POST(request: Request) {
   const rateLimitKey = `${email}-${clientIp}`;
 
   if (checkRateLimit(rateLimitKey, 5, 15 * 60 * 1000)) {
-    // 5 requests per 15 minutes
     return Response.json(
       { error: "Too many requests. Please try again later." },
       { status: 429 },
     );
   }
 
-  // Spam detection
   const spamCheck = isSpam({
     email,
     message,
@@ -79,13 +82,11 @@ export async function POST(request: Request) {
   });
 
   if (spamCheck.isSpam) {
-    // Log spam attempts for monitoring
     console.warn("Spam detected:", {
       email,
       reasons: spamCheck.reasons,
       ip: clientIp,
     });
-    // Silently reject spam - don't let bots know they were caught
     return Response.json({ success: true }, { status: 200 });
   }
 
@@ -102,40 +103,59 @@ export async function POST(request: Request) {
   };
 
   try {
-    await resend.contacts.create({
-      email,
-      firstName,
-      lastName,
-      unsubscribed: !marketingConsent,
-      audienceId: process.env.RESEND_GENERAL_AUDIENCE_ID as string,
-    });
+    if (!shouldSkipResendAudienceSync()) {
+      await resend.contacts.create({
+        audienceId: process.env.RESEND_GENERAL_AUDIENCE_ID as string,
+        email,
+        firstName,
+        lastName,
+        unsubscribed: !marketingConsent,
+      });
+    }
+
+    const submissionTo = getContactFormSubmissionTo();
+    if (!submissionTo) {
+      return Response.json(
+        {
+          error:
+            "Email delivery is not configured for this environment. Set RESEND_DEV_TO_EMAIL or RESEND_TEST_RECIPIENTS.",
+        },
+        { status: 503 },
+      );
+    }
 
     const submissionEmail = await renderContactFormSubmissionEmail(emailProps);
 
     const data = await resend.emails.send({
       from: "After Avenue Contact Form <forms@afteravenue.com>",
+      html: submissionEmail.html,
       replyTo: `${name} <${email}>`,
-      to: "After Avenue <hello@afteravenue.com>",
       subject: `Contact Form Submission - ${companyName}`,
       text: submissionEmail.text,
-      html: submissionEmail.html,
+      to: submissionTo,
     });
 
-    const delayConfirmationEmail = setTimeout(async () => {
-      const confirmationEmail =
-        await renderContactFormConfirmationEmail(emailProps);
+    const confirmationTo = getContactFormConfirmationTo({ email, name });
 
-      await resend.emails.send({
-        to: `${name} <${email}>`,
-        from: "After Avenue <hello@afteravenue.com>",
-        subject: "We received your contact info.",
-        text: confirmationEmail.text,
-        html: confirmationEmail.html,
-      });
-    }, 500);
+    const delayConfirmationEmail = confirmationTo
+      ? setTimeout(async () => {
+          const confirmationEmail =
+            await renderContactFormConfirmationEmail(emailProps);
+
+          await resend.emails.send({
+            from: "After Avenue <hello@afteravenue.com>",
+            html: confirmationEmail.html,
+            subject: "We received your contact info.",
+            text: confirmationEmail.text,
+            to: confirmationTo,
+          });
+        }, 500)
+      : undefined;
 
     if (data.error) {
-      clearTimeout(delayConfirmationEmail);
+      if (delayConfirmationEmail) {
+        clearTimeout(delayConfirmationEmail);
+      }
 
       return Response.json({ error: data.error });
     }

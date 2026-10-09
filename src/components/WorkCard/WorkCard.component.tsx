@@ -1,19 +1,15 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
-import type { HTMLAttributes } from "react";
-import { useState } from "react";
+import type { HTMLAttributes, ReactElement } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import { LazyReactPlayer } from "src/components/LazyReactPlayer/LazyReactPlayer.component";
 import styles from "src/components/WorkCard/WorkCard.module.css";
 import type { Work } from "src/contentful/getWork";
 import ArrowDownIcon from "src/icons/ArrowDown.svg";
 import { VIDEO_MOUNT_ROOT_MARGIN } from "src/utils/constants";
 import { controlsPlayerConfig } from "src/utils/videoPlayerConfig";
-
-const ReactPlayer = dynamic(() => import("react-player"), {
-  ssr: false,
-});
 
 interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {
   subtitle: string;
@@ -24,33 +20,63 @@ interface WorkCardProps extends HTMLAttributes<HTMLDivElement> {
 export const WorkCard = (props: WorkCardProps) => {
   const { work, title, subtitle } = props;
   const [hasMounted, setHasMounted] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [showPreviewChrome, setShowPreviewChrome] = useState(true);
 
-  const { ref } = useInView({
+  const { inView, ref } = useInView({
     rootMargin: VIDEO_MOUNT_ROOT_MARGIN,
     threshold: 0,
-    triggerOnce: true,
-    onChange: (visible) => {
-      if (visible) {
-        setHasMounted(true);
-      }
-    },
+    triggerOnce: false,
   });
+
+  const loadingFallback = useMemo(
+    (): ReactElement => <div className={styles.workCardVideoLightPreview} />,
+    [],
+  );
+
+  useEffect(() => {
+    if (inView) {
+      setHasMounted(true);
+    }
+  }, [inView]);
 
   return (
     <div ref={ref} className={styles.workCard}>
       <div className={styles.workCardVideoContainer}>
         {hasMounted && work.workVideoUrl ? (
           <div className={styles.workCardVideoEmbed}>
-            <ReactPlayer
+            <LazyReactPlayer
               config={controlsPlayerConfig}
               controls
+              light
+              loadingFallback={loadingFallback}
               loop
-              muted
+              onClickPreview={() => {
+                setPlaying(true);
+              }}
+              onPlaying={() => {
+                setShowPreviewChrome(false);
+              }}
+              onStart={() => {
+                setShowPreviewChrome(false);
+              }}
               playsInline
+              playing={playing}
               src={work.workVideoUrl}
               width="100%"
               height="100%"
             />
+            {showPreviewChrome ? (
+              <div
+                aria-hidden="true"
+                className={styles.workCardVideoPreviewChrome}
+              >
+                <div className={styles.workCardVideoDotOverlay} />
+                <div className={styles.workCardVideoPlayAffordance}>
+                  <span className={styles.workCardVideoPlayTriangle} />
+                </div>
+              </div>
+            ) : null}
           </div>
         ) : null}
       </div>

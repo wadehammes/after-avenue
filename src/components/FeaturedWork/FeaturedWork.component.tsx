@@ -1,10 +1,10 @@
 "use client";
 
 import classNames from "classnames";
-import dynamic from "next/dynamic";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useEffectEvent, useMemo, useRef } from "react";
 import styles from "src/components/FeaturedWork/FeaturedWork.module.css";
 import { useFeaturedReelInView } from "src/components/FeaturedWork/useFeaturedReelInView";
+import { LazyReactPlayer } from "src/components/LazyReactPlayer/LazyReactPlayer.component";
 import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
 import type { Work } from "src/contentful/getWork";
@@ -14,14 +14,11 @@ import scrollEntrance from "src/styles/scrollEntrance.module.css";
 import {
   createMutedPlayerHandlers,
   ensureContainerMuted,
+  featuredReelPlayerConfig,
   mutedAutoplayPlayerProps,
   reelPlayerConfig,
 } from "src/utils/videoPlayerConfig";
 import { useMediaQuery } from "usehooks-ts";
-
-const ReactPlayer = dynamic(() => import("react-player"), {
-  ssr: false,
-});
 
 interface FeaturedWorkProps {
   fields: Work;
@@ -36,28 +33,28 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
     initializeWithValue: false,
   });
   const { featuredWorkButtonText } = useGlobalVariables();
-  const { hasAnimated, onPlayerReady, playInView, ref } = useFeaturedReelInView(
-    {
+  const { hasAnimated, hasMountedPlayer, playInView, ref } =
+    useFeaturedReelInView({
       priority,
-    },
-  );
+    });
   const embedRef = useRef<HTMLDivElement>(null);
-  const muteHandlers = useMemo(
-    () => createMutedPlayerHandlers(embedRef, onPlayerReady),
-    [onPlayerReady],
-  );
+
+  const muteHandlers = useMemo(() => createMutedPlayerHandlers(embedRef), []);
+
+  const syncEmbedMuted = useEffectEvent(() => {
+    ensureContainerMuted(embedRef.current);
+  });
 
   useEffect(() => {
     if (!playInView) {
       return;
     }
 
-    ensureContainerMuted(embedRef.current);
+    syncEmbedMuted();
   }, [playInView]);
 
   return !isMobile ? (
     <div
-      ref={ref}
       className={classNames(styles.featuredWork, scrollEntrance.enter, {
         [scrollEntrance.animate]: !priority && hasAnimated,
         [scrollEntrance.readyToPlay]: priority,
@@ -78,22 +75,26 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
         </div>
       </div>
       {workVideoUrl ? (
-        <div className={styles.videoContainer}>
+        <div ref={ref} className={styles.videoContainer}>
           <div className={styles.videoPlayer}>
             <div ref={embedRef} className={styles.videoPlayerEmbed}>
-              <ReactPlayer
-                autoPlay={priority}
-                config={reelPlayerConfig}
-                controls={false}
-                loop
-                playsInline
-                playing={playInView}
-                src={workVideoUrl}
-                width="100%"
-                height="100%"
-                {...mutedAutoplayPlayerProps}
-                {...muteHandlers}
-              />
+              {hasMountedPlayer ? (
+                <LazyReactPlayer
+                  autoPlay={priority}
+                  config={
+                    priority ? reelPlayerConfig : featuredReelPlayerConfig
+                  }
+                  controls={false}
+                  loop
+                  playsInline
+                  playing={playInView}
+                  src={workVideoUrl}
+                  width="100%"
+                  height="100%"
+                  {...mutedAutoplayPlayerProps}
+                  {...muteHandlers}
+                />
+              ) : null}
             </div>
           </div>
         </div>

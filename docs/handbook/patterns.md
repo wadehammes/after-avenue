@@ -26,14 +26,22 @@ When you add client-side queries, place them under **`src/hooks/queries/`**, use
 ## API layer and Route Handlers
 
 - **Client**: [src/api/urls.ts](../../src/api/urls.ts) is the front door for browser-initiated HTTP calls (same-origin Route Handlers and approved external hooks such as Vercel deploy URLs). All JSON POSTs go through [postJson](../../src/api/helpers.ts); use [fetchResponse](../../src/api/helpers.ts) when parsing a `Response` body.
-- **Server**: Implement behavior in **`src/app/api/<name>/route.ts`** (POST/GET as needed), validate input, and return `Response` JSON with appropriate status codes.
+- **Server**: Implement behavior in **`src/app/api/<name>/route.ts`** (POST/GET as needed), validate input with shared Zod schemas from **`src/lib/forms/`** (e.g. [contactFormApiSchema](../../src/lib/forms/contactForm.schema.ts), [hubspotLeadApiSchema](../../src/lib/forms/contactForm.schema.ts)), and return `Response` JSON with appropriate status codes (`400` **`{ error: "Invalid request" }`**, `500` with a fixed error string—not raw thrown values).
 - **Do not call `fetch` in components.** Use a React Query hook whose `mutationFn` (or `queryFn`) delegates to the `api` object.
 - **Tests**: [helpers.spec.ts](../../src/api/helpers.spec.ts) and [urls.spec.ts](../../src/api/urls.spec.ts) unit-test the API layer with mocked `fetch`. Components that use the API are tested via page objects (see [conventions.md](conventions.md#what-to-mock-and-what-not-to)).
 
 ## Forms
 
-- **Library**: react-hook-form is used where complex forms exist (e.g. [ContactForm](../../src/components/ContactForm/ContactForm.component.tsx)).
-- **Submit**: Call a mutation hook (e.g. [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts)), which chains `api` methods. Handle errors at the call site with `setError` or toasts—not by re-throwing after a failed `mutateAsync`.
+- **Library**: [react-hook-form](https://react-hook-form.com/) with **Zod** schemas via **`@hookform/resolvers/zod`**. Shared field rules live in [formFieldSchemas.ts](../../src/lib/forms/formFieldSchemas.ts); per-form schemas in `src/lib/forms/` (e.g. [contactForm.schema.ts](../../src/lib/forms/contactForm.schema.ts) with matching [contactForm.schema.spec.ts](../../src/lib/forms/contactForm.schema.spec.ts)).
+- **UI**: Contact and future CMS forms use Base UI field primitives — [Input](../../src/components/Input/Input.component.tsx), [TextArea](../../src/components/TextArea/TextArea.component.tsx), [Checkbox](../../src/components/Checkbox/Checkbox.component.tsx) — composed with [FormFieldLayout](../../src/ui/Field/FormFieldLayout.component.tsx), shared layout tokens in [formFieldShared.module.css](../../src/styles/formFieldShared.module.css) and [formLayoutShared.module.css](../../src/styles/formLayoutShared.module.css). [FormWebsiteHoneypot](../../src/components/forms/FormWebsiteHoneypot.component.tsx) wires the hidden `website` honeypot through react-hook-form. [FieldErrorMessage](../../src/ui/Field/FieldErrorMessage.component.tsx) and [useStableFieldId.ts](../../src/hooks/useStableFieldId.ts) support labels and errors. Contact field types and API bodies live in [contactForm.schema.ts](../../src/lib/forms/contactForm.schema.ts) (`ContactFormValues`, `contactFormApiSchema`, `hubspotLeadApiSchema`)—not on the component file.
+- **Submit**: Call a mutation hook (e.g. [useSubmitContactFormMutation.ts](../../src/hooks/mutations/useSubmitContactFormMutation.ts)), which chains `api` methods. On failure, surface errors with [appToast.error](../../src/lib/toast/appToast.ts) (see **Toasts** below)—not inline `setError` on the root field for API failures.
+- **Success**: [ContactForm](../../src/components/ContactForm/ContactForm.component.tsx) still swaps to the CMS success message after a good submit; deploy refresh uses toast success only.
+
+## Toasts (in-app)
+
+- **Implementation**: [ToastHost](../../src/components/Toast/ToastHost.component.tsx) wraps the client tree in [providers.tsx](../../src/app/providers.tsx) (Base UI Toast). Call [appToast.success / error / warning](../../src/lib/toast/appToast.ts) from components (e.g. [ContactForm](../../src/components/ContactForm/ContactForm.component.tsx), [DeployButton](../../src/components/DeployButton/DeployButton.component.tsx)).
+- **Tokens**: Toast colors and sizing use `--color-toast-*`, `--toast-width`, and `--toast-offset` in [variables.css](../../src/styles/variables.css).
+- **Tests**: [`.jest/setupTests.ts`](../../.jest/setupTests.ts) mocks `src/lib/toast/appToast` via [appToast.mock.ts](../../src/tests/mocks/appToast.mock.ts). Page objects export `mockToast` for assertions (see [DeployButton.po.tsx](../../src/components/DeployButton/DeployButton.po.tsx), [ContactForm.po.tsx](../../src/components/ContactForm/ContactForm.po.tsx)).
 
 ## Transactional email (React Email)
 
@@ -41,10 +49,10 @@ Contact form mail is built with **[React Email](https://react.email/)** and sent
 
 ### End-to-end flow
 
-1. **Client** — [ContactForm](../../src/components/ContactForm/ContactForm.component.tsx) submits through [useSubmitContactFormMutation](../../src/hooks/mutations/useSubmitContactFormMutation.ts) → `api.sendContactEmail` in [urls.ts](../../src/api/urls.ts).
-2. **Route Handler** — validates reCAPTCHA, rate limits, and spam; maps form fields to [ContactFormEmailProps](../../src/emails/ContactFormEmail.interfaces.ts).
+1. **Client** — [ContactForm](../../src/components/ContactForm/ContactForm.component.tsx) submits through [useSubmitContactFormMutation](../../src/hooks/mutations/useSubmitContactFormMutation.ts) → `api.sendEmail.contact` in [urls.ts](../../src/api/urls.ts).
+2. **Route Handler** — [send-email/contact/route.ts](../../src/app/api/send-email/contact/route.ts) checks the honeypot, validates the JSON body with [contactFormApiSchema](../../src/lib/forms/contactForm.schema.ts), then verifies reCAPTCHA, rate limits, and spam; maps form fields to [ContactFormEmailProps](../../src/emails/ContactFormEmail.interfaces.ts). Route behavior is covered by [route.spec.ts](../../src/app/api/send-email/contact/route.spec.ts).
 3. **Render** — [renderContactEmails.tsx](../../src/emails/renderContactEmails.tsx) calls `render()` from `react-email` for HTML and plain-text bodies.
-4. **Send** — Resend delivers an internal notification (`ContactFormSubmissionEmail`) and a user confirmation (`ContactFormConfirmationEmail`).
+4. **Send** — Resend delivers an internal notification (`ContactFormSubmissionEmail`) and a user confirmation (`ContactFormConfirmationEmail`). Recipients come from [emailHelpers.ts](../../src/utils/emailHelpers.ts): **production** uses **`hello@afteravenue.com`** and the submitter’s address; **staging** and **local** / **`pnpm dev`** route both messages to **`RESEND_TEST_RECIPIENTS`** or **`RESEND_DEV_TO_EMAIL`** only (never production or the submitter; audience sync skipped). See [platform.md → Environment variables](platform.md#environment-variables-and-nextconfig).
 
 ### Template layout (`src/emails/`)
 
@@ -68,7 +76,7 @@ Contact form mail is built with **[React Email](https://react.email/)** and sent
 
 ### Testing
 
-- **Template content** — [ContactFormEmails.spec.tsx](../../src/emails/ContactFormEmails.spec.tsx) renders templates with Testing Library (`screen`, `getByText`, `getByAltText`). React Email’s `<Html>` nesting warnings in JSDOM are expected noise.
+- **Template content** — [ContactFormEmails.spec.tsx](../../src/emails/ContactFormEmails.spec.tsx) renders templates with Testing Library (`screen`, `getByText`, `getByAltText`). JSDOM uses [mockReactEmailJsdom.tsx](../../src/tests/mocks/mockReactEmailJsdom.tsx) for document primitives (see [conventions.md → Jest configuration](conventions.md#jest-configuration)).
 - **Render helpers** — [renderContactEmails.spec.tsx](../../src/emails/renderContactEmails.spec.tsx) **mocks** `react-email`’s `render`. Do not call the real `@react-email/render` in Jest — it requires ESM VM modules the test runner does not provide.
 - **Route Handler** — test spam/rate-limit/recaptcha behavior in a dedicated route spec if you add one; keep template assertions in `src/emails/`.
 
@@ -84,7 +92,7 @@ Contact form mail is built with **[React Email](https://react.email/)** and sent
 
 ## Dynamic imports
 
-Use **`next/dynamic`** for code-splitting when a component is heavy or must be client-only. See [components.md](components.md).
+Use **`next/dynamic`** for code-splitting when a component is heavy but SSR-safe. For **client-only** modules, use **`browser()`** + **`use()`** + **`Suspense`** (see [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs)). See [components.md](components.md).
 
 ## Embedded video (Vimeo / YouTube)
 
@@ -92,7 +100,7 @@ Work entries store a **`workVideoUrl`** (Vimeo or YouTube). The site plays them 
 
 ### Scroll entrance (home featured reels)
 
-Home **featured reels** use scroll-driven entrance in [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css). Each embed mounts once via **`next/dynamic`** (`ssr: false`). **`playing`** toggles from **`useInView`**; the **priority** reel also sets **`autoPlay`** (static, never toggled on scroll) and re-asserts **`playing`** in **`onReady`** so the async chunk load does not miss autoplay.
+Home **featured reels** use scroll-driven entrance in [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css). The **16∶9** **`videoContainer`** always renders when a video URL exists and holds the merged **`useInView`** ref. [**`useFeaturedReelInView`**](../../src/components/FeaturedWork/useFeaturedReelInView.ts) preloads with **`VIDEO_MOUNT_ROOT_MARGIN`** (sticky mount) and toggles **`playing`** from a strict viewport observer so off-screen reels **pause**. The **priority** (first) reel uses **`reelPlayerConfig`** (**`background: true`**) and **`autoPlay`** so Vimeo autoplays without a poster frame; scroll reels use **`featuredReelPlayerConfig`** (**`background: false`**) so **`playing={false}`** pauses off-screen embeds. Both use **`initialInView`** on the priority reel’s observers.
 
 ### Embed config
 
@@ -114,16 +122,16 @@ Home **featured reels** use scroll-driven entrance in [scrollEntrance.module.css
 
 | Surface | Component | Strategy |
 |---------|-----------|----------|
-| Home featured reels (desktop) | [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) + [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) | **`ReactPlayer`** via **`next/dynamic`** (`ssr: false`); **`playing={inView}`** only. First reel: **`initialInView`**. Scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). Mobile uses **`WorkCard`**. |
-| Work index / category / related cards | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | **`ReactPlayer`** directly. Lazy-mount at **`VIDEO_MOUNT_ROOT_MARGIN`** (~**80%** ahead). **`controlsPlayerConfig`**, user clicks to play. |
+| Home featured reels (desktop) | [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) + [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) | Lazy-mount once in the preload margin; **`playing={playInView}`** pauses off-screen. First reel: **`priority`**. Scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). Mobile uses **`WorkCard`**. |
+| Work index / category / related cards | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | **`LazyReactPlayer`** with **`light`** (oEmbed poster until click—no iframe on initial load). Lazy-mount at **`VIDEO_MOUNT_ROOT_MARGIN`**. Click the preview to load **`controlsPlayerConfig`** inline; title row links to work detail. [`WorkPagePrefetch`](../../src/components/WorkPage/WorkPagePrefetch.component.tsx) preloads the player chunk on `/work`. |
 | Work detail hero | [`WorkEntryPage`](../../src/components/WorkEntryPage/WorkEntryPage.component.tsx) | [`WorkHeroVideo`](../../src/components/WorkHeroVideo/WorkHeroVideo.component.tsx) — **`playing`** from server prop or **`?playVideo=true`**, loading overlay until ready. |
 | Editors index hover background | [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | **Single active player** on load (`autoPlay` + **`onReady`**). On hover (150ms debounce in [`EditorsPage`](../../src/components/EditorsPage/EditorsPage.component.tsx)), show the **static MP4** while a **hidden preload** `ReactPlayer` loads the next embed; swap on **`onReady`**. |
 
 ### Performance rules
 
 1. **Never mount one `ReactPlayer` per list item** on a long page. Lazy-mount, use **`light`** for click-to-play grids, or use a **fixed-size player pool** (editors background).
-2. **Work grids** use **`VIDEO_MOUNT_ROOT_MARGIN`** (~**300px**) on a **single** observer per card — early enough to load before scroll-in, without mounting the whole grid at once.
-3. **Featured reels** stay mounted; **`playInView`** toggles **`playing`** without unmounting so scroll-back resumes from the same position.
+2. **Work grids** and **home featured reels** use **`VIDEO_MOUNT_ROOT_MARGIN`** (`80% 0px` in [constants.ts](../../src/utils/constants.ts)) so embeds can load before scroll-in without mounting the whole page at once.
+3. **Featured reels** sticky-mount in the preload margin, then **`playing={playInView}`** only—paused iframes off-screen, playing in view, no reload on scroll-back. Use **`featuredReelPlayerConfig`** so Vimeo respects pause (not **`background: true`**). Up to eight mounted embeds is the tradeoff vs a single-player pool.
 4. **Do not combine scroll-driven opacity on the same node as a lazy Vimeo iframe** — use **`scrollEntrance`** on home reels only; work cards stay static to avoid flicker.
 5. **Reserve space** — video containers use **16∶9** padding (or **`aspect-ratio`**) and the dot-pattern placeholder so layout does not shift while the chunk loads.
 

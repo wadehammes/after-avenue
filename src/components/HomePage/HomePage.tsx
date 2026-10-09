@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import parse from "html-react-parser";
-import { useEffect } from "react";
+import { useEffect, useEffectEvent } from "react";
 import { useInView } from "react-intersection-observer";
 import { FeaturedBrands } from "src/components/FeaturedBrands/FeaturedBrands.component";
 import { FeaturedWork } from "src/components/FeaturedWork/FeaturedWork.component";
@@ -36,9 +36,13 @@ export const HomePage = (props: HomePageProps) => {
     (work) => work.workVideoUrl,
   )?.workSlug;
 
+  const prefetchReactPlayer = useEffectEvent(() => {
+    void import("react-player");
+  });
+
   useEffect(() => {
     if (priorityVideoSlug) {
-      void import("react-player");
+      prefetchReactPlayer();
     }
   }, [priorityVideoSlug]);
 

@@ -53,6 +53,8 @@ pnpm dev
 
 The dev server listens on **http://localhost:3005** (see `package.json`).
 
+To **exercise the contact form with real Resend delivery** on localhost (no production inboxes or submitter mail), set **`RESEND_API_KEY`**, **`RESEND_DEV_TO_EMAIL`**, and reCAPTCHA keys in **`.env.local`**. **`pnpm dev`** treats mail like non-production even when **`ENVIRONMENT`** is **`staging`** from Vercel. On **staging.afteravenue.com**, set **`RESEND_TEST_RECIPIENTS`** in Vercel (comma-separated). HubSpot runs on **production** only. See **`docs/handbook/platform.md`** (Resend / reCAPTCHA).
+
 ## Development and deployment
 
 Deployment is handled via **Vercel**. Each PR typically gets a preview deployment that updates with new commits. Exact project URL and access policies are configured in your Vercel team settings.
@@ -112,25 +114,36 @@ We use Jest and the **page object** pattern in **`docs/handbook/conventions.md`*
 - Import **`screen`** and **`userEvent`** from [`src/tests/test-utils.tsx`](./src/tests/test-utils.tsx) (includes React Query providers). Use **`userEvent`**, not `fireEvent`.
 - **Do not** add spec files under `src/hooks/queries/` or `src/hooks/mutations/`—test **component call sites** instead.
 - Mock the API layer in **page objects** with [`mockApiResponse`](./src/tests/mocks/mockApiResponse.ts) and `jest.mock("src/api/urls")`.
+- **`appToast`** is mocked globally in [`.jest/setupTests.ts`](./.jest/setupTests.ts); export **`mockToast`** from the PO when asserting toast success/error (see handbook **Testing**).
 - Unit-test [`src/api/helpers.spec.ts`](./src/api/helpers.spec.ts) and [`src/api/urls.spec.ts`](./src/api/urls.spec.ts) directly.
 
 Examples: [`ContactForm.spec.tsx`](./src/components/ContactForm/ContactForm.spec.tsx), [`DeployButton.spec.tsx`](./src/components/DeployButton/DeployButton.spec.tsx), [`StyledButton.spec.tsx`](./src/components/StyledButton/StyledButton.spec.tsx).
 
+### Git commits (Cursor agents)
+
+Cursor hooks block raw **`git commit`** in agent sessions. Use [`scripts/git-commit.sh`](./scripts/git-commit.sh) or **`git -c core.hooksPath=.githooks commit`** so [`.githooks/commit-msg`](./.githooks/commit-msg) can reject `Co-authored-by` trailers. Details: [`.cursor/hooks/README.md`](./.cursor/hooks/README.md).
+
 ## Linting and formatting
 
-This project uses [Biome](https://biomejs.dev/) for linting and formatting.
+**Biome** lints and formats TS/JS/JSON/CSS; **Stylelint** checks CSS Modules. CI runs **`tsc:ci`**, **`lint:ci`**, **`lint:css`**, **`test:ci`**, and **`knip:ci`** (see [`docs/handbook/platform.md`](./docs/handbook/platform.md)).
 
-- To lint the codebase:
+Before you push (especially after types, lint, or dependency changes):
 
-  ```sh
-  pnpm lint
-  ```
+```sh
+pnpm lint:all
+pnpm test:ci
+```
 
-- To auto-format the codebase:
+**`lint:all`** runs Biome on files changed since **`origin/staging`**, Stylelint with **`--fix`**, **`tsc --strict`**, and Knip.
 
-  ```sh
-  pnpm format
-  ```
+Other useful commands:
+
+```sh
+pnpm lint          # Biome check (full repo)
+pnpm lint:fix      # Biome with safe fixes
+pnpm lint:css      # Stylelint only
+pnpm format        # Biome format
+```
 
 ## After Avenue handbook
 
@@ -140,7 +153,7 @@ The handbook is **markdown only** and is meant for humans and tooling alike. It 
 
 **Entry point:** [`docs/handbook/README.md`](./docs/handbook/README.md) — short overview and an index table linking to every chapter.
 
-**Agents and automation:** [AGENTS.md](./AGENTS.md) (defaults for AI assistants). In Cursor, project rules live under [`.cursor/rules/`](./.cursor/rules/). For custom GPTs or other tools without Cursor, use the task map in [`docs/handbook/llms.md`](./docs/handbook/llms.md).
+**Agents and automation:** [AGENTS.md](./AGENTS.md) (defaults for AI assistants). In Cursor, project rules live under [`.cursor/rules/`](./.cursor/rules/); agent hooks under [`.cursor/hooks/`](./.cursor/hooks/). For custom GPTs or other tools without Cursor, use the task map in [`docs/handbook/llms.md`](./docs/handbook/llms.md).
 
 ### Suggested reading order
 

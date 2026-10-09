@@ -85,7 +85,7 @@ const nextConfig: NextConfig = {
       "react-google-recaptcha",
       "react-intersection-observer",
       "react-player",
-      "sonner",
+      "@base-ui/react",
     ],
   },
   webpack(config, { dev, isServer }) {

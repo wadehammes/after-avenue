@@ -45,6 +45,14 @@ We favor plain functions with typed props—no `React.FC`—and explicit conditi
 - **Raster images in UI**: Use **`next/image`** (`import Image from "next/image"`). Avoid bare **`<img>`** for content images unless you have a rare, documented exception. Every `Image` needs an **`alt`**; rules and remote hosts are in **Accessibility** below.
 - **Links**: Use **`next/link`**'s **`Link`** for all navigational links—internal paths, external URLs, **`mailto:`**, **`tel:`**, and the like—not a bare **`<a>`** unless you have a rare, documented exception. Pass **`href`**; for new tabs, set **`target`** and **`rel`** (e.g. **`noopener noreferrer`**). See [components.md](components.md#links).
 
+### React 19.3 (client-only code and refs)
+
+- **`ref` as a prop.** Function components accept **`ref`** on their props type (no **`forwardRef`**). Shared primitives such as [`Button`](../../src/ui/Button/Button.component.tsx) and form fields follow this pattern.
+- **`useEffectEvent`.** Use for logic invoked from **`useEffect`** or event handlers when you want stable effect dependencies without stale closures (e.g. scroll/resize listeners in [`Navigation`](../../src/components/Navigation/Navigation.tsx)).
+- **`<Activity>`**. Use to keep off-screen UI mounted but deprioritized instead of unmounting when product needs preserved state; otherwise prefer conditional render (e.g. mobile nav unmounts when closed).
+- **`browser()` + `use()` + `Suspense`.** Prefer this over **`next/dynamic`** with **`ssr: false`** for browser-only libraries. Shared factory: [`createBrowserLazyDefault`](../../src/ui/browserLazyDefault.tsx); domain wrappers [`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx) and [`ContactFormReCaptcha`](../../src/components/ContactForm/ContactFormReCaptcha.component.tsx).
+- **`use()` for context.** Client hooks may read context with **`use(MyContext)`** instead of **`useContext`** (e.g. [`useGlobalVariables`](../../src/context/globalContext.context.tsx)).
+
 ### Large components and state
 
 - **Extract state into a custom hook when a component has many state items.** If a component uses several `useState`/`useEffect` calls and many derived values (e.g. booleans, computed styles), move that logic into a dedicated hook (e.g. `useMyComponentState`) in the same folder. The hook should accept the minimal props/data it needs and return a single object of state and derived values. The main component file stays focused on composition and JSX; the hook file owns the state and effects. Example: [ContactForm.component.tsx](../../src/components/ContactForm/ContactForm.component.tsx) (form state and submission wiring).
@@ -57,12 +65,12 @@ We standardize on **Biome** for both lint and format of TS/JS/JSON/CSS, plus **S
 - **Commands**:
   - `pnpm lint` – Biome `check` (no writes)
   - `pnpm lint:fix` – Biome `check --fix` (fix what can be fixed)
-  - `pnpm lint:changed` – Biome `check --fix` scoped to files changed since `origin/main` (fast pre-push pass)
+  - `pnpm lint:changed` – Biome `check --fix` scoped to files changed since **`origin/staging`** (errors only; matches [biome.json](../../biome.json) `defaultBranch`)
   - `pnpm lint:css` – Stylelint check only (matches `**/*.css`)
   - `pnpm lint:css:fix` – Stylelint with `--fix`
-  - `pnpm lint:all` – `pnpm lint:changed` then `pnpm lint:css:fix`
+  - `pnpm lint:all` – **`pnpm lint:changed`**, then **`pnpm lint:css:fix`**, **`pnpm tsc:ci`**, **`pnpm knip:ci`** (local pre-push pass before CI)
 - **Config**: [biome.json](../../biome.json) for Biome (CSS formatter and linter included); [stylelint.config.mjs](../../stylelint.config.mjs) for Stylelint.
-- **Notable Biome rules**: no unused imports/variables, no inferrable types (annotate where Biome requires), use `as const` where appropriate, `noDangerouslySetInnerHtml` is a warning.
+- **Notable Biome rules**: no unused imports/variables, **`noUnusedFunctionParameters`** (prefix intentionally unused params with **`_`**, e.g. jsdom **`Request`** polyfills in [`.jest/setupTests.ts`](../../.jest/setupTests.ts)), no inferrable types (annotate where Biome requires), use `as const` where appropriate, **`noDescendingSpecificity`** on CSS Modules (nested **`:hover`** / pseudo rules must not drop in specificity later in the file—see [StyledButton.module.css](../../src/components/StyledButton/StyledButton.module.css)), `noDangerouslySetInnerHtml` is a warning.
 - **Stylelint** extends `stylelint-config-standard` + `stylelint-config-css-modules` and runs the `csstools/value-no-unknown-custom-properties` plugin, which validates every `var(--…)` against [`src/styles/variables.css`](../../src/styles/variables.css) and [`src/styles/runtime-variables.json`](../../src/styles/runtime-variables.json). Properties injected at render time (inline style, `<style>` tags, Next.js font classes on `<html>`, or set on a parent rule) must be registered so Stylelint recognizes them—either as `--name: initial;` in CSS or in `runtime-variables.json`.
 - Run lint/format before committing so CI (e.g. `pnpm lint:ci`) passes.
 
@@ -79,7 +87,8 @@ Place the CSS module next to the component, e.g. `MyComponent.component.tsx` and
 ### Modern CSS
 
 - **Nesting**: Use nesting for scoped styles and for nested media queries. Examples: [src/components/HeroSlide/HeroSlide.module.css](../../src/components/HeroSlide/HeroSlide.module.css), [src/components/Section/Section.module.css](../../src/components/Section/Section.module.css).
-- **Custom properties**: Use variables from the global design system. They are defined in [src/styles/variables.css](../../src/styles/variables.css) on `:root`, e.g. `var(--colors-purple-main)`, `var(--font-size-standard)`, `var(--sizing-1)`. Prefer these over hard-coded colors and sizes. If you need to inject a custom property at render time (inline `style={{ "--foo": value }}`, `<style>` tag, or set on a parent rule), declare it in the same file as `--foo: initial;` or add it to [`runtime-variables.json`](../../src/styles/runtime-variables.json) so Stylelint recognizes it.
+- **Custom properties**: Use variables from the global design system. They are defined in [src/styles/variables.css](../../src/styles/variables.css) on `:root`, e.g. `var(--colors-street-lamp-yellow)`, `var(--sizing-1)`. Prefer these over hard-coded colors and sizes. If you need to inject a custom property at render time (inline `style={{ "--foo": value }}`, `<style>` tag, or set on a parent rule), declare it in the same file as `--foo: initial;` or add it to [`runtime-variables.json`](../../src/styles/runtime-variables.json) so Stylelint recognizes it.
+- **Form control accents**: Checked, hover, and focus states on [Input](../../src/components/Input/Input.component.tsx), [TextArea](../../src/components/TextArea/TextArea.component.tsx), and [Checkbox](../../src/components/Checkbox/Checkbox.component.tsx) use **`--colors-street-lamp-yellow`** and shared tokens such as **`--color-input-focus-accent-bg`** and **`--color-input-checkbox-hover-bg`** in [variables.css](../../src/styles/variables.css). Use **`--colors-red`** / habanero tints for validation errors only—not for a checked checkbox.
 - **Modern features**: Use `color-mix()`, `clamp()` for responsive typography and spacing where they simplify code. Keep styles DRY by reusing variables and, when needed, component-level custom properties.
 
 ### Mobile-first
@@ -92,7 +101,8 @@ Write base styles for mobile; then override or add rules for larger viewports.
 ### Style rules
 
 - **Alphabetize** CSS properties within each rule block.
-- **Nest** selectors where it makes sense (`&:hover`, `&.active`, `& .child`), but **avoid deep nesting**. If a block has many nested rules (e.g. a root class with five or more descendant blocks), break it into separate top-level rules using the full selector (e.g. `.table .tableCell { }` instead of nesting `.tableCell` inside `.table`). Keep nesting to one level for structure; use flat rules for clarity.
+- **Nest** selectors where it makes sense (`&:hover`, `&.active`, `& .child`), but **avoid deep nesting**. If a block has many nested rules (e.g. a root class with five or more descendant blocks), break it into separate top-level rules using the full selector (e.g. `.table .tableCell { }` instead of nesting `.tableCell` inside `.table`; checked-state **`.checkbox[data-checked] .indicator`** in [Checkbox.module.css](../../src/components/Checkbox/Checkbox.module.css) after the base **`.indicator`** block). Keep nesting to one level for structure; use flat rules for clarity.
+- **Hover and state specificity**: When a component always applies modifier classes (e.g. **`contained`** / **`outlined`** on [`StyledButton`](../../src/components/StyledButton/StyledButton.component.tsx)), put **`:hover`** on those modifiers—not a separate theme-level **`:hover`** that loses to more specific rules later. Order less-specific selectors before more-specific ones so Stylelint **`no-descending-specificity`** (and Biome on CSS) passes in **`pnpm lint:css`** / **`pnpm lint:all`**.
 - **Spacing**: Do not use `margin-top`. Prefer flexbox with `gap` for vertical and horizontal spacing between siblings (e.g. `display: flex; flex-direction: column; gap: var(--sizing-1)`).
 - Do not add redundant comments in CSS; class names and structure should be self-explanatory.
 
@@ -129,6 +139,8 @@ Default to running **in-repo utilities** for real in component tests — both th
 - **Don't mock**: anything under [`src/utils/`](../../src/utils/) — URL builders, URL param parsers, string helpers, etc. Let them run.
 - **Do mock**: external dependencies — `src/api/*` calls, `next/router`, `next/script` (see below), `next/dynamic`, third-party widgets such as `react-google-recaptcha`, `IntersectionObserver`, and similar.
 - **Mocking `src/api/urls` in page objects**: wire `jest.mock("src/api/urls")` in the **PO file** (not the spec), export `mockApi`, and use [`mockApiResponse`](../../src/tests/mocks/mockApiResponse.ts) for success/failure setup helpers (e.g. `setupMockSuccess()` / `setupMockFailure()`). See [ContactForm.po.tsx](../../src/components/ContactForm/ContactForm.po.tsx) and [DeployButton.po.tsx](../../src/components/DeployButton/DeployButton.po.tsx).
+- **Toasts in specs**: Global mock in [`.jest/setupTests.ts`](../../.jest/setupTests.ts) replaces [appToast](../../src/lib/toast/appToast.ts). Export **`mockToast`** from the PO (re-export from [appToast.mock.ts](../../src/tests/mocks/appToast.mock.ts)) and assert `mockToast.error` / `mockToast.success` when the component reports API or deploy outcomes—not `screen.getByText` for toast copy.
+- **Handbook test rules** — [handbookTestRules.ts](../../src/tests/utils/handbookTestRules.ts) and [handbookTestRules.spec.ts](../../src/tests/utils/handbookTestRules.spec.ts) encode the **Do not test React Query** checks below; Cursor [`.cursor/hooks/block-query-hook-mocks.sh`](../../.cursor/hooks/block-query-hook-mocks.sh) blocks new violations on edit.
 - **API layer unit tests**: colocate specs next to the API modules ([helpers.spec.ts](../../src/api/helpers.spec.ts), [urls.spec.ts](../../src/api/urls.spec.ts)) and mock `global.fetch` there—not in component specs.
 - **Assertions**: compute the expected value by calling the real helper in the spec (e.g. `expect(href).toBe(appendUrlParams(enrollOffersUrl(), "", ""))`), or use `toContain` with a stable substring when downstream side-effects would otherwise force coupling to internals. Both are fine; pick whichever keeps the test legible.
 - **Wiring assertions**: drop `expect(mockedHelper).toHaveBeenCalledWith(...)` style checks when un-mocking — the final output already proves the wiring.
@@ -147,7 +159,15 @@ jest.mock("next/script", () => ({
 }));
 ```
 
-Other third-party mocks follow the same pattern—e.g. [`mockGoogleRecaptcha.tsx`](../../src/tests/mocks/mockGoogleRecaptcha.tsx) for `react-google-recaptcha`. [`mockNextDynamic.ts`](../../src/tests/mocks/mockNextDynamic.ts) is wired globally in [`.jest/setupTests.ts`](../../.jest/setupTests.ts) as a passthrough for `next/dynamic`.
+Other third-party mocks follow the same pattern—e.g. [`mockGoogleRecaptcha.tsx`](../../src/tests/mocks/mockGoogleRecaptcha.tsx) for `react-google-recaptcha` (ContactForm PO uses an explicit `jest.mock` factory). [`mockNextDynamic.ts`](../../src/tests/mocks/mockNextDynamic.ts) is wired globally in [`.jest/setupTests.ts`](../../.jest/setupTests.ts) as a passthrough for `next/dynamic`.
+
+### Jest configuration
+
+- **[jest.config.ts](../../jest.config.ts)** — `next/jest`, jsdom, **`testTimeout: 20000`**, CSS → **`identity-obj-proxy`**. After merge, **`moduleNameMapper`** adds **`^.+\\.(svg)$`** → [svgMock.tsx](../../src/tests/mocks/svgMock.tsx) so SVG imports (e.g. Select chevrons) render in jsdom. **`transformIgnorePatterns`** is patched to allow ESM in **`@base-ui`** and **`@faker-js`**.
+- **[`.jest/setupTests.ts`](../../.jest/setupTests.ts)** — jest-dom globals, router/dynamic/recaptcha wiring, **`jest.mock("src/lib/toast/appToast")`**, jsdom-safe [**react-email** document mocks](../../src/tests/mocks/mockReactEmailJsdom.tsx), [**`createBrowserLazyDefault`** test double](../../src/tests/mocks/mockBrowserLazyDefault.ts), per-test reset of toast mock fns, and small polyfills (`TextEncoder`, `PointerEvent`, `Request`/`Response`) for jsdom.
+- **Route Handler specs** — colocate `route.spec.ts` beside the handler (e.g. [send-email/contact/route.spec.ts](../../src/app/api/send-email/contact/route.spec.ts), [hubspot/lead-generation/route.spec.ts](../../src/app/api/hubspot/lead-generation/route.spec.ts)). Mock third-party SDKs (`resend`) with **`jest.mock` factories** that close over **`const` mocks declared above the factory** (Jest hoisting). Load the handler with **`jest.isolateModules(() => require(...))`** in `beforeAll` so mocked dependencies bind correctly. For reCAPTCHA, mock **`globalThis.fetch`** and set **`RECAPTCHA_SECRET_KEY`** rather than stubbing `verifyRecaptchaToken` inline. **[`.jest/setEnvVars.ts`](../../.jest/setEnvVars.ts)** sets **`ENVIRONMENT=staging`**, so handlers that **skip HubSpot** or use **non-production Resend routing** behave like staging unless the spec assigns **`process.env.ENVIRONMENT = "production"`** for production-path tests (validation against HubSpot API, etc.).
+- **`process.env` in specs** — assign **`ENVIRONMENT`** (and other vars) on a copied env object in **`beforeEach`** / restore in **`afterEach`** when testing [emailHelpers.ts](../../src/utils/emailHelpers.ts) or Route Handlers. **`NODE_ENV`** is read-only under **`tsc --strict`**; use [`setProcessEnv`](../../src/tests/utils/setProcessEnv.ts) when a spec must simulate **`pnpm dev`** (**`NODE_ENV=development`**) alongside **`ENVIRONMENT=staging`**.
+- **Contact form call-site specs** — with default **`ENVIRONMENT=staging`**, [useSubmitContactFormMutation](../../src/hooks/mutations/useSubmitContactFormMutation.ts) does **not** call HubSpot after a successful send; assert **`mockApi.hubspot.leadGeneration`** is omitted (see [ContactForm.spec.tsx](../../src/components/ContactForm/ContactForm.spec.tsx)). Wrap HubSpot failure / ordering tests in **`process.env.ENVIRONMENT = "production"`** (restore in **`finally`**) so the mutation exercises the production chain.
 
 ### React Email templates
 
@@ -185,3 +205,9 @@ Keep data-fetching hooks in their own files under `src/hooks/queries/` and `src/
 - **Hook params must be a single object.** Pass one argument object to the hook instead of multiple positional arguments. Define an interface for the params in the same file when it helps.
 - **Keep query hooks dumb.** Query files should only call `useQuery` (or `useMutation`) with `queryKey`, `queryFn`, `enabled`, `select`, etc. Do not add side effects (e.g. `useEffect`), error callbacks (`onError`), or success callbacks (`onSuccess`) in the query file.
 - **Handle errors and side effects at the call site.** Where the query is used (e.g. in a component), read `isError` and `error` from the result and run any `useEffect` or callbacks there (logging, reporting, toasts, etc.).
+
+### Do not test React Query
+
+- Do **not** add **`*.spec.tsx`**, **`*.spec.ts`**, **`*.test.*`**, or **`*.po.tsx`** under **`src/hooks/mutations/`** or **`src/hooks/queries/`**.
+- In component and integration tests, mock **`src/api/urls`** (or **`global.fetch`** in API unit specs) and let real query/mutation hooks run inside the shared test **`render`** wrapper. Do **not** **`jest.mock`** or **`jest.mocked`** on hooks imported from **`src/hooks/queries/`** or **`src/hooks/mutations/`** in feature specs.
+- **Page objects** (**`*.po.tsx`**) should stub **`api.*`** via **`jest.mock("src/api/urls")`** and **`mockApiResponse`**, not mutation hooks. Rules are enforced in [handbookTestRules.ts](../../src/tests/utils/handbookTestRules.ts) and Cursor [`.cursor/hooks/block-query-hook-mocks.sh`](../../.cursor/hooks/block-query-hook-mocks.sh).
