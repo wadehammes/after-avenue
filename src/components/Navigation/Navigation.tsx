@@ -1,9 +1,10 @@
 "use client";
 
+import { Dialog } from "@base-ui/react/dialog";
 import classNames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useEffectEvent, useState } from "react";
+import { startTransition, useEffect, useEffectEvent, useState } from "react";
 import { MobileNavigationDrawer } from "src/components/Navigation/MobileNavigationDrawer.component";
 import styles from "src/components/Navigation/Navigation.module.css";
 import type { Page } from "src/contentful/getPages";
@@ -21,8 +22,9 @@ export const Navigation = (props: NavigationProps) => {
   const pathname = usePathname();
 
   const setOpen = useEffectEvent((open: boolean) => {
-    setIsOpen(open);
-    document.body.style.overflow = open ? "hidden" : "auto";
+    startTransition(() => {
+      setIsOpen(open);
+    });
   });
 
   const onScroll = useEffectEvent(() => {
@@ -91,6 +93,7 @@ export const Navigation = (props: NavigationProps) => {
               type="button"
               className={styles.mobileNavToggle}
               onClick={() => setOpen(!isOpen)}
+              aria-expanded={isOpen ? "true" : "false"}
               aria-label="Toggle mobile navigation"
             >
               <Menu className={styles.menu} />
@@ -98,11 +101,16 @@ export const Navigation = (props: NavigationProps) => {
           </div>
         ) : null}
       </div>
-      <MobileNavigationDrawer
-        navigationItems={navigationItems}
-        visible={isOpen}
-        closeMenu={closeMenu}
-      />
+      <Dialog.Root modal onOpenChange={setOpen} open={isOpen}>
+        <Dialog.Portal>
+          <Dialog.Popup className={styles.mobileNav}>
+            <MobileNavigationDrawer
+              closeMenu={closeMenu}
+              navigationItems={navigationItems}
+            />
+          </Dialog.Popup>
+        </Dialog.Portal>
+      </Dialog.Root>
     </nav>
   );
 };

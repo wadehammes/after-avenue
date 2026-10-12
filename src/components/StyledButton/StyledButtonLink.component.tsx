@@ -1,11 +1,11 @@
 import classNames from "classnames";
 import type { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
-import type { ReactNode } from "react";
-import type { AriaLinkOptions } from "react-aria";
+import type { ComponentProps, ReactNode } from "react";
 import styles from "src/components/StyledButton/StyledButton.module.css";
 
-interface StyledButtonLinkProps extends Omit<AriaLinkOptions, "href"> {
+interface StyledButtonLinkProps
+  extends Omit<ComponentProps<typeof Link>, "className" | "href"> {
   children: ReactNode;
   color?: "light" | "dark";
   href: Url;

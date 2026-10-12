@@ -30,7 +30,7 @@ export const DeployButton = (props: DeployButtonProps) => {
   return (
     <StyledButton
       isDisabled={isRefreshing}
-      onPress={handleDeploy}
+      onClick={handleDeploy}
       variant={isRefreshing ? "contained" : "outlined"}
       color="dark"
     >

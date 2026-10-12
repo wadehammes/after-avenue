@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { useEffect, useEffectEvent, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import styles from "src/components/FeaturedWork/FeaturedWork.module.css";
 import { useFeaturedReelInView } from "src/components/FeaturedWork/useFeaturedReelInView";
 import { LazyReactPlayer } from "src/components/LazyReactPlayer/LazyReactPlayer.component";
@@ -13,8 +13,6 @@ import PlayIcon from "src/icons/Play.icon.svg";
 import scrollEntrance from "src/styles/scrollEntrance.module.css";
 import {
   createMutedPlayerHandlers,
-  ensureContainerMuted,
-  featuredReelPlayerConfig,
   mutedAutoplayPlayerProps,
   reelPlayerConfig,
 } from "src/utils/videoPlayerConfig";
@@ -33,25 +31,12 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
     initializeWithValue: false,
   });
   const { featuredWorkButtonText } = useGlobalVariables();
-  const { hasAnimated, hasMountedPlayer, playInView, ref } =
-    useFeaturedReelInView({
-      priority,
-    });
+  const { hasAnimated, hasMountedPlayer, inView, ref } = useFeaturedReelInView({
+    priority,
+  });
   const embedRef = useRef<HTMLDivElement>(null);
 
   const muteHandlers = useMemo(() => createMutedPlayerHandlers(embedRef), []);
-
-  const syncEmbedMuted = useEffectEvent(() => {
-    ensureContainerMuted(embedRef.current);
-  });
-
-  useEffect(() => {
-    if (!playInView) {
-      return;
-    }
-
-    syncEmbedMuted();
-  }, [playInView]);
 
   return !isMobile ? (
     <div
@@ -81,13 +66,11 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
               {hasMountedPlayer ? (
                 <LazyReactPlayer
                   autoPlay={priority}
-                  config={
-                    priority ? reelPlayerConfig : featuredReelPlayerConfig
-                  }
+                  config={reelPlayerConfig}
                   controls={false}
                   loop
                   playsInline
-                  playing={playInView}
+                  playing={priority || inView}
                   src={workVideoUrl}
                   width="100%"
                   height="100%"

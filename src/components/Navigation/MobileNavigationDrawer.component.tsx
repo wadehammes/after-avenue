@@ -1,5 +1,6 @@
 "use client";
 
+import { Dialog } from "@base-ui/react/dialog";
 import Link from "next/link";
 import styles from "src/components/Navigation/Navigation.module.css";
 import type { Page } from "src/contentful/getPages";
@@ -10,22 +11,22 @@ import Close from "src/icons/Close.svg";
 interface MobileNavigationDrawerProps {
   closeMenu?: () => void;
   navigationItems: Partial<Page | null>[];
-  visible: boolean;
 }
 
 export const MobileNavigationDrawer = (props: MobileNavigationDrawerProps) => {
-  const { navigationItems, visible, closeMenu } = props;
+  const { navigationItems, closeMenu } = props;
   const { email, phoneNumber } = useGlobalVariables();
 
-  if (!visible) {
-    return null;
-  }
-
   return (
-    <div className={styles.mobileNav}>
-      <button className={styles.closeButton} type="button" onClick={closeMenu}>
+    <>
+      <Dialog.Title className="hidden-title">Site navigation</Dialog.Title>
+      <Dialog.Close
+        aria-label="Close menu"
+        className={styles.closeButton}
+        type="button"
+      >
         <Close className={styles.close} />
-      </button>
+      </Dialog.Close>
       <Link href="/" onClick={closeMenu} className={styles.mobileNavLogo}>
         <AfterAvenueBrandmark className={styles.mobileSvg} />
       </Link>
@@ -63,6 +64,6 @@ export const MobileNavigationDrawer = (props: MobileNavigationDrawerProps) => {
       >
         {phoneNumber}
       </Link>
-    </div>
+    </>
   );
 };

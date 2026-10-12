@@ -28,7 +28,7 @@ Helpers are **split by topic**—there is no barrel `utils/index.ts`. Import the
 | **Spam / rate limits** | [spamDetection.ts](../../src/utils/spamDetection.ts), [rateLimit.ts](../../src/utils/rateLimit.ts) |
 | **reCAPTCHA** | [recaptcha.ts](../../src/utils/recaptcha.ts) |
 | **Email routing** | [emailHelpers.ts](../../src/utils/emailHelpers.ts) — non-production Resend-only contact recipients via [helpers.ts](../../src/utils/helpers.ts) **`isNonProductionContactEnvironment()`**; covered by [emailHelpers.spec.ts](../../src/utils/emailHelpers.spec.ts) |
-| **Video embed config** | [videoPlayerConfig.ts](../../src/utils/videoPlayerConfig.ts) — Vimeo/YouTube configs, muted autoplay helpers (`reelPlayerConfig`, `featuredReelPlayerConfig`, `editorsBackgroundPlayerConfig`, `controlsPlayerConfig`) |
+| **Video embed config** | [videoPlayerConfig.ts](../../src/utils/videoPlayerConfig.ts) — Vimeo/YouTube configs, muted autoplay helpers (`reelPlayerConfig`, `editorsBackgroundPlayerConfig`, `controlsPlayerConfig`) |
 | **Public env (client)** | [publicEnv.ts](../../src/utils/publicEnv.ts) — e.g. `getRecaptchaSiteKey()` for form components |
 
 Specs: `*.spec.ts` next to modules (e.g. [rateLimit.spec.ts](../../src/utils/rateLimit.spec.ts)).

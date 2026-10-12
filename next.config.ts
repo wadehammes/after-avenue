@@ -81,7 +81,6 @@ const nextConfig: NextConfig = {
     optimizePackageImports: [
       "@contentful/rich-text-react-renderer",
       "@tanstack/react-query",
-      "react-aria",
       "react-google-recaptcha",
       "react-intersection-observer",
       "@base-ui/react",

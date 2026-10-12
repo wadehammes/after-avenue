@@ -1,12 +1,18 @@
 import classNames from "classnames";
-import type { Ref } from "react";
-import type { AriaButtonProps } from "react-aria";
+import type { ComponentProps, Ref } from "react";
 import styles from "src/components/StyledButton/StyledButton.module.css";
 import { Button } from "src/ui/Button/Button.component";
 
-interface StyledButtonProps extends AriaButtonProps {
+type BaseStyledButtonProps = Omit<
+  ComponentProps<typeof Button>,
+  "className" | "disabled"
+>;
+
+interface StyledButtonProps extends BaseStyledButtonProps {
   color?: "light" | "dark";
+  disabled?: boolean;
   fullWidth?: boolean;
+  isDisabled?: boolean;
   ref?: Ref<HTMLButtonElement>;
   size?: "small" | "medium" | "large";
   variant?: "contained" | "outlined";
@@ -14,7 +20,9 @@ interface StyledButtonProps extends AriaButtonProps {
 
 export const StyledButton = (props: StyledButtonProps) => {
   const {
+    disabled,
     fullWidth,
+    isDisabled,
     ref,
     variant = "outlined",
     color = "dark",
@@ -26,6 +34,7 @@ export const StyledButton = (props: StyledButtonProps) => {
     <Button
       ref={ref}
       {...buttonProps}
+      disabled={disabled ?? isDisabled}
       className={classNames(styles.styledButton, {
         [styles.contained]: variant === "contained",
         [styles.dark]: color === "dark",
