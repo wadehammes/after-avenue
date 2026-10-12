@@ -15,9 +15,8 @@ export const useFeaturedReelInView = (
   const [hasAnimated, setHasAnimated] = useState(false);
   const [hasMountedPlayer, setHasMountedPlayer] = useState(priority);
 
-  const { inView: playInView, ref } = useInView({
-    initialInView: priority,
-    threshold: 0,
+  const { inView, ref } = useInView({
+    threshold: priority ? 0 : 0.35,
     triggerOnce: false,
     onChange: (visible) => {
       if (visible && !scrollTimelineSupported) {
@@ -27,15 +26,15 @@ export const useFeaturedReelInView = (
   });
 
   useEffect(() => {
-    if (priority || playInView) {
+    if (inView) {
       setHasMountedPlayer(true);
     }
-  }, [playInView, priority]);
+  }, [inView]);
 
   return {
     hasAnimated,
     hasMountedPlayer,
-    playInView,
+    inView,
     ref,
   };
 };

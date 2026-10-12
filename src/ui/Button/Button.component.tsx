@@ -1,25 +1,16 @@
-import type { Ref } from "react";
-import { type AriaButtonProps, useButton, useObjectRef } from "react-aria";
-import styles from "src/ui/Button/Button.module.css";
+"use client";
 
-interface ButtonProps extends AriaButtonProps {
-  className?: string;
+import { Button as BaseButton } from "@base-ui/react/button";
+import type { ComponentProps, Ref } from "react";
+
+export type ButtonProps = ComponentProps<typeof BaseButton> & {
   ref?: Ref<HTMLButtonElement>;
-  style?: React.CSSProperties;
-}
+};
 
 export const Button = (props: ButtonProps) => {
-  const { className, ref, style, ...buttonAriaProps } = props;
-  const buttonRef = useObjectRef(ref);
-  const { buttonProps } = useButton(buttonAriaProps, buttonRef);
+  const { className, ref, style, ...restProps } = props;
 
   return (
-    <button
-      {...buttonProps}
-      className={className ? className : styles.button}
-      style={style}
-    >
-      {props.children}
-    </button>
+    <BaseButton {...restProps} className={className} ref={ref} style={style} />
   );
 };

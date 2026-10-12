@@ -52,7 +52,7 @@ Use **`next/dynamic`** when a component is heavy but still safe to SSR. For most
 | [`WorkHeroVideo`](../../src/components/WorkHeroVideo/WorkHeroVideo.component.tsx) | Work detail hero — controls, solid loading overlay until ready, `playing` prop. |
 | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | Work grid / home mobile — **`light`** poster, lazy-mount via `useInView` (`VIDEO_MOUNT_ROOT_MARGIN`), custom play chrome until playback starts. |
 | [`WorkPagePrefetch`](../../src/components/WorkPage/WorkPagePrefetch.component.tsx) | Client helper on `/work` — `import("react-player")` warmup for the grid. |
-| [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop) — mount when in view (priority on load); `playing={playInView}` from [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts); scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). |
+| [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop) — priority embed on load; others mount at ~35% in view via [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts); `playing={priority || inView}`; scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). |
 | [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | Fixed full-viewport background for `/editors` (desktop); **two-player pool** — active embed stays mounted; static MP4 + hidden preload on hover; swap on **`onReady`**. |
 
 ## Shared form and feedback UI
@@ -62,6 +62,8 @@ Reusable pieces live **outside** a single feature folder when more than one form
 | Location | Role |
 |----------|------|
 | [Input/](../../src/components/Input/), [TextArea/](../../src/components/TextArea/), [Checkbox/](../../src/components/Checkbox/) | Base UI + react-hook-form field wrappers for labels, errors, and refs (React 19 `ref` prop). |
+| [ui/Button/](../../src/ui/Button/Button.component.tsx) | Thin wrapper around **`@base-ui/react/button`**; [StyledButton](../../src/components/StyledButton/StyledButton.component.tsx) applies site styles. |
+| [Navigation/](../../src/components/Navigation/) | Mobile menu uses Base UI **`Dialog`** (modal, focus trap, scroll lock) via [`Navigation.tsx`](../../src/components/Navigation/Navigation.tsx) + [`MobileNavigationDrawer`](../../src/components/Navigation/MobileNavigationDrawer.component.tsx). |
 | [forms/FormWebsiteHoneypot.component.tsx](../../src/components/forms/FormWebsiteHoneypot.component.tsx) | Honeypot `website` field for bot traps. |
 | [Toast/ToastHost.component.tsx](../../src/components/Toast/ToastHost.component.tsx) | App-wide toast viewport; mounted from [providers.tsx](../../src/app/providers.tsx). |
 | [ui/Field/FieldErrorMessage.component.tsx](../../src/ui/Field/FieldErrorMessage.component.tsx) | Shared error line under controls. |

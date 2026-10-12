@@ -95,13 +95,23 @@ Contact form mail is built with **[React Email](https://react.email/)** and sent
 
 Use **`next/dynamic`** for code-splitting when a component is heavy but SSR-safe. For most **client-only** widgets, use **`browser()`** + **`use()`** + **`Suspense`** via [`createBrowserLazyDefault`](../../src/ui/browserLazyDefault.tsx) (see [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs)). **[`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx)** is an exception: it uses **`next/dynamic`** (`ssr: false`) because **`react-player`** v3 lazy-loads Vimeo/YouTube chunks and that combination breaks **Turbopack** production builds with **`createBrowserLazyDefault`**. See [components.md](components.md).
 
+### Deferred UI (`Activity`, `ViewTransition`)
+
+| Pattern | Where | Why |
+|---------|-------|-----|
+| **`Activity`** + **`useInView`** | [`HomePage.tsx`](../../src/components/HomePage/HomePage.tsx) → **`FeaturedBrands`** | Pre-render the brands strip at low priority before the section scrolls in; switch to **`visible`** when **`inView`**. |
+| Base UI **`Dialog`** | [`Navigation.tsx`](../../src/components/Navigation/Navigation.tsx) → [`MobileNavigationDrawer`](../../src/components/Navigation/MobileNavigationDrawer.component.tsx) | Modal mobile menu (focus trap, scroll lock, **`Dialog.Close`**). Toggle uses **`startTransition`** for open state. |
+| **`useInView`** + conditional mount | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx), [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) | Video embeds stay **unmounted** until needed—**`Activity`** is not used here because iframe cost dominates preserved state. |
+
+See [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs) for when to choose **`Activity`** vs unmount vs **`ViewTransition`**.
+
 ## Embedded video (Vimeo / YouTube)
 
 Work entries store a **`workVideoUrl`** (Vimeo or YouTube). The site plays them through **[`react-player`](https://github.com/cookpete/react-player)**. Shared embed config lives in [`videoPlayerConfig.ts`](../../src/utils/videoPlayerConfig.ts). Treat every embed as expensive: one iframe per mount, heavy on scroll and memory if you mount many at once.
 
 ### Scroll entrance (home featured reels)
 
-Home **featured reels** use scroll-driven entrance in [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css). The **16∶9** **`videoContainer`** always renders when a video URL exists and holds the **`useInView`** ref. [**`useFeaturedReelInView`**](../../src/components/FeaturedWork/useFeaturedReelInView.ts) **mounts** **`LazyReactPlayer`** only for the **priority** reel or when the reel is **in view** (avoids hammering Vimeo with many simultaneous embeds). It toggles **`playing`** from the same observer so off-screen reels **pause**. The **priority** (first) reel uses **`reelPlayerConfig`** (**`background: true`**) and **`autoPlay`** so Vimeo autoplays without a poster frame; scroll reels use **`featuredReelPlayerConfig`** (**`background: false`**) so **`playing={false}`** pauses off-screen embeds. The priority reel uses **`initialInView`** on its observer.
+Home **featured reels** use scroll-driven entrance in [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css). The **16∶9** **`videoContainer`** always renders when a video URL exists and holds the **`useInView`** ref. [**`useFeaturedReelInView`**](../../src/components/FeaturedWork/useFeaturedReelInView.ts) mounts **`LazyReactPlayer`** for the **priority** reel on load only; other reels mount after **~35%** visible (**`threshold: 0.35`**) and stay mounted (no eager **`react-player`** prefetch on [`HomePage`](../../src/components/HomePage/HomePage.tsx)). **`playing`** is **`priority || inView`** so off-screen embeds pause without unmount flicker. Every reel uses **`reelPlayerConfig`** (**`background: true`**) with muted autoplay props.
 
 ### Embed config
 
@@ -123,7 +133,7 @@ Home **featured reels** use scroll-driven entrance in [scrollEntrance.module.css
 
 | Surface | Component | Strategy |
 |---------|-----------|----------|
-| Home featured reels (desktop) | [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) + [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) | Mount embed when in view (priority reel on load); **`playing={playInView}`** pauses off-screen. First reel: **`priority`**. Scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). Mobile uses **`WorkCard`**. |
+| Home featured reels (desktop) | [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) + [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) | Priority reel mounts on load; others after **`threshold: 0.35`**. **`playing={priority || inView}`**; no home-wide **`react-player`** prefetch. Scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). Mobile uses **`WorkCard`**. |
 | Work index / category / related cards | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | **`LazyReactPlayer`** with **`light`** (poster until click—no iframe on first paint). Lazy-mount at **`VIDEO_MOUNT_ROOT_MARGIN`**. Custom play chrome over the poster until **`onPlaying`** / **`onStart`**. Click preview → **`playing={true}`** + **`controlsPlayerConfig`**. Title row links to work detail. [`WorkPagePrefetch`](../../src/components/WorkPage/WorkPagePrefetch.component.tsx) preloads the player chunk on `/work`. |
 | Work detail hero | [`WorkEntryPage`](../../src/components/WorkEntryPage/WorkEntryPage.component.tsx) | [`WorkHeroVideo`](../../src/components/WorkHeroVideo/WorkHeroVideo.component.tsx) — **`playing`** from server prop or **`?playVideo=true`**, loading overlay until ready. |
 | Editors index hover background | [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | **Two-player pool:** active embed stays mounted (hidden while preloading). On hover (150ms debounce in [`EditorsPage`](../../src/components/EditorsPage/EditorsPage.component.tsx)), show the **static MP4** while a **hidden preload** `ReactPlayer` loads the next embed; swap on **`onReady`**. |
@@ -132,7 +142,7 @@ Home **featured reels** use scroll-driven entrance in [scrollEntrance.module.css
 
 1. **Never mount one `ReactPlayer` per list item** on a long page. Lazy-mount, use **`light`** for click-to-play grids, or use a **fixed-size player pool** (editors background).
 2. **Work grids** (and home **mobile** reels via **`WorkCard`**) lazy-mount at **`VIDEO_MOUNT_ROOT_MARGIN`** (`80% 0px` in [constants.ts](../../src/utils/constants.ts)) so cards can warm up before scroll-in.
-3. **Featured reels (desktop home)** mount **`LazyReactPlayer`** when the reel is **in view**, or immediately for the **priority** reel only—**not** via the preload margin (avoids many simultaneous Vimeo embeds). Then **`playing={playInView}`** pauses off-screen; use **`featuredReelPlayerConfig`** so Vimeo respects pause (not **`background: true`**).
+3. **Featured reels (desktop home)** load **one embed on first paint** (priority reel only). Additional reels mount when sufficiently in view—not at **`threshold: 0`** for every stacked block. Do **not** prefetch **`react-player`** for all featured items on [`HomePage`](../../src/components/HomePage/HomePage.tsx).
 4. **Do not combine scroll-driven opacity on the same node as a lazy Vimeo iframe** — use **`scrollEntrance`** on home reels only; work cards stay static to avoid flicker.
 5. **Reserve space** — video containers use **16∶9** padding (or **`aspect-ratio`**) and a solid background (or **`light`** poster) so layout does not shift while the chunk loads.
 
