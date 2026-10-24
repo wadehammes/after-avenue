@@ -11,7 +11,7 @@ describe("useFeaturedReelInView", () => {
     setupIntersectionObserverMock();
   });
 
-  it("starts with inView true for the priority reel via initialInView before observe runs", async () => {
+  it("starts with inView true for the priority reel via initialInView", async () => {
     const { useFeaturedReelInView } = await import(
       "src/components/FeaturedWork/useFeaturedReelInView"
     );
@@ -21,10 +21,10 @@ describe("useFeaturedReelInView", () => {
     );
 
     expect(result.current.inView).toBe(true);
-    expect(result.current.hasMountedPlayer).toBe(true);
+    expect(result.current.shouldPlay).toBe(true);
   });
 
-  it("starts with hasMountedPlayer false for non-priority reels until the target intersects", async () => {
+  it("starts with shouldPlay false for non-priority reels until the target intersects", async () => {
     resetIntersectionObserverMocks();
     setupIntersectionObserverMock({
       fireOnObserve: true,
@@ -39,15 +39,33 @@ describe("useFeaturedReelInView", () => {
       useFeaturedReelInView({ priority: false }),
     );
 
-    expect(result.current.hasMountedPlayer).toBe(false);
+    expect(result.current.shouldPlay).toBe(false);
 
     act(() => {
       result.current.ref(document.createElement("div"));
     });
 
     await waitFor(() => {
-      expect(result.current.hasMountedPlayer).toBe(true);
+      expect(result.current.inView).toBe(true);
     });
-    expect(result.current.inView).toBe(true);
+    expect(result.current.shouldPlay).toBe(true);
+  });
+
+  it("keeps shouldPlay true for the priority reel after the observe target is attached", async () => {
+    const { useFeaturedReelInView } = await import(
+      "src/components/FeaturedWork/useFeaturedReelInView"
+    );
+
+    const { result } = renderHook(() =>
+      useFeaturedReelInView({ priority: true }),
+    );
+
+    expect(result.current.shouldPlay).toBe(true);
+
+    act(() => {
+      result.current.ref(document.createElement("div"));
+    });
+
+    expect(result.current.shouldPlay).toBe(true);
   });
 });

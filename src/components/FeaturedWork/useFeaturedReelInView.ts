@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { supportsScrollTimeline } from "src/utils/supportsScrollTimeline";
 
@@ -13,29 +13,30 @@ export const useFeaturedReelInView = (
 ) => {
   const { priority = false } = options;
   const [hasAnimated, setHasAnimated] = useState(false);
-  const [hasMountedPlayer, setHasMountedPlayer] = useState(priority);
+  const [eagerPlay, setEagerPlay] = useState(priority);
 
   const { inView, ref } = useInView({
     initialInView: priority,
-    threshold: priority ? 0 : 0.35,
+    rootMargin: priority ? "0px" : "0px 0px -12% 0px",
+    threshold: priority ? 0 : 0.2,
     triggerOnce: false,
     onChange: (visible) => {
+      if (visible) {
+        setEagerPlay((current) => (current ? false : current));
+      }
+
       if (visible && !scrollTimelineSupported) {
         setHasAnimated(true);
       }
     },
   });
 
-  useEffect(() => {
-    if (inView) {
-      setHasMountedPlayer(true);
-    }
-  }, [inView]);
+  const shouldPlay = inView || (priority && eagerPlay);
 
   return {
     hasAnimated,
-    hasMountedPlayer,
     inView,
     ref,
+    shouldPlay,
   };
 };

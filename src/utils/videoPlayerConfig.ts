@@ -17,6 +17,8 @@ const youtubeConfig = (config: YoutubeConfigWithMuteParam) =>
 interface MuteablePlayer extends Element {
   defaultMuted?: boolean;
   muted?: boolean;
+  pause?: () => Promise<void> | void;
+  play?: () => Promise<void>;
   volume?: number;
 }
 
@@ -33,6 +35,24 @@ const findPlayerElement = (
   }
 
   return container.querySelector("vimeo-video, youtube-video");
+};
+
+export interface PlayerMediaElement {
+  pause: () => Promise<void> | void;
+  play: () => Promise<void>;
+  readyState?: number;
+}
+
+export const getPlayerMediaElement = (
+  container: HTMLElement | null,
+): PlayerMediaElement | null => {
+  const player = findPlayerElement(container);
+
+  if (!player || typeof player.play !== "function") {
+    return null;
+  }
+
+  return player as PlayerMediaElement;
 };
 
 const ensurePlayerMuted = (player: MuteablePlayer | null | undefined) => {
@@ -54,10 +74,16 @@ export const ensureContainerMuted = (container: HTMLElement | null) => {
   ensurePlayerMuted(findPlayerElement(container));
 };
 
+interface MutedPlayerHandlerOptions {
+  invokeReadyOnStart?: boolean;
+}
+
 export const createMutedPlayerHandlers = (
   containerRef: RefObject<HTMLElement | null>,
   onReady?: () => void,
+  options: MutedPlayerHandlerOptions = {},
 ) => {
+  const { invokeReadyOnStart = true } = options;
   const enforce = () => {
     ensureContainerMuted(containerRef.current);
   };
@@ -70,7 +96,9 @@ export const createMutedPlayerHandlers = (
     },
     onStart: () => {
       enforce();
-      onReady?.();
+      if (invokeReadyOnStart) {
+        onReady?.();
+      }
     },
   };
 };

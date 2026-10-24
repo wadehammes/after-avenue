@@ -28,7 +28,7 @@ Helpers are **split by topic**—there is no barrel `utils/index.ts`. Import the
 | **Spam / rate limits** | [spamDetection.ts](../../src/utils/spamDetection.ts), [rateLimit.ts](../../src/utils/rateLimit.ts) |
 | **reCAPTCHA** | [recaptcha.ts](../../src/utils/recaptcha.ts) |
 | **Email routing** | [emailHelpers.ts](../../src/utils/emailHelpers.ts) — non-production Resend-only contact recipients via [helpers.ts](../../src/utils/helpers.ts) **`isNonProductionContactEnvironment()`**; covered by [emailHelpers.spec.ts](../../src/utils/emailHelpers.spec.ts) |
-| **Video embed config** | [videoPlayerConfig.ts](../../src/utils/videoPlayerConfig.ts) — Vimeo/YouTube configs, muted autoplay helpers (`reelPlayerConfig`, `editorsBackgroundPlayerConfig`, `controlsPlayerConfig`) |
+| **Video embed config** | [videoPlayerConfig.ts](../../src/utils/videoPlayerConfig.ts) — Vimeo/YouTube configs, muted autoplay helpers (`reelPlayerConfig`, `editorsBackgroundPlayerConfig`, `controlsPlayerConfig`), **`createMutedPlayerHandlers`** (optional **`invokeReadyOnStart: false`** for featured reels), **`getPlayerMediaElement`** / **`PlayerMediaElement`** for imperative featured-reel playback |
 | **Public env (client)** | [publicEnv.ts](../../src/utils/publicEnv.ts) — e.g. `getRecaptchaSiteKey()` for form components |
 
 Specs: `*.spec.ts` next to modules (e.g. [rateLimit.spec.ts](../../src/utils/rateLimit.spec.ts)).
@@ -100,7 +100,7 @@ Client, getters, parsers, generated types — see [contentful.md](contentful.md)
 |------|---------|
 | [WorkHeroVideo/](../../src/components/WorkHeroVideo/) | Work detail hero — `ReactPlayer`, loading overlay. |
 | [WorkCard/](../../src/components/WorkCard/) | Work grid card; lazy-mount video near viewport. |
-| [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block (desktop video). [`useFeaturedReelInView.ts`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) (mount); [`useFeaturedReelMedia.ts`](../../src/components/FeaturedWork/useFeaturedReelMedia.ts) (imperative play/pause). Specs colocated. |
+| [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block. [`FeaturedWork.component.tsx`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) (layout + **`WorkCard`** on mobile); [`useFeaturedReelInView.ts`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) (**`shouldPlay`** / **`eagerPlay`**); [`useFeaturedWorkReelPlayer.ts`](../../src/components/FeaturedWork/useFeaturedWorkReelPlayer.ts) (loading overlay, **`embedRef`**, mute handlers); [`useFeaturedReelMedia.ts`](../../src/components/FeaturedWork/useFeaturedReelMedia.ts) (**`playWhenReady`**, **`getPlayerMediaElement`**). Specs colocated. |
 | [EditorsBackgroundVideo/](../../src/components/EditorsBackgroundVideo/) | `/editors` hover background; two-player pool. |
 
 Patterns and performance rules: [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube). Shared scroll entrance styles: [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css) (import `.enter` / `.animate` on card roots).

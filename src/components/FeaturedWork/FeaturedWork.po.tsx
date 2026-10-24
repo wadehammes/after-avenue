@@ -20,6 +20,7 @@ jest.mock("src/components/LazyReactPlayer/LazyReactPlayer.component", () => ({
 }));
 
 export class FeaturedWorkPageObject extends BasePageObject {
+  public testId = "rhFeaturedWork";
   public defaultWork = workFactory.build();
 
   constructor(
