@@ -1,5 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { type RenderOptions, render } from "@testing-library/react";
+import {
+  type RenderHookOptions,
+  type RenderOptions,
+  render,
+  renderHook as rtlRenderHook,
+} from "@testing-library/react";
 import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
 import type { ReactElement } from "react";
 import { useState } from "react";
@@ -29,7 +34,12 @@ const customRender = (
   options?: Omit<RenderOptions, "queries">,
 ) => render(ui, { wrapper: Providers, ...options });
 
+const customRenderHook = <Result, Props>(
+  hook: (initialProps: Props) => Result,
+  options?: Omit<RenderHookOptions<Props>, "wrapper">,
+) => rtlRenderHook(hook, { wrapper: Providers, ...options });
+
 export * from "@testing-library/react";
 export { default as userEvent } from "@testing-library/user-event";
 
-export { customRender as render };
+export { customRender as render, customRenderHook as renderHook };
