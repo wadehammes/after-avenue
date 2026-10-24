@@ -69,9 +69,10 @@ Shared test infrastructure (see [conventions.md](conventions.md#testing)):
 
 | Path | Purpose |
 |------|---------|
-| [test-utils.tsx](../../src/tests/test-utils.tsx) | Custom `render` with React Query + router; re-exports `userEvent` |
+| [test-utils.tsx](../../src/tests/test-utils.tsx) | Custom `render` and `renderHook` with React Query + router; re-exports Testing Library helpers and `userEvent` |
 | [basePageObject.po.ts](../../src/tests/basePageObject.po.ts) | Base class for page objects |
-| [factories/BaseFactory.ts](../../src/tests/factories/BaseFactory.ts) | Faker test factories (e.g. [StyledButton.factory.ts](../../src/tests/factories/StyledButton.factory.ts)) |
+| [factories/BaseFactory.ts](../../src/tests/factories/BaseFactory.ts) | Faker test factories (e.g. [StyledButton.factory.ts](../../src/tests/factories/StyledButton.factory.ts), [Work.factory.ts](../../src/tests/factories/Work.factory.ts)) |
+| [mocks/mockIntersectionObserver.ts](../../src/tests/mocks/mockIntersectionObserver.ts) | `setupIntersectionObserverMock`, `resetIntersectionObserverMocks` — optional **`fireOnObserve`** / **`isIntersecting`** for hook specs; global default in [setupTests.ts](../../.jest/setupTests.ts) |
 | [mocks/mockApiResponse.ts](../../src/tests/mocks/mockApiResponse.ts) | Success/failure helpers for mocked `api` endpoints |
 | [mocks/mockGoogleRecaptcha.tsx](../../src/tests/mocks/mockGoogleRecaptcha.tsx) | Invisible reCAPTCHA ref mock for component tests |
 | [mocks/appToast.mock.ts](../../src/tests/mocks/appToast.mock.ts) | Shared `mockToast` fns for toast assertions (wired in setupTests) |
@@ -99,7 +100,7 @@ Client, getters, parsers, generated types — see [contentful.md](contentful.md)
 |------|---------|
 | [WorkHeroVideo/](../../src/components/WorkHeroVideo/) | Work detail hero — `ReactPlayer`, loading overlay. |
 | [WorkCard/](../../src/components/WorkCard/) | Work grid card; lazy-mount video near viewport. |
-| [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block (desktop video). Playback/scroll state in colocated [`useFeaturedReelInView.ts`](../../src/components/FeaturedWork/useFeaturedReelInView.ts). |
+| [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block (desktop video). [`useFeaturedReelInView.ts`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) (mount); [`useFeaturedReelMedia.ts`](../../src/components/FeaturedWork/useFeaturedReelMedia.ts) (imperative play/pause). Specs colocated. |
 | [EditorsBackgroundVideo/](../../src/components/EditorsBackgroundVideo/) | `/editors` hover background; two-player pool. |
 
 Patterns and performance rules: [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube). Shared scroll entrance styles: [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css) (import `.enter` / `.animate` on card roots).

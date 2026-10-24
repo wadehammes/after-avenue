@@ -1,9 +1,10 @@
 "use client";
 
 import classNames from "classnames";
-import { useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import styles from "src/components/FeaturedWork/FeaturedWork.module.css";
 import { useFeaturedReelInView } from "src/components/FeaturedWork/useFeaturedReelInView";
+import { useFeaturedReelMedia } from "src/components/FeaturedWork/useFeaturedReelMedia";
 import { LazyReactPlayer } from "src/components/LazyReactPlayer/LazyReactPlayer.component";
 import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.component";
 import { WorkCard } from "src/components/WorkCard/WorkCard.component";
@@ -35,6 +36,19 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
     priority,
   });
   const embedRef = useRef<HTMLDivElement>(null);
+  const [mediaElement, setMediaElement] = useState<HTMLVideoElement | null>(
+    null,
+  );
+
+  const shouldPlay = priority || inView;
+  const { onError, remountKey } = useFeaturedReelMedia({
+    active: hasMountedPlayer && shouldPlay,
+    mediaElement,
+  });
+
+  const handlePlayerRef = useCallback((node: HTMLVideoElement | null) => {
+    setMediaElement(node);
+  }, []);
 
   const muteHandlers = useMemo(() => createMutedPlayerHandlers(embedRef), []);
 
@@ -65,12 +79,13 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
             <div ref={embedRef} className={styles.videoPlayerEmbed}>
               {hasMountedPlayer ? (
                 <LazyReactPlayer
-                  autoPlay={priority}
+                  key={`${workVideoUrl}-${remountKey}`}
+                  ref={handlePlayerRef}
                   config={reelPlayerConfig}
                   controls={false}
                   loop
+                  onError={onError}
                   playsInline
-                  playing={priority || inView}
                   src={workVideoUrl}
                   width="100%"
                   height="100%"

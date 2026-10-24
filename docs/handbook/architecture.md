@@ -65,7 +65,7 @@ Feature-scoped TypeScript interfaces shared across components.
 ### `src/tests/`
 
 - [basePageObject.po.ts](../../src/tests/basePageObject.po.ts) — base class for page objects.
-- [test-utils.tsx](../../src/tests/test-utils.tsx) — custom `render` with app providers; re-exports `userEvent`.
+- [test-utils.tsx](../../src/tests/test-utils.tsx) — custom `render` and `renderHook` with app providers; re-exports Testing Library helpers and `userEvent`.
 - [factories/BaseFactory.ts](../../src/tests/factories/BaseFactory.ts) — base class for Faker test factories.
 - `mocks/` — Jest doubles from [.jest/setupTests.ts](../../.jest/setupTests.ts), [`mockApiResponse`](../../src/tests/mocks/mockApiResponse.ts), [`mockGoogleRecaptcha`](../../src/tests/mocks/mockGoogleRecaptcha.tsx), and related helpers for page objects.
 

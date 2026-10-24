@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import parse from "html-react-parser";
-import { Activity } from "react";
+import { Activity, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { FeaturedBrands } from "src/components/FeaturedBrands/FeaturedBrands.component";
 import { FeaturedWork } from "src/components/FeaturedWork/FeaturedWork.component";
@@ -35,6 +35,13 @@ export const HomePage = (props: HomePageProps) => {
   const priorityVideoSlug = featuredWork.find(
     (work) => work.workVideoUrl,
   )?.workSlug;
+
+  useEffect(() => {
+    if (priorityVideoSlug) {
+      void import("react-player");
+      void import("vimeo-video-element/react");
+    }
+  }, [priorityVideoSlug]);
 
   return (
     <>

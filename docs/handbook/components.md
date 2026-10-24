@@ -48,11 +48,11 @@ Use **`next/dynamic`** when a component is heavy but still safe to SSR. For most
 
 | Component | Role |
 |-----------|------|
-| [`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx) | Client-only **`react-player`** wrapper (`next/dynamic`). Use everywhere instead of a direct import. |
+| [`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx) | Client-only **`react-player`** wrapper (`next/dynamic`, **`forwardRef`** to the underlying media element). Use everywhere instead of a direct import. |
 | [`WorkHeroVideo`](../../src/components/WorkHeroVideo/WorkHeroVideo.component.tsx) | Work detail hero — controls, solid loading overlay until ready, `playing` prop. |
 | [`WorkCard`](../../src/components/WorkCard/WorkCard.component.tsx) | Work grid / home mobile — **`light`** poster, lazy-mount via `useInView` (`VIDEO_MOUNT_ROOT_MARGIN`), custom play chrome until playback starts. |
 | [`WorkPagePrefetch`](../../src/components/WorkPage/WorkPagePrefetch.component.tsx) | Client helper on `/work` — `import("react-player")` warmup for the grid. |
-| [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop) — priority embed on load; others mount at ~35% in view via [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts); `playing={priority || inView}`; scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). |
+| [`FeaturedWork`](../../src/components/FeaturedWork/FeaturedWork.component.tsx) | Home featured reel (desktop) — [`useFeaturedReelInView`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) + [`useFeaturedReelMedia`](../../src/components/FeaturedWork/useFeaturedReelMedia.ts); imperative play/pause via player ref; scroll entrance via [`scrollEntrance.module.css`](../../src/styles/scrollEntrance.module.css). |
 | [`EditorsBackgroundVideo`](../../src/components/EditorsBackgroundVideo/EditorsBackgroundVideo.component.tsx) | Fixed full-viewport background for `/editors` (desktop); **two-player pool** — active embed stays mounted; static MP4 + hidden preload on hover; swap on **`onReady`**. |
 
 ## Shared form and feedback UI

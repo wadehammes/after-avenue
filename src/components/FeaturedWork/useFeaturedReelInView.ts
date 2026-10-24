@@ -16,6 +16,7 @@ export const useFeaturedReelInView = (
   const [hasMountedPlayer, setHasMountedPlayer] = useState(priority);
 
   const { inView, ref } = useInView({
+    initialInView: priority,
     threshold: priority ? 0 : 0.35,
     triggerOnce: false,
     onChange: (visible) => {

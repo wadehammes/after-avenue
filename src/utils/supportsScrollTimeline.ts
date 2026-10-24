@@ -1,6 +1,7 @@
-/** Scroll-driven animations (`animation-timeline: view()`). */
 export const supportsScrollTimeline = (): boolean => {
   return (
-    typeof CSS !== "undefined" && CSS.supports("animation-timeline: view()")
+    typeof CSS !== "undefined" &&
+    typeof CSS.supports === "function" &&
+    CSS.supports("animation-timeline: view()")
   );
 };
