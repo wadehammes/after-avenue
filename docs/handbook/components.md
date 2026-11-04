@@ -38,11 +38,11 @@ Export the component as both a **named export** (e.g. `export const MyComponent`
 
 ## Dynamic imports
 
-Use **`next/dynamic`** when a component is heavy but still safe to SSR. For most **browser-only** dependencies (`window`, third-party widgets), use **`createBrowserLazyDefault`](../../src/ui/browserLazyDefault.tsx) (**`browser()`** + **`use()`** + **`Suspense`**) per [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs). CMS-driven pieces are imported directly in **ContentRenderer** today; if a block becomes large enough to defer, wrap it with `dynamic` there or in the parent.
+Use **`next/dynamic`** when a component is heavy but still safe to SSR. For most **browser-only** dependencies (`window`, third-party widgets), use [**`BrowserLazyDefault`**](../../src/ui/browserLazyDefault.tsx) (**`browser()`** + **`use()`** + **`Suspense`**, with a module-level **`import()`** promise) per [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs). CMS-driven pieces are imported directly in **ContentRenderer** today; if a block becomes large enough to defer, wrap it with `dynamic` there or in the parent.
 
 **Embedded video**: Always render **`react-player`** through [`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx) (**`next/dynamic`**, `ssr: false`—see [conventions.md](conventions.md)). Toggle playback with **`playing`**; use **`autoPlay`** only as a **static** mount-time hint (e.g. priority home reel, editors background) — never flip **`autoPlay`** when **`playing`** changes. Optional **`loadingFallback`** wraps the player in **`Suspense`**. See [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube).
 
-**Contact reCAPTCHA**: [`ContactFormReCaptcha`](../../src/components/ContactForm/ContactFormReCaptcha.component.tsx) loads **`react-google-recaptcha`** via **`createBrowserLazyDefault`** (not **`next/dynamic`**).
+**Contact reCAPTCHA**: [`ContactFormReCaptcha`](../../src/components/ContactForm/ContactFormReCaptcha.component.tsx) loads **`react-google-recaptcha`** via **`BrowserLazyDefault`** (not **`next/dynamic`**).
 
 ## Video-related components
 

@@ -1,23 +1,24 @@
 import { type ComponentType, createElement, useEffect, useState } from "react";
 
-export const createBrowserLazyDefault = <P extends object>(
-  importFn: () => Promise<{ default: ComponentType<P> }>,
+type BrowserLazyDefaultProps<P extends object> = P & {
+  modulePromise: Promise<{ default: ComponentType<P> }>;
+};
+
+export const BrowserLazyDefault = <P extends object>(
+  props: BrowserLazyDefaultProps<P>,
 ) => {
-  const BrowserLazyDefault = (props: P) => {
-    const [Component, setComponent] = useState<ComponentType<P> | null>(null);
+  const { modulePromise, ...rest } = props;
+  const [Component, setComponent] = useState<ComponentType<P> | null>(null);
 
-    useEffect(() => {
-      importFn().then((module) => {
-        setComponent(() => module.default);
-      });
-    }, []);
+  useEffect(() => {
+    modulePromise.then((module) => {
+      setComponent(() => module.default);
+    });
+  }, [modulePromise]);
 
-    if (!Component) {
-      return null;
-    }
+  if (!Component) {
+    return null;
+  }
 
-    return createElement(Component, props);
-  };
-
-  return BrowserLazyDefault;
+  return createElement(Component, rest as P);
 };

@@ -61,7 +61,7 @@ Small, cross-feature UI pieces that are not full `src/components/` features:
 |------|---------|
 | [Field/FieldErrorMessage.component.tsx](../../src/ui/Field/FieldErrorMessage.component.tsx) | Inline validation error under form controls. |
 | [Field/FormFieldLayout.component.tsx](../../src/ui/Field/FormFieldLayout.component.tsx) | Shared label + control slot + error wrapper for Input/TextArea. |
-| [browserLazyDefault.tsx](../../src/ui/browserLazyDefault.tsx) | **`createBrowserLazyDefault`** — `browser()` + dynamic `import()` + `Suspense` for client-only packages (e.g. reCAPTCHA). **`react-player`** uses [`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx) instead. |
+| [browserLazyDefault.tsx](../../src/ui/browserLazyDefault.tsx) | **`BrowserLazyDefault`** — `browser()` + `use()` on a module-scoped `import()` promise + `Suspense` for client-only packages (e.g. reCAPTCHA). **`react-player`** uses [`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx) instead. |
 
 ## `src/tests/`
 
