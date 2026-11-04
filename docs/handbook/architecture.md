@@ -100,7 +100,7 @@ flowchart LR
 
 - **[next.config.ts](../../next.config.ts)** — `env` exposure, images, Turbopack/SVG rules, redirects as needed.
 - **[biome.json](../../biome.json)** — lint and format; includes CSS. Run `pnpm lint`, `pnpm format`, `pnpm lint:fix`.
-- **Branching**: Default branch is `staging`. Releases use `make release tag=vX.X.X`; see the root [README.md](../../README.md).
+- **Branching**: Default branch is `staging`. Releases use `make release tag=vX.X.X` from `staging` (Vercel role gate, tag push, optional `gh run watch`); see [platform.md → Production releases](platform.md#production-releases) and the root [README.md](../../README.md).
 
 ## Further reading
 
