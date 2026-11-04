@@ -9,33 +9,43 @@ type DynamicOptions<P extends object> = {
   ssr?: boolean;
 };
 
-/**
- * Jest stand-in for `next/dynamic`. Runs the import loader and renders the
- * resolved default export—no lazy loading or SSR split in unit tests.
- */
+type DynamicHostProps = {
+  loader: () => Promise<{ default: ComponentType<object> }>;
+  componentProps: object;
+};
+
+const DynamicHost = (props: DynamicHostProps) => {
+  const { loader, componentProps } = props;
+  const [Component, setComponent] = useState<ComponentType<object> | null>(
+    null,
+  );
+
+  useEffect(() => {
+    loader().then((mod) => {
+      setComponent(() => mod.default);
+    });
+  }, [loader]);
+
+  if (!Component) {
+    return null;
+  }
+
+  return createElement(Component, componentProps);
+};
+
+DynamicHost.displayName = "DynamicMock";
+
 const mockNextDynamic = <P extends object>(
   loader: DynamicLoader<P>,
   _options?: DynamicOptions<P>,
 ): ComponentType<P> => {
-  const DynamicComponent = (props: P) => {
-    const [Component, setComponent] = useState<ComponentType<P> | null>(null);
+  const loaderForHost = loader as DynamicHostProps["loader"];
 
-    useEffect(() => {
-      loader().then((mod) => {
-        setComponent(() => mod.default);
-      });
-    }, []);
-
-    if (!Component) {
-      return null;
-    }
-
-    return createElement(Component, props);
-  };
-
-  DynamicComponent.displayName = "DynamicMock";
-
-  return DynamicComponent;
+  return (props: P) =>
+    createElement(DynamicHost, {
+      loader: loaderForHost,
+      componentProps: props,
+    });
 };
 
 export default mockNextDynamic;

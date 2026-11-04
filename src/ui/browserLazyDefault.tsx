@@ -3,31 +3,33 @@
 import { type ComponentType, type ReactNode, Suspense, use } from "react";
 import { browser } from "react-dom";
 
-type BrowserLazyProps<P extends object> = P & {
+export type BrowserLazyDefaultProps<P extends object> = P & {
+  modulePromise: Promise<{ default: ComponentType<P> }>;
   suspenseFallback?: ReactNode;
 };
 
-export const createBrowserLazyDefault = <P extends object>(
-  importFn: () => Promise<{ default: ComponentType<P> }>,
+type BrowserLazyInnerProps<P extends object> = P & {
+  modulePromise: Promise<{ default: ComponentType<P> }>;
+};
+
+const BrowserLazyInner = <P extends object>(
+  props: BrowserLazyInnerProps<P>,
 ) => {
-  const modulePromise = importFn();
+  const { modulePromise, ...rest } = props;
+  use(browser());
+  const DefaultExport = use(modulePromise).default;
 
-  const BrowserLazyInner = (props: P) => {
-    use(browser());
-    const DefaultExport = use(modulePromise).default;
+  return <DefaultExport {...(rest as P)} />;
+};
 
-    return <DefaultExport {...props} />;
-  };
+export const BrowserLazyDefault = <P extends object>(
+  props: BrowserLazyDefaultProps<P>,
+) => {
+  const { modulePromise, suspenseFallback, ...playerProps } = props;
 
-  const BrowserLazyDefault = (props: BrowserLazyProps<P>) => {
-    const { suspenseFallback, ...playerProps } = props;
-
-    return (
-      <Suspense fallback={suspenseFallback ?? null}>
-        <BrowserLazyInner {...(playerProps as P)} />
-      </Suspense>
-    );
-  };
-
-  return BrowserLazyDefault;
+  return (
+    <Suspense fallback={suspenseFallback ?? null}>
+      <BrowserLazyInner modulePromise={modulePromise} {...(playerProps as P)} />
+    </Suspense>
+  );
 };

@@ -93,7 +93,7 @@ Contact form mail is built with **[React Email](https://react.email/)** and sent
 
 ## Dynamic imports
 
-Use **`next/dynamic`** for code-splitting when a component is heavy but SSR-safe. For most **client-only** widgets, use **`browser()`** + **`use()`** + **`Suspense`** via [`createBrowserLazyDefault`](../../src/ui/browserLazyDefault.tsx) (see [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs)). **[`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx)** is an exception: it uses **`next/dynamic`** (`ssr: false`) because **`react-player`** v3 lazy-loads Vimeo/YouTube chunks and that combination breaks **Turbopack** production builds with **`createBrowserLazyDefault`**. See [components.md](components.md).
+Use **`next/dynamic`** for code-splitting when a component is heavy but SSR-safe. For most **client-only** widgets, use **`browser()`** + **`use()`** + **`Suspense`** via [`BrowserLazyDefault`](../../src/ui/browserLazyDefault.tsx) (see [conventions.md → React 19.3](conventions.md#react-193-client-only-code-and-refs)). **[`LazyReactPlayer`](../../src/components/LazyReactPlayer/LazyReactPlayer.component.tsx)** is an exception: it uses **`next/dynamic`** (`ssr: false`) because **`react-player`** v3 lazy-loads Vimeo/YouTube chunks and that combination breaks **Turbopack** production builds with **`BrowserLazyDefault`**. See [components.md](components.md).
 
 ### Deferred UI (`Activity`, `ViewTransition`)
 
