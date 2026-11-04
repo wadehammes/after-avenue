@@ -82,14 +82,15 @@ To create a production release, create a tag sequential to the latest. Tags shou
 
 Steps:
 
-1. Check out `staging` and pull the latest changes.
-2. Run `make release` with the tag name:
+1. Check out **`staging`** and pull the latest changes (`make release` refuses other branches).
+2. Be signed in to Vercel (**`vercel login`**) or set **`VERCEL_TOKEN`**. Release requires **Member** or **Owner** on the **`worldwadeweb`** team (see **`docs/handbook/platform.md`** → Production releases).
+3. Run **`make release`** with the tag name (creates the tag, pushes it, then optionally watches **create-release** via **`gh`**):
 
 ```bash
 make release tag=vX.X.X
 ```
 
-Releases are only available to Vercel users with appropriate roles on the project.
+Only that tag is pushed—not every local tag. Install the [GitHub CLI](https://cli.github.com/) to follow the workflow from the terminal.
 
 ### Component creation
 

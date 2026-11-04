@@ -18,6 +18,7 @@ Use this page to choose **which markdown file to read first**. It mirrors the fu
 | Scroll performance, `useInView`, `react-intersection-observer` on list pages | [patterns.md](patterns.md#embedded-video-vimeo--youtube) |
 | Scroll-driven card entrance (`animation-timeline: view()`), `scrollEntrance.module.css` | [patterns.md](patterns.md#embedded-video-vimeo--youtube) |
 | CI, `pnpm` scripts, Knip, `next.config` (env, CSP, redirects), draft APIs, `src/proxy.ts`, `svg.d.ts` / `tsc:ci` | [platform.md](platform.md) and [conventions.md](conventions.md) |
+| Production release (`make release`, Vercel gate, `create-release` workflow) | [platform.md → Production releases](platform.md#production-releases), root [README.md](../../README.md) |
 | Contact form staging vs production (Resend, HubSpot skip, env vars) | [patterns.md](patterns.md#transactional-email-react-email), [platform.md](platform.md#environment-variables-and-nextconfig), [source-layout.md](source-layout.md) |
 | `LazyReactPlayer`, Turbopack + `react-player`, editors two-player pool | [patterns.md](patterns.md#embedded-video-vimeo--youtube), [conventions.md](conventions.md#react-193-client-only-code-and-refs) |
 | React 19.3 `Activity`, `startTransition`; Base UI `Dialog` (mobile nav) | [conventions.md](conventions.md#react-193-client-only-code-and-refs), [patterns.md](patterns.md#deferred-ui-activity-viewtransition), [components.md](components.md#shared-form-and-feedback-ui) |
