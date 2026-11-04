@@ -6,7 +6,7 @@ If you are new here, this page is your map. It explains how the site is structur
 
 - **Framework**: Next.js **16.4** (see root [`package.json`](../../package.json)) with the **App Router** and **Turbopack** (default dev and production bundler). Routes live under `src/app/` (`page.tsx`, `layout.tsx`, Route Handlers under `src/app/api/`). Legacy webpack: **`pnpm dev:webpack`** / **`pnpm build:webpack`**.
 - **UI**: React **19.3**, TypeScript **7** (`pnpm tsc:ci`).
-- **Runtime**: Node **24.x** from [`.tool-versions`](../../.tool-versions); **pnpm** **12.4.x**.
+- **Runtime**: Node **26.x** and **pnpm** **12.16.x** from [`.tool-versions`](../../.tool-versions) (**mise** locally — root [README.md](../../README.md)).
 - **CMS**: Contentful. Content types are generated into `src/contentful/types/`; getters and parsers live in `src/contentful/`.
 - **Data fetching**: Server Components and Contentful getters at request/build time; **React Query** (TanStack) for client-side mutations and any future client queries. Mutation hooks live in `src/hooks/mutations/` and call the API surface in [src/api/urls.ts](../../src/api/urls.ts).
 - **Styling**: **CSS Modules** (`.module.css`) with modern CSS (nesting, custom properties). Global tokens and reset live in [src/styles/globals.css](../../src/styles/globals.css). Shared module styles (e.g. [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css)) live under `src/styles/`.
@@ -100,7 +100,7 @@ flowchart LR
 
 - **[next.config.ts](../../next.config.ts)** — `env` exposure, images, Turbopack/SVG rules, redirects as needed.
 - **[biome.json](../../biome.json)** — lint and format; includes CSS. Run `pnpm lint`, `pnpm format`, `pnpm lint:fix`.
-- **Branching**: Default branch is `staging`. Releases use `make release tag=vX.X.X`; see the root [README.md](../../README.md).
+- **Branching**: Default branch is `staging`. Releases use `make release tag=vX.X.X` from `staging` (Vercel role gate, tag push, optional `gh run watch`); see [platform.md → Production releases](platform.md#production-releases) and the root [README.md](../../README.md).
 
 ## Further reading
 

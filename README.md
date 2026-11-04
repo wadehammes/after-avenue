@@ -6,8 +6,8 @@ Marketing site: **Next.js App Router**, **React**, **TypeScript**, **CSS Modules
 
 | Layer | Version / note |
 |-------|----------------|
-| **Node.js** | **24.x** ([`.tool-versions`](./.tool-versions) — run **`asdf install`**) |
-| **pnpm** | **12.4.x** (`packageManager` in [`package.json`](./package.json)) |
+| **Node.js** | **26.x** ([`.tool-versions`](./.tool-versions) — run **`mise install`**) |
+| **pnpm** | **12.16.x** (`packageManager` in [`package.json`](./package.json)) |
 | **Next.js** | **16.4.x** (Turbopack default for **`pnpm dev`** / **`pnpm build`**; **`pnpm dev:webpack`** / **`pnpm build:webpack`** optional) |
 | **React** | **19.3.x** |
 | **TypeScript** | **7.x** (`pnpm tsc:ci`; Next **`experimental.useTypeScriptCli`**) |
@@ -24,12 +24,12 @@ After a dependency bump, refresh this table if major versions change. Detail liv
 
 ## Development setup
 
-- Install asdf — https://asdf-vm.com/guide/getting-started.html (see `.tool-versions` for which plugins to add)
+- Install **mise** — https://mise.jdx.dev/getting-started.html ([`.tool-versions`](./.tool-versions) pins **Node** and **pnpm**)
 
-Run asdf:
+Install pinned tools:
 
 ```bash
-asdf install
+mise install
 ```
 
 Run pnpm:
@@ -82,14 +82,15 @@ To create a production release, create a tag sequential to the latest. Tags shou
 
 Steps:
 
-1. Check out `staging` and pull the latest changes.
-2. Run `make release` with the tag name:
+1. Check out **`staging`** and pull the latest changes (`make release` refuses other branches).
+2. Be signed in to Vercel (**`vercel login`**) or set **`VERCEL_TOKEN`**. Release requires **Member** or **Owner** on the **`worldwadeweb`** team (see **`docs/handbook/platform.md`** → Production releases).
+3. Run **`make release`** with the tag name (creates the tag, pushes it, then optionally watches **create-release** via **`gh`**):
 
 ```bash
 make release tag=vX.X.X
 ```
 
-Releases are only available to Vercel users with appropriate roles on the project.
+Only that tag is pushed—not every local tag. Install the [GitHub CLI](https://cli.github.com/) to follow the workflow from the terminal.
 
 ### Component creation
 
@@ -140,13 +141,14 @@ Cursor hooks (rhythm **`.claude/`** patterns) remind agents to read the handbook
 
 ## Linting and formatting
 
-**Biome** lints and formats TS/JS/JSON/CSS; **Stylelint** checks CSS Modules. CI runs **`tsc:ci`**, **`lint:ci`**, **`lint:css`**, **`test:ci`**, and **`knip:ci`** (see [`docs/handbook/platform.md`](./docs/handbook/platform.md)).
+**Biome** lints and formats TS/JS/JSON/CSS; **Stylelint** checks CSS Modules. CI runs **`tsc:ci`**, **`lint:ci`**, **`lint:css`**, **`test:ci`**, **`test:scripts`**, and **`knip:ci`** (see [`docs/handbook/platform.md`](./docs/handbook/platform.md)).
 
 Before you push (especially after types, lint, or dependency changes):
 
 ```sh
 pnpm lint:all
 pnpm test:ci
+pnpm test:scripts   # release helpers under scripts/ (node:test)
 ```
 
 **`lint:all`** runs Biome on files changed since **`origin/staging`**, Stylelint with **`--fix`**, **`tsc --strict`**, and Knip. Optional before a handbook-heavy PR: **`pnpm handbook:check`** (fails if substantive code changed vs **`origin/staging`** without any **`docs/handbook/*.md`** in the diff — see [`scripts/handbook-sync-check.sh`](./scripts/handbook-sync-check.sh)).
@@ -196,7 +198,7 @@ The handbook is **markdown only** and is meant for humans and tooling alike. It 
 | [**contentful.md**](./docs/handbook/contentful.md) | **Generated types** (`pnpm types:contentful`), **getters** vs **parsers**, **sections vs content blocks**, **ContentRenderer**, **Rich Text**, **Contentful client**. |
 | [**components.md**](./docs/handbook/components.md) | Component folders, **`pnpm scaffold`**, page objects, **test IDs**, exports, **dynamic imports**, links. |
 | [**patterns.md**](./docs/handbook/patterns.md) | **Server Components**, **React Query**, **`src/api`** (`postJson`, `fetchResponse`), **forms**, **metadata / JSON-LD**, **`next/dynamic`**. |
-| [**platform.md**](./docs/handbook/platform.md) | **GitHub CI** (`tsc`, Biome, Stylelint, Jest, Knip), **`pnpm` scripts** (including **`handbook:check`**), **Cursor agent hooks**, **`next.config` env** and redirects, **draft / disable-draft APIs**, **`src/proxy.ts`**. |
+| [**platform.md**](./docs/handbook/platform.md) | **GitHub CI** (`tsc`, Biome, Stylelint, Jest, **`test:scripts`**, Knip), **`pnpm` scripts** (including **`handbook:check`**), **Cursor agent hooks**, **`next.config` env** and redirects, **draft / disable-draft APIs**, **`src/proxy.ts`**. |
 | [**integrations.md**](./docs/handbook/integrations.md) | **Google Analytics** (`@next/third-parties`), **`dataLayer`** conventions. |
 | [**distribution.md**](./docs/handbook/distribution.md) | **Sitemap** generation (`make sitemap`, `public/sitemap.xml`), **robots** and related App Router metadata. |
 | [**source-layout.md**](./docs/handbook/source-layout.md) | **`src/interfaces`**, **`src/utils`**, **`src/api`**, **`src/hooks`**, **`src/tests`**, **`src/lib`**. |

@@ -33,7 +33,7 @@ Quick lookup—one line per file:
 | [contentful.md](contentful.md) | Generated types, getters, parsers, sections vs modules, Rich Text, client. |
 | [components.md](components.md) | Component folder layout, `pnpm scaffold`, page objects, test IDs, exports, dynamic imports, links. |
 | [patterns.md](patterns.md) | Server components, React Query, `src/api` (`postJson`, `fetchResponse`), forms, transactional email (React Email + Resend), layout, metadata, JSON-LD, embedded video performance (`ReactPlayer`, lazy mount, editors background). |
-| [platform.md](platform.md) | GitHub CI (tsc, Biome, Stylelint, Jest, Knip), `pnpm` scripts (`email:dev`), `next.config`, draft mode APIs, `src/proxy.ts`. |
+| [platform.md](platform.md) | GitHub CI (tsc, Biome, Stylelint, Jest, `test:scripts`, Knip), `pnpm` scripts (`email:dev`), `next.config`, draft mode APIs, `src/proxy.ts`. |
 | [integrations.md](integrations.md) | Google Analytics, data layer, related env. |
 | [distribution.md](distribution.md) | Sitemap generation and `public/` output. |
 | [source-layout.md](source-layout.md) | `src/interfaces`, `src/utils`, `src/api`, `src/hooks`, `src/tests`, `src/lib`, `src/emails`. |
@@ -41,6 +41,6 @@ Quick lookup—one line per file:
 
 ## Development setup
 
-Machine setup (ASDF, pnpm, Vercel env, first `pnpm dev`) lives in the root **[README.md](../../README.md)** so we do not maintain two copies. After you are up and running locally, use this handbook when you are actually changing the app.
+Machine setup (mise, pnpm, Vercel env, first `pnpm dev`) lives in the root **[README.md](../../README.md)** so we do not maintain two copies. After you are up and running locally, use this handbook when you are actually changing the app.
 
 **Agents:** defaults and “keep docs in sync” expectations are in the repo root **[AGENTS.md](../../AGENTS.md)**. **Cursor** loads **[`.cursor/rules/after-avenue-handbook.mdc`](../../.cursor/rules/after-avenue-handbook.mdc)** as a project rule.

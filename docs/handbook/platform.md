@@ -7,15 +7,16 @@ This page covers **CI**, **env vars**, **draft preview**, and **`src/proxy.ts`**
 PRs that target **`staging`** run [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml):
 
 1. Checkout
-2. **pnpm** + **Node** from [`.tool-versions`](../../.tool-versions)
+2. **pnpm** + **Node** from [`.tool-versions`](../../.tool-versions) (CI reads the file directly; locally use **mise** — see root [README.md](../../README.md))
 3. **`pnpm install`**
 4. **`pnpm tsc:ci`** — TypeScript strict (does **not** require gitignored **`next-env.d.ts`**; SVGR icon types live in [`src/@types/svg.d.ts`](../../src/@types/svg.d.ts)—see [conventions.md](conventions.md))
 5. **`pnpm lint:ci`** — Biome in CI reporter mode
 6. **`pnpm lint:css`** — Stylelint on CSS Modules
-7. **`pnpm test:ci`** — Jest
-8. **`pnpm knip:ci`** — unused files, exports, and dependencies
+7. **`pnpm test:ci`** — Jest (`scripts/` is excluded in [jest.config.ts](../../jest.config.ts); see [conventions.md → Jest configuration](conventions.md#jest-configuration))
+8. **`pnpm test:scripts`** — Node **`node:test`** for release helpers under **`scripts/`**
+9. **`pnpm knip:ci`** — unused files, exports, and dependencies
 
-Run **`pnpm lint:all`** (Biome on changes since **`origin/staging`**, Stylelint fix, **`tsc:ci`**, **`knip:ci`**) and **`pnpm test:ci`** locally before pushing when you touch types, lint, tests, or dependencies. CI still runs **`lint:ci`** (Biome, full repo) separately from **`lint:changed`**.
+Run **`pnpm lint:all`** (Biome on changes since **`origin/staging`**, Stylelint fix, **`tsc:ci`**, **`knip:ci`**) and **`pnpm test:ci`** (plus **`pnpm test:scripts`** when you touch **`scripts/*.test.mjs`**) locally before pushing when you touch types, lint, tests, or dependencies. CI still runs **`lint:ci`** (Biome, full repo) separately from **`lint:changed`**.
 
 ## Package scripts (local workflow)
 
@@ -31,6 +32,9 @@ Run **`pnpm lint:all`** (Biome on changes since **`origin/staging`**, Stylelint 
 | `pnpm test:ci` | Jest (CI-style). |
 | `pnpm knip` / `pnpm knip:ci` | Find unused files, exports, and dependencies ([`knip.json`](../../knip.json)). Jest-only mock exports loaded via **`jest.mock`** in [`.jest/setupTests.ts`](../../.jest/setupTests.ts) are listed under **`ignoreIssues`** there so Knip does not treat them as dead code. |
 | `pnpm handbook:check` | Fail if **`src/`** (or test infra / **`next.config`**) changed vs **`origin/staging`** without any **`docs/handbook/*.md`** in the same diff — uses [`.cursor/hooks/_lib.sh`](../../.cursor/hooks/_lib.sh) chapter suggestions. |
+| `pnpm test:scripts` | Node **`node:test`** for release helpers (e.g. [`verify-vercel-release.mjs`](../../scripts/verify-vercel-release.mjs)). |
+| `make release tag=vX.Y.Z` | From **`staging`** only — Vercel role gate, tag push, [`watch-release.sh`](../../scripts/watch-release.sh). See [Production releases](#production-releases). |
+| `make sitemap` | Regenerate [`public/sitemap.xml`](../../public/sitemap.xml) (also runs at end of **`pnpm build`**). |
 | `pnpm scaffold` | New component folder under `src/components/` (see [components.md](components.md)). |
 | `pnpm email:dev` | React Email preview server for `src/emails/` on port **3006** (see [patterns.md → Transactional email](patterns.md#transactional-email-react-email)). |
 | `pnpm types:contentful` | Regenerate `src/contentful/types` (needs CMA env vars). |
@@ -58,6 +62,19 @@ Project agent hooks live in [`.cursor/hooks.json`](../../.cursor/hooks.json) and
 **Jest:** Configuration lives in **[jest.config.ts](../../jest.config.ts)** with setup in **[`.jest/setupTests.ts`](../../.jest/setupTests.ts)** — see [conventions.md → Jest configuration](conventions.md#jest-configuration).
 
 Configure values in **Vercel** (or your host) and mirror locally via `npx vercel env pull` as described in the root README.
+
+## Production releases
+
+Pushing a **`v*`** tag runs [`.github/workflows/release.yml`](../../.github/workflows/release.yml) (**create-release**): fast-forward **`main`** to the tag, generate a changelog, and publish a GitHub Release. The workflow checkout uses repository secret **`AA_NEXT_PAT`** so **Reset Main** can push to protected **`main`**.
+
+**Local `make release`** ([`Makefile`](../../Makefile)) — same flow as filtermydiscogs:
+
+1. **`verify-vercel-team`** — [`scripts/verify-vercel-for-release.sh`](../../scripts/verify-vercel-for-release.sh) requires **`vercel login`** or **`VERCEL_TOKEN`** and Vercel team role **Member** or **Owner** on **`worldwadeweb`** (override with **`VERCEL_TEAM_ID`**). **Developer** and below cannot cut a release.
+2. Run only from branch **`staging`** with **`make release tag=vX.Y.Z`** (tag name must start with **`v`**).
+3. Creates the tag and **`git push origin "$(tag)"`** (that tag only—not all local tags).
+4. [`scripts/watch-release.sh`](../../scripts/watch-release.sh) polls **create-release** and runs **`gh run watch`** when the GitHub CLI is installed; without **`gh`**, the tag still releases and the script prints the Actions URL.
+
+Membership rules are unit-tested: **`pnpm test:scripts`**. Git may print **Bypassed rule violations** on **`v*`** tag push when rulesets apply—that is expected for maintainers with bypass.
 
 **Cache-Control** in [`headers()`](../../next.config.ts): HTML pages get long-lived cache in **production** only. In **development**, pages use `no-store` and `_next` is excluded from page rules so HMR/RSC are not cached (avoids refresh loops in `next dev`).
 
