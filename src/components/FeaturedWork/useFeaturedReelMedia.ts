@@ -7,14 +7,15 @@ interface MediaElement {
 
 interface UseFeaturedReelMediaOptions {
   active: boolean;
-  mediaElement: MediaElement | null;
+  getMediaElement: () => MediaElement | null;
 }
 
 export const useFeaturedReelMedia = (options: UseFeaturedReelMediaOptions) => {
-  const { active, mediaElement } = options;
+  const { active, getMediaElement } = options;
   const [remountKey, setRemountKey] = useState(0);
 
-  useEffect(() => {
+  const syncPlayback = useCallback(() => {
+    const mediaElement = getMediaElement();
     if (!mediaElement) {
       return;
     }
@@ -25,7 +26,11 @@ export const useFeaturedReelMedia = (options: UseFeaturedReelMediaOptions) => {
     }
 
     void mediaElement.play().catch(() => {});
-  }, [active, mediaElement]);
+  }, [active, getMediaElement]);
+
+  useEffect(() => {
+    syncPlayback();
+  }, [syncPlayback]);
 
   const onError = useCallback(() => {
     setRemountKey((attempt) => {
@@ -39,6 +44,7 @@ export const useFeaturedReelMedia = (options: UseFeaturedReelMediaOptions) => {
 
   return {
     onError,
+    onMediaReady: syncPlayback,
     remountKey,
   };
 };

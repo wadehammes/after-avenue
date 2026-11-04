@@ -5,15 +5,18 @@ import { supportsScrollTimeline } from "src/utils/supportsScrollTimeline";
 const scrollTimelineSupported = supportsScrollTimeline();
 
 interface UseFeaturedReelInViewOptions {
+  prefetchPlayer?: boolean;
   priority?: boolean;
 }
 
 export const useFeaturedReelInView = (
   options: UseFeaturedReelInViewOptions = {},
 ) => {
-  const { priority = false } = options;
+  const { prefetchPlayer = false, priority = false } = options;
   const [hasAnimated, setHasAnimated] = useState(false);
-  const [hasMountedPlayer, setHasMountedPlayer] = useState(priority);
+  const [hasMountedPlayer, setHasMountedPlayer] = useState(
+    priority || prefetchPlayer,
+  );
 
   const { inView, ref } = useInView({
     initialInView: priority,
