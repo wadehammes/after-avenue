@@ -36,12 +36,16 @@ export const HomePage = (props: HomePageProps) => {
     (work) => work.workVideoUrl,
   )?.workSlug;
 
+  const hasFeaturedReels = featuredWork.some((work) => work.workVideoUrl);
+
   useEffect(() => {
-    if (priorityVideoSlug) {
-      void import("react-player");
-      void import("vimeo-video-element/react");
+    if (!hasFeaturedReels) {
+      return;
     }
-  }, [priorityVideoSlug]);
+
+    void import("react-player");
+    void import("vimeo-video-element/react");
+  }, [hasFeaturedReels]);
 
   return (
     <>
@@ -63,6 +67,7 @@ export const HomePage = (props: HomePageProps) => {
             <FeaturedWork
               fields={work}
               key={work.workSlug}
+              prefetchReel={Boolean(work.workVideoUrl)}
               priority={work.workSlug === priorityVideoSlug}
             />
           ))}

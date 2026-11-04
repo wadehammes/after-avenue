@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import styles from "src/components/FeaturedWork/FeaturedWork.module.css";
 import { useFeaturedReelInView } from "src/components/FeaturedWork/useFeaturedReelInView";
 import { useFeaturedReelMedia } from "src/components/FeaturedWork/useFeaturedReelMedia";
@@ -14,6 +14,7 @@ import PlayIcon from "src/icons/Play.icon.svg";
 import scrollEntrance from "src/styles/scrollEntrance.module.css";
 import {
   createMutedPlayerHandlers,
+  findEmbedMediaElement,
   mutedAutoplayPlayerProps,
   reelPlayerConfig,
 } from "src/utils/videoPlayerConfig";
@@ -21,11 +22,12 @@ import { useMediaQuery } from "usehooks-ts";
 
 interface FeaturedWorkProps {
   fields: Work;
+  prefetchReel?: boolean;
   priority?: boolean;
 }
 
 export const FeaturedWork = (props: FeaturedWorkProps) => {
-  const { fields, priority = false } = props;
+  const { fields, prefetchReel = false, priority = false } = props;
   const { workVideoUrl, workSlug } = fields;
 
   const isMobile = useMediaQuery("(max-width: 768px)", {
@@ -33,24 +35,39 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
   });
   const { featuredWorkButtonText } = useGlobalVariables();
   const { hasAnimated, hasMountedPlayer, inView, ref } = useFeaturedReelInView({
+    prefetchPlayer: prefetchReel,
     priority,
   });
   const embedRef = useRef<HTMLDivElement>(null);
-  const [mediaElement, setMediaElement] = useState<HTMLVideoElement | null>(
-    null,
-  );
 
-  const shouldPlay = priority || inView;
-  const { onError, remountKey } = useFeaturedReelMedia({
-    active: hasMountedPlayer && shouldPlay,
-    mediaElement,
-  });
+  const getMediaElement = useCallback(() => {
+    const element = findEmbedMediaElement(embedRef.current);
+    if (
+      !element ||
+      typeof element.play !== "function" ||
+      typeof element.pause !== "function"
+    ) {
+      return null;
+    }
 
-  const handlePlayerRef = useCallback((node: HTMLVideoElement | null) => {
-    setMediaElement(node);
+    return {
+      pause: () => element.pause?.() ?? Promise.resolve(),
+      play: async () => {
+        await element.play?.();
+      },
+    };
   }, []);
 
-  const muteHandlers = useMemo(() => createMutedPlayerHandlers(embedRef), []);
+  const shouldPlay = priority || inView;
+  const { onError, onMediaReady, remountKey } = useFeaturedReelMedia({
+    active: hasMountedPlayer && shouldPlay,
+    getMediaElement,
+  });
+
+  const muteHandlers = useMemo(
+    () => createMutedPlayerHandlers(embedRef, onMediaReady),
+    [onMediaReady],
+  );
 
   return !isMobile ? (
     <div
@@ -80,7 +97,6 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
               {hasMountedPlayer ? (
                 <LazyReactPlayer
                   key={`${workVideoUrl}-${remountKey}`}
-                  ref={handlePlayerRef}
                   config={reelPlayerConfig}
                   controls={false}
                   loop

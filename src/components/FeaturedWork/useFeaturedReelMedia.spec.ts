@@ -8,10 +8,38 @@ describe("useFeaturedReelMedia", () => {
     const pause = jest.fn(async () => {});
     const mediaElement = { play, pause };
 
-    renderHook(() => useFeaturedReelMedia({ active: true, mediaElement }));
+    renderHook(() =>
+      useFeaturedReelMedia({
+        active: true,
+        getMediaElement: () => mediaElement,
+      }),
+    );
 
     expect(play).toHaveBeenCalledTimes(1);
     expect(pause).not.toHaveBeenCalled();
+  });
+
+  it("calls play when onMediaReady runs while active after the embed mounts", () => {
+    const play = jest.fn(async () => {});
+    const pause = jest.fn(async () => {});
+    let mediaElement: { play: typeof play; pause: typeof pause } | null = null;
+
+    const { result } = renderHook(() =>
+      useFeaturedReelMedia({
+        active: true,
+        getMediaElement: () => mediaElement,
+      }),
+    );
+
+    expect(play).not.toHaveBeenCalled();
+
+    mediaElement = { play, pause };
+
+    act(() => {
+      result.current.onMediaReady();
+    });
+
+    expect(play).toHaveBeenCalledTimes(1);
   });
 
   it("calls pause when inactive", () => {
@@ -19,7 +47,12 @@ describe("useFeaturedReelMedia", () => {
     const pause = jest.fn(async () => {});
     const mediaElement = { play, pause };
 
-    renderHook(() => useFeaturedReelMedia({ active: false, mediaElement }));
+    renderHook(() =>
+      useFeaturedReelMedia({
+        active: false,
+        getMediaElement: () => mediaElement,
+      }),
+    );
 
     expect(pause).toHaveBeenCalledTimes(1);
     expect(play).not.toHaveBeenCalled();
@@ -32,7 +65,10 @@ describe("useFeaturedReelMedia", () => {
     };
 
     const { result } = renderHook(() =>
-      useFeaturedReelMedia({ active: true, mediaElement }),
+      useFeaturedReelMedia({
+        active: true,
+        getMediaElement: () => mediaElement,
+      }),
     );
 
     act(() => {
