@@ -17,6 +17,8 @@ const youtubeConfig = (config: YoutubeConfigWithMuteParam) =>
 interface MuteablePlayer extends Element {
   defaultMuted?: boolean;
   muted?: boolean;
+  pause?: () => Promise<void> | void;
+  play?: () => Promise<void>;
   volume?: number;
 }
 
@@ -25,7 +27,7 @@ export const mutedAutoplayPlayerProps = {
   volume: 0,
 } as const;
 
-const findPlayerElement = (
+export const findEmbedMediaElement = (
   container: HTMLElement | null,
 ): MuteablePlayer | null => {
   if (!container) {
@@ -51,7 +53,7 @@ const ensurePlayerMuted = (player: MuteablePlayer | null | undefined) => {
 };
 
 export const ensureContainerMuted = (container: HTMLElement | null) => {
-  ensurePlayerMuted(findPlayerElement(container));
+  ensurePlayerMuted(findEmbedMediaElement(container));
 };
 
 export const createMutedPlayerHandlers = (

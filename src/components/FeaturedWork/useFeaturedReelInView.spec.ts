@@ -24,6 +24,19 @@ describe("useFeaturedReelInView", () => {
     expect(result.current.hasMountedPlayer).toBe(true);
   });
 
+  it("starts with hasMountedPlayer true when prefetchPlayer is enabled before intersect", async () => {
+    const { useFeaturedReelInView } = await import(
+      "src/components/FeaturedWork/useFeaturedReelInView"
+    );
+
+    const { result } = renderHook(() =>
+      useFeaturedReelInView({ prefetchPlayer: true }),
+    );
+
+    expect(result.current.hasMountedPlayer).toBe(true);
+    expect(result.current.inView).toBe(false);
+  });
+
   it("starts with hasMountedPlayer false for non-priority reels until the target intersects", async () => {
     resetIntersectionObserverMocks();
     setupIntersectionObserverMock({
