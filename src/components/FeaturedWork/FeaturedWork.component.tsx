@@ -12,9 +12,10 @@ import type { Work } from "src/contentful/getWork";
 import { useGlobalVariables } from "src/context/globalContext.context";
 import PlayIcon from "src/icons/Play.icon.svg";
 import scrollEntrance from "src/styles/scrollEntrance.module.css";
+import videoLoadingOverlay from "src/styles/videoLoadingOverlay.module.css";
 import {
   createMutedPlayerHandlers,
-  findEmbedMediaElement,
+  getEmbedMediaController,
   mutedAutoplayPlayerProps,
   reelPlayerConfig,
 } from "src/utils/videoPlayerConfig";
@@ -22,12 +23,18 @@ import { useMediaQuery } from "usehooks-ts";
 
 interface FeaturedWorkProps {
   fields: Work;
+  onReelEmbedReady?: () => void;
   prefetchReel?: boolean;
   priority?: boolean;
 }
 
 export const FeaturedWork = (props: FeaturedWorkProps) => {
-  const { fields, prefetchReel = false, priority = false } = props;
+  const {
+    fields,
+    onReelEmbedReady,
+    prefetchReel = false,
+    priority = false,
+  } = props;
   const { workVideoUrl, workSlug } = fields;
 
   const isMobile = useMediaQuery("(max-width: 768px)", {
@@ -40,40 +47,28 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
   });
   const embedRef = useRef<HTMLDivElement>(null);
 
-  const getMediaElement = useCallback(() => {
-    const element = findEmbedMediaElement(embedRef.current);
-    if (
-      !element ||
-      typeof element.play !== "function" ||
-      typeof element.pause !== "function"
-    ) {
-      return null;
-    }
-
-    return {
-      pause: () => element.pause?.() ?? Promise.resolve(),
-      play: async () => {
-        await element.play?.();
-      },
-    };
-  }, []);
+  const getMediaElement = useCallback(
+    () => getEmbedMediaController(embedRef.current),
+    [],
+  );
 
   const shouldPlay = priority || inView;
-  const { onError, onMediaReady, remountKey } = useFeaturedReelMedia({
+
+  const { hasStartedPlayback, onError } = useFeaturedReelMedia({
     active: hasMountedPlayer && shouldPlay,
+    embedContainerRef: embedRef,
+    embedEventsEnabled: hasMountedPlayer,
     getMediaElement,
+    onEmbedCanPlay: onReelEmbedReady,
   });
 
-  const muteHandlers = useMemo(
-    () => createMutedPlayerHandlers(embedRef, onMediaReady),
-    [onMediaReady],
-  );
+  const muteHandlers = useMemo(() => createMutedPlayerHandlers(embedRef), []);
 
   return !isMobile ? (
     <div
-      className={classNames(styles.featuredWork, scrollEntrance.enter, {
+      className={classNames(styles.featuredWork, {
+        [scrollEntrance.enter]: !priority,
         [scrollEntrance.animate]: !priority && hasAnimated,
-        [scrollEntrance.readyToPlay]: priority,
       })}
     >
       <div className={styles.workOverlay}>
@@ -96,7 +91,7 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
             <div ref={embedRef} className={styles.videoPlayerEmbed}>
               {hasMountedPlayer ? (
                 <LazyReactPlayer
-                  key={`${workVideoUrl}-${remountKey}`}
+                  key={workVideoUrl}
                   config={reelPlayerConfig}
                   controls={false}
                   loop
@@ -110,6 +105,16 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
                 />
               ) : null}
             </div>
+            {hasMountedPlayer && shouldPlay ? (
+              <div
+                aria-hidden="true"
+                className={classNames(videoLoadingOverlay.overlay, {
+                  [videoLoadingOverlay.dotPattern]: true,
+                  [videoLoadingOverlay.hidden]: hasStartedPlayback,
+                  [videoLoadingOverlay.instantHide]: priority,
+                })}
+              />
+            ) : null}
           </div>
         </div>
       ) : null}

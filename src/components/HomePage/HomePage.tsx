@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import parse from "html-react-parser";
-import { Activity, useEffect } from "react";
+import { Activity, useCallback, useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { FeaturedBrands } from "src/components/FeaturedBrands/FeaturedBrands.component";
 import { FeaturedWork } from "src/components/FeaturedWork/FeaturedWork.component";
@@ -11,6 +11,8 @@ import { StyledButtonLink } from "src/components/StyledButton/StyledButtonLink.c
 
 import type { Page } from "src/contentful/getPages";
 import type { Work } from "src/contentful/getWork";
+
+const SECONDARY_REEL_PREFETCH_DELAY_MS = 3_000;
 
 interface HomePageProps {
   featuredWork: Work[];
@@ -37,14 +39,28 @@ export const HomePage = (props: HomePageProps) => {
   )?.workSlug;
 
   const hasFeaturedReels = featuredWork.some((work) => work.workVideoUrl);
+  const [prefetchSecondaryReels, setPrefetchSecondaryReels] = useState(false);
+  const secondaryPrefetchTimeoutRef = useRef<
+    ReturnType<typeof setTimeout> | undefined
+  >(undefined);
+
+  const enableSecondaryReelPrefetch = useCallback(() => {
+    clearTimeout(secondaryPrefetchTimeoutRef.current);
+    setPrefetchSecondaryReels(true);
+  }, []);
 
   useEffect(() => {
     if (!hasFeaturedReels) {
       return;
     }
 
-    void import("react-player");
-    void import("vimeo-video-element/react");
+    secondaryPrefetchTimeoutRef.current = setTimeout(() => {
+      setPrefetchSecondaryReels(true);
+    }, SECONDARY_REEL_PREFETCH_DELAY_MS);
+
+    return () => {
+      clearTimeout(secondaryPrefetchTimeoutRef.current);
+    };
   }, [hasFeaturedReels]);
 
   return (
@@ -63,14 +79,26 @@ export const HomePage = (props: HomePageProps) => {
       </section>
       <section className={styles.featuredWorkContainer}>
         <div className="container column">
-          {featuredWork.map((work) => (
-            <FeaturedWork
-              fields={work}
-              key={work.workSlug}
-              prefetchReel={Boolean(work.workVideoUrl)}
-              priority={work.workSlug === priorityVideoSlug}
-            />
-          ))}
+          {featuredWork.map((work) => {
+            const isPriority = work.workSlug === priorityVideoSlug;
+            const hasVideo = Boolean(work.workVideoUrl);
+            const prefetchReel =
+              hasVideo && (isPriority || prefetchSecondaryReels);
+
+            return (
+              <FeaturedWork
+                fields={work}
+                key={work.workSlug}
+                onReelEmbedReady={
+                  isPriority && hasVideo
+                    ? enableSecondaryReelPrefetch
+                    : undefined
+                }
+                prefetchReel={prefetchReel}
+                priority={isPriority}
+              />
+            );
+          })}
         </div>
 
         <div className="buttonContainer">

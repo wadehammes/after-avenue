@@ -21,14 +21,14 @@ Helpers are **split by topic**—there is no barrel `utils/index.ts`. Import the
 
 | Area | Files (examples) |
 |------|------------------|
-| **Constants** | [constants.ts](../../src/utils/constants.ts) — slugs, navigation IDs, build exclusions, `VIDEO_MOUNT_ROOT_MARGIN` |
+| **Constants** | [constants.ts](../../src/utils/constants.ts) — slugs, navigation IDs, build exclusions, `VIDEO_MOUNT_ROOT_MARGIN`, featured-reel play/pause debounce (`FEATURED_REEL_*_MS`) |
 | **General helpers** | [helpers.ts](../../src/utils/helpers.ts) — `envUrl`, `isLocalEnvironment`, `isStagingEnvironment`, `isNonProductionContactEnvironment`, `createImageUrl`, guards |
 | **Scroll entrance** | [supportsScrollTimeline.ts](../../src/utils/supportsScrollTimeline.ts) — feature detect for CSS scroll-driven fallback |
 | **Style** | [styleHelpers.ts](../../src/utils/styleHelpers.ts) |
 | **Spam / rate limits** | [spamDetection.ts](../../src/utils/spamDetection.ts), [rateLimit.ts](../../src/utils/rateLimit.ts) |
 | **reCAPTCHA** | [recaptcha.ts](../../src/utils/recaptcha.ts) |
 | **Email routing** | [emailHelpers.ts](../../src/utils/emailHelpers.ts) — non-production Resend-only contact recipients via [helpers.ts](../../src/utils/helpers.ts) **`isNonProductionContactEnvironment()`**; covered by [emailHelpers.spec.ts](../../src/utils/emailHelpers.spec.ts) |
-| **Video embed config** | [videoPlayerConfig.ts](../../src/utils/videoPlayerConfig.ts) — Vimeo/YouTube configs, muted autoplay helpers (`reelPlayerConfig`, `editorsBackgroundPlayerConfig`, `controlsPlayerConfig`), **`findEmbedMediaElement`** for imperative reel playback |
+| **Video embed config** | [videoPlayerConfig.ts](../../src/utils/videoPlayerConfig.ts) — Vimeo/YouTube configs, muted autoplay helpers (`reelPlayerConfig`, `editorsBackgroundPlayerConfig`, `controlsPlayerConfig`), **`getEmbedMediaController`** / **`observeEmbedLifecycle`** for imperative reel playback |
 | **Public env (client)** | [publicEnv.ts](../../src/utils/publicEnv.ts) — e.g. `getRecaptchaSiteKey()` for form components |
 
 Specs: `*.spec.ts` next to modules (e.g. [rateLimit.spec.ts](../../src/utils/rateLimit.spec.ts)).
@@ -77,6 +77,7 @@ Shared test infrastructure (see [conventions.md](conventions.md#testing)):
 | [mocks/mockGoogleRecaptcha.tsx](../../src/tests/mocks/mockGoogleRecaptcha.tsx) | Invisible reCAPTCHA ref mock for component tests |
 | [mocks/appToast.mock.ts](../../src/tests/mocks/appToast.mock.ts) | Shared `mockToast` fns for toast assertions (wired in setupTests) |
 | [mocks/svgMock.tsx](../../src/tests/mocks/svgMock.tsx) | SVG imports in Jest via `jest.config` `moduleNameMapper` |
+| [helpers/embedMediaTest.helpers.ts](../../src/tests/helpers/embedMediaTest.helpers.ts) | DOM fixture + mock **`play`** / **`pause`** for embed hook and **`videoPlayerConfig`** specs |
 | [utils/setProcessEnv.ts](../../src/tests/utils/setProcessEnv.ts) | Assign read-only env keys (e.g. **`NODE_ENV`**) in strict TypeScript specs |
 | [utils/handbookTestRules.ts](../../src/tests/utils/handbookTestRules.ts) | Static checks for handbook testing conventions (see [conventions.md → Testing](conventions.md#testing)) |
 | `mocks/` | Jest doubles for router, `matchMedia`, `IntersectionObserver`, etc. |
@@ -98,12 +99,12 @@ Client, getters, parsers, generated types — see [contentful.md](contentful.md)
 
 | Path | Purpose |
 |------|---------|
-| [WorkHeroVideo/](../../src/components/WorkHeroVideo/) | Work detail hero — `ReactPlayer`, loading overlay. |
+| [WorkHeroVideo/](../../src/components/WorkHeroVideo/) | Work detail hero — `ReactPlayer`, shared loading overlay (`videoLoadingOverlay.module.css`). |
 | [WorkCard/](../../src/components/WorkCard/) | Work grid card; lazy-mount video near viewport. |
-| [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block (desktop video). [`useFeaturedReelInView.ts`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) (**`prefetchPlayer`** / **`inView`** mount); [`useFeaturedReelMedia.ts`](../../src/components/FeaturedWork/useFeaturedReelMedia.ts) (imperative play/pause + **`onMediaReady`**). Specs colocated. |
+| [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block (desktop video). Lifecycle in [`useFeaturedReelInView.ts`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) + [`useFeaturedReelMedia.ts`](../../src/components/FeaturedWork/useFeaturedReelMedia.ts); see [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube). Specs colocated. |
 | [EditorsBackgroundVideo/](../../src/components/EditorsBackgroundVideo/) | `/editors` hover background; two-player pool. |
 
-Patterns and performance rules: [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube). Shared scroll entrance styles: [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css) (import `.enter` / `.animate` on card roots).
+Patterns and performance rules: [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube). Shared styles: [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css), [videoLoadingOverlay.module.css](../../src/styles/videoLoadingOverlay.module.css).
 
 ## `src/emails/`
 

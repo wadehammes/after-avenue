@@ -19,7 +19,9 @@ export const useFeaturedReelInView = (
   );
 
   const { inView, ref } = useInView({
+    delay: priority ? 0 : 100,
     initialInView: priority,
+    rootMargin: priority ? "0px" : "0px 0px 20% 0px",
     threshold: priority ? 0 : 0.35,
     triggerOnce: false,
     onChange: (visible) => {
@@ -30,10 +32,10 @@ export const useFeaturedReelInView = (
   });
 
   useEffect(() => {
-    if (inView) {
+    if (prefetchPlayer || inView) {
       setHasMountedPlayer(true);
     }
-  }, [inView]);
+  }, [inView, prefetchPlayer]);
 
   return {
     hasAnimated,

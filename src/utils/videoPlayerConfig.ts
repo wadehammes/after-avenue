@@ -27,7 +27,7 @@ export const mutedAutoplayPlayerProps = {
   volume: 0,
 } as const;
 
-export const findEmbedMediaElement = (
+const findEmbedMediaElement = (
   container: HTMLElement | null,
 ): MuteablePlayer | null => {
   if (!container) {
@@ -35,6 +35,91 @@ export const findEmbedMediaElement = (
   }
 
   return container.querySelector("vimeo-video, youtube-video");
+};
+
+export interface EmbedMediaController {
+  pause: () => Promise<void> | void;
+  play: () => Promise<void>;
+}
+
+export const getEmbedMediaController = (
+  container: HTMLElement | null,
+): EmbedMediaController | null => {
+  const element = findEmbedMediaElement(container);
+  if (
+    !element ||
+    typeof element.play !== "function" ||
+    typeof element.pause !== "function"
+  ) {
+    return null;
+  }
+
+  const play = element.play.bind(element);
+  const pause = element.pause.bind(element);
+
+  return {
+    pause: () => pause(),
+    play: async () => {
+      await play();
+    },
+  };
+};
+
+export interface EmbedLifecycleHandlers {
+  onAttached?: () => void;
+  onLoadComplete: () => void;
+  onPlaying: () => void;
+}
+
+export const observeEmbedLifecycle = (
+  container: HTMLElement,
+  handlers: EmbedLifecycleHandlers,
+): (() => void) => {
+  let detachListeners: (() => void) | undefined;
+
+  const attachToEmbed = (embed: Element) => {
+    if (detachListeners) {
+      return;
+    }
+
+    const onLoadComplete = () => {
+      handlers.onLoadComplete();
+    };
+    const onPlaying = () => {
+      handlers.onPlaying();
+    };
+
+    embed.addEventListener("loadcomplete", onLoadComplete);
+    embed.addEventListener("playing", onPlaying);
+
+    detachListeners = () => {
+      embed.removeEventListener("loadcomplete", onLoadComplete);
+      embed.removeEventListener("playing", onPlaying);
+    };
+
+    handlers.onAttached?.();
+  };
+
+  const tryAttach = () => {
+    const embed = findEmbedMediaElement(container);
+    if (!embed) {
+      return;
+    }
+
+    attachToEmbed(embed);
+  };
+
+  tryAttach();
+
+  const observer = new MutationObserver(() => {
+    tryAttach();
+  });
+  observer.observe(container, { childList: true, subtree: true });
+
+  return () => {
+    observer.disconnect();
+    detachListeners?.();
+  };
 };
 
 const ensurePlayerMuted = (player: MuteablePlayer | null | undefined) => {
