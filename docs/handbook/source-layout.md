@@ -100,10 +100,10 @@ Client, getters, parsers, generated types — see [contentful.md](contentful.md)
 |------|---------|
 | [WorkHeroVideo/](../../src/components/WorkHeroVideo/) | Work detail hero — `ReactPlayer`, loading overlay. |
 | [WorkCard/](../../src/components/WorkCard/) | Work grid card; lazy-mount video near viewport. |
-| [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block (desktop video). [`useFeaturedReelInView.ts`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) (**`prefetchPlayer`** / **`inView`** mount); [`useFeaturedReelMedia.ts`](../../src/components/FeaturedWork/useFeaturedReelMedia.ts) (imperative play/pause + **`onMediaReady`**). Specs colocated. |
+| [FeaturedWork/](../../src/components/FeaturedWork/) | Home featured work block (desktop video). [`HomePage.tsx`](../../src/components/HomePage/HomePage.tsx) stages **`prefetchReel`** (priority, then **`onReelEmbedReady`** on embed **`playing`** / fallback). [`FeaturedWork.module.css`](../../src/components/FeaturedWork/FeaturedWork.module.css) loading overlay until **`hasStartedPlayback`**. [`useFeaturedReelInView.ts`](../../src/components/FeaturedWork/useFeaturedReelInView.ts) (non-priority **`delay`** / **`rootMargin`**) + [`useFeaturedReelMedia.ts`](../../src/components/FeaturedWork/useFeaturedReelMedia.ts) (**`embedEventsEnabled`**, debounced **`pause()`**, latched **`hasStartedPlayback`**). Specs colocated. |
 | [EditorsBackgroundVideo/](../../src/components/EditorsBackgroundVideo/) | `/editors` hover background; two-player pool. |
 
-Patterns and performance rules: [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube). Shared scroll entrance styles: [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css) (import `.enter` / `.animate` on card roots).
+Patterns and performance rules: [patterns.md → Embedded video](patterns.md#embedded-video-vimeo--youtube). Shared scroll entrance styles: [scrollEntrance.module.css](../../src/styles/scrollEntrance.module.css) (non-priority home reels: `.enter` / `.animate`; priority reel omits `.enter`).
 
 ## `src/emails/`
 

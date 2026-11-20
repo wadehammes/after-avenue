@@ -22,12 +22,18 @@ import { useMediaQuery } from "usehooks-ts";
 
 interface FeaturedWorkProps {
   fields: Work;
+  onReelEmbedReady?: () => void;
   prefetchReel?: boolean;
   priority?: boolean;
 }
 
 export const FeaturedWork = (props: FeaturedWorkProps) => {
-  const { fields, prefetchReel = false, priority = false } = props;
+  const {
+    fields,
+    onReelEmbedReady,
+    prefetchReel = false,
+    priority = false,
+  } = props;
   const { workVideoUrl, workSlug } = fields;
 
   const isMobile = useMediaQuery("(max-width: 768px)", {
@@ -59,19 +65,23 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
   }, []);
 
   const shouldPlay = priority || inView;
-  const { onError, onMediaReady, remountKey } = useFeaturedReelMedia({
-    active: hasMountedPlayer && shouldPlay,
+
+  const showVideoLoadingOverlay = hasMountedPlayer && shouldPlay;
+
+  const { hasStartedPlayback, onError } = useFeaturedReelMedia({
+    active: showVideoLoadingOverlay,
+    embedContainerRef: embedRef,
+    embedEventsEnabled: hasMountedPlayer,
     getMediaElement,
+    onEmbedCanPlay: onReelEmbedReady,
   });
 
-  const muteHandlers = useMemo(
-    () => createMutedPlayerHandlers(embedRef, onMediaReady),
-    [onMediaReady],
-  );
+  const muteHandlers = useMemo(() => createMutedPlayerHandlers(embedRef), []);
 
   return !isMobile ? (
     <div
-      className={classNames(styles.featuredWork, scrollEntrance.enter, {
+      className={classNames(styles.featuredWork, {
+        [scrollEntrance.enter]: !priority,
         [scrollEntrance.animate]: !priority && hasAnimated,
         [scrollEntrance.readyToPlay]: priority,
       })}
@@ -96,7 +106,7 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
             <div ref={embedRef} className={styles.videoPlayerEmbed}>
               {hasMountedPlayer ? (
                 <LazyReactPlayer
-                  key={`${workVideoUrl}-${remountKey}`}
+                  key={workVideoUrl}
                   config={reelPlayerConfig}
                   controls={false}
                   loop
@@ -110,6 +120,15 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
                 />
               ) : null}
             </div>
+            {showVideoLoadingOverlay ? (
+              <div
+                aria-hidden="true"
+                className={classNames(styles.videoLoadingOverlay, {
+                  [styles.videoLoadingOverlayHidden]: hasStartedPlayback,
+                  [styles.videoLoadingOverlayPriority]: priority,
+                })}
+              />
+            ) : null}
           </div>
         </div>
       ) : null}
