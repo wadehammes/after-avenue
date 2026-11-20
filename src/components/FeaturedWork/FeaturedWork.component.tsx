@@ -12,9 +12,10 @@ import type { Work } from "src/contentful/getWork";
 import { useGlobalVariables } from "src/context/globalContext.context";
 import PlayIcon from "src/icons/Play.icon.svg";
 import scrollEntrance from "src/styles/scrollEntrance.module.css";
+import videoLoadingOverlay from "src/styles/videoLoadingOverlay.module.css";
 import {
   createMutedPlayerHandlers,
-  findEmbedMediaElement,
+  getEmbedMediaController,
   mutedAutoplayPlayerProps,
   reelPlayerConfig,
 } from "src/utils/videoPlayerConfig";
@@ -46,30 +47,15 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
   });
   const embedRef = useRef<HTMLDivElement>(null);
 
-  const getMediaElement = useCallback(() => {
-    const element = findEmbedMediaElement(embedRef.current);
-    if (
-      !element ||
-      typeof element.play !== "function" ||
-      typeof element.pause !== "function"
-    ) {
-      return null;
-    }
-
-    return {
-      pause: () => element.pause?.() ?? Promise.resolve(),
-      play: async () => {
-        await element.play?.();
-      },
-    };
-  }, []);
+  const getMediaElement = useCallback(
+    () => getEmbedMediaController(embedRef.current),
+    [],
+  );
 
   const shouldPlay = priority || inView;
 
-  const showVideoLoadingOverlay = hasMountedPlayer && shouldPlay;
-
   const { hasStartedPlayback, onError } = useFeaturedReelMedia({
-    active: showVideoLoadingOverlay,
+    active: hasMountedPlayer && shouldPlay,
     embedContainerRef: embedRef,
     embedEventsEnabled: hasMountedPlayer,
     getMediaElement,
@@ -83,7 +69,6 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
       className={classNames(styles.featuredWork, {
         [scrollEntrance.enter]: !priority,
         [scrollEntrance.animate]: !priority && hasAnimated,
-        [scrollEntrance.readyToPlay]: priority,
       })}
     >
       <div className={styles.workOverlay}>
@@ -120,12 +105,13 @@ export const FeaturedWork = (props: FeaturedWorkProps) => {
                 />
               ) : null}
             </div>
-            {showVideoLoadingOverlay ? (
+            {hasMountedPlayer && shouldPlay ? (
               <div
                 aria-hidden="true"
-                className={classNames(styles.videoLoadingOverlay, {
-                  [styles.videoLoadingOverlayHidden]: hasStartedPlayback,
-                  [styles.videoLoadingOverlayPriority]: priority,
+                className={classNames(videoLoadingOverlay.overlay, {
+                  [videoLoadingOverlay.dotPattern]: true,
+                  [videoLoadingOverlay.hidden]: hasStartedPlayback,
+                  [videoLoadingOverlay.instantHide]: priority,
                 })}
               />
             ) : null}

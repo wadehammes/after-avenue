@@ -71,25 +71,6 @@
   background-image: url("/images/dot-bg.png");
 }
 
-.videoLoadingOverlay {
-  background-color: var(--color-bg, #000);
-  background-image: url("/images/dot-bg.png");
-  inset: 0;
-  opacity: 1;
-  pointer-events: none;
-  position: absolute;
-  transition: opacity 0.35s ease-in-out;
-  z-index: 1;
-
-  &.videoLoadingOverlayHidden {
-    opacity: 0;
-  }
-
-  &.videoLoadingOverlayPriority.videoLoadingOverlayHidden {
-    transition: none;
-  }
-}
-
 .videoPlayerEmbed {
   position: absolute;
   inset: 0;

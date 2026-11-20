@@ -32,16 +32,10 @@ export const useFeaturedReelInView = (
   });
 
   useEffect(() => {
-    if (prefetchPlayer) {
+    if (prefetchPlayer || inView) {
       setHasMountedPlayer(true);
     }
-  }, [prefetchPlayer]);
-
-  useEffect(() => {
-    if (inView) {
-      setHasMountedPlayer(true);
-    }
-  }, [inView]);
+  }, [inView, prefetchPlayer]);
 
   return {
     hasAnimated,

@@ -6,9 +6,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { findEmbedMediaElement } from "src/utils/videoPlayerConfig";
-
-const PAUSE_WHEN_OFF_SCREEN_MS = 300;
+import {
+  FEATURED_REEL_PAUSE_WHEN_OFF_SCREEN_MS,
+  FEATURED_REEL_PLAY_WHEN_ON_SCREEN_MS,
+} from "src/utils/constants";
+import { observeEmbedLifecycle } from "src/utils/videoPlayerConfig";
 
 interface MediaElement {
   pause: () => Promise<void> | void;
@@ -23,27 +25,6 @@ interface UseFeaturedReelMediaOptions {
   onEmbedCanPlay?: () => void;
 }
 
-const attachEmbedLifecycleListeners = (
-  embed: Element,
-  onLoadComplete: () => void,
-  onPlaying: () => void,
-): (() => void) => {
-  const onLoadCompleteHandler = () => {
-    onLoadComplete();
-  };
-  const onPlayingHandler = () => {
-    onPlaying();
-  };
-
-  embed.addEventListener("loadcomplete", onLoadCompleteHandler);
-  embed.addEventListener("playing", onPlayingHandler);
-
-  return () => {
-    embed.removeEventListener("loadcomplete", onLoadCompleteHandler);
-    embed.removeEventListener("playing", onPlayingHandler);
-  };
-};
-
 export const useFeaturedReelMedia = (options: UseFeaturedReelMediaOptions) => {
   const {
     active,
@@ -54,6 +35,9 @@ export const useFeaturedReelMedia = (options: UseFeaturedReelMediaOptions) => {
   } = options;
   const hasNotifiedCanPlayRef = useRef(false);
   const pauseDelayRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+  const playDelayRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
   const [hasStartedPlayback, setHasStartedPlayback] = useState(false);
@@ -75,12 +59,16 @@ export const useFeaturedReelMedia = (options: UseFeaturedReelMediaOptions) => {
     [getMediaElement],
   );
 
-  const handleEmbedPlaying = useEffectEvent(() => {
+  const syncPlaybackIfActive = useEffectEvent(() => {
     if (active) {
       syncPlayback(true);
     }
+  });
 
-    setHasStartedPlayback(true);
+  const handleEmbedPlaying = useEffectEvent(() => {
+    syncPlaybackIfActive();
+
+    setHasStartedPlayback((started) => (started ? started : true));
 
     if (!onEmbedCanPlay || hasNotifiedCanPlayRef.current) {
       return;
@@ -91,21 +79,26 @@ export const useFeaturedReelMedia = (options: UseFeaturedReelMediaOptions) => {
   });
 
   const handleEmbedLoadComplete = useEffectEvent(() => {
-    if (active) {
-      syncPlayback(true);
-    }
+    syncPlaybackIfActive();
   });
 
   useEffect(() => {
+    clearTimeout(pauseDelayRef.current);
+    clearTimeout(playDelayRef.current);
+
     if (active) {
-      clearTimeout(pauseDelayRef.current);
-      syncPlayback(true);
-      return;
+      playDelayRef.current = setTimeout(() => {
+        syncPlayback(true);
+      }, FEATURED_REEL_PLAY_WHEN_ON_SCREEN_MS);
+
+      return () => {
+        clearTimeout(playDelayRef.current);
+      };
     }
 
     pauseDelayRef.current = setTimeout(() => {
       syncPlayback(false);
-    }, PAUSE_WHEN_OFF_SCREEN_MS);
+    }, FEATURED_REEL_PAUSE_WHEN_OFF_SCREEN_MS);
 
     return () => {
       clearTimeout(pauseDelayRef.current);
@@ -122,36 +115,11 @@ export const useFeaturedReelMedia = (options: UseFeaturedReelMediaOptions) => {
       return;
     }
 
-    let detachListeners: (() => void) | undefined;
-
-    const tryAttach = () => {
-      if (detachListeners) {
-        return;
-      }
-
-      const embed = findEmbedMediaElement(container);
-      if (!embed) {
-        return;
-      }
-
-      detachListeners = attachEmbedLifecycleListeners(
-        embed,
-        handleEmbedLoadComplete,
-        handleEmbedPlaying,
-      );
-    };
-
-    tryAttach();
-
-    const observer = new MutationObserver(() => {
-      tryAttach();
+    return observeEmbedLifecycle(container, {
+      onAttached: syncPlaybackIfActive,
+      onLoadComplete: handleEmbedLoadComplete,
+      onPlaying: handleEmbedPlaying,
     });
-    observer.observe(container, { childList: true, subtree: true });
-
-    return () => {
-      observer.disconnect();
-      detachListeners?.();
-    };
   }, [embedContainerRef, embedEventsEnabled]);
 
   const onError = useCallback(() => {
@@ -163,8 +131,5 @@ export const useFeaturedReelMedia = (options: UseFeaturedReelMediaOptions) => {
   return {
     hasStartedPlayback,
     onError,
-    onMediaReady: () => {
-      syncPlayback(active);
-    },
   };
 };

@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import parse from "html-react-parser";
-import { Activity, useCallback, useEffect, useState } from "react";
+import { Activity, useCallback, useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { FeaturedBrands } from "src/components/FeaturedBrands/FeaturedBrands.component";
 import { FeaturedWork } from "src/components/FeaturedWork/FeaturedWork.component";
@@ -40,8 +40,12 @@ export const HomePage = (props: HomePageProps) => {
 
   const hasFeaturedReels = featuredWork.some((work) => work.workVideoUrl);
   const [prefetchSecondaryReels, setPrefetchSecondaryReels] = useState(false);
+  const secondaryPrefetchTimeoutRef = useRef<
+    ReturnType<typeof setTimeout> | undefined
+  >(undefined);
 
   const enableSecondaryReelPrefetch = useCallback(() => {
+    clearTimeout(secondaryPrefetchTimeoutRef.current);
     setPrefetchSecondaryReels(true);
   }, []);
 
@@ -50,12 +54,12 @@ export const HomePage = (props: HomePageProps) => {
       return;
     }
 
-    const timeoutId = window.setTimeout(() => {
+    secondaryPrefetchTimeoutRef.current = setTimeout(() => {
       setPrefetchSecondaryReels(true);
     }, SECONDARY_REEL_PREFETCH_DELAY_MS);
 
     return () => {
-      window.clearTimeout(timeoutId);
+      clearTimeout(secondaryPrefetchTimeoutRef.current);
     };
   }, [hasFeaturedReels]);
 

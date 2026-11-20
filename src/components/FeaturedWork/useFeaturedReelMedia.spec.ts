@@ -1,61 +1,54 @@
 import { describe, expect, it, jest } from "@jest/globals";
 import { useFeaturedReelMedia } from "src/components/FeaturedWork/useFeaturedReelMedia";
+import {
+  createEmbedMediaDomFixture,
+  createMockEmbedMediaController,
+} from "src/tests/helpers/embedMediaTest.helpers";
 import { act, renderHook } from "src/tests/test-utils";
+import {
+  FEATURED_REEL_PAUSE_WHEN_OFF_SCREEN_MS,
+  FEATURED_REEL_PLAY_WHEN_ON_SCREEN_MS,
+} from "src/utils/constants";
 
 describe("useFeaturedReelMedia", () => {
-  it("calls play on the media element when active", () => {
-    const play = jest.fn(async () => {});
-    const pause = jest.fn(async () => {});
-    const mediaElement = { play, pause };
+  it("calls play on the media element when active after the play delay", () => {
+    jest.useFakeTimers();
+    const { pause, play } = createMockEmbedMediaController();
 
     renderHook(() =>
       useFeaturedReelMedia({
         active: true,
-        getMediaElement: () => mediaElement,
-      }),
-    );
-
-    expect(play).toHaveBeenCalledTimes(1);
-    expect(pause).not.toHaveBeenCalled();
-  });
-
-  it("calls play when onMediaReady runs while active after the embed mounts", () => {
-    const play = jest.fn(async () => {});
-    const pause = jest.fn(async () => {});
-    let mediaElement: { play: typeof play; pause: typeof pause } | null = null;
-
-    const { result } = renderHook(() =>
-      useFeaturedReelMedia({
-        active: true,
-        getMediaElement: () => mediaElement,
+        getMediaElement: () => ({ play, pause }),
       }),
     );
 
     expect(play).not.toHaveBeenCalled();
 
-    mediaElement = { play, pause };
-
     act(() => {
-      result.current.onMediaReady();
+      jest.advanceTimersByTime(FEATURED_REEL_PLAY_WHEN_ON_SCREEN_MS);
     });
 
     expect(play).toHaveBeenCalledTimes(1);
+    expect(pause).not.toHaveBeenCalled();
+    jest.useRealTimers();
   });
 
   it("debounces pause when becoming inactive", () => {
     jest.useFakeTimers();
-    const play = jest.fn(async () => {});
-    const pause = jest.fn(async () => {});
-    const mediaElement = { play, pause };
+    const { pause, play } = createMockEmbedMediaController();
 
     const { rerender } = renderHook(
       ({ active }: { active: boolean }) =>
         useFeaturedReelMedia({
           active,
-          getMediaElement: () => mediaElement,
+          getMediaElement: () => ({ play, pause }),
         }),
       { initialProps: { active: true } },
     );
+
+    act(() => {
+      jest.advanceTimersByTime(FEATURED_REEL_PLAY_WHEN_ON_SCREEN_MS);
+    });
 
     expect(play).toHaveBeenCalled();
 
@@ -64,7 +57,7 @@ describe("useFeaturedReelMedia", () => {
     expect(pause).not.toHaveBeenCalled();
 
     act(() => {
-      jest.advanceTimersByTime(300);
+      jest.advanceTimersByTime(FEATURED_REEL_PAUSE_WHEN_OFF_SCREEN_MS);
     });
 
     expect(pause).toHaveBeenCalledTimes(1);
@@ -73,20 +66,16 @@ describe("useFeaturedReelMedia", () => {
 
   it("keeps hasStartedPlayback latched when active toggles off", () => {
     jest.useFakeTimers();
-    const container = document.createElement("div");
-    const embed = document.createElement("vimeo-video");
-    container.appendChild(embed);
+    const { embed, containerRef } = createEmbedMediaDomFixture();
+    const { pause, play } = createMockEmbedMediaController();
 
     const { result, rerender } = renderHook(
       ({ active }: { active: boolean }) =>
         useFeaturedReelMedia({
           active,
-          embedContainerRef: { current: container },
+          embedContainerRef: containerRef,
           embedEventsEnabled: true,
-          getMediaElement: () => ({
-            play: jest.fn(async () => {}),
-            pause: jest.fn(async () => {}),
-          }),
+          getMediaElement: () => ({ play, pause }),
         }),
       { initialProps: { active: true } },
     );
@@ -100,7 +89,7 @@ describe("useFeaturedReelMedia", () => {
     rerender({ active: false });
 
     act(() => {
-      jest.advanceTimersByTime(300);
+      jest.advanceTimersByTime(FEATURED_REEL_PAUSE_WHEN_OFF_SCREEN_MS);
     });
 
     expect(result.current.hasStartedPlayback).toBe(true);
@@ -109,19 +98,15 @@ describe("useFeaturedReelMedia", () => {
 
   it("calls onEmbedCanPlay only after playing, not on loadcomplete alone", () => {
     const onEmbedCanPlay = jest.fn();
-    const container = document.createElement("div");
-    const embed = document.createElement("vimeo-video");
-    container.appendChild(embed);
+    const { embed, containerRef } = createEmbedMediaDomFixture();
+    const { pause, play } = createMockEmbedMediaController();
 
     renderHook(() =>
       useFeaturedReelMedia({
         active: true,
-        embedContainerRef: { current: container },
+        embedContainerRef: containerRef,
         embedEventsEnabled: true,
-        getMediaElement: () => ({
-          play: jest.fn(async () => {}),
-          pause: jest.fn(async () => {}),
-        }),
+        getMediaElement: () => ({ play, pause }),
         onEmbedCanPlay,
       }),
     );
@@ -140,19 +125,15 @@ describe("useFeaturedReelMedia", () => {
   });
 
   it("sets hasStartedPlayback after the embed fires playing", () => {
-    const container = document.createElement("div");
-    const embed = document.createElement("vimeo-video");
-    container.appendChild(embed);
+    const { containerRef, embed } = createEmbedMediaDomFixture();
+    const { pause, play } = createMockEmbedMediaController();
 
     const { result } = renderHook(() =>
       useFeaturedReelMedia({
         active: true,
-        embedContainerRef: { current: container },
+        embedContainerRef: containerRef,
         embedEventsEnabled: true,
-        getMediaElement: () => ({
-          play: jest.fn(async () => {}),
-          pause: jest.fn(async () => {}),
-        }),
+        getMediaElement: () => ({ play, pause }),
       }),
     );
 
@@ -166,16 +147,14 @@ describe("useFeaturedReelMedia", () => {
   });
 
   it("calls play when the embed dispatches loadcomplete", () => {
-    const play = jest.fn(async () => {});
-    const pause = jest.fn(async () => {});
-    const container = document.createElement("div");
-    const embed = document.createElement("vimeo-video");
-    container.appendChild(embed);
+    jest.useFakeTimers();
+    const { embed, containerRef } = createEmbedMediaDomFixture();
+    const { pause, play } = createMockEmbedMediaController();
 
     renderHook(() =>
       useFeaturedReelMedia({
         active: true,
-        embedContainerRef: { current: container },
+        embedContainerRef: containerRef,
         embedEventsEnabled: true,
         getMediaElement: () => ({ play, pause }),
       }),
@@ -188,19 +167,23 @@ describe("useFeaturedReelMedia", () => {
     });
 
     expect(play).toHaveBeenCalledTimes(1);
+    jest.useRealTimers();
   });
 
   it("retries play on player error instead of remounting", () => {
-    const play = jest.fn(async () => {});
-    const pause = jest.fn(async () => {});
-    const mediaElement = { play, pause };
+    jest.useFakeTimers();
+    const { pause, play } = createMockEmbedMediaController();
 
     const { result } = renderHook(() =>
       useFeaturedReelMedia({
         active: true,
-        getMediaElement: () => mediaElement,
+        getMediaElement: () => ({ play, pause }),
       }),
     );
+
+    act(() => {
+      jest.advanceTimersByTime(FEATURED_REEL_PLAY_WHEN_ON_SCREEN_MS);
+    });
 
     const callsBefore = play.mock.calls.length;
 
@@ -210,5 +193,6 @@ describe("useFeaturedReelMedia", () => {
 
     expect(play.mock.calls.length).toBeGreaterThan(callsBefore);
     expect(result.current).not.toHaveProperty("remountKey");
+    jest.useRealTimers();
   });
 });

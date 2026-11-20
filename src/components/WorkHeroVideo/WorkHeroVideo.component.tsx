@@ -4,6 +4,7 @@ import classNames from "classnames";
 import { useState } from "react";
 import { LazyReactPlayer } from "src/components/LazyReactPlayer/LazyReactPlayer.component";
 import styles from "src/components/WorkHeroVideo/WorkHeroVideo.module.css";
+import videoLoadingOverlay from "src/styles/videoLoadingOverlay.module.css";
 import { controlsPlayerConfig } from "src/utils/videoPlayerConfig";
 
 interface WorkHeroVideoProps {
@@ -49,8 +50,8 @@ export const WorkHeroVideo = (props: WorkHeroVideoProps) => {
       </div>
       <div
         aria-hidden="true"
-        className={classNames(styles.loadingOverlay, {
-          [styles.hidden]: isReady,
+        className={classNames(videoLoadingOverlay.overlay, {
+          [videoLoadingOverlay.hidden]: isReady,
         })}
       />
     </div>
