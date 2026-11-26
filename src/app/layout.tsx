@@ -1,4 +1,6 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { draftMode } from "next/headers";
 import { area, arida } from "src/app/fonts";
 import Providers from "src/app/providers";
@@ -80,6 +82,12 @@ export default async function RootLayout({
             <Footer />
           </div>
         </Providers>
+        {!draft.isEnabled ? (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        ) : null}
       </body>
       {process.env.GA_MEASUREMENT_ID ? (
         <GoogleAnalytics gaId={process.env.GA_MEASUREMENT_ID} />

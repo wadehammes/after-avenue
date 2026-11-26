@@ -185,7 +185,7 @@ The handbook is **markdown only** and is meant for humans and tooling alike. It 
 - **CMS work (Contentful):** [contentful.md](./docs/handbook/contentful.md) end to end — generated types, getters, parsers, sections vs content blocks, **ContentRenderer**, and the checklist for a new CMS-driven block.
 - **Pages, data fetching, or SEO:** [patterns.md](./docs/handbook/patterns.md) (Server Components, React Query, Route Handlers, JSON-LD) and the architecture doc’s data-flow section.
 - **CI, env, draft preview, or `proxy.ts`:** [platform.md](./docs/handbook/platform.md).
-- **Google Analytics and the data layer:** [integrations.md](./docs/handbook/integrations.md).
+- **Analytics (GA, Vercel Web Analytics / Speed Insights) and the data layer:** [integrations.md](./docs/handbook/integrations.md).
 - **Sitemaps and public XML output:** [distribution.md](./docs/handbook/distribution.md).
 - **Interfaces, API layer, tests, and navigating `src/utils` / `src/lib`:** [source-layout.md](./docs/handbook/source-layout.md).
 
@@ -199,7 +199,7 @@ The handbook is **markdown only** and is meant for humans and tooling alike. It 
 | [**components.md**](./docs/handbook/components.md) | Component folders, **`pnpm scaffold`**, page objects, **test IDs**, exports, **dynamic imports**, links. |
 | [**patterns.md**](./docs/handbook/patterns.md) | **Server Components**, **React Query**, **`src/api`** (`postJson`, `fetchResponse`), **forms**, **metadata / JSON-LD**, **`next/dynamic`**. |
 | [**platform.md**](./docs/handbook/platform.md) | **GitHub CI** (`tsc`, Biome, Stylelint, Jest, **`test:scripts`**, Knip), **`pnpm` scripts** (including **`handbook:check`**), **Cursor agent hooks**, **`next.config` env** and redirects, **draft / disable-draft APIs**, **`src/proxy.ts`**. |
-| [**integrations.md**](./docs/handbook/integrations.md) | **Google Analytics** (`@next/third-parties`), **`dataLayer`** conventions. |
+| [**integrations.md**](./docs/handbook/integrations.md) | **Google Analytics** (`@next/third-parties`), **Vercel Web Analytics / Speed Insights**, **`dataLayer`** conventions. |
 | [**distribution.md**](./docs/handbook/distribution.md) | **Sitemap** generation (`make sitemap`, `public/sitemap.xml`), **robots** and related App Router metadata. |
 | [**source-layout.md**](./docs/handbook/source-layout.md) | **`src/interfaces`**, **`src/utils`**, **`src/api`**, **`src/hooks`**, **`src/tests`**, **`src/lib`**. |
 | [**llms.md**](./docs/handbook/llms.md) | **Task → chapter** map and copy-paste blurb for custom GPTs and other tools. |
