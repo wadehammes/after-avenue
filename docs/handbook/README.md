@@ -34,7 +34,7 @@ Quick lookup—one line per file:
 | [components.md](components.md) | Component folder layout, `pnpm scaffold`, page objects, test IDs, exports, dynamic imports, links. |
 | [patterns.md](patterns.md) | Server components, React Query, `src/api` (`postJson`, `fetchResponse`), forms, transactional email (React Email + Resend), layout, metadata, JSON-LD, embedded video performance (`ReactPlayer`, lazy mount, editors background). |
 | [platform.md](platform.md) | GitHub CI (tsc, Biome, Stylelint, Jest, `test:scripts`, Knip), `pnpm` scripts (`email:dev`), `next.config`, draft mode APIs, `src/proxy.ts`. |
-| [integrations.md](integrations.md) | Google Analytics, data layer, related env. |
+| [integrations.md](integrations.md) | Google Analytics, Vercel Web Analytics / Speed Insights, data layer, related env. |
 | [distribution.md](distribution.md) | Sitemap generation and `public/` output. |
 | [source-layout.md](source-layout.md) | `src/interfaces`, `src/utils`, `src/api`, `src/hooks`, `src/tests`, `src/lib`, `src/emails`. |
 | [llms.md](llms.md) | Task-to-chapter routing for tools; copy-paste blurb for non-Cursor agents. |

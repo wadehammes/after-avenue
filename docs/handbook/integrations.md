@@ -9,6 +9,12 @@ Use this chapter when changing **analytics**, **tags**, or **client-side trackin
 
 Prefer the existing layout pattern when adding or changing measurement IDs so third-party scripts stay in one place.
 
+## Vercel Web Analytics and Speed Insights
+
+- **App Router**: [src/app/layout.tsx](../../src/app/layout.tsx) mounts **`Analytics`** (`@vercel/analytics/next`) and **`SpeedInsights`** (`@vercel/speed-insights/next`) at the end of **`<body>`**, alongside other third-party scripts. Both are omitted while **Contentful draft preview** is active (`draft.isEnabled`).
+- **No app env vars** — on Vercel, the project’s deployment context supplies what the packages need. Enable **Web Analytics** and **Speed Insights** for the project in the [Vercel dashboard](https://vercel.com/docs/analytics/quickstart); they do not send data during local **`pnpm dev`**.
+- **CSP**: [`next.config.ts`](../../next.config.ts) already allows **`*.vercel-insights.com`** (and related Vercel origins) in **`script-src`**.
+
 ## Data layer
 
 When adding custom events, push structured payloads to **`window.dataLayer`** in client components. Keep event names consistent and colocate helpers with the feature that emits them.
